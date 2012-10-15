@@ -1,0 +1,212 @@
+ 
+ PPIDD initialized (MPI-2 version of PPIDD).
+ 
+ Total procs=   4,  Nprocs(compute processes)=   3,  My proc=   0
+ Performing ppidd tests.
+ SUCCESSFUL TEST SHOULD END WITH ' All PPIDD tests successful.'
+ 
+ Checking whether C types match Fortran types:
+ The size (in bytes) of some C data types:
+ Size of C float:                    4 bytes
+ Size of C double:                   8 bytes
+ Size of C fortint:                  8 bytes
+ Size of C fortlogical:              8 bytes
+ The size (in bytes) of some Fortran data types:
+ Size of Fortran Real:               4 bytes
+ Size of Fortran Doule Precision:    8 bytes
+ Size of Fortran Integer:            8 bytes
+ Size of Fortran Logical:            8 bytes
+ All data types (Integer, Logical, and Double Precision) match between C and Fortran.
+
+ Starting PPIDD basic test with GA-size=   32.00 MB (  4194304 words),  Buffer size=   16.00 MB (  2097152 words)
+
+
+ (1) Array data are stored across distributed compute processes:
+ ppidd has created global array: ppiddarray
+ ppidd_create:     cpu=   0.0000 sec,  elapsed=   0.0000 sec,  wtime=   0.0002 sec
+ ppidd_zero:       cpu=   0.0500 sec,  elapsed=   0.0600 sec,  wtime=   0.0568 sec
+ TIME FOR LATENCY TEST PPIDD_PUT=             0.02 SEC,  LATENCY=      0.97 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_PUT=             0.02 SEC,  LATENCY=      0.96 MICROSEC
+ ppidd_put(trial): cpu=   0.0400 sec,  elapsed=   0.0600 sec,  wtime=   0.0724 sec,  speed=     1326.35 MB/sec
+ ppidd_put:         total latency time=   0.0001 sec,  nopr=    20
+ ppidd_put:        cpu=   0.6000 sec,  elapsed=   0.6200 sec,  wtime=   0.6216 sec,  speed=     1544.34 MB/sec
+ ppidd_put:        cpu=   0.6000 sec,  elapsed=   0.6200 sec,  wtime=   0.6216 sec,  latency=      0.96 microsec, bandwidth=     1544.49 MB/sec
+ TIME FOR LATENCY TEST PPIDD_GET=             0.02 SEC,  LATENCY=      1.05 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_GET=             0.02 SEC,  LATENCY=      1.05 MICROSEC
+ ppidd_get:         total latency time=   0.0001 sec,  nopr=    20
+ ppidd_get:        cpu=   0.5800 sec,  elapsed=   0.6200 sec,  wtime=   0.6272 sec,  speed=     1530.68 MB/sec
+ ppidd_get:        cpu=   0.5800 sec,  elapsed=   0.6200 sec,  wtime=   0.6272 sec,  latency=      1.05 microsec, bandwidth=     1530.83 MB/sec
+ TIME FOR LATENCY TEST PPIDD_ACC=             0.06 SEC,  LATENCY=      3.24 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_ACC=             0.06 SEC,  LATENCY=      3.22 MICROSEC
+ ppidd_acc:         total latency time=   0.0002 sec,  nopr=    20
+ ppidd_acc:        cpu=   0.8800 sec,  elapsed=   0.9100 sec,  wtime=   0.8979 sec,  speed=     1069.20 MB/sec
+ ppidd_acc:        cpu=   0.8800 sec,  elapsed=   0.9100 sec,  wtime=   0.8979 sec,  latency=      3.22 microsec, bandwidth=     1069.43 MB/sec
+ ppidd_destroy:    cpu=   0.0000 sec,  elapsed=   0.0100 sec,  wtime=   0.0019 sec
+
+ (2) Array data are stored on helper processes:
+ ppidd has created global array: ppiddarray
+ ppidd_create:     cpu=   0.0000 sec,  elapsed=   0.0000 sec,  wtime=   0.0000 sec
+ ppidd_zero:       cpu=   0.0500 sec,  elapsed=   0.0600 sec,  wtime=   0.0638 sec
+ TIME FOR LATENCY TEST PPIDD_PUT=             0.03 SEC,  LATENCY=      1.50 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_PUT=             0.03 SEC,  LATENCY=      1.51 MICROSEC
+ ppidd_put(trial): cpu=   0.0500 sec,  elapsed=   0.0500 sec,  wtime=   0.0567 sec,  speed=     1694.58 MB/sec
+ ppidd_put:         total latency time=   0.0001 sec,  nopr=    20
+ ppidd_put:        cpu=   0.5200 sec,  elapsed=   0.5600 sec,  wtime=   0.5566 sec,  speed=     1724.75 MB/sec
+ ppidd_put:        cpu=   0.5200 sec,  elapsed=   0.5600 sec,  wtime=   0.5566 sec,  latency=      1.51 microsec, bandwidth=     1725.03 MB/sec
+ TIME FOR LATENCY TEST PPIDD_GET=             0.03 SEC,  LATENCY=      1.55 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_GET=             0.03 SEC,  LATENCY=      1.54 MICROSEC
+ ppidd_get:         total latency time=   0.0001 sec,  nopr=    20
+ ppidd_get:        cpu=   0.5400 sec,  elapsed=   0.5600 sec,  wtime=   0.5586 sec,  speed=     1718.73 MB/sec
+ ppidd_get:        cpu=   0.5400 sec,  elapsed=   0.5600 sec,  wtime=   0.5586 sec,  latency=      1.54 microsec, bandwidth=     1719.02 MB/sec
+ TIME FOR LATENCY TEST PPIDD_ACC=             0.03 SEC,  LATENCY=      1.49 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_ACC=             0.03 SEC,  LATENCY=      1.50 MICROSEC
+ ppidd_acc:         total latency time=   0.0001 sec,  nopr=    20
+ ppidd_acc:        cpu=   1.1500 sec,  elapsed=   1.1800 sec,  wtime=   1.1796 sec,  speed=      813.84 MB/sec
+ ppidd_acc:        cpu=   1.1500 sec,  elapsed=   1.1800 sec,  wtime=   1.1796 sec,  latency=      1.50 microsec, bandwidth=      813.90 MB/sec
+ ppidd_destroy:    cpu=   0.0100 sec,  elapsed=   0.0100 sec,  wtime=   0.0100 sec
+ 
+ TIME FOR LATENCY TEST PPIDD_SEND/RECV=       0.06 SEC,  LATENCY=      0.45 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_SEND/RECV=       0.06 SEC,  LATENCY=      0.45 MICROSEC
+ ppidd_send/recv:   total latency time=   0.0000 sec,  nopr=    20
+ ppidd_send/recv:  cpu=   0.1800 sec,  elapsed=   0.1800 sec,  wtime=   0.1767 sec,  speed=     1811.31 MB/sec
+ ppidd_send/recv:  cpu=   0.1800 sec,  elapsed=   0.1800 sec,  wtime=   0.1767 sec,  latency=      0.45 microsec, bandwidth=     1811.40 MB/sec
+ TIME FOR LATENCY TEST PPIDD_BRDCST=          0.09 SEC,  LATENCY=      0.89 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_BRDCST=          0.09 SEC,  LATENCY=      0.89 MICROSEC
+ ppidd_brdcst:      total latency time=   0.0002 sec,  nopr=   180
+ ppidd_brdcst:     cpu=   2.8300 sec,  elapsed=   2.9200 sec,  wtime=   2.9173 sec,  speed=      877.53 MB/sec
+ ppidd_brdcst:     cpu=   2.8300 sec,  elapsed=   2.9200 sec,  wtime=   2.9173 sec,  latency=      0.89 microsec, bandwidth=      877.58 MB/sec
+ TIME FOR LATENCY TEST PPIDD_GSUM=            0.14 SEC,  LATENCY=      2.06 MICROSEC (trial test)
+ TIME FOR LATENCY TEST PPIDD_GSUM=            0.14 SEC,  LATENCY=      2.05 MICROSEC
+ ppidd_gsum:        total latency time=   0.0000 sec,  nopr=    20
+ ppidd_gsum:       cpu=   1.2900 sec,  elapsed=   1.6300 sec,  wtime=   1.6318 sec,  speed=      196.11 MB/sec
+ ppidd_gsum:       cpu=   1.2900 sec,  elapsed=   1.6300 sec,  wtime=   1.6318 sec,  latency=      2.05 microsec, bandwidth=      196.11 MB/sec
+ 
+ Time spent on ppidd_basictest:                  cpu=          9.7600 sec, elapsed=         10.4300 sec, wtime=         10.4393 sec
+ 
+ PPIDD mutex tests:
+ 
+ Total time on calling get_current_times:        cpu=        0.430000 sec, elapsed=        0.680000 sec, wtime=        0.689146 sec
+ Total number of calling get_current_times:        1000000
+ Average time per get_current_times calling:     cpu=       430.0 nanosec, elapsed=       680.0 nanosec, wtime=       689.1 nanosec
+ 
+ Total time on calling ppidd_wtime    1000000  times:                                                    wtime=        0.146714 sec
+ Average time per ppidd_wtime calling:                                                                   wtime=       146.7 nanosec
+ 
+
+ 1. Mutex data are stored on compute process, and mutex is implemented through RMA operations:
+ (1) PPIDD mutex test with computing tasks:
+ Nprocs=         3  Total tasks=                 48
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.050027058
+     1          16         0.050026998
+     2          16         0.050027058
+ Time spent for iprocs=0:                        cpu=        0.630000 sec, elapsed=        0.800000 sec, wtime=        0.800433 sec
+ Time spent for each proc(average):              cpu=        0.550000 sec, elapsed=        0.800000 sec, wtime=        0.800433 sec
+ Average time per task:                          cpu=        0.011458 sec, elapsed=        0.016667 sec, wtime=        0.016676 sec
+ 
+ (2) Distribute computing tasks to all processes without mutex, but ensure only one process is alllowed to do the computation at a time:
+ Nprocs=         3  Total tasks=                 48
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.050027564
+     1          16         0.050027624
+     2          16         0.050027624
+ Time spent for iprocs=0:                        cpu=        0.680000 sec, elapsed=        0.800000 sec, wtime=        0.800441 sec
+ Time spent for each proc(average):              cpu=        0.666667 sec, elapsed=        0.800000 sec, wtime=        0.800442 sec
+ Average time per computing task:                cpu=        0.013889 sec, elapsed=        0.016667 sec, wtime=        0.016676 sec
+ 
+ Comparing the time between (1) and (2), we also get the approximate average time per lock/unlock calling:
+                                                                                                         wtime=      -188.7 nanosec
+ This data probably can be used to evaluate the mutex only if the number of tasks is large enough.
+ 
+ (3) PPIDD mutex test without computing tasks:
+ Nprocs=         3  Total tasks=              30000
+  IPROC      TASKS      WTime/task(Sec)
+     0       10000         0.000015298
+     1       10000         0.000015300
+     2       10000         0.000015300
+ Time spent for iprocs=0:                        cpu=        0.140000 sec, elapsed=        0.160000 sec, wtime=        0.152975 sec
+ Time spent for each proc(average):              cpu=        0.126667 sec, elapsed=        0.160000 sec, wtime=        0.152991 sec
+ Average time per lock/unlock calling:           cpu=      4222.2 nanosec, elapsed=      5333.3 nanosec, wtime=      5099.7 nanosec
+ The data in (3) can be used to evaluate the mutex since all callings are evenly distributed to all processes.
+
+ 2. Mutex data are stored on helper process, and mutex is implemented on top of two-sided operations:
+ (1) PPIDD mutex test with computing tasks:
+ Nprocs=         3  Total tasks=                 48
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.050019130
+     1          16         0.050019190
+     2          16         0.050019190
+ Time spent for iprocs=0:                        cpu=        0.640000 sec, elapsed=        0.800000 sec, wtime=        0.800306 sec
+ Time spent for each proc(average):              cpu=        0.623333 sec, elapsed=        0.800000 sec, wtime=        0.800307 sec
+ Average time per task:                          cpu=        0.012986 sec, elapsed=        0.016667 sec, wtime=        0.016673 sec
+ 
+ (2) Distribute computing tasks to all processes without mutex, but ensure only one process is alllowed to do the computation at a time:
+ Nprocs=         3  Total tasks=                 48
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.050008625
+     1          16         0.050008699
+     2          16         0.050008699
+ Time spent for iprocs=0:                        cpu=        0.620000 sec, elapsed=        0.800000 sec, wtime=        0.800138 sec
+ Time spent for each proc(average):              cpu=        0.603333 sec, elapsed=        0.800000 sec, wtime=        0.800139 sec
+ Average time per computing task:                cpu=        0.012569 sec, elapsed=        0.016667 sec, wtime=        0.016670 sec
+ 
+ Comparing the time between (1) and (2), we also get the approximate average time per lock/unlock calling:
+                                                                                                         wtime=      3498.5 nanosec
+ This data probably can be used to evaluate the mutex only if the number of tasks is large enough.
+ 
+ (3) PPIDD mutex test without computing tasks:
+ Nprocs=         3  Total tasks=              30000
+  IPROC      TASKS      WTime/task(Sec)
+     0       10000         0.000004378
+     1       10000         0.000004378
+     2       10000         0.000004378
+ Time spent for iprocs=0:                        cpu=        0.040000 sec, elapsed=        0.040000 sec, wtime=        0.043778 sec
+ Time spent for each proc(average):              cpu=        0.040000 sec, elapsed=        0.040000 sec, wtime=        0.043779 sec
+ Average time per lock/unlock calling:           cpu=      1333.3 nanosec, elapsed=      1333.3 nanosec, wtime=      1459.3 nanosec
+ The data in (3) can be used to evaluate the mutex since all callings are evenly distributed to all processes.
+ 
+ Time spent on ppidd_mutex_test:                 cpu=          3.3300 sec, elapsed=          4.2400 sec, wtime=          4.2354 sec
+ 
+ PPIDD shared counter tests:
+ (1) PPIDD shared counter test with computing tasks:
+ Nprocs=         3  Total tasks=                 50
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.016671062
+     1          17         0.016670536
+     2          17         0.016669890
+ Time spent for iprocs=0:                        cpu=        0.270000 sec, elapsed=        0.270000 sec, wtime=        0.266737 sec
+ Sum of time for all procs all tasks:            cpu=        0.830000 sec, elapsed=        0.830000 sec, wtime=        0.833524 sec
+ Sum of time for all procs all computations:                                                             wtime=        0.833449 sec
+ Sum of time for all procs all counter callings:                                                         wtime=        0.000075 sec
+ Average time per task:                          cpu=        0.016600 sec, elapsed=        0.016600 sec, wtime=        0.016670 sec
+ Average time per computation:                                                                           wtime=        0.016669 sec
+ Average time per shared counter calling:                                                                wtime=      1506.8 nanosec
+ 
+ (2) Distribute computing tasks to processes without shared counter:
+ Nprocs=         3  Total tasks=                 50
+  IPROC      TASKS      WTime/task(Sec)
+     0          16         0.016668990
+     1          17         0.016674056
+     2          17         0.016669526
+ Time spent for iprocs=0:                        cpu=        0.270000 sec, elapsed=        0.270000 sec, wtime=        0.266704 sec
+ Sum of time for all procs all computing tasks:  cpu=        0.850000 sec, elapsed=        0.850000 sec, wtime=        0.833545 sec
+ Average time per computing task:                cpu=        0.017000 sec, elapsed=        0.017000 sec, wtime=        0.016671 sec
+ 
+ Comparing the times between (1) and (2), we also get the approximate average time per counter calling:  wtime=      -410.1 nanosec
+ This data probably can not be used to evaluate the shared counter since some extra overhead is included.
+ 
+ (3) PPIDD shared counter test without computing tasks:
+ Nprocs=         3  Total tasks=            1000000
+  IPROC      TASKS      WTime/task(Sec)
+     0      333330         0.000001684
+     1      333324         0.000001684
+     2      333346         0.000001683
+ Time spent for iprocs=0:                        cpu=        0.560000 sec, elapsed=        0.560000 sec, wtime=        0.561182 sec
+ Sum of time for all procs all empty tasks:      cpu=        1.680000 sec, elapsed=        1.680000 sec, wtime=        1.683548 sec
+ Average time per shared counter calling:        cpu=      1680.0 nanosec, elapsed=      1680.0 nanosec, wtime=      1683.5 nanosec
+ The data in (3) probably can not be used to evaluate the shared counter since all callings may concentrate on some processes.
+ The data in (1) are much better.
+ 
+ Time spent on ppidd_sharedcounter_test:         cpu=          1.1200 sec, elapsed=          1.1300 sec, wtime=          1.1282 sec
+ 
+ All PPIDD tests successful.

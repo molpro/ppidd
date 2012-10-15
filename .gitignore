@@ -1,2 +1,5 @@
+*.exe
+*.o
 doc/doxygen/
 doc/doxygen.log
+lib/

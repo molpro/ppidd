@@ -13,14 +13,14 @@
    external name.
 
    Note: FORTRAN externals are generally all lowercase, but may
-   be uppercase.  See machines.f for details.
+   be uppercase.  See ppidd_machines.h for details.
 
 \* ------------------------------------------------------------- */
 
 #ifndef __PPIDD_EAF_FORTRAN_H__
 #define __PPIDD_EAF_FORTRAN_H__
 
- # include "util/machines.h"
+ # include "ppidd_machines.h"
 
  #     define PPIDD_Eaf_open                 FORT_Extern(ppidd_eaf_open,PPIDD_EAF_OPEN)
  #     define PPIDD_Eaf_write                FORT_Extern(ppidd_eaf_write,PPIDD_EAF_WRITE)

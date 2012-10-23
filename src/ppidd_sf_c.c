@@ -24,7 +24,7 @@
 \* ====================================================================== */
 
 
-#include "ppidd_sf_c.h"   /* include machines.h */
+#include "ppidd_sf_c.h"   /* include ppidd_machines.h */
 
 #ifdef FORTCL_NEXT
 #undef FORTCL_NEXT

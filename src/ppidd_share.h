@@ -30,13 +30,13 @@
 #if defined(MPI2) || defined(GA_TOOLS)
 
 #ifdef MPI2
- #include "mpiga_base.h"         /* include mpi.h, machines.h, and ppidd_dtype.h */
+ #include "mpiga_base.h"         /* include mpi.h, ppidd_machines.h, and ppidd_dtype.h */
  #include "mpi_utils.h"
  #include "mpi_nxtval.h"
 #endif
 
 #ifdef GA_TOOLS
- #include "util/machines.h"
+ #include "ppidd_machines.h"
  #include <ga.h>
  #include <macdecls.h>
 
@@ -73,7 +73,7 @@
 
 /*! For serial case */
 #else
- #include "util/machines.h"
+ #include "ppidd_machines.h"
 #endif
 
 #if (PPIDD_LANG == 1)

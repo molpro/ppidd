@@ -21,7 +21,7 @@
 #ifndef __PPIDD_FORTRAN_H__
 #define __PPIDD_FORTRAN_H__
 
- # include "util/machines.h"
+ # include "ppidd_machines.h"
 
  #     define PPIDD_Initialize              FORT_Extern(ppidd_initialize,PPIDD_INITIALIZE)
  #     define PPIDD_Initialize_data         FORT_Extern(ppidd_initialize_data,PPIDD_INITIALIZE_DATA)

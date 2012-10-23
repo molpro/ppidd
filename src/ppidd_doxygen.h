@@ -17,7 +17,7 @@
        |-- ./lib                          Final location of PPIDD library
        |-- ./src                          Source code directory for PPIDD library
        |   |-- GNUmakefile                    Makefile for src directory
-       |   |-- machines.h                     Head file for machine-related settings
+       |   |-- ppidd_machines.h               Head file for machine-related settings
        |   |-- mpi_helpmutex.c                Mutex source file using helper process
        |   |-- mpi_nxtval.c                   NXTVAL source file
        |   |-- mpi_nxtval.h                   NXTVAL header file
@@ -52,7 +52,7 @@
            |-- sizeofctypes.c                 Code for determining the size of C data types
            |-- sizeoffortypes.F               Code for determining the size of Fortran data types
            |-- ppidd_test.F                   Fortran test program
-           `-- timing_molpro.c                Utility tool for timing
+           `-- ppidd_test.out                 Output of test example
 
   </pre>
 

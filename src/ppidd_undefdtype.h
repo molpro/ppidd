@@ -1,7 +1,7 @@
 
 /*! \file
   Overwrite data types (fortint and forlogical) for PPIDD C interface.
-  prerequisite: include machines.h
+  prerequisite: include ppidd_machines.h
 */
 
 #ifndef __PPIDD_UNDEFDTYPE_H__

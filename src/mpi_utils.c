@@ -14,7 +14,7 @@
 
 #if defined(MPI2) || defined(GA_MPI)
 
-#include "util/machines.h"  /* needed by fortint in mpiga_type_f2cmpi */
+#include "ppidd_machines.h"  /* needed by fortint in mpiga_type_f2cmpi */
 #include "mpi_utils.h"
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];
@@ -132,7 +132,7 @@ int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype, int *sizeofdtype)
     switch(fdtype){
     case 0:
             sizefdtype=sizeof(fortint);
-/* we don't decide fortint by this method, but according to EXT_INT64 and EXT_INT in machines.h
+/* we don't decide fortint by this method, but according to EXT_INT64 and EXT_INT in ppidd_machines.h
             if (sizefdtype==(int)sizeof(int)) {
                MPI_Type_size(MPI_INT, &sizempidtype);
                if (sizefdtype==sizempidtype) mpidtype=MPI_INT;

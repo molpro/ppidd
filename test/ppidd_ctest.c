@@ -1,5 +1,5 @@
 /*! PPIDD standalone c test suites */
-#include "util/machines.h"
+#include "ppidd_machines.h"
 #include "ppidd_c.h"
 
 #ifdef MOLPRO

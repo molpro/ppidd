@@ -13,7 +13,7 @@
 #ifndef __PPIDD_EAF_C_H__
 #define __PPIDD_EAF_C_H__
 
-   #include "util/machines.h"
+   #include "ppidd_machines.h"
    extern void PPIDD_Eaf_open(char *fname, fortint *type, fortint *handle, fortint *ierr);
    extern void PPIDD_Eaf_write(fortint *handle,double *byte_offset,void *buff,fortint *byte_length,fortint *ierr);
    extern void PPIDD_Eaf_awrite(fortint *handle,double *byte_offset,void *buff,fortint *byte_length,fortint *request_id,fortint *ierr);

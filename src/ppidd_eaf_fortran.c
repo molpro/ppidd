@@ -24,7 +24,7 @@
 \* ====================================================================== */
 
 
-#include "ppidd_eaf_fortran.h"   /* include machines.h */
+#include "ppidd_eaf_fortran.h"   /* include ppidd_machines.h */
 
 #ifdef MPI2
  #include <mpi.h>

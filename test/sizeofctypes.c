@@ -1,4 +1,4 @@
-#include "util/machines.h"
+#include "ppidd_machines.h"
 #include "ppidd_dtype.h"
 
 #define	sizeofctype        FORT_Extern(sizeofctype,SIZEOFCTYPE)

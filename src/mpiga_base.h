@@ -25,7 +25,7 @@
  #include <time.h>
 
  #include "mpimutex.h"  /* mpi.h is already included here */
- #include "util/machines.h"
+ #include "ppidd_machines.h"
 
  #include "ppidd_dtype.h"
 

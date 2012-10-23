@@ -2,14 +2,14 @@
 .PHONY: default
 default: ppidd_test.exe ppidd_sf_test.exe ppidd_ctest.exe
 
-ppidd_ctest.exe: ppidd_ctest.o timing_molpro.o
+ppidd_ctest.exe: ppidd_ctest.o
 ifeq ($(BUILD),MPI2)
 	$(CC) $(CFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
 else
 	$(FC) $(patsubst -Vaxlib,-nofor_main,$(FFLAGS)) -o $@ $^ -L../lib -lppidd $(LIBS)
 endif
 
-ppidd_test.exe: ppidd_test.o timing_molpro.o sizeofctypes.o sizeoffortypes.o
+ppidd_test.exe: ppidd_test.o sizeofctypes.o sizeoffortypes.o
 	$(FC) $(FFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
 ppidd_sf_test.exe: ppidd_sf_test.o
 	$(FC) $(FFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)

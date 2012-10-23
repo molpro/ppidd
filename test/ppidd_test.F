@@ -105,28 +105,28 @@ c... Checking if C data types match Fortran
       endif
       call ppidd_barrier()
 c... Performing PPIDD basic operation test
-      call get_current_times(cpua,walla,wtimea)
+      call get_current_times(cpua,wtimea)
       call ppidd_basictest(helper_server_flag)
       call ppidd_barrier()
-      call get_current_times(cpub,wallb,wtimeb)
+      call get_current_times(cpub,wtimeb)
       if(iprocs.eq.0)write(iout,*)
       if(iprocs.eq.0)write(iout,100) 'ppidd_basictest:',
-     >   cpub-cpua,wallb-walla,wtimeb-wtimea
+     >   cpub-cpua,wtimeb-wtimea
 100   format(1x,'Time spent on ',a,t49,' cpu=',f16.4,' sec,',
-     > ' elapsed=',f16.4,' sec,',' wtime=',f16.4,' sec')
+     > '  wall time=',f16.4,' sec')
 
       call ppidd_barrier()
 c... Performing PPIDD mutex test
-      call get_current_times(cpua,walla,wtimea)
+      call get_current_times(cpua,wtimea)
       call ppidd_mutex_test(helper_server_flag)
       call ppidd_barrier()
-      call get_current_times(cpub,wallb,wtimeb)
+      call get_current_times(cpub,wtimeb)
       if(iprocs.eq.0)write(iout,*)
       if(iprocs.eq.0)write(iout,100) 'ppidd_mutex_test:',
-     >   cpub-cpua,wallb-walla,wtimeb-wtimea
+     >   cpub-cpua,wtimeb-wtimea
       call ppidd_barrier()
 c... Performing PPIDD shared counter test
-      call get_current_times(cpua,walla,wtimea)
+      call get_current_times(cpua,wtimea)
       if (helper_server_flag) then
         call ppidd_sharedcounter_test
       else
@@ -134,10 +134,10 @@ c... Performing PPIDD shared counter test
      >    'Helper server is disabled. Skip the shared counter test.'
       end if
       call ppidd_barrier()
-      call get_current_times(cpub,wallb,wtimeb)
+      call get_current_times(cpub,wtimeb)
       if(iprocs.eq.0)write(iout,*)
       if(iprocs.eq.0)write(iout,100) 'ppidd_sharedcounter_test:',
-     >   cpub-cpua,wallb-walla,wtimeb-wtimea
+     >   cpub-cpua,wtimeb-wtimea
 c
       if(iprocs.eq.0) write(iout,*)
       if(iprocs.eq.0) write(iout,*) 'All PPIDD tests successful.'
@@ -214,7 +214,7 @@ c
       logical helper_server_flag
       double precision, allocatable :: buff(:)
       double precision totsize,bufsize,z1
-      double precision cpu1,cpu2,cpu,wall1,wall2,wall,speed
+      double precision cpu1,cpu2,cpu,speed
       integer lentot,lenbuf,len,ioff,ilo,ihi
       integer lenseg,lenlat
       integer maxprc,nloop,nprocs,iprocs,iout,i,ipr
@@ -307,18 +307,17 @@ c... case (2)
 c
 c... ppidd_create
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       call ppidd_create('ppiddarray',lentot,dtype,storetype,ihandle,ok)
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
-      wall=wall2-wall1
       wtime=wtime2-wtime1
       call ppidd_inquire_name(ihandle,name)
       if(iprocs.eq.0)write(iout,*)
      >  'ppidd has created global array: ',name(1:len_trim(name))
-      if(iprocs.eq.0)write(iout,10) 'ppidd_create:',cpu,wall,wtime
+      if(iprocs.eq.0)write(iout,10) 'ppidd_create:',cpu,wtime
 10    format(1x,a,t20,'cpu=',f9.4,' sec,',
-     >       '  elapsed=',f9.4,' sec,','  wtime=',f9.4,' sec',:,
+     >       '  wall time=',f9.4,' sec',:,
      >       ',  speed=', f12.2,' MB/sec')
       call ppidd_flush6
 cc    create global data struct for testing latency, lenseg elements per proc evenly
@@ -328,15 +327,14 @@ cc    create global data struct for testing latency, lenseg elements per proc ev
 c
 c... ppidd_zero
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,nloop
         call ppidd_zero(ihandle,ok)
       end do
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
-      wall=wall2-wall1
       wtime=wtime2-wtime1
-      if(iprocs.eq.0) write(iout,10) 'ppidd_zero:',cpu,wall,wtime
+      if(iprocs.eq.0) write(iout,10) 'ppidd_zero:',cpu,wtime
       call ppidd_flush6
       call ppidd_zero(ihandlat,ok)
 c
@@ -399,12 +397,11 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
       nloop_save=nloop
       nloop=1
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       nopr=0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         if(iprocs.eq.ipr) then
           do i=1,nloop
           nrest=lentot
@@ -419,18 +416,16 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
           end do
         end if
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
-        wall=wall2-wall1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
       end do
-      spd2=0.0d0
-      if(wtimes.gt.0d0) spd2=dble(maxprc*nloop)*totsize/wtimes
+      speed=0.0d0
+      if(wtimes.gt.0d0) speed=dble(maxprc*nloop)*totsize/wtimes
       if(iprocs.eq.0)
-     >   write(iout,10) 'ppidd_put(trial):',cpus,walls,wtimes,spd2
+     >   write(iout,10) 'ppidd_put(trial):',cpus,wtimes,speed
       call ppidd_flush6
       call ppidd_barrier()
       nloop=nloop_save
@@ -438,12 +433,11 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
 
 c... measure the bandwidth
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       nopr=0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         if(iprocs.eq.ipr) then
           do i=1,nloop
           nrest=lentot
@@ -458,47 +452,36 @@ c... measure the bandwidth
           end do
         end if
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
-        wall=wall2-wall1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
         if(iprocs.eq.0 .and. verbose) then
-          speed1=0.0d0
-          speed2=0.0d0
-          if(wall.gt.0d0) speed1=totsize*dble(nloop)/wall
-          if(wtime.gt.0d0) speed2=totsize*dble(nloop)/wtime
-          write(iout,20) 'ppidd_put:',ipr,cpu,wall,speed1
-20        format(1x,a,t15,'  iprocs=',i3,'  cpu=',f9.4,' sec,',
-     >         '  elapsed=',f9.4,' sec,  speed1=',
-     >         f8.2,' MB/sec')
-          write(iout,22) 'ppidd_put:',ipr,cpu,wtime,speed2
+          speed=0.0d0
+          if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
+          write(iout,22) 'ppidd_put:',ipr,cpu,wtime,speed
 22        format(1x,a,t15,'  iprocs=',i3,'  cpu=',f9.4,' sec,',
-     >         '  w  time=',f9.4,' sec,  speed2=',
+     >         '  wall time=',f9.4,' sec,  speed=',
      >         f8.2,' MB/sec')
           call ppidd_flush6
         end if
       end do
-      spd1=0.0d0
-      spd2=0.0d0
-      if(walls.gt.0d0) spd1=dble(maxprc*nloop)*totsize/walls
+      speed=0.0d0
       if(wtimes.gt.0d0) then
-        spd2=dble(maxprc*nloop)*totsize/wtimes
+        speed=dble(maxprc*nloop)*totsize/wtimes
         bdw=dble(maxprc*nloop)*totsize/(wtimes-wlat*dble(nopr*nprocs))
       end if
-      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_put:',spd1,spd2
-23    format(1x,a,t18,'  average speed1=',f8.2,' MB/sec,',
-     >                '  average speed2=',f8.2,' MB/sec')
+      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_put:',speed
+23    format(1x,a,t18,'  average speed=',f8.2,' MB/sec,')
       if(iprocs.eq.0) then
         write(iout,55) 'ppidd_put:',wlat*dble(nopr*nprocs),nopr
-        write(iout,10) 'ppidd_put:',cpus,walls,wtimes,spd2
-        write(iout,60) 'ppidd_put:',cpus,walls,wtimes,wlat*1.0d6,bdw
+        write(iout,10) 'ppidd_put:',cpus,wtimes,speed
+        write(iout,60) 'ppidd_put:',cpus,wtimes,wlat*1.0d6,bdw
       end if
 55    format(1x,a,t20,' total latency time=',f9.4,' sec,  nopr=',i6)
 60    format(1x,a,t20,'cpu=',f9.4,' sec,',
-     >       '  elapsed=',f9.4,' sec,','  wtime=',f9.4,' sec',:,
+     >       '  wall time=',f9.4,' sec',:,
      >     ',  latency=',f10.2,' microsec, bandwidth=', f12.2,' MB/sec')
       call ppidd_flush6
 
@@ -549,12 +532,11 @@ c ppidd_get latency standard test
 
 c... measure the bandwidth
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       nopr=0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         if(iprocs.eq.ipr) then
           do i=1,nloop
           nrest=lentot
@@ -569,35 +551,28 @@ c... measure the bandwidth
           end do
         end if
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
-        wall=wall2-wall1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
         if(iprocs.eq.0 .and. verbose) then
-          speed1=0.0d0
-          speed2=0.0d0
-          if(wall.gt.0d0) speed1=totsize*dble(nloop)/wall
-          if(wtime.gt.0d0) speed2=totsize*dble(nloop)/wtime
-          write(iout,20) 'ppidd_get:',ipr,cpu,wall,speed1
-          write(iout,22) 'ppidd_get:',ipr,cpu,wtime,speed2
+          speed=0.0d0
+          if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
+          write(iout,22) 'ppidd_get:',ipr,cpu,wtime,speed
           call ppidd_flush6
         end if
       end do
-      spd1=0.0d0
-      spd2=0.0d0
-      if(walls.gt.0d0) spd1=dble(maxprc*nloop)*totsize/walls
+      speed=0.0d0
       if(wtimes.gt.0d0) then
-        spd2=dble(maxprc*nloop)*totsize/wtimes
+        speed=dble(maxprc*nloop)*totsize/wtimes
         bdw=dble(maxprc*nloop)*totsize/(wtimes-wlat*dble(nopr*nprocs))
       end if
-      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_get:',spd1,spd2
+      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_get:',speed
       if(iprocs.eq.0) then
         write(iout,55) 'ppidd_get:',wlat*dble(nopr*nprocs),nopr
-        write(iout,10) 'ppidd_get:',cpus,walls,wtimes,spd2
-        write(iout,60) 'ppidd_get:',cpus,walls,wtimes,wlat*1.0d6,bdw
+        write(iout,10) 'ppidd_get:',cpus,wtimes,speed
+        write(iout,60) 'ppidd_get:',cpus,wtimes,wlat*1.0d6,bdw
       end if
       call ppidd_flush6
 c
@@ -649,12 +624,11 @@ c ppidd_acc latency standard test
 
 c... measure the bandwidth
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       nopr=0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         if(iprocs.eq.ipr) then
           do i=1,nloop
           nrest=lentot
@@ -669,47 +643,39 @@ c... measure the bandwidth
           end do
         end if
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
-        wall=wall2-wall1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
         if(iprocs.eq.0 .and. verbose) then
-          speed1=0.0d0
-          speed2=0.0d0
-          if(wall.gt.0d0) speed1=totsize*dble(nloop)/wall
-          if(wtime.gt.0d0) speed2=totsize*dble(nloop)/wtime
-          write(iout,20) 'ppidd_acc:',ipr,cpu,wall,speed1
-          write(iout,22) 'ppidd_acc:',ipr,cpu,wtime,speed2
+          speed=0.0d0
+          if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
+          write(iout,22) 'ppidd_acc:',ipr,cpu,wtime,speed
           call ppidd_flush6
         end if
       end do
-      spd1=0.0
-      spd2=0.0
-      if(walls.gt.0d0) spd1=dble(maxprc*nloop)*totsize/walls
+      speed=0.0
       if(wtimes.gt.0d0) then
-        spd2=dble(maxprc*nloop)*totsize/wtimes
+        speed=dble(maxprc*nloop)*totsize/wtimes
         bdw=dble(maxprc*nloop)*totsize/(wtimes-wlat*dble(nopr*nprocs))
       end if
-      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_acc:',spd1,spd2
+      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_acc:',speed
       if(iprocs.eq.0) then
         write(iout,55) 'ppidd_acc:',wlat*dble(nopr*nprocs),nopr
-        write(iout,10) 'ppidd_acc:',cpus,walls,wtimes,spd2
-        write(iout,60) 'ppidd_acc:',cpus,walls,wtimes,wlat*1.0d6,bdw
+        write(iout,10) 'ppidd_acc:',cpus,wtimes,speed
+        write(iout,60) 'ppidd_acc:',cpus,wtimes,wlat*1.0d6,bdw
       end if
       call ppidd_flush6
 c
 c... ppidd_destroy
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       call ppidd_destroy(ihandle,ok)
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
-      wall=wall2-wall1
       wtime=wtime2-wtime1
-      if(iprocs.eq.0) write(iout,10) 'ppidd_destroy:',cpu,wall,wtime
+      if(iprocs.eq.0) write(iout,10) 'ppidd_destroy:',cpu,wtime
       call ppidd_flush6
 
       call ppidd_destroy(ihandlat,ok)
@@ -787,7 +753,6 @@ c ppidd_send/recv latency standard test
 
 c.... measure bandwidth
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       dtype=1
       nopr=0
@@ -796,7 +761,7 @@ c.... measure bandwidth
       do ipr=0,proc_ltop-1
         ipr_pair=maxprc-1-ipr
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         if(iprocs.eq.ipr) then
           do i=1,nloop
           nrest=lentot
@@ -819,39 +784,32 @@ c.... measure bandwidth
           end do
         end if
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
-        wall=wall2-wall1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
         if(iprocs.eq.0 .and. verbose) then
-          speed1=0.0d0
-          speed2=0.0d0
-          if(wall.gt.0d0) speed1=totsize*dble(nloop)/wall
-          if(wtime.gt.0d0) speed2=totsize*dble(nloop)/wtime
-          write(iout,20) 'ppidd_send/recv:',ipr,cpu,wall,speed1
-          write(iout,22) 'ppidd_send/recv:',ipr,cpu,wtime,speed2
+          speed=0.0d0
+          if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
+          write(iout,22) 'ppidd_send/recv:',ipr,cpu,wtime,speed
           call ppidd_flush6
         end if
       end do
-      spd1=0.0
-      spd2=0.0
-      if(walls.gt.0d0) spd1=dble(proc_ltop*nloop)*totsize/walls
+      speed=0.0
       if(wtimes.gt.0d0) then
-         spd2=totsize*dble(proc_ltop*nloop)/wtimes
+         speed=totsize*dble(proc_ltop*nloop)/wtimes
          bdw=totsize*dble(proc_ltop*nloop)/(wtimes-
      >       wlat*dble(nopr*proc_ltop))
       end if
       if(iprocs.eq.0.and.verbose)
-     >  write(iout,23) 'ppidd_send/recv:',spd1,spd2
+     >  write(iout,23) 'ppidd_send/recv:',speed
       if(iprocs.eq.0) write(iout,55) 'ppidd_send/recv:',
      >  wlat*dble(nopr*proc_ltop),nopr
       if(iprocs.eq.0) write(iout,10) 'ppidd_send/recv:',
-     >  cpus,walls,wtimes,spd2
+     >  cpus,wtimes,speed
       if(iprocs.eq.0) write(iout,60) 'ppidd_send/recv:',
-     >  cpus,walls,wtimes,wlat*1.0d6,bdw
+     >  cpus,wtimes,wlat*1.0d6,bdw
       call ppidd_flush6
 !      nloop=nloop_save
 c
@@ -893,7 +851,6 @@ c ppidd_bcast latency standard test
 
 c ppidd_bcast bandwidth test
       cpus=0.0
-      walls=0.0
       wtimes=0.0
       nopr=0
       totsize_save=totsize
@@ -902,7 +859,7 @@ c ppidd_bcast bandwidth test
       lentot=nint(totsize)*1024*128
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call get_current_times(cpu1,wall1,wtime1)
+        call get_current_times(cpu1,wtime1)
         do i=1,nloop
         nrest=lentot
         do ioff=0,lentot-1,lenbuf
@@ -913,37 +870,30 @@ c ppidd_bcast bandwidth test
         end do
         end do
         call ppidd_barrier()
-        call get_current_times(cpu2,wall2,wtime2)
-        wall=wall2-wall1
+        call get_current_times(cpu2,wtime2)
         cpu=cpu2-cpu1
         wtime=wtime2-wtime1
         cpus=cpus+cpu
-        walls=walls+wall
         wtimes=wtimes+wtime
         if(iprocs.eq.0 .and. verbose) then
-          speed1=0.0d0
-          speed2=0.0d0
-          if(wall.gt.0d0) speed1=totsize*dble(nloop)/wall
-          if(wtime.gt.0d0) speed2=totsize*dble(nloop)/wtime
-          write(iout,20) 'ppidd_brdcst:',ipr,cpu,wall,speed1
-          write(iout,22) 'ppidd_brdcst:',ipr,cpu,wtime,speed2
+          speed=0.0d0
+          if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
+          write(iout,22) 'ppidd_brdcst:',ipr,cpu,wtime,speed
           call ppidd_flush6
         end if
       end do
-      spd1=0.0
-      spd2=0.0
+      speed=0.0
       bdw=0.0d0
-      if(walls.gt.0d0) spd1=dble(maxprc*nloop)*totsize/walls
-      if(wtimes.gt.0d0) spd2=dble(maxprc*nloop)*totsize/wtimes
+      if(wtimes.gt.0d0) speed=dble(maxprc*nloop)*totsize/wtimes
       if(wtimes-wlat*dble(nopr) .gt. 0d0) then
         bdw=dble(maxprc*nloop)*totsize/(wtimes-wlat*dble(nopr))
       end if
       if(iprocs.eq.0.and.verbose)
-     >    write(iout,23) 'ppidd_brdcst:',spd1,spd2
+     >    write(iout,23) 'ppidd_brdcst:',speed
       if(iprocs.eq.0) then
         write(iout,55) 'ppidd_brdcst:',wlat*dble(nopr),nopr
-        write(iout,10) 'ppidd_brdcst:',cpus,walls,wtimes,spd2
-        write(iout,60) 'ppidd_brdcst:',cpus,walls,wtimes,wlat*1.0d6,bdw
+        write(iout,10) 'ppidd_brdcst:',cpus,wtimes,speed
+        write(iout,60) 'ppidd_brdcst:',cpus,wtimes,wlat*1.0d6,bdw
       end if
       call ppidd_flush6
       totsize=totsize_save
@@ -984,7 +934,7 @@ c ppidd_gsum latency standard test
 c ppidd_gsum bandwidth standard test
       nopr=0
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,nloop
       nrest=lentot
       do ioff=0,lentot-1,lenbuf
@@ -995,20 +945,19 @@ c ppidd_gsum bandwidth standard test
       end do
       end do
       call ppidd_barrier()
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       cpus=cpu2-cpu1
-      walls=wall2-wall1
       wtimes=wtime2-wtime1
-      spd1=0.0
-      spd2=0.0
-      if(wall.gt.0d0) spd1=totsize*dble(nloop)/walls
-      if(wtimes.gt.0d0) spd2=totsize*dble(nloop)/wtimes
-      if(wtimes.gt.0d0) bdw=totsize*dble(nloop)/(wtimes-wlat*dble(nopr))
-      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_gsum:',spd1,spd2
+      speed=0.0
+      if(wtimes.gt.0d0) then
+        speed=totsize*dble(nloop)/wtimes
+        bdw=totsize*dble(nloop)/(wtimes-wlat*dble(nopr))
+      end if
+      if(iprocs.eq.0.and.verbose) write(iout,23) 'ppidd_gsum:',speed
       if(iprocs.eq.0) write(iout,55) 'ppidd_gsum:',wlat*dble(nopr),nopr
-      if(iprocs.eq.0)write(iout,10) 'ppidd_gsum:',cpus,walls,wtimes,spd2
+      if(iprocs.eq.0)write(iout,10) 'ppidd_gsum:',cpus,wtimes,speed
       if(iprocs.eq.0) write(iout,60) 'ppidd_gsum:',
-     >  cpus,walls,wtimes,wlat*1.0d6,bdw
+     >  cpus,wtimes,wlat*1.0d6,bdw
       call ppidd_flush6
 c
 c... release the memory in buffer space
@@ -1017,12 +966,12 @@ c... release the memory in buffer space
       return
       end
 
-      subroutine get_current_times(cpu,wall,wtime)
+c... get current CPU time from Fortran intrinsic function and wall time from MPI2/GA function
+      subroutine get_current_times(cpu,wtime)
       implicit double precision (a-h,o-z)
-      double precision cpu,wall,wtime
+      double precision cpu,wtime
 
       cpu=dble(second())
-      wall=wallcl()
       call ppidd_wtime(wtime)
 
       return
@@ -1035,9 +984,8 @@ c... release the memory in buffer space
       integer, allocatable :: task_array(:)
       double precision, allocatable :: sum_array(:)
       double precision, allocatable :: tcpu_array1(:)
-      double precision, allocatable :: twall_array1(:)
       double precision, allocatable :: twt_array1(:),twt_array2(:)
-      double precision cpu1,cpu2,wall1,wall2
+      double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
       integer nprocs,iprocs,iout,i
@@ -1088,14 +1036,12 @@ c... initialise the buffer space
       ALLOCATE( task_array(nprocs) )
       ALLOCATE( sum_array(nprocs) )
       ALLOCATE( tcpu_array1(nprocs) )
-      ALLOCATE( twall_array1(nprocs) )
       ALLOCATE( twt_array1(nprocs) )
       ALLOCATE( twt_array2(nprocs) )
       do i=1,nprocs
         task_array(i)=0
         sum_array(i)=0.0d0
         tcpu_array1(i)=0.0d0
-        twall_array1(i)=0.0d0
         twt_array1(i)=0.0d0
         twt_array2(i)=0.0d0
       end do
@@ -1108,7 +1054,7 @@ c...(1)  shared counter test with computing tasks
 c... initialise the NXTVAL Server
       call ppidd_nxtval(-nprocs,junk)
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       call ppidd_nxtval(nprocs,nval)
       call ppidd_wtime(wtimea)
       do while (nval.lt.num_tasks)
@@ -1121,10 +1067,9 @@ c... time spent on computation and other overhead
         call ppidd_nxtval(nprocs,nval)
         call ppidd_wtime(wtimea)
       enddo
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
 c... task time
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
       call ppidd_barrier()
 
@@ -1137,7 +1082,6 @@ c... broadcast the completed tasks on current process
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(sum_array(i), 1,1,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array2(i), 1,1,i-1)
       end do
@@ -1167,29 +1111,27 @@ c... print out the summary
 20        format(1x,i5,i12,f20.9)
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
-10      format(1x,a,t49,' cpu=',f16.6,' sec,',' elapsed=',f16.6,' sec,',
-     >         ' wtime=',f16.6,' sec')
+     >  tcpu_array1(1),twt_array1(1)
+10      format(1x,a,t49,' cpu=',f16.6,' sec,',
+     >  '  wall time=',f16.6,' sec')
         cpu_tot1=sum(tcpu_array1)
-        wall_tot1=sum(twall_array1)
         wt_tot1=sum(twt_array1)
         wt_tot2=sum(twt_array2)
         write(iout,10) 'Sum of time for all procs all tasks:',
-     >  cpu_tot1,wall_tot1,wt_tot1
+     >  cpu_tot1,wt_tot1
         write(iout,9) 'Sum of time for all procs all computations:',
      >  wt_tot2
-9       format(1x,a,t105,' wtime=',f16.6,' sec')
+9       format(1x,a,t75,'  wall time=',f16.6,' sec')
         write(iout,9) 'Sum of time for all procs all counter callings:',
      >  wt_tot1-wt_tot2
         acpu1=cpu_tot1/dble(num_tasks)
-        awall1=wall_tot1/dble(num_tasks)
         awt1=wt_tot1/dble(num_tasks)
         awt2=wt_tot2/dble(num_tasks)
-        write(iout,10) 'Average time per task:',acpu1,awall1,awt1
+        write(iout,10) 'Average time per task:',acpu1,awt1
         write(iout,9) 'Average time per computation:',awt2
         write(iout,12) 'Average time per shared counter calling:',
      >                 (awt1-awt2)*1.0d9
-12      format(1x,a,t105,' wtime=',f12.1,' nanosec')
+12      format(1x,a,t75,'  wall time=',f12.1,' nanosec')
       end if
 c... end of (1)
 
@@ -1205,7 +1147,7 @@ c...(2)  distribute tasks evenly to every process without shared counter
       if(verbose) write(iout,30)
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,num_tasks
         ipr=mod(i,nprocs)
         if(ipr.eq.iprocs) then
@@ -1214,9 +1156,8 @@ c...(2)  distribute tasks evenly to every process without shared counter
           task_array(iprocs+1)=task_array(iprocs+1)+1
         end if
       enddo
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
       call ppidd_barrier()
 
@@ -1225,7 +1166,6 @@ c... broadcast the completed tasks on current process
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(sum_array(i), 1,1,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
       end do
 
@@ -1251,21 +1191,20 @@ c... print out the summary
           write(iout,20) i-1,task_array(i),twt_task
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
+     >  tcpu_array1(1),twt_array1(1)
         cpu_tot3=sum(tcpu_array1)
-        wall_tot3=sum(twall_array1)
         wt_tot3=sum(twt_array1)
         write(iout,10) 'Sum of time for all procs all computing tasks:',
-     >  cpu_tot3,wall_tot3,wt_tot3
+     >  cpu_tot3,wt_tot3
         acpu3=cpu_tot3/dble(num_tasks)
-        awall3=wall_tot3/dble(num_tasks)
         awt3=wt_tot3/dble(num_tasks)
         write(iout,10) 'Average time per computing task:',
-     >                 acpu3,awall3,awt3
+     >                 acpu3,awt3
         write(iout,*)
-        write(iout,12) 'Comparing the times between (1) and (2), we also
-     > get the approximate average time per counter calling:',
-     >  (awt1-awt3)*1.0d9
+        write(iout,115)
+115     format(1x,'Comparing the times between (1) and (2), we also'
+     >  ,' get the approximate average time per counter calling:')
+        write(iout,12) ' ',(awt1-awt3)*1.0d9
         write(iout,13)
 13      format(1x,'This data probably can not be used to evaluate'
      >  ,' the shared counter since some extra overhead is included.')
@@ -1285,15 +1224,14 @@ c    2^31=2,147,483,648
       if(verbose) write(iout,30)
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       call ppidd_nxtval(nprocs,nval)
       do while (nval.lt.num_tasks)
         task_array(iprocs+1)=task_array(iprocs+1)+1
         call ppidd_nxtval(nprocs,nval)
       enddo
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
       call ppidd_barrier()
 
@@ -1304,7 +1242,6 @@ c... broadcast the completed tasks on current process
       do i=1,nprocs
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
       end do
       call ppidd_barrier()
@@ -1322,20 +1259,18 @@ c... print out the summary
           write(iout,20) i-1,task_array(i),twt_task
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
+     >  tcpu_array1(1),twt_array1(1)
         cpu_tot4=sum(tcpu_array1)
-        wall_tot4=sum(twall_array1)
         wt_tot4=sum(twt_array1)
         write(iout,10) 'Sum of time for all procs all empty tasks:',
-     >  cpu_tot4,wall_tot4,wt_tot4
+     >  cpu_tot4,wt_tot4
 c... convert time to nanosecond
         acpu4=(cpu_tot4/dble(num_tasks))*1.0d9
-        awall4=(wall_tot4/dble(num_tasks))*1.0d9
         awt4=(wt_tot4/dble(num_tasks))*1.0d9
         write(iout,11) 'Average time per shared counter calling:',
-     >                 acpu4,awall4,awt4
-11      format(1x,a,t49,' cpu=',f12.1,' nanosec,',' elapsed=',f12.1,
-     >  ' nanosec,',' wtime=',f12.1,' nanosec')
+     >                 acpu4,awt4
+11      format(1x,a,t49,' cpu=',f12.1,' nanosec,',
+     >  '  wall time=',f12.1,' nanosec')
         write(iout,111)
 111     format(1x,'The data in (3) probably can not be used to evaluate'
      >  ,' the shared counter since all callings may concentrate on',
@@ -1348,7 +1283,6 @@ c... release the memory in buffer space
       IF( ALLOCATED(task_array) ) DEALLOCATE( task_array)
       IF( ALLOCATED(sum_array) ) DEALLOCATE( sum_array)
       IF( ALLOCATED(tcpu_array1) ) DEALLOCATE( tcpu_array1)
-      IF( ALLOCATED(twall_array1) ) DEALLOCATE( twall_array1)
       IF( ALLOCATED(twt_array1) ) DEALLOCATE( twt_array1)
       IF( ALLOCATED(twt_array2) ) DEALLOCATE( twt_array2)
 
@@ -1365,9 +1299,8 @@ c... release the memory in buffer space
       integer, allocatable :: task_array(:)
       double precision, allocatable :: sum_array(:)
       double precision, allocatable :: tcpu_array1(:)
-      double precision, allocatable :: twall_array1(:)
       double precision, allocatable :: twt_array1(:)
-      double precision cpu1,cpu2,wall1,wall2
+      double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
       integer nprocs,iprocs,iout,i
@@ -1410,28 +1343,26 @@ c    2^31=2,147,483,648
 c... calculate the average time per get_current_times calling
       ntimes=1000000
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,ntimes
-        call get_current_times(cpu0,wall0,wtime0)
+        call get_current_times(cpu0,wtime0)
       end do
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       cpu_tot=cpu2-cpu1
-      wall_tot=wall2-wall1
       wt_tot=wtime2-wtime1
 
       if(iprocs.eq.0) then
         write(iout,*)
         write(iout,10) 'Total time on calling get_current_times: ',
-     >    cpu_tot,wall_tot,wt_tot
+     >    cpu_tot,wt_tot
         write(iout,89) 'Total number of calling get_current_times: ',
      >    ntimes
 89      format(1x,a,t49,i10)
 c... convert time to nanosecond
         acpu=(cpu_tot/dble(ntimes))*1.0d9
-        awall=(wall_tot/dble(ntimes))*1.0d9
         awt=(wt_tot/dble(ntimes))*1.0d9
         write(iout,11) 'Average time per get_current_times calling:',
-     >     acpu,awall,awt
+     >     acpu,awt
       end if
 
 c... calculate the average time per ppidd_wtime calling
@@ -1447,7 +1378,7 @@ c... calculate the average time per ppidd_wtime calling
         write(iout,*)
         write(iout,92) 'Total time on calling ppidd_wtime ',
      >     ntimes, wt_tot
-92      format(1x,a,i10,'  times:',t105,' wtime=',f16.6,' sec')
+92      format(1x,a,i10,'  times:',t75,'  wall time=',f16.6,' sec')
 c... convert time to nanosecond
         awt=(wt_tot/dble(ntimes))*1.0d9
         write(iout,12) 'Average time per ppidd_wtime calling:', awt
@@ -1459,7 +1390,6 @@ c... initialise the buffer space
       ALLOCATE( task_array(nprocs) )
       ALLOCATE( sum_array(nprocs) )
       ALLOCATE( tcpu_array1(nprocs) )
-      ALLOCATE( twall_array1(nprocs) )
       ALLOCATE( twt_array1(nprocs) )
 
 
@@ -1500,7 +1430,6 @@ c... case 2
         task_array(i)=0
         sum_array(i)=0.0d0
         tcpu_array1(i)=0.0d0
-        twall_array1(i)=0.0d0
         twt_array1(i)=0.0d0
       end do
 
@@ -1511,7 +1440,7 @@ c...(1)  mutex test with computing tasks
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
 
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
 
       do i=iprocs+1,num_tasks,nprocs
         call ppidd_lock_mutex(0)
@@ -1523,11 +1452,10 @@ c... critical section
         call ppidd_barrier()
       enddo
 
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
 
 c... task time
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
       call ppidd_barrier()
 
@@ -1536,7 +1464,6 @@ c... broadcast the completed tasks on current process
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(sum_array(i), 1,1,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
       end do
 
@@ -1565,22 +1492,19 @@ c... print out the summary
 20        format(1x,i5,i12,f20.9)
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
-10      format(1x,a,t49,' cpu=',f16.6,' sec,',' elapsed=',f16.6,' sec,',
-     >         ' wtime=',f16.6,' sec')
+     >  tcpu_array1(1),twt_array1(1)
+10      format(1x,a,t49,' cpu=',f16.6,' sec,',
+     >         '  wall time=',f16.6,' sec')
         cpu_tot1=sum(tcpu_array1)
-        wall_tot1=sum(twall_array1)
         wt_tot1=sum(twt_array1)
         acpu_tot1=cpu_tot1/dble(nprocs)
-        awall_tot1=wall_tot1/dble(nprocs)
         awt_tot1=wt_tot1/dble(nprocs)
         write(iout,10) 'Time spent for each proc(average):',
-     >  acpu_tot1,awall_tot1,awt_tot1
+     >  acpu_tot1,awt_tot1
         acpu1=acpu_tot1/dble(num_tasks)
-        awall1=awall_tot1/dble(num_tasks)
         awt1=awt_tot1/dble(num_tasks)
-        write(iout,10) 'Average time per task:',acpu1,awall1,awt1
-12      format(1x,a,t105,' wtime=',f12.1,' nanosec')
+        write(iout,10) 'Average time per task:',acpu1,awt1
+12      format(1x,a,t75,'  wall time=',f12.1,' nanosec')
       end if
 c... end of (1)
 
@@ -1598,7 +1522,7 @@ c...(2)  distribute tasks evenly to every process without mutex (lock and unlock
       if(verbose) write(iout,30)
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,num_tasks
         if(mod(i,nprocs).eq.iprocs) then
           call compute_task(npart,nscale_task,sumtemp)
@@ -1607,9 +1531,8 @@ c...(2)  distribute tasks evenly to every process without mutex (lock and unlock
         end if
         call ppidd_barrier()
       enddo
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
       call ppidd_barrier()
 
@@ -1618,7 +1541,6 @@ c... broadcast the completed tasks on current process
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(sum_array(i), 1,1,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
       end do
 
@@ -1644,24 +1566,21 @@ c... print out the summary
           write(iout,20) i-1,task_array(i),twt_task
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
+     >  tcpu_array1(1),twt_array1(1)
         cpu_tot3=sum(tcpu_array1)
-        wall_tot3=sum(twall_array1)
         wt_tot3=sum(twt_array1)
         acpu_tot3=cpu_tot3/dble(nprocs)
-        awall_tot3=wall_tot3/dble(nprocs)
         awt_tot3=wt_tot3/dble(nprocs)
         write(iout,10) 'Time spent for each proc(average):',
-     >  acpu_tot3,awall_tot3,awt_tot3
+     >  acpu_tot3,awt_tot3
         acpu3=acpu_tot3/dble(num_tasks)
-        awall3=awall_tot3/dble(num_tasks)
         awt3=awt_tot3/dble(num_tasks)
         write(iout,10) 'Average time per computing task:',
-     >                 acpu3,awall3,awt3
+     >                 acpu3,awt3
         write(iout,*)
         write(iout,33)
-33      format(1x, 'Comparing the time between (1) and (2), we also
-     > get the approximate average time per lock/unlock calling:')
+33      format(1x, 'Comparing the time between (1) and (2), we also',
+     >  ' get the approximate average time per lock/unlock calling:')
         write(iout,12) ' ',(awt1-awt3)*1.0d9
         write(iout,13)
 13      format(1x,'This data probably can be used to evaluate'
@@ -1682,17 +1601,16 @@ c    2^31=2,147,483,648
       if(verbose) write(iout,30)
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks3
       call ppidd_barrier()
-      call get_current_times(cpu1,wall1,wtime1)
+      call get_current_times(cpu1,wtime1)
       do i=1,num_tasks3
         call ppidd_lock_mutex(0)
         call ppidd_unlock_mutex(0)
       enddo
-      call get_current_times(cpu2,wall2,wtime2)
+      call get_current_times(cpu2,wtime2)
       call ppidd_barrier()
-      call get_current_times(cpu3,wall3,wtime3)
+      call get_current_times(cpu3,wtime3)
       task_array(iprocs+1)=num_tasks3
       tcpu_array1(iprocs+1)=cpu2-cpu1
-      twall_array1(iprocs+1)=wall2-wall1
       twt_array1(iprocs+1)=wtime2-wtime1
 
 
@@ -1700,7 +1618,6 @@ c... broadcast the completed tasks on current process
       do i=1,nprocs
         call ppidd_bcast(task_array(i),1,0,i-1)
         call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twall_array1(i), 1,1,i-1)
         call ppidd_bcast(twt_array1(i), 1,1,i-1)
       end do
       call ppidd_barrier()
@@ -1719,24 +1636,21 @@ c... print out the summary
           write(iout,20) i-1,task_array(i),twt_task
         end do
         write(iout,10) 'Time spent for iprocs=0:',
-     >  tcpu_array1(1),twall_array1(1),twt_array1(1)
+     >  tcpu_array1(1),twt_array1(1)
         cpu_tot4=sum(tcpu_array1)
-        wall_tot4=sum(twall_array1)
         wt_tot4=sum(twt_array1)
         acpu_tot4=cpu_tot4/dble(nprocs)
-        awall_tot4=wall_tot4/dble(nprocs)
         awt_tot4=wt_tot4/dble(nprocs)
         write(iout,10) 'Time spent for each proc(average):',
-     >  acpu_tot4,awall_tot4,awt_tot4
+     >  acpu_tot4,awt_tot4
 c... convert time to nanosecond
         acpu4=(acpu_tot4/dble(num_tasks_tot))*1.0d9
-        awall4=(awall_tot4/dble(num_tasks_tot))*1.0d9
         awt4=(awt_tot4/dble(num_tasks_tot))*1.0d9
 
         write(iout,11) 'Average time per lock/unlock calling:',
-     >                 acpu4,awall4,awt4
-11      format(1x,a,t49,' cpu=',f12.1,' nanosec,',' elapsed=',f12.1,
-     >  ' nanosec,',' wtime=',f12.1,' nanosec')
+     >                 acpu4,awt4
+11      format(1x,a,t49,' cpu=',f12.1,' nanosec,',
+     >  '  wall time=',f12.1,' nanosec')
         write(iout,111)
 111     format(1x,'The data in (3) can be used to evaluate the mutex'
      >  ,' since all callings are evenly distributed to all processes.')
@@ -1754,7 +1668,6 @@ c... release the memory in buffer space
       IF( ALLOCATED(task_array) ) DEALLOCATE( task_array)
       IF( ALLOCATED(sum_array) ) DEALLOCATE( sum_array)
       IF( ALLOCATED(tcpu_array1) ) DEALLOCATE( tcpu_array1)
-      IF( ALLOCATED(twall_array1) ) DEALLOCATE( twall_array1)
       IF( ALLOCATED(twt_array1) ) DEALLOCATE( twt_array1)
 
       return

@@ -20,7 +20,15 @@
  * required by FORTRAN on a particular machine. If this is unknown,
  * compile a simple FORTRAN subroutine with the -c option and
  * use 'nm' to look at the object file.
-*/
+ *
+ * This header file is a subset of machines.h, and mainly includes:
+ * (1) system include files on different machines
+ * (2) definitions of C data types in some special cases
+ * (3) definitions of LARGEFILE settings for Parallel IO (in GA)
+ * (4) definitions of FORTCL settings for passing character string between Fortran and C
+ * (5) definitions of Fortran data types in C
+ * (6) definitions of _UNDERSCORES and Macro FORT_Extern for objects which can be called in Fortran
+ */
 
 /* PPIDD header file for C programs:
  * include files
@@ -169,7 +177,7 @@ typedef FORTINT fortint ; /* fortran integer type */
 typedef FORTINTC fortintc ; /* fortran character string length type */
 
 
-/* definitions of _UNDERSCORES for objects which can be called in Fortran */
+/* definitions of _UNDERSCORES and FORT_Extern for objects which can be called in Fortran */
 
 #if defined(NAME_LU) || defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(_WIN32)
 #define _UNDERSCORES 1

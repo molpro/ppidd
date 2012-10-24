@@ -75,10 +75,7 @@
 #endif
 #include <sys/types.h>
 #ifdef _WIN32
-#define ssize_t int
-#define mode_t unsigned long
 #include <io.h>
-#define F_OK 0
 #else
 #include <unistd.h>
 #ifndef _AIX

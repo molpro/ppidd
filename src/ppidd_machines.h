@@ -56,45 +56,43 @@
 
 /* system include files on different machines */
 
-#ifndef MACHINES_H_DEFINES_ONLY
-   #include <ctype.h>
-   #include <errno.h>
-   #include <fcntl.h>
-   #include <math.h>
-   #ifndef M_PI
-   #define M_PI 3.14159265358979323846
-   #endif
-   #include <signal.h>
-   #include <stdlib.h>
-   #include <stdio.h>
-   #include <string.h>
-   #ifndef _WIN32
-   #include <sys/param.h>
-   #endif
-   #include <sys/stat.h>
-   #include <time.h>
-   #ifndef _WIN32
-   #include <sys/time.h>
-   #include <sys/times.h>
-   #endif
-   #include <sys/types.h>
-   #ifdef _WIN32
-   #define ssize_t int
-   #define mode_t unsigned long
-   #include <io.h>
-   #define F_OK 0
-   #else
-   #include <unistd.h>
-   #ifndef _AIX
-   #include <sys/unistd.h>
-   #endif
-   #endif
+#include <ctype.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <math.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#ifndef _WIN32
+#include <sys/param.h>
+#endif
+#include <sys/stat.h>
+#include <time.h>
+#ifndef _WIN32
+#include <sys/time.h>
+#include <sys/times.h>
+#endif
+#include <sys/types.h>
+#ifdef _WIN32
+#define ssize_t int
+#define mode_t unsigned long
+#include <io.h>
+#define F_OK 0
+#else
+#include <unistd.h>
+#ifndef _AIX
+#include <sys/unistd.h>
+#endif
+#endif
 
-   #ifdef SX
-   #include <stdint.h>
-   #include <sys/socket.h> /* for gethostname */
-   #endif
-#endif /* MACHINES_H_DEFINES_ONLY */
+#ifdef SX
+#include <stdint.h>
+#include <sys/socket.h> /* for gethostname */
+#endif
 
 
 /* definitions of C data types in some special cases */

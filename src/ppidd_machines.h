@@ -85,7 +85,6 @@
 
 #ifdef SX
 #include <stdint.h>
-#include <sys/socket.h> /* for gethostname */
 #endif
 
 

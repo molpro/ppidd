@@ -2,19 +2,27 @@
 #include "ppidd_machines.h"
 #include "ppidd_c.h"
 
-#ifdef MOLPRO
-    int ppidd_ctest(void)
-#else
-    int main(int argc, char **argv)
-#endif
-{
-    int me, nproc;
+int ppidd_ctest();
 
-#ifndef MOLPRO
-     /* initialize PPIDD*/
+#ifdef MOLPRO
+#else
+int main(int argc, char **argv)
+{
+    /* Initialize PPIDD */
     PPIDD_Initialize(argc, argv);
     PPIDD_Initialize_data();
+
+    ppidd_ctest();
+
+    /* Terminate and Tidy up PPIDD */
+    PPIDD_Finalize();
+    return 0;
+}
 #endif
+
+int ppidd_ctest(void)
+{
+    int me, nproc;
 
     PPIDD_Size(&nproc);
     PPIDD_Rank(&me);
@@ -33,9 +41,5 @@
        fflush(stdout);
     }
 
-#ifndef MOLPRO
-/* ***  Terminate and Tidy up PPIDD */
-    PPIDD_Finalize();
-#endif
     return 0;
 }

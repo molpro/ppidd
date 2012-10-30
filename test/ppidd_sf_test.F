@@ -5,13 +5,34 @@ c
 #define FNAME   'ppidd_sf'
 
 #ifdef MOLPRO
-      subroutine ppidd_sf_test
 #else
       program main
-#endif
       implicit none
       logical helper_server_flag
       integer num_per_helper
+
+! Intitialize PPIDD library
+      call ppidd_initialize()
+#ifdef NO_NXTVAL_SERVER
+      helper_server_flag=.false.
+      num_per_helper=-1
+#else
+! one helper server on every node */
+      helper_server_flag=.true.
+      num_per_helper=0
+#endif
+      call ppidd_helper_server(helper_server_flag,num_per_helper)
+      call ppidd_initialize_data()
+
+      call ppidd_sf_test()
+
+! Terminate and Tidy up PPIDD
+      call ppidd_finalize()
+      end
+#endif
+
+      subroutine ppidd_sf_test
+      implicit none
       integer iout
 c
       integer size
@@ -27,23 +48,6 @@ c     integer stack, heap
 c
       integer nodeid, nnodes
       integer me,nproc,handle,i,start,end,j, rc, chunk
-c
-c
-c...  Intitialize PPIDD library
-c
-#ifndef MOLPRO
-      call ppidd_initialize()
-#ifdef NO_NXTVAL_SERVER
-      helper_server_flag=.false.
-      num_per_helper=-1
-#else
-! one helper server on every node */
-      helper_server_flag=.true.
-      num_per_helper=0
-#endif
-      call ppidd_helper_server(helper_server_flag,num_per_helper)
-      call ppidd_initialize_data()
-#endif
 
 c...  Get the processes number and process id
       call ppidd_size(nproc)
@@ -156,12 +160,7 @@ c
 
       if(me.eq.0) write(iout,*) 'PPIDD sf test successful.'
 c
-c***  Terminate and Tidy up PPIDD
-c
-#ifndef MOLPRO
-      call ppidd_finalize()
-#endif
-c
+      return
       end
 
       subroutine ppidd_sf_flush6

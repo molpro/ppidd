@@ -1,31 +1,15 @@
 ! PPIDD standalone test suites
 
 #ifdef MOLPRO
-      subroutine ppiddtest
-      USE molpro_options, ONLY : molpro_helper_server
 #else
       program main
-#endif
-      implicit double precision (a-h,o-z)
-      integer iprocs, nproc, nproc_total
+      implicit none
       logical helper_server_flag
       integer num_per_helper
-#ifndef MOLPRO
-      integer ma_heap, idtype
-      logical status
-#endif
-#if !defined(MOLPRO) && defined(PPIDD_USE_MA)
-      integer, parameter :: heap=400*400*4
-      integer, parameter :: fudge=100
-      integer, parameter :: stack=400*400*4
-#endif
 
-c
-c...  Intitialize PPIDD library
-c***  Intitialize a message passing library
-c***  Initialize GA
-c
-#ifndef MOLPRO
+!  Intitialize PPIDD library
+!  Intitialize a message passing library
+!  Initialize GA
       call ppidd_initialize()
 #ifdef NO_NXTVAL_SERVER
       helper_server_flag=.false.
@@ -37,8 +21,26 @@ c
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
-#else
-      helper_server_flag=molpro_helper_server
+
+      call ppiddtest(helper_server_flag)
+
+! Terminate and Tidy up PPIDD
+      call ppidd_finalize()
+      end
+#endif
+
+      subroutine ppiddtest(helper_server_flag)
+      implicit double precision (a-h,o-z)
+      integer iprocs, nproc, nproc_total
+      logical helper_server_flag
+#ifndef MOLPRO
+      integer ma_heap, idtype
+      logical status
+#ifdef PPIDD_USE_MA
+      integer, parameter :: heap=400*400*4
+      integer, parameter :: fudge=100
+      integer, parameter :: stack=400*400*4
+#endif
 #endif
 
 c...  Get the processes number and process id
@@ -145,12 +147,7 @@ c
       write(iout,*) 'All PPIDD tests are skipped in serial case.'
 #endif
 c
-c***  Terminate and Tidy up PPIDD
-c
-#ifndef MOLPRO
-      call ppidd_finalize()
-#endif
-c
+      return
       end
 
 

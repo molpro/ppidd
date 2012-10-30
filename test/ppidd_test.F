@@ -5,6 +5,14 @@
       implicit none
       logical helper_server_flag
       integer num_per_helper
+      integer iprocs,iout
+#ifdef PPIDD_USE_MA
+      integer ma_heap, idtype
+      logical status
+      integer, parameter :: heap=400*400*4
+      integer, parameter :: fudge=100
+      integer, parameter :: stack=400*400*4
+#endif
 
 !  Intitialize PPIDD library
 !  Intitialize a message passing library
@@ -20,37 +28,11 @@
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
-
-      call ppiddtest(helper_server_flag)
-
-! Terminate and Tidy up PPIDD
-      call ppidd_finalize()
-      end
-#endif
-
-      subroutine ppiddtest(helper_server_flag)
-      implicit double precision (a-h,o-z)
-      integer iprocs, nproc, nproc_total
-      logical helper_server_flag
-#ifndef MOLPRO
-      integer ma_heap, idtype
-      logical status
-#ifdef PPIDD_USE_MA
-      integer, parameter :: heap=400*400*4
-      integer, parameter :: fudge=100
-      integer, parameter :: stack=400*400*4
-#endif
-#endif
-
-c...  Get the processes number and process id
-      call ppidd_size(nproc)
-      call ppidd_rank(iprocs)
-      call ppidd_size_all(nproc_total)
 c
+      call ppidd_rank(iprocs)
       iout=6
       if(iprocs.eq.0)then
          write(iout,*)
-
 #ifdef MPI2
          write(iout,*) 'PPIDD initialized (MPI-2 version of PPIDD).'
 #else
@@ -59,8 +41,8 @@ c
          call ppidd_flush6
       endif
       call ppidd_barrier()
-c
-#if !defined(MOLPRO) && defined(PPIDD_USE_MA)
+
+#if defined(PPIDD_USE_MA)
 c***  Initialize the MA package
 c     MA must be initialized before any global array is allocated
 c
@@ -80,10 +62,31 @@ c... idtype=1: fortran double precision type
       idtype=1
       call ppidd_ma_init(idtype,stack,ma_heap,status)
       if (.not. status) call ppidd_error('ppidd_ma_init failed',-1)
+
+      if(iprocs.eq.0) write(iout,*) 'MA initialized.'
 #endif
+
+! Call ppiddtest      
+      call ppiddtest(helper_server_flag)
+
+! Terminate and Tidy up PPIDD
+      call ppidd_finalize()
+      end
+#endif
+
+      subroutine ppiddtest(helper_server_flag)
+      implicit double precision (a-h,o-z)
+      integer iprocs, nproc, nproc_total
+      logical helper_server_flag
+
+c...  Get the processes number and process id
+      call ppidd_size(nproc)
+      call ppidd_rank(iprocs)
+      call ppidd_size_all(nproc_total)
 c
+      iout=6
 c
-c... Synchronize processes (a barrier) before specific tests
+c... Print messages
 c
       if(iprocs.eq.0)then
          write(iout,*)
@@ -98,6 +101,7 @@ c
          call ppidd_flush6
       endif
 
+! Synchronize processes (a barrier) before specific tests
 #if defined(MPI2) || defined(GA_TOOLS)
       call ppidd_barrier()
 c... Checking if C data types match Fortran
@@ -118,6 +122,7 @@ c... Performing PPIDD basic operation test
 
       call ppidd_barrier()
 c... Performing PPIDD mutex test
+#ifndef NOMAIN
       call get_current_times(cpua,wtimea)
       call ppidd_mutex_test(helper_server_flag)
       call ppidd_barrier()
@@ -126,6 +131,9 @@ c... Performing PPIDD mutex test
       if(iprocs.eq.0)write(iout,100) 'ppidd_mutex_test:',
      >   cpub-cpua,wtimeb-wtimea
       call ppidd_barrier()
+#else
+      write(iout,*) 'Skip the standalone PPIDD mutex test.'
+#endif
 c... Performing PPIDD shared counter test
       call get_current_times(cpua,wtimea)
       if (helper_server_flag) then
@@ -151,11 +159,7 @@ c
 
 
       subroutine ppidd_flush6
-#ifdef MOLPRO
-      call flush6()
-#else
       call flush(6)
-#endif
       end
 
 

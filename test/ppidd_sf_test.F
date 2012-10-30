@@ -163,9 +163,5 @@ c
       end
 
       subroutine ppidd_sf_flush6
-#ifdef MOLPRO
-      call flush6()
-#else
       call flush(6)
-#endif
       end

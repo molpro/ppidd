@@ -6,7 +6,6 @@ c
 
 #ifdef MOLPRO
       subroutine ppidd_sf_test
-      USE molpro_options, ONLY : molpro_helper_server
 #else
       program main
 #endif
@@ -44,8 +43,6 @@ c
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
-#else
-      helper_server_flag=molpro_helper_server
 #endif
 
 c...  Get the processes number and process id

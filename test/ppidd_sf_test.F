@@ -4,8 +4,7 @@ c FNAME - filename for test program
 c
 #define FNAME   'ppidd_sf'
 
-#ifdef MOLPRO
-#else
+#ifndef NOMAIN
       program main
       implicit none
       logical helper_server_flag

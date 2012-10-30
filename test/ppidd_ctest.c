@@ -4,8 +4,7 @@
 
 int ppidd_ctest();
 
-#ifdef MOLPRO
-#else
+#ifndef NOMAIN
 int main(int argc, char **argv)
 {
     /* Initialize PPIDD */

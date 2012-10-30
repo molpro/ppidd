@@ -1,7 +1,6 @@
 ! PPIDD standalone test suites
 
-#ifdef MOLPRO
-#else
+#ifndef NOMAIN
       program main
       implicit none
       logical helper_server_flag

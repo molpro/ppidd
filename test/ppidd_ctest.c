@@ -2,7 +2,7 @@
 #include "ppidd_machines.h"
 #include "ppidd_c.h"
 
-int ppidd_ctest();
+int ppidd_ctest(void);
 
 #ifndef NOMAIN
 int main(int argc, char **argv)

@@ -66,13 +66,13 @@ c
 c
       if(me.eq.0) write(iout,*) 'Creating shared file = ',
      >            trim(FNAME)
-      call ppidd_sf_flush6
+      call ppidd_flush6
       call ppidd_sf_create(FNAME,
      $     dble(16*size),dble(8*size),dble(8*dimnsn),handle,rc)
 c
       call ppidd_barrier()
       if(me.eq.0) write(iout,*) 'Writing and reading operations:'
-      call ppidd_sf_flush6
+      call ppidd_flush6
       call ppidd_barrier()
       chunk = (size+nproc-1)/nproc
       start = me*chunk+1
@@ -109,7 +109,7 @@ c
 c
       call ppidd_gsum(1,ttw,1,'max')
       call ppidd_barrier()
-      call ppidd_sf_flush6
+      call ppidd_flush6
 c
 c
 c     everybody reads different chunk of data
@@ -144,7 +144,7 @@ c
       call ppidd_gsum(1,ttr,1,'max')
       call ppidd_barrier()
 c
-      call ppidd_sf_flush6
+      call ppidd_flush6
       if(me.eq.0)then
         write(iout,*)
         write(iout,*)'test passed ', 8*maxid*dimnsn,' bytes'
@@ -160,8 +160,4 @@ c
       if(me.eq.0) write(iout,*) 'PPIDD sf test successful.'
 c
       return
-      end
-
-      subroutine ppidd_sf_flush6
-      call flush(6)
       end

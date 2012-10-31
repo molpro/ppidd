@@ -158,11 +158,6 @@ c
       end
 
 
-      subroutine ppidd_flush6
-      call flush(6)
-      end
-
-
 ! Checking whether C types match Fortran types
       subroutine ppidd_checkdtype
       implicit double precision (a-h,o-z)

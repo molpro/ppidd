@@ -1,6 +1,5 @@
 ! PPIDD standalone test suites
 
-#ifndef NOMAIN
       program main
       implicit none
       logical helper_server_flag
@@ -72,7 +71,6 @@ c... idtype=1: fortran double precision type
 ! Terminate and Tidy up PPIDD
       call ppidd_finalize()
       end
-#endif
 
       subroutine ppiddtest(helper_server_flag)
       implicit double precision (a-h,o-z)
@@ -122,7 +120,6 @@ c... Performing PPIDD basic operation test
 
       call ppidd_barrier()
 c... Performing PPIDD mutex test
-#ifndef NOMAIN
       call get_current_times(cpua,wtimea)
       call ppidd_mutex_test(helper_server_flag)
       call ppidd_barrier()
@@ -131,9 +128,6 @@ c... Performing PPIDD mutex test
       if(iprocs.eq.0)write(iout,100) 'ppidd_mutex_test:',
      >   cpub-cpua,wtimeb-wtimea
       call ppidd_barrier()
-#else
-      write(iout,*) 'Skip the standalone PPIDD mutex test.'
-#endif
 c... Performing PPIDD shared counter test
       call get_current_times(cpua,wtimea)
       if (helper_server_flag) then

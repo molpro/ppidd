@@ -4,7 +4,6 @@ c FNAME - filename for test program
 c
 #define FNAME   'ppidd_sf'
 
-#ifndef NOMAIN
       program main
       implicit none
       logical helper_server_flag
@@ -28,7 +27,6 @@ c
 ! Terminate and Tidy up PPIDD
       call ppidd_finalize()
       end
-#endif
 
       subroutine ppidd_sf_test
       implicit none

@@ -4,7 +4,6 @@
 
 int ppidd_ctest(void);
 
-#ifndef NOMAIN
 int main(int argc, char **argv)
 {
     /* Initialize PPIDD */
@@ -17,7 +16,6 @@ int main(int argc, char **argv)
     PPIDD_Finalize();
     return 0;
 }
-#endif
 
 int ppidd_ctest(void)
 {

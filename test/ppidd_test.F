@@ -210,7 +210,7 @@ c
       integer proc_ltop,proc_rbot,dest_src,sync,lenre,srcre
       integer dtype,storetype
       integer ihandle,ihandlat
-      character*80 name
+      character(len=80) :: name
       logical ok
       logical verbose
       logical arcca_test_flag
@@ -1676,8 +1676,7 @@ c
       integer N,nloop
       double precision totsum,sum,pai
       integer i,j
-      double precision err, f, pi, w
-      f(x) = 4.0d0/(1.0d0+x*x)
+      double precision err, pi, w
       pi = 4.0d0*atan(1.0d0)
 
       totsum = 0.0d0
@@ -1701,4 +1700,12 @@ c
 !      write(6,*) 'running compute_task, pai=',pai,' err=',err
 
       return
+      contains
+       double precision function f(x)
+       implicit none
+       double precision x
+       f = 4.0d0/(1.0d0+x*x)
+       return
+       end function f
+
       end

@@ -9,7 +9,7 @@
 
     - GNU make version 3.81 or higher
 
-    - A Fortran compiler
+    - A Fortran compiler which supports Fortran 2003 Standard features
 
     - A C compiler
 

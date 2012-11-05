@@ -41,7 +41,7 @@ c
       double precision tt0,tt1,ttw, ttr, tcgtime
 c     integer stack, heap
       integer idlist(maxid), curid
-      character*80 errmsg
+      character(len=80) errmsg
 c
       integer nodeid, nnodes
       integer me,nproc,handle,i,start,end,j, rc, chunk

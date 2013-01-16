@@ -86,19 +86,18 @@
 #include "ppidd_fortran.h"
 
 #if defined(MPI2) || defined(GA_MPI)
-/* Declare the function prototypes. These functions will be used to catch the command line arguments */
   #ifdef MOLPRO
-/* Use external functions from MOLPRO FORTRAN wrappers to construct the argument list */
-    extern fortint molpro_iargc_();
-    extern void molpro_getarg_(fortint *, char *, fortint);
-    #define ppidd_iargc molpro_iargc_
-    #define ppidd_getarg molpro_getarg_
-  #else
-/* Use external functions from PPIDD FORTRAN wrappers to construct the argument list */
-    extern fortint ppidd_iargc_();
-    extern void ppidd_getarg_(fortint *, char *, fortint);
-    #define ppidd_iargc ppidd_iargc_
-    #define ppidd_getarg ppidd_getarg_
+/* Declare the function prototypes. These functions will be used to catch the command line arguments */
+/* if iargc_ and getarg_ have been defined, then use them to
+  construct the argument list by calling FORTRAN.
+      extern int  iargc_();
+      extern void getarg_(int*,char*,int);
+
+   Otherwise, use external functions and subroutines from molpro FORTRAN wrappers
+   to construct the argument list. */
+
+      extern fortint molpro_iargc_();
+      extern void molpro_getarg_(fortint *, char *, fortint);
   #endif
 #endif
 #endif
@@ -129,8 +128,12 @@
    /* ========================== *\
       Get command line arguments
    \* ========================== */
+  #ifdef MOLPRO
+/* For molpro, enable the function of getting command line arguments */
+/* Use external functions and subroutines from molpro FORTRAN wrappers
+   to construct the argument list */
 
-      argc=(int)ppidd_iargc();
+      argc=(int)molpro_iargc_();
       if(argc) {
          argc++;
          argv = malloc(argc*sizeof(char*));
@@ -140,9 +143,9 @@
 	   ifor=(fortint)i;
 
          # if defined CRAY
-             ppidd_getarg(&ifor,arg,&lenmax);
+             molpro_getarg_(&ifor,arg,&lenmax);
          # else
-             ppidd_getarg(&ifor,arg,lenmax);
+             molpro_getarg_(&ifor,arg,lenmax);
          # endif
 
            for(j=0; j<256 && arg[j] != ' '; j++);
@@ -151,19 +154,17 @@
            if(MPIGA_Debug)printf("In ppidd_initialize: argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
          }
       }
-      #if !defined(MOLPRO) && defined(MPICH1)
-/* For MPICH1 (it is used rarely, and can be replaced by MPICH2), MPI_Init can't work if arguments are null.
-   In this case use the dummy command arguments.
-   For MPICH2 and other MPI2 library, there is no such limitation */
-      if(argc==0) {
-         argc=1;
-         i=0;
-         argv = malloc(argc*sizeof(char*));
-         strcpy(arg,"DummyCommand");
-         argv[0] = (char *) strdup(arg);
-         if(MPIGA_Debug)printf("In ppidd_initialize: USE DUMMY ARGUMENTS in MPICH1. argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
-      }
-      #endif
+  #else
+/* For standalone ppidd library, disable the function of getting command line arguments. */
+/* Use the dummy command arguments, since MPI_Init can't work if arguments are null for MPICH1.
+   For MPICH2 and other MPI2 library, no such limitation */
+      argc=1;
+      i=0;
+      argv = malloc(argc*sizeof(char*));
+      strcpy(arg,"DummyCommand");
+      argv[0] = (char *) strdup(arg);
+      if(MPIGA_Debug)printf("In ppidd_initialize: USE DUMMY ARGUMENTS. argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
+  #endif
 #endif
 
    /* ================ *\

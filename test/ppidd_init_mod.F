@@ -14,7 +14,7 @@
 
       subroutine ppidd_initialize(nargs, args)
         use, intrinsic :: iso_c_binding, only: c_int,c_ptr,c_loc,
-     >                    c_null_ptr,c_null_char
+     >                    c_null_char
         implicit none
         integer, intent(in) :: nargs
         integer, parameter  :: lenmax=1024
@@ -25,8 +25,7 @@
         integer i
 
         nstrs=nargs
-        pt_string=c_null_ptr
-        do i = 1, nstrs
+        do i = 1, nargs
            array_strings(i) = trim(args(i))//c_null_char
            pt_string(i) = c_loc(array_strings(i))
         end do

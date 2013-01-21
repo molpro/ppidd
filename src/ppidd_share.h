@@ -111,7 +111,7 @@
    /* ========================== *\
       Get command line arguments
    \* ========================== */
-      if(argc) {
+      if(argc>0) {
          argv = malloc(argc*sizeof(char*));
          for(i=0; i<argc; ++i) {
            argv[i] = (char *) strdup(args[i]);

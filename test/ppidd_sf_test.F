@@ -5,12 +5,13 @@ c
 #define FNAME   'ppidd_sf'
 
       program main
+      use ppidd_init_mod
       implicit none
       logical helper_server_flag
       integer num_per_helper
 
 ! Intitialize PPIDD library
-      call ppidd_initialize()
+      call ppidd_initialize(0,'')
 #ifdef NO_NXTVAL_SERVER
       helper_server_flag=.false.
       num_per_helper=-1

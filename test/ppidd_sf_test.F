@@ -5,7 +5,7 @@ c
 #define FNAME   'ppidd_sf'
 
       program main
-      use ppidd_init_mod
+      use ppidd
       implicit none
       logical helper_server_flag
       integer num_per_helper

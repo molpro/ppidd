@@ -1,4 +1,4 @@
-      module ppidd_init_mod
+      module ppidd
 
       interface
         subroutine ppidd_initialize_f2c(nargs, args)
@@ -34,4 +34,4 @@
 
       end subroutine ppidd_initialize
   
-      end module ppidd_init_mod
+      end module ppidd

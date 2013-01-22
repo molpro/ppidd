@@ -50,6 +50,7 @@ endif
 endif
 ifdef _I8_
 override CFLAGS+=-D_I8_
+override FFLAGS+=-D_I8_
 endif
 
 ifndef BUILD

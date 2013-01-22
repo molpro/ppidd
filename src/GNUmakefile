@@ -9,4 +9,4 @@ default: $(addsuffix .o,$(basename $(wildcard *.c *.F)))
 	$(FC) -c $(FFLAGS) $<
 
 clean:
-	@rm -f *.o
+	@rm -f *.o *.mod

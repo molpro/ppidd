@@ -17,16 +17,19 @@
      >                    c_null_char
         implicit none
         integer, intent(in) :: nargs
+        character(len=*),dimension(nargs),intent(in) :: args
         integer, parameter  :: lenmax=1024
-        character(len=lenmax),dimension(nargs),intent(in) :: args
         character(len=lenmax),dimension(nargs),target :: array_strings
         integer(c_int) :: nstrs
         type(c_ptr), dimension(nargs) :: pt_string
-        integer i
+        integer i,l
 
         nstrs=nargs
         do i = 1, nargs
-           array_strings(i) = trim(args(i))//c_null_char
+           l=len_trim(args(i))
+           if (l.eq.0) stop ! need to call error routine, argument length is zero, likely nargs is wrong
+           if (l.ge.lenmax) stop ! need to call error routine, argument too long
+           array_strings(i) = args(i)(1:l)//c_null_char
            pt_string(i) = c_loc(array_strings(i))
         end do
 

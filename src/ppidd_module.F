@@ -36,7 +36,7 @@
            if (l.eq.0) stop ! need to call error routine, argument length is zero, likely nargs is wrong
            if (l.ge.lenmax) stop ! need to call error routine, argument too long
            array_strings(i) = args(i)(1:l)//c_null_char
-           pt_string(i) = c_loc(array_strings(i))
+           pt_string(i) = c_loc(array_strings(i)(1:1))
         end do
 
         call ppidd_initialize_f2c(nstrs,pt_string)

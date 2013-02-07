@@ -103,7 +103,7 @@
       int mpierr;
   #endif
 #if (PPIDD_LANG == 2)
-      int i,j,argc=nargs;
+      int i,argc=nargs;
       char **argv = NULL;
       char arg[256];
 

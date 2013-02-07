@@ -86,7 +86,6 @@
 #include "ppidd_fortran.h"
 #endif
 
-
 /*! Initialize the PPIDD parallel environment
  *
  *  - For \b GA, includes initialization of TCGMSG/MPI and GA.
@@ -182,6 +181,14 @@
 #endif
 #endif
    }
+
+#if (PPIDD_LANG == 2)
+   void PPIDD_Initialize(void) {
+    int i=0;
+    char **a = NULL;
+    ppidd_initialize_f2c(i,a);
+   }
+#endif
 
 #if (PPIDD_LANG == 1)
 /* Both fortint and fortlogical are defined as int. */

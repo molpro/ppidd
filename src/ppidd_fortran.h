@@ -23,7 +23,7 @@
 
  # include "ppidd_machines.h"
 
-/* #     define PPIDD_Initialize              FORT_Extern(ppidd_initialize,PPIDD_INITIALIZE) */
+ #     define PPIDD_Initialize              FORT_Extern(ppidd_initialize,PPIDD_INITIALIZE)
  #     define PPIDD_Initialize_data         FORT_Extern(ppidd_initialize_data,PPIDD_INITIALIZE_DATA)
  #     define PPIDD_Worker_comm             FORT_Extern(ppidd_worker_comm,PPIDD_WORKER_COMM)
  #     define PPIDD_Finalize                FORT_Extern(ppidd_finalize,PPIDD_FINALIZE)

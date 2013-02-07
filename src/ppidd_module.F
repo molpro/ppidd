@@ -1,15 +1,15 @@
       module ppidd
 
       interface
-        subroutine ppidd_initialize(nargs, args)
+        subroutine ppidd_initialize_with_args(nargs, args)
         integer, intent(in) :: nargs
         character(len=*),dimension(nargs),intent(in) :: args
-        end subroutine ppidd_initialize
+        end subroutine ppidd_initialize_with_args
       end interface
 
       end module ppidd
 
-      subroutine ppidd_initialize(nargs, args)
+      subroutine ppidd_initialize_with_args(nargs, args)
         use, intrinsic :: iso_c_binding, only: c_int,c_ptr,c_loc,
      >                    c_null_char
         implicit none
@@ -41,4 +41,4 @@
 
         call ppidd_initialize_f2c(nstrs,pt_string)
 
-      end subroutine ppidd_initialize
+      end subroutine ppidd_initialize_with_args

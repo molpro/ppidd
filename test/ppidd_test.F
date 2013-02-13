@@ -17,7 +17,7 @@
 !  Intitialize PPIDD library
 !  Intitialize a message passing library
 !  Initialize GA
-      call ppidd_initialize(0,'')
+      call ppidd_initialize_with_args(0,'')
 #ifdef NO_NXTVAL_SERVER
       helper_server_flag=.false.
       num_per_helper=-1

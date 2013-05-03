@@ -43,14 +43,13 @@
 	       ,fortintc lx
 #endif
 )  {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
       int mpierr;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       char *errmsg;
 #endif
       int i;
@@ -76,8 +75,7 @@
       mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(fortint)mpifhandle;
       *ierr=(fortint)mpierr;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       if(MPI_Debug) {
          printf("%5d: PPIDD_Sf_create: sizeof(double) =%d, sizeof(SFsize_t)=%d\n",ppidd_sf_rank(),(int)sizeof(double),(int)sizeof(SFsize_t));
          printf("%5d: PPIDD_Sf_create: sizeof(fortint)=%d, sizeof(Integer) =%d\n",ppidd_sf_rank(),(int)sizeof(fortint),(int)sizeof(Integer));
@@ -101,9 +99,7 @@
 
       free(name2);
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",ppidd_sf_rank(),(int)*handle,(int)*ierr);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_create is not available in serial case.\n");
       exit(1);
 #endif
@@ -136,17 +132,14 @@
       *request_id=(fortint)request;
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_write : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",ppidd_sf_rank(),(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       char *buffer=(char *)buff;
 
       int ihandle=(int)*handle;
       int irequest_id;
       *ierr=(fortint)SF_Write(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(fortint)irequest_id;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_write is not available in serial case.\n");
       exit(1);
 #endif
@@ -178,17 +171,14 @@
       *request_id=(fortint)request;
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_read  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",ppidd_sf_rank(),(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       char *buffer=(char *)buff;
 
       int ihandle=(int)*handle;
       int irequest_id;
       *ierr=(fortint)SF_Read(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(fortint)irequest_id;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_read is not available in serial case.\n");
       exit(1);
 #endif
@@ -216,14 +206,11 @@
 #endif
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_wait  : end. ierr=%d\n",ppidd_sf_rank(),(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int irequest_id=(int)*request_id;
       *ierr=(fortint)SF_Wait(&irequest_id);
       *request_id=(fortint)irequest_id;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_wait is not available in serial case.\n");
       exit(1);
 #endif
@@ -261,8 +248,7 @@
       }
 #endif
       *ierr=(fortint)mpierr;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int inum=(int)*num;
       int *ilist,i;
 
@@ -277,9 +263,7 @@
           list[i] = (fortint) ilist[i];
       }
       free(ilist);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_waitall is not available in serial case.\n");
       exit(1);
 #endif
@@ -300,13 +284,10 @@
       mpierr=MPI_File_close( &mpi_fh );
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_destroy: end. handle=%d,ierr=%d\n",ppidd_sf_rank(),(int)mpifhandle,(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int ihandle=(int)*handle;
       *ierr=(fortint)SF_Destroy(ihandle);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_destroy is not available in serial case.\n");
       exit(1);
 #endif
@@ -328,7 +309,7 @@
 	       ,fortintc lx
 #endif
 )  {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
@@ -352,16 +333,13 @@
       MPI_Error_string(perrcode, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
       strcpy(message,estring2);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       SF_Errmsg(perrcode, message);
 #endif
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_errmsg: middle. message=%s\n",ppidd_sf_rank(),message);
       for(i=strlen(message);i<lxi;i++) message[i]=' ';
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_errmsg: end. perrcode=%d\n",ppidd_sf_rank(),perrcode);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Sf_errmsg is not available in serial case.\n");
       exit(1);
 #endif

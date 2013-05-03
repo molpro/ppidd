@@ -45,12 +45,12 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#ifdef GA_TOOLS
+#ifdef GA_MPI
  #include <ga.h>
  #include <sf.h>
 #endif
  extern int ppidd_sf_rank(void);
-#if defined(GA_TOOLS) || defined(MPI2)
+#if defined(GA_MPI) || defined(MPI2)
  static int MPI_Debug=0;
 #endif
 

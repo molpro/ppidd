@@ -27,7 +27,7 @@
 #error "PPIDD_LANG not defined"
 #endif
 
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
 
 #ifdef MPI2
  #include "mpiga_base.h"         /* include mpi.h, ppidd_machines.h, and ppidd_dtype.h */
@@ -35,7 +35,7 @@
  #include "mpi_nxtval.h"
 #endif
 
-#ifdef GA_TOOLS
+#ifdef GA_MPI
  #include "ppidd_machines.h"
  #include <ga.h>
  #include <macdecls.h>
@@ -43,10 +43,8 @@
  #include <ga-papi.h>
  #define ga_type_f2c pnga_type_f2c
 
- #ifdef GA_MPI
-   #include <mpi.h>
-   #include "mpi_utils.h"
- #endif
+ #include <mpi.h>
+ #include "mpi_utils.h"
 #endif
  static int MPIGA_Debug=0;
 
@@ -78,9 +76,9 @@
 #endif
 #if defined(MPI2) || defined(GA_MPI)
 
-  #ifdef MPI2
-      int mpierr;
-  #endif
+#ifdef MPI2
+    int mpierr;
+#endif
 #if (PPIDD_LANG == 2)
       int i,argc=nargs;
       char **argv = NULL;
@@ -108,19 +106,16 @@
       }
 #endif
 
+#endif
    /* ================ *\
       Initialize MPIGA
    \* ================ */
-  #ifdef MPI2
-      mpierr=mpiga_initialize(&argc,&argv);
-      mpi_test_status("PPIDD_Initialize:",mpierr);
-  #endif
-  #ifdef GA_MPI
-      MPI_Init(&argc, &argv);                       /* initialize MPI */
-  #endif
-#endif
-#ifdef GA_TOOLS
-      GA_Initialize();                            /* initialize GA */
+#ifdef MPI2
+    mpierr=mpiga_initialize(&argc,&argv);
+    mpi_test_status("PPIDD_Initialize:",mpierr);
+#elif defined(GA_MPI)
+    MPI_Init(&argc, &argv);                     /* initialize MPI */
+    GA_Initialize();                            /* initialize GA */
 #endif
 
 #if (PPIDD_LANG == 2)
@@ -207,12 +202,9 @@
    void PPIDD_Finalize(void) {
 #ifdef MPI2
       mpiga_terminate();
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       GA_Terminate();
-#ifdef GA_MPI
       MPI_Finalize();
-#endif
 #endif
    }
 
@@ -226,16 +218,14 @@
    void PPIDD_Uses_ma(fortlogical *ok) {
 #ifdef MPI2
       *ok = FALSE;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       if(MPIGA_Debug)printf("In ppidd_uses_ma: sizeof(fortlogical)=%d, sizeof(fortint)=%d, sizeof(Integer)=%d\n",
                              (int)sizeof(fortlogical),(int)sizeof(fortint),(int)sizeof(Integer));
       if(MPIGA_Debug)printf("In ppidd_uses_ma: sizeof(double)=%d,  sizeof(DoublePrecision)=%d\n",(int)sizeof(double),(int)sizeof(DoublePrecision));
 
       if (GA_Uses_ma()) *ok = TRUE;
       else *ok = FALSE;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *ok = FALSE;
 #endif
   }
@@ -249,8 +239,7 @@
    void PPIDD_MA_init(fortint *dtype, fortint *stack, fortint *heap, fortlogical *ok) {
 #ifdef MPI2
       *ok = TRUE;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int istack=(int)*stack;
       int iheap=(int)*heap;
       int gadtype=-1;
@@ -270,8 +259,7 @@
       }
       if( MA_init(gadtype, istack, iheap)) *ok = TRUE;
       else *ok = FALSE;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *ok = TRUE;
 #endif
   }
@@ -289,11 +277,9 @@
    void PPIDD_Wtime(double *ctime) {
 #ifdef MPI2
       *ctime = MPI_Wtime();
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       *ctime = GA_Wtime();
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *ctime = (double)0;
 #endif
   }
@@ -334,14 +320,12 @@
 
 #ifdef MPI2
       MPIGA_Error(msg2, icode);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       GA_Error(msg2, icode);
 #endif
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
       free(msg2);
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       fprintf(stdout," %s %d (%#x).\n", msg2,icode,icode);
       fflush(stdout);
       fprintf(stderr," %s %d (%#x).\n", msg2,icode,icode);
@@ -404,8 +388,8 @@
         int mproc = (int) *numproc;
         *val= (fortint) NXTVAL(&mproc);
       }
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#elif defined(GA_MPI)
+#else
       printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
       exit(1);
 #endif
@@ -426,11 +410,9 @@
 
       MPI_Comm_size(mpicomm, &mpinp);
       *np = (fortint) mpinp;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       *np = (fortint)GA_Nnodes();
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *np = (fortint)1;
 #endif
    }
@@ -449,11 +431,9 @@
 
       MPI_Comm_size(mpicomm, &mpinp);
       *np = (fortint) mpinp;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       *np = (fortint)GA_Nnodes();
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *np = (fortint)1;
 #endif
    }
@@ -472,11 +452,9 @@
 
       MPI_Comm_rank(mpicomm, &mpime);
       *me = (fortint) mpime;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       *me = (fortint)GA_Nodeid();
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *me = (fortint)0;
 #endif
    }
@@ -488,7 +466,7 @@
  *  - \b MPI2 does nothing
  */
    void PPIDD_Init_fence(void) {
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       GA_Init_fence();
 #endif
    }
@@ -500,7 +478,7 @@
  *  - \b MPI2 does nothing
  */
    void PPIDD_Fence(void) {
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       GA_Fence();
 #endif
    }
@@ -574,8 +552,7 @@ static int n_in_msg_mpiq=0;
          msg_mpiq[n_in_msg_mpiq].lenbuf =(long) mpilenbuf;
          msg_mpiq[n_in_msg_mpiq].snd = (long)1;
       }
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Send should not be called in serial case.\n");
       exit(1);
 #endif
@@ -643,8 +620,7 @@ static int n_in_msg_mpiq=0;
          *sourcereal = (fortint)status.MPI_SOURCE;
          *lenreal    = (fortint)mpilenbuf;
       }
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Recv should not be called in serial case.\n");
       exit(1);
 #endif
@@ -698,8 +674,7 @@ static int n_in_msg_mpiq=0;
       mpi_test_status("PPIDD_Iprobe:",mpierr);
       if(flag) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
     *ok = FALSE ;
 #endif
    }
@@ -728,8 +703,7 @@ static int n_in_msg_mpiq=0;
 
       mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpicomm);
       mpi_test_status("PPIDD_BCast:",mpierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gacount=(int)*count;
       int dtype =(int)*type;
       int garoot=(int)*root;
@@ -766,8 +740,7 @@ static int n_in_msg_mpiq=0;
 
       mpierr=MPI_Barrier(mpigv(Compute_comm));
       mpi_test_status("PPIDD_Barrier:",mpierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       GA_Sync();
 #endif
    }
@@ -791,7 +764,7 @@ static int n_in_msg_mpiq=0;
 #endif
 /*! \endcond */
       ) {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
       int dtype=(int)*type;
 #endif
       char *op2, *p;
@@ -800,8 +773,7 @@ static int n_in_msg_mpiq=0;
       MPI_Datatype mpidtype;
       int sizempidtype;
       int mpilen=(int)*len;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int buflen=(int)*len;
       int gadtype_f=-1,gadtype_c;
       char *errmsg;
@@ -821,8 +793,7 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       MPI_GSum(mpidtype,buffer,mpilen, op2);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       switch(dtype){
       case 0:
               gadtype_f=MT_F_INT;
@@ -906,8 +877,7 @@ static int n_in_msg_mpiq=0;
       *handle=(fortint)mpihandle;
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int dtype=(int)*datatype;
       int gadtype=-1;
       int ndim=1;
@@ -971,8 +941,7 @@ static int n_in_msg_mpiq=0;
 
       *handle=(fortint)gahandle;
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Create_irreg should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1044,8 +1013,7 @@ static int n_in_msg_mpiq=0;
       *handle=(fortint)mpihandle;
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int dtype=(int)*datatype;
       int gadtype=-1;
       int ndim=1;
@@ -1096,8 +1064,7 @@ static int n_in_msg_mpiq=0;
 
       *handle=(fortint)gahandle;
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Create should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1122,13 +1089,11 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Destroy: array %d destroyed!\n",ProcID(),mpihandle);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int ihandle = (int) *handle;
       GA_Destroy(ihandle);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Destroy should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1160,8 +1125,7 @@ static int n_in_msg_mpiq=0;
       *ihi = (fortint) mpiihi;
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       int garank=(int)*rank;
       int ndim=1;
@@ -1184,8 +1148,7 @@ static int n_in_msg_mpiq=0;
       free(gailo);
       free(gaihi);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Distrib should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1238,8 +1201,7 @@ static int n_in_msg_mpiq=0;
       free(mpiproclist);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       int *mpiilo;
       int *mpiihi;
@@ -1270,8 +1232,7 @@ static int n_in_msg_mpiq=0;
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Location should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1317,8 +1278,7 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Get: Get value from array handle= %d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       int ld[1]={1};
       int ndim=1;
@@ -1334,8 +1294,7 @@ static int n_in_msg_mpiq=0;
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Get should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1379,8 +1338,7 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Put: Put buff numbers to array handle=%d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       int ld[1]={1};
       int ndim=1;
@@ -1396,8 +1354,7 @@ static int n_in_msg_mpiq=0;
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Put should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1434,8 +1391,7 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Acc: Accumulate buff numbers to array handle=%d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       int ld[1]={1};
       int ndim=1;
@@ -1451,8 +1407,7 @@ static int n_in_msg_mpiq=0;
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Acc should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1482,8 +1437,7 @@ static int n_in_msg_mpiq=0;
       *returnval=(fortint)mpivalue;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
                             ProcID(),mpiinum,mpihandle,mpiincr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int handle = (int) *ihandle;
       int ndim=1;
       int *mpiinum;
@@ -1496,8 +1450,7 @@ static int n_in_msg_mpiq=0;
       gavalue=NGA_Read_inc(handle,mpiinum, gaincr);
       free(mpiinum);
       *returnval=(fortint)gavalue;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Read_inc should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1520,8 +1473,7 @@ static int n_in_msg_mpiq=0;
          MPIGA_Error("PPIDD_Zero_patch: invalid storetype, should be 0. handle=",mpihandle);
 
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int handle = (int) *ihandle;
       int ndim=1;
       int *mpiilo;
@@ -1558,13 +1510,11 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Zero: array %d has been set to zero.\n",ProcID(),mpihandle);
       if (mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int ihandle = (int) *handle;
       GA_Zero(ihandle);
       *ok = TRUE ;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Zero should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1583,7 +1533,7 @@ static int n_in_msg_mpiq=0;
 #endif
 /*! \endcond */
       ) {
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       int ga_a=(int)*handlei;
       int ga_b;
       char *name2, *p;
@@ -1644,9 +1594,7 @@ static int n_in_msg_mpiq=0;
       strncpy(name,name2,len_actual);
       for(i=len_actual;i<lxi;i++) name[i]=' ';
       if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
-#endif
-
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       char *name2;
       int lxi;
       int i,len_actual;
@@ -1667,8 +1615,7 @@ static int n_in_msg_mpiq=0;
       strncpy(name,name2,len_actual);
       for(i=len_actual;i<lxi;i++) name[i]=' ';
       if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Inquire_name should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1686,11 +1633,9 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       int mpihandle = (int) *handle;
       *storetype=(fortint)mpiga_inquire_storetype(mpihandle);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       *storetype=(fortint)0;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Inquire_stype should not be called in serial case.\n");
       exit(1);
 #endif
@@ -1706,13 +1651,11 @@ static int n_in_msg_mpiq=0;
       long localmem;
       localmem=mpiga_localmem();
       *mem_used=(fortint)localmem;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       size_t localmem;
       localmem=GA_Inquire_memory();
       *mem_used=(fortint)localmem;
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *mem_used=(fortint)0;
 #endif
    }
@@ -1750,8 +1693,7 @@ static int n_in_msg_mpiq=0;
 
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpinumber = (int) *number;
       int mpierr;
       mpierr=GA_Create_mutexes(mpinumber);
@@ -1759,8 +1701,7 @@ static int n_in_msg_mpiq=0;
       if(mpierr==1) *ok = TRUE ;
       else *ok = FALSE ;
       if(MPIGA_Debug)printf("In PPIDD_Create_Mutexes: mpierr=%d, ok=%d.\n",mpierr,(int)*ok);
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *ok = TRUE ;
 #endif
    }
@@ -1779,8 +1720,7 @@ static int n_in_msg_mpiq=0;
       else
          mpierr=lock_general_helpmutex(mpiinum); /* mutexes data on helper process */
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpiinum = (int) *inum;
       GA_Lock(mpiinum);
 #endif
@@ -1800,8 +1740,7 @@ static int n_in_msg_mpiq=0;
       else
          mpierr=unlock_general_helpmutex(mpiinum);  /* mutexes data on helper process */
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpiinum = (int) *inum;
       GA_Unlock(mpiinum);
 #endif
@@ -1822,16 +1761,14 @@ static int n_in_msg_mpiq=0;
          mpierr=free_general_helpmutexes();   /* mutexes data on helper process */
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int mpierr;
       mpierr=GA_Destroy_mutexes();
 /* This is one of exceptions in GA (see global/src/capi.c) : Returns [1] if the operation succeeded or [0] when failed */
       if(mpierr==1) *ok = TRUE ;
       else *ok = FALSE ;
       if(MPIGA_Debug)printf("In PPIDD_Destroy_Mutexes: mpierr=%d, ok=%d.\n",mpierr,(int)*ok);
-#endif
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       *ok = TRUE ;
 #endif
    }

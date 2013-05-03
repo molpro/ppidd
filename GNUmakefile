@@ -81,8 +81,8 @@ endif
 ifneq ($(BUILD),MPI2)
 
 ifeq ($(BUILD),GA_MPI)
-override CFLAGS+=-DGA_TOOLS -DGA_MPI
-override FFLAGS+=-DGA_TOOLS -DGA_MPI
+override CFLAGS+=-DGA_MPI
+override FFLAGS+=-DGA_MPI
 endif
 override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
 

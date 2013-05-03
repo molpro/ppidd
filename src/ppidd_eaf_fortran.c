@@ -34,12 +34,12 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#ifdef GA_TOOLS
+#ifdef GA_MPI
  #include <ga.h>
  #include <eaf.h>
 #endif
 
-#if defined(GA_TOOLS) || defined(MPI2)
+#if defined(GA_MPI) || defined(MPI2)
  static int MPI_Debug=0;
 #endif
 
@@ -55,7 +55,7 @@
 
       MPI_Comm_rank(mpicomm,&myid);
 #endif
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       myid=GA_Nodeid();
 #endif
       return(myid);

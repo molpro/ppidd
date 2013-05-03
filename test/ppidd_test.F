@@ -101,7 +101,7 @@ c
       endif
 
 ! Synchronize processes (a barrier) before specific tests
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
       call ppidd_barrier()
 c... Checking if C data types match Fortran
       if(iprocs.eq.0)then
@@ -1013,7 +1013,7 @@ c    2^31=2,147,483,648
       if(iprocs.eq.0) write(iout,*) 'PPIDD shared counter tests:'
       call ppidd_flush6
 
-#if defined(GA_TOOLS) && defined(GA_MPI)
+#if defined(GA_MPI)
 
       if(iprocs.eq.0) write(iout,*)
      > 'For GA_MPI, ppidd_nxtval does nothing. Skip this test.'

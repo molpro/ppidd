@@ -42,7 +42,7 @@
 	       ,fortintc lx
 #endif
 )  {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
@@ -50,13 +50,11 @@
       int amode=0;
       int mpierr;
 #endif
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       int gaerr;
       int gahandle;
 #endif
-#if defined(MPI2) || defined(GA_TOOLS)
       int modetype=(int)*type;
-#endif
       int i;
       char *name2;
       int lxi;
@@ -94,16 +92,14 @@
       *handle=(fortint)mpifhandle;
       *ierr=(fortint)mpierr;
 #endif
-#ifdef GA_TOOLS
+#ifdef GA_MPI
       gaerr=EAF_Open(name2, modetype, &gahandle);
       *handle=(fortint)gahandle;
       *ierr=(fortint)gaerr;
 #endif
       free(name2);
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",ppidd_eaf_rank(),(int)*handle,(int)*ierr);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_open is not available in serial case.\n");
       exit(1);
 #endif
@@ -131,8 +127,7 @@
       mpierr=MPI_File_write_at(mpi_fh,offset,buff,count,datatype,&status);
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_write : end. handle=%d,ierr=%d\n",ppidd_eaf_rank(),(int)mpifhandle,(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
@@ -140,9 +135,7 @@
 
       gaerr=EAF_Write(gahandle,offset,buff,bytes);
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_write is not available in serial case.\n");
       exit(1);
 #endif
@@ -176,8 +169,7 @@
       *request_id=(fortint)request;
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_awrite : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",ppidd_eaf_rank(),(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
@@ -187,9 +179,7 @@
       gaerr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
       *request_id=(fortint)request;
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_awrite is not available in serial case.\n");
       exit(1);
 #endif
@@ -218,8 +208,7 @@
       mpierr=MPI_File_read_at(mpi_fh,offset,buff,count,datatype,&status);
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_read  : end. handle=%d,ierr=%d\n",ppidd_eaf_rank(),(int)mpifhandle,(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
@@ -227,9 +216,7 @@
 
       gaerr=EAF_Read(gahandle,offset,buff,bytes);
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_read is not available in serial case.\n");
       exit(1);
 #endif
@@ -264,8 +251,7 @@
       *request_id=(fortint)request;
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_aread  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",ppidd_eaf_rank(),(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
@@ -275,9 +261,7 @@
       gaerr=EAF_Aread(gahandle,offset,buff,bytes,&request);
       *request_id=(fortint)request;
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_aread is not available in serial case.\n");
       exit(1);
 #endif
@@ -310,17 +294,14 @@
 #endif
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_wait  : end. ierr=%d\n",ppidd_eaf_rank(),(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       int request=(int)*request_id;
       int gaerr;
 
       gaerr=EAF_Wait(gahandle,request);
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_wait is not available in serial case.\n");
       exit(1);
 #endif
@@ -358,9 +339,8 @@
       }
 #endif
       *ierr=(fortint)mpierr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#elif defined(GA_MPI)
+#else
       printf(" ERROR: PPIDD_Eaf_waitall is not available in serial case.\n");
       exit(1);
 #endif
@@ -396,8 +376,7 @@
 
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_probe  : end. ierr=%d\n",ppidd_eaf_rank(),(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int garequest=(int)*request_id;
       int gastatus;
       int gaerr;
@@ -405,9 +384,7 @@
       gaerr=EAF_Probe(garequest, &gastatus);
       *status=(fortint)gastatus;
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_probe is not available in serial case.\n");
       exit(1);
 #endif
@@ -429,16 +406,13 @@
       mpierr=MPI_File_close( &mpi_fh );
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_close: end. handle=%d,ierr=%d\n",ppidd_eaf_rank(),(int)mpifhandle,(int)*ierr);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       int gaerr;
 
       gaerr=EAF_Close(gahandle);
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_close is not available in serial case.\n");
       exit(1);
 #endif
@@ -459,7 +433,7 @@
 	       ,fortintc lx
 #endif
 )  {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
       int i,pierr=0;
       char *name2;
       int lxi;
@@ -479,8 +453,7 @@
 
 #ifdef MPI2
       pierr=MPI_File_delete(name2,MPI_INFO_NULL);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       pierr=EAF_Delete(name2);
 #endif
 
@@ -488,9 +461,7 @@
       free(name2);
       *ierr=(fortint)pierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_delete: end. ierr=%d\n",ppidd_eaf_rank(),(int)*ierr);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_delete is not available in serial case.\n");
       exit(1);
 #endif
@@ -514,8 +485,7 @@
       *fsize=(double)size;
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_length: end. handle=%d,fsize=%f\n",ppidd_eaf_rank(),(int)mpifhandle,*fsize);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t length;
       int gaerr;
@@ -523,9 +493,7 @@
       gaerr=EAF_Length(gahandle,&length);
       *fsize=(double)length;
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_length is not available in serial case.\n");
       exit(1);
 #endif
@@ -548,17 +516,14 @@
       mpierr=MPI_File_set_size(mpi_fh,size);
       *ierr=(fortint)mpierr;
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_truncate: end. handle=%d,size=%ld\n",ppidd_eaf_rank(),(int)mpifhandle,(long)size);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t length=(eaf_off_t)*offset;
       int gaerr;
 
       gaerr=EAF_Truncate(gahandle,length);
       *ierr=(fortint)gaerr;
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_truncate is not available in serial case.\n");
       exit(1);
 #endif
@@ -576,7 +541,7 @@
 	       ,fortintc lx
 #endif
 )  {
-#if defined(MPI2) || defined(GA_TOOLS)
+#if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
@@ -600,16 +565,13 @@
       MPI_Error_string(perrcode, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
       strcpy(message,estring2);
-#endif
-#ifdef GA_TOOLS
+#elif defined(GA_MPI)
       EAF_Errmsg(perrcode, message);
 #endif
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_errmsg: middle. message=%s\n",ppidd_eaf_rank(),message);
       for(i=strlen(message);i<lxi;i++) message[i]=' ';
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_errmsg: end. perrcode=%d\n",ppidd_eaf_rank(),perrcode);
-#endif
-
-#if !defined(MPI2) && !defined(GA_TOOLS)
+#else
       printf(" ERROR: PPIDD_Eaf_errmsg is not available in serial case.\n");
       exit(1);
 #endif

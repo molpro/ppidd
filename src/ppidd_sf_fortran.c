@@ -34,17 +34,6 @@
 #ifdef GA_TOOLS
  #include <ga.h>
  #include <sf.h>
-
- #ifndef GA_VERSION_GE_5
- extern Integer sf_create(char *fname, SFsize_t *size_hard_limit, SFsize_t *size_soft_limit, SFsize_t *req_size, Integer *handle);
- extern Integer FATR sf_write_(Integer *s_a, SFsize_t *offset, SFsize_t *bytes, char *buffer, Integer *req_id);
- extern Integer FATR sf_read_(Integer *s_a, SFsize_t *offset, SFsize_t *bytes, char *buffer, Integer *req_id);
- extern Integer FATR sf_wait_(Integer *req_id);
- extern Integer FATR sf_waitall_(Integer *list, Integer *num);
- extern Integer FATR sf_destroy_(Integer *s_a);
- extern void sf_errmsg(int code, char *msg);
- #endif
-
 #endif
 
 #if defined(GA_TOOLS) || defined(MPI2)

@@ -40,19 +40,13 @@
  #include <ga.h>
  #include <macdecls.h>
 
-  #ifdef GA_VERSION_GE_5
-    #if (GA_VERSION_MAJOR == 5) && (GA_VERSION_MINOR == 0)
-      extern int ga_type_f2c(int type);
-    #else
-      #include <ga-papi.h>
-      #define ga_type_f2c pnga_type_f2c
-    #endif
-  #endif
+ #include <ga-papi.h>
+ #define ga_type_f2c pnga_type_f2c
 
-  #ifdef GA_MPI
-    #include <mpi.h>
-    #include "mpi_utils.h"
-  #endif
+ #ifdef GA_MPI
+   #include <mpi.h>
+   #include "mpi_utils.h"
+ #endif
 #endif
  static int MPIGA_Debug=0;
 

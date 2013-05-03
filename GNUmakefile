@@ -80,30 +80,12 @@ endif
 
 ifneq ($(BUILD),MPI2)
 
-ifdef INCLUDE
-ifeq (libga.la,$(filter libga.la,$(notdir $(wildcard $(firstword $(INCLUDE))/../lib/*.la))))
-GA_VERSION=VERSION_GE_5
-endif
-endif
-
-ifeq ($(GA_VERSION),VERSION_GE_5)
-
-ifeq ($(BUILD),GA_MPI)
-override CFLAGS+=-DGA_TOOLS -DGA_MPI -DGA_VERSION_GE_5
-override FFLAGS+=-DGA_TOOLS -DGA_MPI -DGA_VERSION_GE_5
-endif
-override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
-
-else
-
 ifeq ($(BUILD),GA_MPI)
 override CFLAGS+=-DGA_TOOLS -DGA_MPI
 override FFLAGS+=-DGA_TOOLS -DGA_MPI
-override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib/*)) -lglobal -lma -lpario -larmci -llinalg
 endif
+override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
 
-endif
-endif
 
 ifeq ($(BUILD),MPI2)
 override CFLAGS+=-DMPI2

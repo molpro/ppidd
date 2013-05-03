@@ -95,12 +95,8 @@
          free(errmsg);
       }
 
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_create(name2, size_hard_limit, size_soft_limit, req_size, handle);
-    #else
       *ierr=(fortint)SF_Create(name2, *size_hard_limit, *size_soft_limit, *req_size, &i);
       *handle=(fortint)i;
-    #endif
 #endif
 
       free(name2);
@@ -144,14 +140,10 @@
 #ifdef GA_TOOLS
       char *buffer=(char *)buff;
 
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_write_(handle, byte_offset, byte_length, buffer, request_id);
-    #else
       int ihandle=(int)*handle;
       int irequest_id;
       *ierr=(fortint)SF_Write(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(fortint)irequest_id;
-    #endif
 #endif
 
 #if !defined(MPI2) && !defined(GA_TOOLS)
@@ -190,14 +182,10 @@
 #ifdef GA_TOOLS
       char *buffer=(char *)buff;
 
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_read_(handle, byte_offset, byte_length, buffer, request_id);
-    #else
       int ihandle=(int)*handle;
       int irequest_id;
       *ierr=(fortint)SF_Read(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(fortint)irequest_id;
-    #endif
 #endif
 
 #if !defined(MPI2) && !defined(GA_TOOLS)
@@ -230,13 +218,9 @@
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_wait  : end. ierr=%d\n",ppidd_sf_rank(),(int)*ierr);
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_wait_(request_id);
-    #else
       int irequest_id=(int)*request_id;
       *ierr=(fortint)SF_Wait(&irequest_id);
       *request_id=(fortint)irequest_id;
-    #endif
 #endif
 
 #if !defined(MPI2) && !defined(GA_TOOLS)
@@ -279,9 +263,6 @@
       *ierr=(fortint)mpierr;
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_waitall_(list, num);
-    #else
       int inum=(int)*num;
       int *ilist,i;
 
@@ -296,7 +277,6 @@
           list[i] = (fortint) ilist[i];
       }
       free(ilist);
-    #endif
 #endif
 
 #if !defined(MPI2) && !defined(GA_TOOLS)
@@ -322,12 +302,8 @@
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_destroy: end. handle=%d,ierr=%d\n",ppidd_sf_rank(),(int)mpifhandle,(int)*ierr);
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      *ierr=(fortint)sf_destroy_(handle);
-    #else
       int ihandle=(int)*handle;
       *ierr=(fortint)SF_Destroy(ihandle);
-    #endif
 #endif
 
 #if !defined(MPI2) && !defined(GA_TOOLS)
@@ -378,11 +354,7 @@
       strcpy(message,estring2);
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      sf_errmsg(perrcode, message);
-    #else
       SF_Errmsg(perrcode, message);
-    #endif
 #endif
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_errmsg: middle. message=%s\n",ppidd_sf_rank(),message);
       for(i=strlen(message);i<lxi;i++) message[i]=' ';

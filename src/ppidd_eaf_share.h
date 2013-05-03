@@ -95,11 +95,7 @@
       *ierr=(fortint)mpierr;
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_open(name2, modetype, &gahandle);
-    #else
       gaerr=EAF_Open(name2, modetype, &gahandle);
-    #endif
       *handle=(fortint)gahandle;
       *ierr=(fortint)gaerr;
 #endif
@@ -142,11 +138,7 @@
       size_t bytes=(size_t)*byte_length;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_write(gahandle,offset,buff,bytes);
-    #else
       gaerr=EAF_Write(gahandle,offset,buff,bytes);
-    #endif
       *ierr=(fortint)gaerr;
 #endif
 
@@ -192,11 +184,7 @@
       int request;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_awrite(gahandle,offset,buff,bytes,&request);
-    #else
       gaerr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
-    #endif
       *request_id=(fortint)request;
       *ierr=(fortint)gaerr;
 #endif
@@ -237,11 +225,7 @@
       size_t bytes=(size_t)*byte_length;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_read(gahandle,offset,buff,bytes);
-    #else
       gaerr=EAF_Read(gahandle,offset,buff,bytes);
-    #endif
       *ierr=(fortint)gaerr;
 #endif
 
@@ -288,11 +272,7 @@
       int request;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_aread(gahandle,offset,buff,bytes,&request);
-    #else
       gaerr=EAF_Aread(gahandle,offset,buff,bytes,&request);
-    #endif
       *request_id=(fortint)request;
       *ierr=(fortint)gaerr;
 #endif
@@ -336,11 +316,7 @@
       int request=(int)*request_id;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_wait(gahandle,request);
-    #else
       gaerr=EAF_Wait(gahandle,request);
-    #endif
       *ierr=(fortint)gaerr;
 #endif
 
@@ -426,11 +402,7 @@
       int gastatus;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_probe(garequest, &gastatus);
-    #else
       gaerr=EAF_Probe(garequest, &gastatus);
-    #endif
       *status=(fortint)gastatus;
       *ierr=(fortint)gaerr;
 #endif
@@ -462,11 +434,7 @@
       int gahandle=(int)*handle;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_close(gahandle);
-    #else
       gaerr=EAF_Close(gahandle);
-    #endif
       *ierr=(fortint)gaerr;
 #endif
 
@@ -513,11 +481,7 @@
       pierr=MPI_File_delete(name2,MPI_INFO_NULL);
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      pierr=eaf_delete(name2);
-    #else
       pierr=EAF_Delete(name2);
-    #endif
 #endif
 
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_delete: mid. fname=%s,pierr=%d\n",ppidd_eaf_rank(),name2,pierr);
@@ -556,11 +520,7 @@
       eaf_off_t length;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_length(gahandle,&length);
-    #else
       gaerr=EAF_Length(gahandle,&length);
-    #endif
       *fsize=(double)length;
       *ierr=(fortint)gaerr;
 #endif
@@ -594,11 +554,7 @@
       eaf_off_t length=(eaf_off_t)*offset;
       int gaerr;
 
-    #ifndef GA_VERSION_GE_5
-      gaerr=eaf_truncate(gahandle,length);
-    #else
       gaerr=EAF_Truncate(gahandle,length);
-    #endif
       *ierr=(fortint)gaerr;
 #endif
 
@@ -646,11 +602,7 @@
       strcpy(message,estring2);
 #endif
 #ifdef GA_TOOLS
-    #ifndef GA_VERSION_GE_5
-      eaf_errmsg(perrcode, message);
-    #else
       EAF_Errmsg(perrcode, message);
-    #endif
 #endif
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_errmsg: middle. message=%s\n",ppidd_eaf_rank(),message);
       for(i=strlen(message);i<lxi;i++) message[i]=' ';

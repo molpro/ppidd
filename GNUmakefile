@@ -64,32 +64,6 @@ ifndef BUILD
 ifdef INCLUDE
 ifneq ($(wildcard $(firstword $(INCLUDE))/../lib/*),)
 ifeq ($(wildcard $(firstword $(INCLUDE))/../lib/*),$(firstword $(wildcard $(firstword $(INCLUDE))/../lib/*)))
-check_files=libtcgmsg.a libglobal.a libma.a libpario.a libarmci.a
-ifeq ($(sort $(check_files)),$(sort $(filter $(check_files),$(notdir $(wildcard $(firstword $(INCLUDE))/../lib/*/*.a)))))
-BUILD=GA_TCGMSG
-endif
-endif
-endif
-endif
-endif
-
-ifndef BUILD
-ifdef INCLUDE
-ifneq ($(wildcard $(firstword $(INCLUDE))/../lib/*),)
-ifeq ($(wildcard $(firstword $(INCLUDE))/../lib/*),$(firstword $(wildcard $(firstword $(INCLUDE))/../lib/*)))
-check_files=libtcgmsg-mpi.a libglobal.a libma.a libpario.a libarmci.a
-ifeq ($(sort $(check_files)),$(sort $(filter $(check_files),$(notdir $(wildcard $(firstword $(INCLUDE))/../lib/*/*.a)))))
-BUILD=GA_TCGMSGMPI
-endif
-endif
-endif
-endif
-endif
-
-ifndef BUILD
-ifdef INCLUDE
-ifneq ($(wildcard $(firstword $(INCLUDE))/../lib/*),)
-ifeq ($(wildcard $(firstword $(INCLUDE))/../lib/*),$(firstword $(wildcard $(firstword $(INCLUDE))/../lib/*)))
 check_files=libglobal.a libma.a libpario.a libarmci.a
 ifeq ($(sort $(check_files)),$(sort $(filter $(check_files),$(notdir $(wildcard $(firstword $(INCLUDE))/../lib/*/*.a)))))
 BUILD=GA_MPI
@@ -114,14 +88,6 @@ endif
 
 ifeq ($(GA_VERSION),VERSION_GE_5)
 
-ifeq ($(BUILD),GA_TCGMSG)
-override CFLAGS+=-DGA_TOOLS -DGA_TCGMSG -DGA_VERSION_GE_5
-override FFLAGS+=-DGA_TOOLS -DGA_TCGMSG -DGA_VERSION_GE_5
-endif
-ifeq ($(BUILD),GA_TCGMSGMPI)
-override CFLAGS+=-DGA_TOOLS -DGA_TCGMSGMPI -DGA_VERSION_GE_5
-override FFLAGS+=-DGA_TOOLS -DGA_TCGMSGMPI -DGA_VERSION_GE_5
-endif
 ifeq ($(BUILD),GA_MPI)
 override CFLAGS+=-DGA_TOOLS -DGA_MPI -DGA_VERSION_GE_5
 override FFLAGS+=-DGA_TOOLS -DGA_MPI -DGA_VERSION_GE_5
@@ -130,16 +96,6 @@ override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -la
 
 else
 
-ifeq ($(BUILD),GA_TCGMSG)
-override CFLAGS+=-DGA_TOOLS -DGA_TCGMSG
-override FFLAGS+=-DGA_TOOLS -DGA_TCGMSG
-override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib/*)) -ltcgmsg -lglobal -lma -lpario -larmci -llinalg
-endif
-ifeq ($(BUILD),GA_TCGMSGMPI)
-override CFLAGS+=-DGA_TOOLS -DGA_TCGMSGMPI
-override FFLAGS+=-DGA_TOOLS -DGA_TCGMSGMPI
-override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib/*)) -ltcgmsg-mpi -lglobal -lma -lpario -larmci -llinalg
-endif
 ifeq ($(BUILD),GA_MPI)
 override CFLAGS+=-DGA_TOOLS -DGA_MPI
 override FFLAGS+=-DGA_TOOLS -DGA_MPI
@@ -165,22 +121,18 @@ default:
 ifneq (3.81,$(firstword $(sort 3.81 $(MAKE_VERSION))))
 	@echo 'Make version 3.81 or higher is required'; exit 1
 endif
-ifeq ($(filter $(BUILD),MPI2 GA_TCGMSG GA_TCGMSGMPI GA_MPI),)
+ifeq ($(filter $(BUILD),MPI2 GA_MPI),)
 	@echo build '$(BUILD)' not supported; exit 1
 endif
 ifdef INCLUDE
 ifeq ($(BUILD),MPI2)
 ifneq (mpi.h,$(filter mpi.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*.h))))
 	@echo 'mpi.h not found in $(INCLUDE).'
-	@echo 'If you intend to build PPIDD with GA 5.0 or higher, GA_TCGMSG, GA_TCGMSGMPI, or GA_MPI must be specified.'; exit 1
+	@echo 'If you intend to build PPIDD with GA 5.0 or higher, GA_MPI must be specified.'; exit 1
 endif
 else
 ifeq ($(BUILD),GA_MPI)
 ifneq ($(sort mafdecls.fh global.fh macommon.h eaf.fh eaf.h),$(sort $(filter mafdecls.fh global.fh macommon.h eaf.fh eaf.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*)))))
-	@echo 'one or more GA include files missing in $(firstword $(INCLUDE))'; exit 1
-endif
-else
-ifneq ($(sort mafdecls.fh global.fh tcgmsg.fh macommon.h eaf.fh eaf.h),$(sort $(filter mafdecls.fh global.fh tcgmsg.fh macommon.h eaf.fh eaf.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*)))))
 	@echo 'one or more GA include files missing in $(firstword $(INCLUDE))'; exit 1
 endif
 endif
@@ -215,11 +167,9 @@ endif
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo
-ifneq ($(BUILD),GA_TCGMSG)
 ifndef MPILIB
 ifndef MPIFC
 	@echo 'both MPILIB and MPIFC variables are unset or cannot be determined'; exit 1
-endif
 endif
 endif
 	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'

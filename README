@@ -38,7 +38,7 @@
     - MPIFC    an MPI2-aware Fortran compiler
     - INCLUDE  directory containing MPI2 or GA include files
     - MPILIB   MPI linking options, eg. '-L/usr/lib -lmpi'
-    - BUILD    either MPI2 (default), GA_TCGMSG, GA_TCGMSGMPI or GA_MPI
+    - BUILD    either MPI2 (default) or GA_MPI
     - CFLAGS   C compiler flags
     - FFLAGS   Fortran compiler flags
     - _I8_     setting _I8_=y lets make know that the compilers use 8-byte integers.
@@ -52,7 +52,7 @@
     Intel  Fortran compiler ) to link with a Fortran main program ( make .... FFLAGS=-Vaxlib ).
     This option can allow getarg() and iargc(), which are not part of the Fortran standard, to
     be resolved properly. In addition, when the library is built on top of GA 5.0 or higher,
-    BUILD=GA_TCGMSG, GA_TCGMSGMPI or GA_MPI must be specified explicitly.
+    BUILD=GA_MPI must be specified explicitly.
 
     Building examples are avaible at ./doc/doxygen/html/index.html after the documentation is built.
 

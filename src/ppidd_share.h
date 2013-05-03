@@ -52,21 +52,6 @@
   #ifdef GA_MPI
     #include <mpi.h>
     #include "mpi_utils.h"
-  #else
-    #ifdef GA_TCGMSGMPI
-      #include <mpi.h>
-      #include "mpi_utils.h"
-    #endif
-    #ifdef GA_VERSION_GE_5
-      #include <tcgmsg.h>
-    #else
-      #include <sndrcv.h>
-    #endif
-    #if (PPIDD_LANG == 2)
-/*! \cond */
-    void PBEGINF_();  /*! use fortran interface routine to avoid handling the arguments additionally */
-/*! \endcond */
-    #endif
   #endif
 #endif
  static int MPIGA_Debug=0;
@@ -88,7 +73,7 @@
 
 /*! Initialize the PPIDD parallel environment
  *
- *  - For \b GA, includes initialization of TCGMSG/MPI and GA.
+ *  - For \b GA, includes initialization of MPI and GA.
  *  - For \b MPI2, calls MPI_Init.
  */
 #if (PPIDD_LANG == 1)
@@ -141,25 +126,6 @@
   #endif
 #endif
 #ifdef GA_TOOLS
-  #if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-/* call c interface routine PBEGIN_(argc, argv) since it will get the right arguments from c main program */
-/* call fortran interface routine PBEGINF_() instead of c interface routine PBEGIN_(argc, argv) to avoid handling the arguments additionally */
-    #ifdef GA_VERSION_GE_5
-     #if (PPIDD_LANG == 1)
-      tcg_pbegin(argc, argv);                    /* initialize TCGMSG */
-     #endif
-     #if (PPIDD_LANG == 2)
-      tcg_pbeginf();                             /* initialize TCGMSG */
-     #endif
-    #else
-     #if (PPIDD_LANG == 1)
-      PBEGIN_(argc, argv);                       /* initialize TCGMSG */
-     #endif
-     #if (PPIDD_LANG == 2)
-      PBEGINF_();                                /* initialize TCGMSG */
-     #endif
-    #endif
-  #endif
       GA_Initialize();                            /* initialize GA */
 #endif
 
@@ -228,7 +194,7 @@
 
       fcomm=MPI_Comm_c2f(mycomm);
       return (fortint)fcomm;
-#elif defined(GA_TCGMSGMPI) || defined(GA_MPI)
+#elif defined(GA_MPI)
       MPI_Fint fcomm;
       fcomm=MPI_Comm_c2f(MPI_COMM_WORLD);
       return (fortint)fcomm;
@@ -241,7 +207,7 @@
 
 /*! Terminate the PPIDD parallel environment.
  *
- *  - For \b GA, tidy up global arrays and TCGMSG/MPI, analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_terminate
+ *  - For \b GA, tidy up global arrays and MPI, analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_terminate
  *  - For \b MPI2, tidy up some associated resources and call MPI_Finalize.
  */
    void PPIDD_Finalize(void) {
@@ -252,13 +218,6 @@
       GA_Terminate();
 #ifdef GA_MPI
       MPI_Finalize();
-#endif
-#if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-    #ifndef GA_VERSION_GE_5
-      PEND_();
-    #else
-      tcg_pend();
-    #endif
 #endif
 #endif
    }
@@ -452,16 +411,6 @@
         *val= (fortint) NXTVAL(&mproc);
       }
 #endif
-#ifdef GA_TOOLS
-  #if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-      long mproc = (long) *numproc;
-    #ifndef GA_VERSION_GE_5
-      *val= (fortint) NXTVAL_(&mproc);
-    #else
-      *val= (fortint) tcg_nxtval(mproc);
-    #endif
-  #endif
-#endif
 #if !defined(MPI2) && !defined(GA_TOOLS)
       printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
       exit(1);
@@ -632,35 +581,6 @@ static int n_in_msg_mpiq=0;
          msg_mpiq[n_in_msg_mpiq].snd = (long)1;
       }
 #endif
-#if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-      long gadtype=(long)-1;
-      long galenbuf;
-      long gadest=(long)*dest;
-      long gasync=(long)*sync;
-      size_t ctype=8;
-      char *errmsg;
-
-      switch((int)*dtype){
-      case 0:
-              gadtype=MT_F_INT;
-              ctype=sizeof(fortint);
-              break;
-      case 1:
-              gadtype=MT_F_DBL;
-              ctype=sizeof(double);
-              break;
-      default:
-              errmsg=strdup(" In PPIDD_Send: wrong data type ");
-              GA_Error(errmsg,(int)*dtype);
-              free(errmsg);
-      }
-      galenbuf=(*count)*ctype;
-    #ifndef GA_VERSION_GE_5
-      SND_(&gadtype, buf, &galenbuf, &gadest, &gasync);
-    #else
-      tcg_snd(gadtype, buf, galenbuf, gadest, gasync);
-    #endif
-#endif
 #if !defined(MPI2) && !defined(GA_TOOLS)
       printf(" ERROR: PPIDD_Send should not be called in serial case.\n");
       exit(1);
@@ -730,40 +650,6 @@ static int n_in_msg_mpiq=0;
          *lenreal    = (fortint)mpilenbuf;
       }
 #endif
-#if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-      long gadtype=(long)-1;
-      long galenbuf;
-      long gasource=(long)*source;
-      long gasync=(long)*sync;
-      long galenreal;
-      long gasourcereal;
-      size_t ctype=8;
-      char *errmsg;
-
-      switch((int)*dtype){
-      case 0:
-              gadtype=MT_F_INT;
-              ctype=sizeof(fortint);
-              break;
-      case 1:
-              gadtype=MT_F_DBL;
-              ctype=sizeof(double);
-              break;
-      default:
-              errmsg=strdup(" In PPIDD_Recv: wrong data type ");
-              GA_Error(errmsg,(int)*dtype);
-              free(errmsg);
-      }
-
-      galenbuf=(*count)*ctype;
-    #ifndef GA_VERSION_GE_5
-      RCV_(&gadtype, buf, &galenbuf, &galenreal, &gasource, &gasourcereal, &gasync);
-    #else
-      tcg_rcv(gadtype, buf, galenbuf, &galenreal, gasource, &gasourcereal, gasync);
-    #endif
-      *lenreal    = (fortint)galenreal;
-      *sourcereal = (fortint)gasourcereal;
-#endif
 #if !defined(MPI2) && !defined(GA_TOOLS)
       printf(" ERROR: PPIDD_Recv should not be called in serial case.\n");
       exit(1);
@@ -775,8 +661,7 @@ static int n_in_msg_mpiq=0;
  *
  * ignores nodesel !! */
 /*!
- *  - \b GA (with TCGMSG) analogous to WAITCOM
- *  - \b MPI2 calls MPI_Wait for all asynchronous requests.
+ *  - \b MPI2/GA_MPI calls MPI_Wait for all asynchronous requests.
  */
    void PPIDD_Wait(fortint *nodesel) {
 #if defined(MPI2) || defined(GA_MPI)
@@ -793,15 +678,6 @@ static int n_in_msg_mpiq=0;
       }
       n_in_msg_mpiq = 0;
 #endif
-#if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-      long  ganode =  (long) *nodesel;
-
-    #ifndef GA_VERSION_GE_5
-      WAITCOM_(&ganode);
-    #else
-      tcg_waitcom(ganode);
-    #endif
-#endif
    }
 
 
@@ -809,8 +685,7 @@ static int n_in_msg_mpiq=0;
  *
  *  Return <tt>.true.</tt> if the message is available, otherwise <tt>.false.</tt>.
  *
- *  - \b GA (with TCGMSG) analogous to PROBE
- *  - \b MPI2 calls MPI_Iprobe
+ *  - \b MPI2/GA_MPI calls MPI_Iprobe
  */
    void PPIDD_Iprobe(fortint *tag,fortint *source,fortlogical *ok) {
 #if defined(MPI2) || defined(GA_MPI)
@@ -828,18 +703,6 @@ static int n_in_msg_mpiq=0;
       mpierr = MPI_Iprobe(mpisource, mpitag, mpicomm, &flag, &status);
       mpi_test_status("PPIDD_Iprobe:",mpierr);
       if(flag) *ok = TRUE ;
-      else *ok = FALSE ;
-#endif
-#if defined(GA_TCGMSG) || defined(GA_TCGMSG5) || defined(GA_TCGMSGMPI)
-      long gatag=(long)*tag;
-      long gasource=(long)*source;
-      long gaflag;
-    #ifndef GA_VERSION_GE_5
-      gaflag=PROBE_(&gatag, &gasource);
-    #else
-      gaflag=tcg_probe(gatag, gasource);
-    #endif
-      if(gaflag) *ok = TRUE ;
       else *ok = FALSE ;
 #endif
 #if !defined(MPI2) && !defined(GA_TOOLS)

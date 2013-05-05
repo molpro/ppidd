@@ -102,9 +102,10 @@ library:
 ifneq (3.81,$(firstword $(sort 3.81 $(MAKE_VERSION))))
 	@echo 'Make version 3.81 or higher is required'; exit 1
 endif
-ifeq ($(filter $(BUILD),MPI2 GA_MPI),)
+ifeq ($(filter $(BUILD),GA_MPI MPI2 SERIAL),)
 	@echo build '$(BUILD)' not supported; exit 1
 endif
+ifneq ($(BUILD),SERIAL)
 ifdef INCLUDE
 ifeq ($(BUILD),MPI2)
 ifneq (mpi.h,$(filter mpi.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*.h))))
@@ -121,6 +122,7 @@ endif
 else
 ifndef MPICC
 	@echo 'both INCLUDE and MPICC variables are unset or cannot be determined'; exit 1
+endif
 endif
 endif
 ifneq ($(kernel),$(findstring $(kernel),Linux Darwin))
@@ -151,9 +153,11 @@ test: library
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo
+ifneq ($(BUILD),SERIAL)
 ifndef MPILIB
 ifndef MPIFC
 	@echo 'both MPILIB and MPIFC variables are unset or cannot be determined'; exit 1
+endif
 endif
 endif
 	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'

@@ -41,7 +41,7 @@
     - BUILD    either MPI2 (default) or GA_MPI
     - CFLAGS   C compiler flags
     - FFLAGS   Fortran compiler flags
-    - _I8_     setting _I8_=y lets make know that the compilers use 8-byte integers.
+    - INTEGER  setting INTEGER=8 lets make know that the compilers use 8-byte integers.
 	       Note, make does not force the compilers to do this, it is up to the
                user to make any necessary changes to CFLAGS/FFLAGS.
     - NXTVAL   setting NXTVAL=n disables the helper process (PPIDD_Nxtval)

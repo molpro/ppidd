@@ -48,7 +48,7 @@ ifeq ($(notdir $(FC)),ifort)
 override FFLAGS+=-Vaxlib
 endif
 endif
-ifdef _I8_
+ifeq ($(INTEGER),8)
 override CFLAGS+=-D_I8_
 endif
 

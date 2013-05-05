@@ -63,10 +63,10 @@
   <pre>
 
      1. Build MPI-2 version of PPIDD:
-     make MPICC=mpiicc MPIFC=mpiifort _I8_=y FFLAGS='-i8'
+     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8'
 
      or
-     make CC=icc FC=ifort _I8_=y FFLAGS='-i8' INCLUDE=/software/intel/mpi/4.0.0.025/intel64/include \
+     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8' INCLUDE=/software/intel/mpi/4.0.0.025/intel64/include \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm'
      (the front part for MPILIB option comes from `mpiifort -show`, and the rear part '-L/usr/lib64 -libverbs -lm' is used to link with Infiniband network.)
@@ -77,19 +77,19 @@
      the building methods of PPIDD differ correspondingly.
 
      A. For GA version lower than 5.0:
-     make MPICC=mpiicc MPIFC=mpiifort _I8_=y FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' MPILIB='-L/usr/lib64 -libverbs -lm'
+     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' MPILIB='-L/usr/lib64 -libverbs -lm'
 
      or
-     make CC=icc FC=ifort _I8_=y FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm'
 
      B. For GA version higher than (or equal to) 5.0, BUILD=GA_MPI must be specified explicitly:
-     make MPICC=mpiicc MPIFC=mpiifort _I8_=y FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/usr/lib64 -libverbs -lm -L/software/intel/mkl/10.0.1.014/lib/em64t -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core'
 
      or
-     make CC=icc FC=ifort _I8_=y FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm \
      -L/software/intel/mkl/10.0.1.014/lib/em64t -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core'

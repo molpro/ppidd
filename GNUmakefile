@@ -151,9 +151,11 @@ test: library
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo
+ifndef LIBS
 ifndef MPILIB
 ifndef MPIFC
-	@echo 'both MPILIB and MPIFC variables are unset or cannot be determined'; exit 1
+	@echo 'LIBS no set and both MPILIB and MPIFC variables are unset or cannot be determined'; exit 1
+endif
 endif
 endif
 	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'

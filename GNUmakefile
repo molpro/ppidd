@@ -94,7 +94,10 @@ endif
 
 
 .PHONY: default
-default:
+default: library
+
+.PHONY: library
+library:
 	@echo
 ifneq (3.81,$(firstword $(sort 3.81 $(MAKE_VERSION))))
 	@echo 'Make version 3.81 or higher is required'; exit 1
@@ -142,6 +145,9 @@ endif
 	$(MAKE) -C src FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))' FFLAGS='$(FFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))'
 	@$(AR) $(ARFLAGS) lib/libppidd.a src/*.o
 	@$(RANLIB) lib/libppidd.a
+
+.PHONY: test
+test: library
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo

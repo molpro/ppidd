@@ -115,7 +115,7 @@
     mpi_test_status("PPIDD_Initialize:",mpierr);
 #elif defined(GA_MPI)
     MPI_Init(&argc, &argv);                     /* initialize MPI */
-    GA_Initialize();                            /* initialize GA */
+    GA_Initialize_args(&argc,&argv);            /* initialize GA */
 #endif
 
 #if (PPIDD_LANG == 2)

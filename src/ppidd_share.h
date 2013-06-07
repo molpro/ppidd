@@ -61,6 +61,9 @@
 #if (PPIDD_LANG == 2)
 #include "ppidd_dtype.h"
 #include "ppidd_fortran.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
 #endif
 
 /*! Initialize the PPIDD parallel environment
@@ -1772,3 +1775,8 @@ static int n_in_msg_mpiq=0;
       *ok = TRUE ;
 #endif
    }
+#if (PPIDD_LANG == 2)
+#ifdef __cplusplus
+ extern "C" {
+#endif
+#endif

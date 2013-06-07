@@ -1777,6 +1777,6 @@ static int n_in_msg_mpiq=0;
    }
 #if (PPIDD_LANG == 2)
 #ifdef __cplusplus
- extern "C" {
+}
 #endif
 #endif

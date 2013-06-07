@@ -2,8 +2,8 @@
 VERSION=$(shell git rev-parse HEAD | cut -c 1-7)
 kernel=$(shell uname -s)
 
-ifeq ($(origin CC),default)
-CC=
+ifeq ($(origin CXX),default)
+CXX=
 endif
 ifeq ($(origin FC),default)
 FC=
@@ -17,29 +17,29 @@ ARFLAGS=-rS
 RANLIB=ranlib
 
 # Generic Linux
-override MPICC_Linux=mpicc
+override MPICXX_Linux=mpicxx
 override MPIFC_Linux=mpif90 mpif77
-override CC_Linux=icc gcc
+override CXX_Linux=icpc g++
 override FC_Linux=pgf90 pathf90 ifort gfortran g95
 
 # Mac OSX
-override MPICC_Darwin=mpicc
+override MPICXX_Darwin=mpicxx
 override MPIFC_Darwin=mpif90
-override CC_Darwin=icc gcc
+override CXX_Darwin=icpc g++
 override FC_Darwin=pgf90 ifort gfortran g95
 
-ifndef CC
-MPICC=$(foreach exe,$(MPICC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
+ifndef CXX
+MPICXX=$(foreach exe,$(MPICXX_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
 endif
 ifndef FC
 MPIFC=$(foreach exe,$(MPIFC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
 endif
-CC=$(foreach exe,$(CC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
+CXX=$(foreach exe,$(CXX_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
 FC=$(foreach exe,$(FC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
 
-CC:=$(firstword $(CC))
+CXX:=$(firstword $(CXX))
 FC:=$(firstword $(FC))
-MPICC:=$(firstword $(MPICC))
+MPICXX:=$(firstword $(MPICXX))
 MPIFC:=$(firstword $(MPIFC))
 DOXYGEN=$(shell if type doxygen 1>/dev/null 2>&1 ; then which doxygen; fi)
 
@@ -120,8 +120,8 @@ endif
 endif
 endif
 else
-ifndef MPICC
-	@echo 'both INCLUDE and MPICC variables are unset or cannot be determined'; exit 1
+ifndef MPICXX
+	@echo 'both INCLUDE and MPICXX variables are unset or cannot be determined'; exit 1
 endif
 endif
 endif
@@ -131,7 +131,7 @@ endif
 ifndef FC
 	@echo 'Unable to find a Fortran compiler'; exit 1
 endif
-ifndef CC
+ifndef CXX
 	@echo 'Unable to find a C compiler'; exit 1
 endif
 	@echo 'Building PPIDD Library (Version $(VERSION))'
@@ -144,7 +144,7 @@ endif
 endif
 	@rm -rf lib
 	@mkdir lib
-	$(MAKE) -C src FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))' FFLAGS='$(FFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))'
+	$(MAKE) -C src FC='$(if $(MPIFC),$(MPIFC),$(FC))' CXX='$(if $(MPICXX),$(MPICXX),$(CXX))' CFLAGS='$(CFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))' FFLAGS='$(FFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))'
 	@$(AR) $(ARFLAGS) lib/libppidd.a src/*.o
 	@$(RANLIB) lib/libppidd.a
 
@@ -160,7 +160,7 @@ ifndef MPIFC
 endif
 endif
 endif
-	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CC='$(if $(MPICC),$(MPICC),$(CC))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'
+	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CXX='$(if $(MPICXX),$(MPICXX),$(CXX))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'
 
 .PHONY: doc
 doc:

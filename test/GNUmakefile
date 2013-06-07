@@ -4,7 +4,7 @@ default: ppidd_test.exe ppidd_sf_test.exe ppidd_ctest.exe
 
 ppidd_ctest.exe: ppidd_ctest.o
 ifeq ($(BUILD),MPI2)
-	$(CC) $(CFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
+	$(CXX) $(CFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
 else
 	$(FC) $(patsubst -Vaxlib,-nofor_main,$(FFLAGS)) -o $@ $^ -L../lib -lppidd $(LIBS)
 endif
@@ -17,8 +17,8 @@ ppidd_sf_test.exe: ppidd_sf_test.o ppidd_flush6.o
 ppidd_test.o: ppidd_test.F
 ppidd_sf_test.o: ppidd_sf_test.F
 
-%.o: %.c
-	$(CC) -c -I ../src $(CFLAGS) $<
+%.o: %.cpp
+	$(CXX) -c -I ../src $(CFLAGS) $<
 
 %.o: %.F
 	$(FC) -c -I ../src $(FFLAGS) $<

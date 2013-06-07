@@ -38,7 +38,7 @@
 #undef FORTINTC_DIVIDE
 #endif
 
-/* The following code should be the same as those in ppidd_eaf_fortran.c (except ppidd_eaf_rank). One should make it consistent once code in ppidd_eaf_fortran.c is changed. */
+/* The following code should be the same as those in ppidd_eaf_fortran.cpp (except ppidd_eaf_rank). One should make it consistent once code in ppidd_eaf_fortran.cpp is changed. */
 
 #ifdef MPI2
  #include <mpi.h>

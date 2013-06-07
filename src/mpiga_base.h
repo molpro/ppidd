@@ -165,7 +165,7 @@ typedef struct {
    int mpiga_unlock_mutex(int);
    int mpiga_destroy_mutexes(void);
 
-   /* MPI one-sided helpmutex Function Prototypes, from mpi_helpmutex.c */
+   /* MPI one-sided helpmutex Function Prototypes, from mpi_helpmutex.cpp */
    void initialize_onesided_helpmutexes(void);
    void finalize_onesided_helpmutexes(void);
    int alloc_onesided_helpmutex_orig(int);
@@ -177,7 +177,7 @@ typedef struct {
    int lock_onesided_helpmutex(int);
    int unlock_onesided_helpmutex(int);
 
-   /* MPI general helpmutex Function Prototypes, from mpi_helpmutex.c */
+   /* MPI general helpmutex Function Prototypes, from mpi_helpmutex.cpp */
    void initialize_general_helpmutexes(void);
    void finalize_general_helpmutexes(void);
    int alloc_general_helpmutex_orig(int);

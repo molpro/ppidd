@@ -3,8 +3,8 @@
  *
  * Parallel Programming Interface for Distributed Data (PPIDD) Reference
  * Manual. The Fortran interface subroutine descriptions can be found
- * in ppidd_fortran.c and ppidd_share.h, and the C interface subroutine
- * descriptions can be found in ppidd_c.c and ppidd_share.h.
+ * in ppidd_fortran.cpp and ppidd_share.h, and the C interface subroutine
+ * descriptions can be found in ppidd_c.cpp and ppidd_share.h.
 
 //   Directory and file structure in PPIDD:
   <pre>
@@ -18,38 +18,38 @@
        |-- ./src                          Source code directory for PPIDD library
        |   |-- GNUmakefile                    Makefile for src directory
        |   |-- ppidd_machines.h               Head file for machine-related settings
-       |   |-- mpi_helpmutex.c                Mutex source file using helper process
-       |   |-- mpi_nxtval.c                   NXTVAL source file
+       |   |-- mpi_helpmutex.cpp              Mutex source file using helper process
+       |   |-- mpi_nxtval.cpp                 NXTVAL source file
        |   |-- mpi_nxtval.h                   NXTVAL header file
-       |   |-- mpi_utils.c                    MPI utility source file
+       |   |-- mpi_utils.cpp                  MPI utility source file
        |   |-- mpi_utils.h                    MPI utility header file
-       |   |-- mpiga_base.c                   Source code for distributed data structure
+       |   |-- mpiga_base.cpp                 Source code for distributed data structure
        |   |-- mpiga_base.h                   Head file for distributed data structure
-       |   |-- mpimutex-hybrid.c              Mutex source file using distributed processes
+       |   |-- mpimutex-hybrid.cpp            Mutex source file using distributed processes
        |   |-- mpimutex.h                     Mutex header file using distributed processes
-       |   |-- ppidd_c.c                      C interface source code
+       |   |-- ppidd_c.cpp                    C interface source code
        |   |-- ppidd_c.h                      C interface header file
        |   |-- ppidd_doxygen.h                PPIDD document main page file
        |   |-- ppidd_dtype.h                  PPIDD data type header file
-       |   |-- ppidd_eaf_c.c                  C interface source code for EAF
+       |   |-- ppidd_eaf_c.cpp                C interface source code for EAF
        |   |-- ppidd_eaf_c.h                  C interface header file for EAF
-       |   |-- ppidd_eaf_fortran.c            Fortran interface source code for EAF
+       |   |-- ppidd_eaf_fortran.cpp          Fortran interface source code for EAF
        |   |-- ppidd_eaf_fortran.h            Fortran interface header file for EAF
        |   |-- ppidd_eaf_share.h              Code shared by both Fortran and C interfaces for EAF
-       |   |-- ppidd_fortran.c                Fortran interface source code for PPIDD
+       |   |-- ppidd_fortran.cpp              Fortran interface source code for PPIDD
        |   |-- ppidd_fortran.h                Fortran interface header file for PPIDD
-       |   |-- ppidd_sf_c.c                   C interface source code for SF
+       |   |-- ppidd_sf_c.cpp                 C interface source code for SF
        |   |-- ppidd_sf_c.h                   C interface header file for SF
-       |   |-- ppidd_sf_fortran.c             Fortran interface source code for SF
+       |   |-- ppidd_sf_fortran.cpp           Fortran interface source code for SF
        |   |-- ppidd_sf_fortran.h             Fortran interface header file for SF
        |   |-- ppidd_sf_share.h               Code shared by both Fortran and C interfaces for SF
        |   |-- ppidd_share.h                  Code shared by both Fortran and C interfaces
        |   `-- ppidd_undefdtype.h             Fortran data type header file for C interface
        `-- ./test                         Test code directory for PPIDD library
            |-- GNUmakefile                    Makefile for test directory
-           |-- ppidd_ctest.c                  C test program
+           |-- ppidd_ctest.cpp                C test program
            |-- ppidd_test.F                   Fortran test program
-           |-- sizeofctypes.c                 Code for determining the size of C data types
+           |-- sizeofctypes.cpp               Code for determining the size of C data types
            |-- sizeoffortypes.F               Code for determining the size of Fortran data types
            |-- ppidd_test.F                   Fortran test program
            `-- ppidd_test.out                 Output of test example
@@ -63,10 +63,10 @@
   <pre>
 
      1. Build MPI-2 version of PPIDD:
-     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8'
+     make MPICXX=mpiicpc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8'
 
      or
-     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8' INCLUDE=/software/intel/mpi/4.0.0.025/intel64/include \
+     make CXX=icpc FC=ifort INTEGER=8 FFLAGS='-i8' INCLUDE=/software/intel/mpi/4.0.0.025/intel64/include \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm'
      (the front part for MPILIB option comes from `mpiifort -show`, and the rear part '-L/usr/lib64 -libverbs -lm' is used to link with Infiniband network.)
@@ -77,19 +77,19 @@
      the building methods of PPIDD differ correspondingly.
 
      A. For GA version lower than 5.0:
-     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' MPILIB='-L/usr/lib64 -libverbs -lm'
+     make MPICXX=mpiicpc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' MPILIB='-L/usr/lib64 -libverbs -lm'
 
      or
-     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make CXX=icpc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' INCLUDE='../../../ga-4-3-3/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm'
 
      B. For GA version higher than (or equal to) 5.0, BUILD=GA_MPI must be specified explicitly:
-     make MPICC=mpiicc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make MPICXX=mpiicpc MPIFC=mpiifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/usr/lib64 -libverbs -lm -L/software/intel/mkl/10.0.1.014/lib/em64t -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core'
 
      or
-     make CC=icc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
+     make CXX=icpc FC=ifort INTEGER=8 FFLAGS='-i8 -Vaxlib' BUILD=GA_MPI INCLUDE='../../../ga-5-0-2-install/include /software/intel/mpi/4.0.0.025/intel64/include' \
      MPILIB='-L/software/intel/mpi/4.0.0.025/intel64/lib -Xlinker --enable-new-dtags -Xlinker -rpath -Xlinker /software/intel/mpi/4.0.0.025/intel64/lib -Xlinker -rpath -Xlinker \
      /opt/intel/mpi-rt/4.0.0 -lmpi -lmpigf -lmpigi -lpthread -lpthread -lpthread -lpthread -lrt -L/usr/lib64 -libverbs -lm \
      -L/software/intel/mkl/10.0.1.014/lib/em64t -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core'

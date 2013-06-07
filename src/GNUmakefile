@@ -1,9 +1,9 @@
 
 .PHONY: default
-default: $(addsuffix .o,$(basename $(wildcard *.c *.F)))
+default: $(addsuffix .o,$(basename $(wildcard *.cpp *.F)))
 
-%.o: %.c
-	$(CC) -c $(CFLAGS) $<
+%.o: %.cpp
+	$(CXX) -c $(CFLAGS) $<
 
 %.o: %.F
 	$(FC) -c $(FFLAGS) $<

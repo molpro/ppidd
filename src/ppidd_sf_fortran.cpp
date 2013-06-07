@@ -15,30 +15,16 @@
  *    all the other arguments are INTEGERS                                                    *
  * -- read/writes are asynchronous                                                            *
  *--------------------------------------------------------------------------------------------*
- * C interface.  The subroutines in this file named PPIDD_XXXXX can be    *
- * only called by C program directly.  Any calling by Fortran progam      *
- * should refer to the routines in the ppidd_sf_fortran.h header file.    *
+ * FORTRAN interface.  The subroutines in this file named PPIDD_XXXXX are *
+ * converted to the proper FORTRAN external by the FORT_Extern macro and  *
+ * the definitions in the ppidd_sf_fortran.h header file.                 *
  *                                                                        *
  * Written by: Manhui Wang                                                *
  * Date:       15/07/2008                                                 *
 \* ====================================================================== */
 
 
-#include "ppidd_sf_c.h"   /* include ppidd_machines.h */
-
-#ifdef FORTCL_NEXT
-#undef FORTCL_NEXT
-#endif
-
-#ifdef FORTCL_END
-#undef FORTCL_END
-#endif
-
-#ifdef FORTINTC_DIVIDE
-#undef FORTINTC_DIVIDE
-#endif
-
-/* The following code should be the same as those in ppidd_sf_fortran.c (except ppidd_sf_rank). One should make it consistent once code in ppidd_sf_fortran.c is changed. */
+#include "ppidd_sf_fortran.h"   /* include ppidd_machines.h */
 
 #ifdef MPI2
  #include <mpi.h>
@@ -49,10 +35,34 @@
  #include <ga.h>
  #include <sf.h>
 #endif
- extern int ppidd_sf_rank(void);
+
 #if defined(GA_MPI) || defined(MPI2)
  static int MPI_Debug=0;
 #endif
 
+
+/* ************************************************************************ *\
+   Get calling process id in the work communicator. This function is only
+   used in operations related to sf.
+\* ************************************************************************ */
+   int ppidd_sf_rank(void) {
+      int myid=0;
+#ifdef MPI2
+      MPI_Comm mpicomm=MPIGA_WORK_COMM;
+
+      MPI_Comm_rank(mpicomm,&myid);
+#endif
+#ifdef GA_MPI
+      myid=GA_Nodeid();
+#endif
+      return(myid);
+   }
+
 /* Common code shared by Fortran and C interfaces for PPIDD Shared Files Library.*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "ppidd_sf_share.h"
+#ifdef __cplusplus
+}
+#endif

@@ -32,7 +32,7 @@
 
     make VAR1=value1 VAR2=value2 ...
 
-    - CC       C compiler
+    - CXX      C++ compiler
     - FC       Fortran compiler
     - MPICC    an MPI2-aware C compiler
     - MPIFC    an MPI2-aware Fortran compiler

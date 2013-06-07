@@ -62,4 +62,10 @@
    }
 
 /* Common code shared by Fortran and C interfaces for PPIDD EAF Library.*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "ppidd_eaf_share.h"
+#ifdef __cplusplus
+}
+#endif

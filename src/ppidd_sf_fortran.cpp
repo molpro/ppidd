@@ -33,7 +33,13 @@
 
 #ifdef GA_MPI
  #include <ga.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
  #include <sf.h>
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #if defined(GA_MPI) || defined(MPI2)

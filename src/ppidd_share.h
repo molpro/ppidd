@@ -40,8 +40,14 @@
  #include <ga.h>
  #include <macdecls.h>
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
  #include <ga-papi.h>
  #define ga_type_f2c pnga_type_f2c
+#ifdef __cplusplus
+ }
+#endif
 
  #include <mpi.h>
  #include "mpi_utils.h"

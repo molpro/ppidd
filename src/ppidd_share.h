@@ -91,7 +91,7 @@
       Get command line arguments
    \* ========================== */
       if(argc>0) {
-         argv = malloc(argc*sizeof(char*));
+         argv = (char **)malloc(argc*sizeof(char*));
          for(i=0; i<argc; ++i) {
            argv[i] = (char *) strdup(args[i]);
            if(MPIGA_Debug)printf("In ppidd_initialize: argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
@@ -102,7 +102,7 @@
    For MPICH2 and other MPI2 library, no such limitation */
          argc=1;
          i=0;
-         argv = malloc(argc*sizeof(char*));
+         argv = (char **)malloc(argc*sizeof(char*));
          strcpy(arg,"DummyCommand");
          argv[i] = (char *) strdup(arg);
          if(MPIGA_Debug)printf("In ppidd_initialize: USE DUMMY ARGUMENTS. argc=%d, argv[%d]=%s\n",argc,i,argv[i]);

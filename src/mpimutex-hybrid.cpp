@@ -27,7 +27,7 @@ int MPIMUTEX_Create(int homerank, MPI_Comm comm, mpimutex_t *mutex_p)
     int blklens[2];
     int disps[2];
 
-    mutex = malloc(sizeof(struct mpimutex));
+    mutex = (mpimutex_t)malloc(sizeof(struct mpimutex));
     if (!mutex) goto err_return;
 
     mutex->homerank = homerank;
@@ -103,7 +103,7 @@ int MPIMUTEX_Lock(mpimutex_t mutex)
     unsigned char val = 1;
     unsigned char *waitlistcopy = NULL;
 
-    waitlistcopy = malloc(mutex->nprocs-1);
+    waitlistcopy = (unsigned char *)malloc(mutex->nprocs-1);
     if (!waitlistcopy) goto err_return;
 
     /* add self to waitlist */
@@ -151,7 +151,7 @@ int MPIMUTEX_Unlock(mpimutex_t mutex)
     unsigned char *waitlistcopy;
 
     /* TODO: MOVE INTO INITIALIZE */
-    waitlistcopy = malloc(mutex->nprocs-1);
+    waitlistcopy = (unsigned char *)malloc(mutex->nprocs-1);
     if (!waitlistcopy) goto err_return;
 
     /* remove self from waitlist */

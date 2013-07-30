@@ -24,6 +24,14 @@
 \* ====================================================================== */
 
 
+#ifdef MPI2
+ #include <mpi.h>
+ #define   MPI_EAF_RW -1
+ #define   MPI_EAF_W  -2
+ #define   MPI_EAF_R  -3
+ extern MPI_Comm MPIGA_WORK_COMM;
+#endif
+
 #include "ppidd_eaf_c.h"   /* include ppidd_machines.h */
 
 #ifdef FORTCL_NEXT
@@ -40,13 +48,7 @@
 
 /* The following code should be the same as those in ppidd_eaf_fortran.cpp (except ppidd_eaf_rank). One should make it consistent once code in ppidd_eaf_fortran.cpp is changed. */
 
-#ifdef MPI2
- #include <mpi.h>
- #define   MPI_EAF_RW -1
- #define   MPI_EAF_W  -2
- #define   MPI_EAF_R  -3
- extern MPI_Comm MPIGA_WORK_COMM;
-#endif
+
 
 #ifdef GA_MPI
  #include <ga.h>

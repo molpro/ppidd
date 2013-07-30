@@ -24,7 +24,7 @@
 \* ====================================================================== */
 
 
-#include "ppidd_eaf_fortran.h"   /* include ppidd_machines.h */
+
 
 #ifdef MPI2
  #include <mpi.h>
@@ -33,6 +33,8 @@
  #define   MPI_EAF_R  -3
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
+
+#include "ppidd_eaf_fortran.h"   /* include ppidd_machines.h */
 
 #ifdef GA_MPI
  #include <ga.h>

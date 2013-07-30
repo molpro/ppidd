@@ -17,6 +17,7 @@
 \* ------------- */
 
 
+ #include "mpimutex.h"  /* mpi.h is already included here */
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
@@ -24,7 +25,7 @@
  #include <unistd.h>
  #include <time.h>
 
- #include "mpimutex.h"  /* mpi.h is already included here */
+
  #include "ppidd_machines.h"
 
  #include "ppidd_dtype.h"

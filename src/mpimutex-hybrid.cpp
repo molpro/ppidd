@@ -7,15 +7,12 @@
 
 #ifdef MPI2
 
+#include "mpimutex.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <assert.h>
-
-#include <mpi.h>
-
-#include "mpimutex.h"
 
 #define WAKEUP 13
 

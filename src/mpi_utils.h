@@ -11,8 +11,8 @@
 #define __MPI_UTILS_H__
 
 #include <mpi.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef CRAY_YMP

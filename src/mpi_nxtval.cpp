@@ -14,8 +14,8 @@
 
 #ifdef MPI2
 
-#include "ppidd_machines.h"
 #include "mpi_utils.h"
+#include "ppidd_machines.h"
 #include "mpi_nxtval.h"
 int mpiga_cleanup_finalize(void);
 

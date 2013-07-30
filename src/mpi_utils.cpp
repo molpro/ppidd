@@ -14,8 +14,9 @@
 
 #if defined(MPI2) || defined(GA_MPI)
 
-#include "ppidd_machines.h"  /* needed by fortint in mpiga_type_f2cmpi */
+
 #include "mpi_utils.h"
+#include "ppidd_machines.h"  /* needed by fortint in mpiga_type_f2cmpi */
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];
 

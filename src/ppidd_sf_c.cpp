@@ -23,6 +23,10 @@
  * Date:       15/07/2008                                                 *
 \* ====================================================================== */
 
+#ifdef MPI2
+ #include <mpi.h>
+ extern MPI_Comm MPIGA_WORK_COMM;
+#endif
 
 #include "ppidd_sf_c.h"   /* include ppidd_machines.h */
 
@@ -40,10 +44,7 @@
 
 /* The following code should be the same as those in ppidd_sf_fortran.cpp (except ppidd_sf_rank). One should make it consistent once code in ppidd_sf_fortran.cpp is changed. */
 
-#ifdef MPI2
- #include <mpi.h>
- extern MPI_Comm MPIGA_WORK_COMM;
-#endif
+
 
 #ifdef GA_MPI
  #include <ga.h>

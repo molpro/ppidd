@@ -36,6 +36,7 @@
 #endif
 
 #ifdef GA_MPI
+ #include "mpi_utils.h"
  #include "ppidd_machines.h"
  #include <ga.h>
  #include <macdecls.h>
@@ -49,8 +50,6 @@
  }
 #endif
 
- #include <mpi.h>
- #include "mpi_utils.h"
 #endif
  static int MPIGA_Debug=0;
 

@@ -204,7 +204,7 @@
 
 /*! Terminate the PPIDD parallel environment.
  *
- *  - For \b GA, tidy up global arrays and MPI, analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_terminate
+ *  - For \b GA, tidy up global arrays and MPI, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#TERMINATE
  *  - For \b MPI2, tidy up some associated resources and call MPI_Finalize.
  */
    void PPIDD_Finalize(void) {
@@ -220,7 +220,7 @@
 /*! \cond */
 /*  Detect whether MA is used for allocation of GA memory.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_uses_ma
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#USES_MA
  *  - \b MPI2 always returns <tt>.false.</tt>
  */
    void PPIDD_Uses_ma(fortlogical *ok) {
@@ -241,7 +241,7 @@
 
 /*  Initialize the memory allocator.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/parsoft/ma/MAapi.html
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/ma/MAapi.html
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
    void PPIDD_MA_init(fortint *dtype, fortint *stack, fortint *heap, fortlogical *ok) {
@@ -279,7 +279,7 @@
  * The times returned are local to the node that called them. There is no requirement that different nodes return the same time.
  * This is a local operation.
  *
- *  - \b GA calls GA_Wtime, which is available only in release 4.1 or greater, http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_wtime
+ *  - \b GA calls GA_Wtime, which is available only in release 4.1 or greater, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#WTIME
  *  - \b MPI2 calls MPI_Wtime
  */
    void PPIDD_Wtime(double *ctime) {
@@ -295,7 +295,7 @@
 
 /*! Print an error message and abort the program execution.
  *
- *  - \b GA calls GA_Error, http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_error
+ *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
    void PPIDD_Error(char *message
@@ -408,7 +408,7 @@
 /*!  Determine the total number of processes available (including helper process if there is one).
  *
  *  - \b GA calls GA_Nnodes,
- *  http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_nnodes
+ *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
  *  - \b MPI2 calls MPI_Comm_size for communicator MPI_COMM_WORLD.
  */
    void PPIDD_Size_all(fortint *np) {
@@ -429,7 +429,7 @@
 /*  Determine the number of compute processes.
  *
  *  - \b GA calls GA_Nnodes,
- *  http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_nnodes
+ *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
  *  - \b MPI2 calls MPI_Comm_size for computational communicator.
  */
    void PPIDD_Size(fortint *np) {
@@ -450,7 +450,7 @@
 /*! Determine the rank of the calling process.
  *
  *  - \b GA calls GA_Nodeid,
- *  http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_nodeid
+ *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID
  *  - \b MPI2 calls MPI_Comm_rank in computational communicator.
  */
    void PPIDD_Rank(fortint *me) {
@@ -470,7 +470,7 @@
 
 /*! Initialize tracing of completion status of data movement operations.
  *
- *  - \b GA calls GA_Init_fence, http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_init_fence
+ *  - \b GA calls GA_Init_fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INIT_FENCE
  *  - \b MPI2 does nothing
  */
    void PPIDD_Init_fence(void) {
@@ -482,7 +482,7 @@
 
 /*! Block the calling process until all data transfers complete.
  *
- *  - \b GA calls GA_Fence, http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_fence
+ *  - \b GA calls GA_Fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#FENCE
  *  - \b MPI2 does nothing
  */
    void PPIDD_Fence(void) {
@@ -691,7 +691,7 @@ static int n_in_msg_mpiq=0;
 /*! Broadcast a message from the root process to all other processes.
  *
  *  Collective operation.
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_brdcst
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#BRDCST
  *  - \b MPI2 calls MPI_Bcast
  *
  *  - \c type=0 : Fortran integer and logical types
@@ -739,7 +739,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Synchronize processes and ensure all have reached this routine.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_sync
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#SYNC
  *  - \b MPI2 calls MPI_Barrier
  */
    void PPIDD_Barrier(void) {
@@ -757,7 +757,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Combine values from all processes and distribute the result back to all processes.
  *
- *  - \b GA analogous to GA_dgop and GA_igop, http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_dgop
+ *  - \b GA analogous to GA_dgop and GA_igop, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GOP
  *  - For \b MPI2, it is realized by MPI_Allreduce
  *
  *  - \c type=0 : Fortran Integer
@@ -829,7 +829,7 @@ static int n_in_msg_mpiq=0;
  *  - \c datatype=0 : Fortran integer and logical types
  *  - \c datatype=1 : Fortran double precision type
 
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_create_irreg
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
    void PPIDD_Create_irreg(char *name
 /*! \cond */
@@ -963,7 +963,7 @@ static int n_in_msg_mpiq=0;
  *  - \c storetype=0 : Normal distributed array stored across the distributed processes
  *  - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled). \c storetype is advisory: the underlying implementation will use up to \c storetype helpers.
 
- *  - For \b GA, storetype doesn't take effect, and data are always stored across the distributed processes, analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_create
+ *  - For \b GA, storetype doesn't take effect, and data are always stored across the distributed processes, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
@@ -1081,7 +1081,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Deallocate the array represented by handle and free any associated resources.
  *
- *  - \b GA analogous http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_destroy
+ *  - \b GA analogous http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY
  */
    void PPIDD_Destroy(fortint *handle,fortlogical *ok) {
 #ifdef MPI2
@@ -1112,7 +1112,7 @@ static int n_in_msg_mpiq=0;
  *
  *  Return <tt>.true.</tt> if successful, otherwise <tt>.false.</tt>
  *  If no array elements are owned by the process, the range is returned as [0,-1].
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_distribution
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION
  */
    void PPIDD_Distrib(fortint *handle,fortint *rank,fortint *ilo,fortint *ihi,fortlogical *ok) {
 #ifdef MPI2
@@ -1168,7 +1168,7 @@ static int n_in_msg_mpiq=0;
  *
  *  Parts of the specified patch might be actually 'owned' by several processes.
  *  np is the number of processes hold tha data (return 0  if ilo/ihi are out of bounds "0").
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_locate_region
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCATE_REGION
  */
    void PPIDD_Location(fortint *handle,     /*!< array handle */
                        fortint *ilo,        /*!< lower element subscript, 1 (not 0) for fisrt element */
@@ -1249,7 +1249,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Copies data from array section to the local array buffer according to starting and ending index.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_get
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET
  */
    void PPIDD_Get(fortint *handle,fortint *ilo,fortint *ihi,void *buff,fortlogical *ok) {
 #ifdef MPI2
@@ -1310,7 +1310,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Put local buffer data into a section of a global array according to starting and ending index.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_put
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT
  */
    void PPIDD_Put(fortint *handle,fortint *ilo,fortint *ihi,void *buff,fortlogical *ok) {
 #ifdef MPI2
@@ -1372,7 +1372,7 @@ static int n_in_msg_mpiq=0;
 /*! Accumulate data into a section of a global array.
  *
  * Atomic operation.  global array section (ilo, ihi) += *fac * buffer
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_acc
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC
  */
    void PPIDD_Acc(fortint *handle,fortint *ilo,fortint *ihi,void *buff,void *fac,fortlogical *ok) {
 #ifdef MPI2
@@ -1426,7 +1426,7 @@ static int n_in_msg_mpiq=0;
  *
  *  Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum)
     element by a given increment. This is a fetch-and-add operation.
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_read_inc
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC
  */
    void PPIDD_Read_inc(fortint *ihandle,fortint *inum,fortint *incr,fortint *returnval) {
 #ifdef MPI2
@@ -1467,7 +1467,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Set all the elements in an array patch to zero.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_zero_patch
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH
  */
    void PPIDD_Zero_patch(fortint *ihandle,fortint *ilo,fortint *ihi) {
 #ifdef MPI2
@@ -1500,9 +1500,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Set all the elements of an array to zero.
+/*! Set all the elements of a global data structure to zero.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_zero
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO
  */
    void PPIDD_Zero(fortint *handle,fortlogical *ok) {
 #ifdef MPI2
@@ -1529,9 +1529,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Create a new array by applying all the properties of another existing array.
+/*! Create a new global array by applying all the properties of another existing global.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_duplicate
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
  *  - \b MPI2  does nothing
  */
    void PPIDD_Duplicate(fortint *handlei, fortint *handlej, char *name
@@ -1569,7 +1569,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Returns the name of a global array represented by the handle.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_inquire_name
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
  *  - \c This operation is local.
  */
    void PPIDD_Inquire_name(fortint *handle, char *name
@@ -1652,7 +1652,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_inquire_memory
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
  */
    void PPIDD_Inquire_mem(fortint *mem_used) {
 #ifdef MPI2
@@ -1674,7 +1674,7 @@ static int n_in_msg_mpiq=0;
  *
  *  Returns <tt>.true.</tt> if the operation succeeded or <tt>.false.</tt> when failed. It is a collective operation.
 
- *  - For \b GA, \c storetype doesn't take effect, analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_create_mutexes
+ *  - For \b GA, \c storetype doesn't take effect, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES
  *  - For \b MPI2, there are two kinds of mutexes:
  *   - (1) \c storetype=0: mutex data will be stored by a global array across the distributed processes.
  *        Due to the poor performance of MPI-2 one-sided communication, this kind of mutex is very slow.
@@ -1717,7 +1717,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Lock a mutex object identified by a given mutex number.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_lock
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK
  */
    void PPIDD_Lock_mutex(fortint *inum) {
 #ifdef MPI2
@@ -1737,7 +1737,7 @@ static int n_in_msg_mpiq=0;
 
 /*! Unlock  a mutex object identified by a given mutex number.
  *
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_unlock
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK
  */
    void PPIDD_Unlock_mutex(fortint *inum) {
 #ifdef MPI2
@@ -1758,7 +1758,7 @@ static int n_in_msg_mpiq=0;
 /*! Destroy the set of mutexes created with PPIDD_Create_mutexes.
  *
  * Returns <tt>.true.</tt> if the operation succeeded or <tt>.false.</tt> when failed. This is a collective operation.
- *  - \b GA analogous to http://www.emsl.pnl.gov/docs/global/ga_ops.html#ga_destroy_mutexes
+ *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES
  */
    void PPIDD_Destroy_mutexes(fortlogical *ok) {
 #ifdef MPI2

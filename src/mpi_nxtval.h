@@ -10,7 +10,7 @@
 
 /* **Include Files*** */
 /*  prerequisite: include ppidd_machines.h and mpi.h, and some basic libraries  */
-#include <mpi.h>
+#include "ppidd_mpi.h"
 #include "ppidd_machines.h"
 
 /* defined variables */

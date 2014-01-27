@@ -7,7 +7,7 @@
 #ifndef __MPIMUTEX_H__
 #define __MPIMUTEX_H__
 
-#include <mpi.h>
+#include "ppidd_mpi.h"
 
 typedef struct mpimutex {
     int nprocs, myrank, homerank;

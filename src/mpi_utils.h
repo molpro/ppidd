@@ -10,7 +10,7 @@
 #ifndef __MPI_UTILS_H__
 #define __MPI_UTILS_H__
 
-#include <mpi.h>
+#include "ppidd_mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

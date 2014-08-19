@@ -1,10 +1,15 @@
 include ../config.mk
 
+SOURCEFILES+=$(wildcard *.cpp)
+ifneq ($(FC),)
+SOURCEFILES+=$(wildcard *.F)
+endif
+
 .PHONY: default
-default: $(addsuffix .o,$(basename $(wildcard *.cpp *.F)))
+default: $(addsuffix .o,$(basename $(SOURCEFILES)))
 
 %.o: %.cpp
-	$(CXX) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $<
 
 %.o: %.F
 	$(FC) -c $(FFLAGS) $<

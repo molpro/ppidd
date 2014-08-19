@@ -1,146 +1,19 @@
 include config.mk
 
-VERSION=$(shell git rev-parse HEAD | cut -c 1-7)
-kernel=$(shell uname -s)
+#ifeq ($(notdir $(FC)),ifort)
+#override FFLAGS+=-Vaxlib
+#endif
 
-ifeq ($(origin CXX),default)
-CXX=
-endif
-ifeq ($(origin FC),default)
-FC=
-endif
-ifeq ($(origin INCLUDE),environment)
-INCLUDE=
-endif
-
-# Generic Linux
-override MPICXX_Linux=mpicxx
-override MPIFC_Linux=mpif90 mpif77
-override CXX_Linux=icpc g++
-override FC_Linux=pgf90 pathf90 ifort gfortran g95
-
-# Mac OSX
-override MPICXX_Darwin=mpicxx
-override MPIFC_Darwin=mpif90
-override CXX_Darwin=icpc g++
-override FC_Darwin=pgf90 ifort gfortran g95
-
-ifndef CXX
-MPICXX=$(foreach exe,$(MPICXX_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
-endif
-ifndef FC
-MPIFC=$(foreach exe,$(MPIFC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
-endif
-CXX=$(foreach exe,$(CXX_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
-FC=$(foreach exe,$(FC_$(kernel)),$(shell if type $(exe) 1>/dev/null 2>&1; then which $(exe); fi))
-
-CXX:=$(firstword $(CXX))
-FC:=$(firstword $(FC))
-MPICXX:=$(firstword $(MPICXX))
-MPIFC:=$(firstword $(MPIFC))
-
-ifeq ($(MPIFC),)
-ifeq ($(notdir $(FC)),ifort)
-override FFLAGS+=-Vaxlib
-endif
-endif
-ifeq ($(INTEGER),8)
-override CFLAGS+=-D_I8_
-endif
-
-ifndef BUILD
-ifdef INCLUDE
-ifeq (mpi.h,$(filter mpi.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*.h))))
-BUILD=MPI2
-endif
-endif
-endif
-
-ifndef BUILD
-ifdef INCLUDE
-ifneq ($(wildcard $(firstword $(INCLUDE))/../lib/*),)
-ifeq ($(wildcard $(firstword $(INCLUDE))/../lib/*),$(firstword $(wildcard $(firstword $(INCLUDE))/../lib/*)))
-check_files=libglobal.a libma.a libpario.a libarmci.a
-ifeq ($(sort $(check_files)),$(sort $(filter $(check_files),$(notdir $(wildcard $(firstword $(INCLUDE))/../lib/*/*.a)))))
-BUILD=GA_MPI
-endif
-endif
-endif
-endif
-endif
-
-ifndef BUILD
-BUILD=MPI2
-endif
-
-ifeq ($(BUILD),GA_MPI)
-override CFLAGS+=-DGA_MPI
-override FFLAGS+=-DGA_MPI
-override LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
-endif
-
-ifeq ($(BUILD),MPI2)
-override CFLAGS+=-DMPI2
-override FFLAGS+=-DMPI2
-ifeq ($(NXTVAL),n)
-override FFLAGS+=-DNO_NXTVAL_SERVER
-override CFLAGS+=-DNO_NXTVAL_SERVER
-endif
-endif
-
+#LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
 
 .PHONY: default
 default: library
 
 .PHONY: library
 library:
-	@echo
-ifneq (3.81,$(firstword $(sort 3.81 $(MAKE_VERSION))))
-	@echo 'Make version 3.81 or higher is required'; exit 1
-endif
-ifeq ($(filter $(BUILD),GA_MPI MPI2 SERIAL),)
-	@echo build '$(BUILD)' not supported; exit 1
-endif
-ifneq ($(BUILD),SERIAL)
-ifdef INCLUDE
-ifeq ($(BUILD),MPI2)
-ifneq (mpi.h,$(filter mpi.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*.h))))
-	@echo 'mpi.h not found in $(INCLUDE).'
-	@echo 'If you intend to build PPIDD with GA 5.0 or higher, GA_MPI must be specified.'; exit 1
-endif
-else
-ifeq ($(BUILD),GA_MPI)
-ifneq ($(sort mafdecls.fh global.fh macommon.h eaf.fh eaf.h),$(sort $(filter mafdecls.fh global.fh macommon.h eaf.fh eaf.h,$(notdir $(wildcard $(firstword $(INCLUDE))/*)))))
-	@echo 'one or more GA include files missing in $(firstword $(INCLUDE))'; exit 1
-endif
-endif
-endif
-else
-ifndef MPICXX
-	@echo 'both INCLUDE and MPICXX variables are unset or cannot be determined'; exit 1
-endif
-endif
-endif
-ifneq ($(kernel),$(findstring $(kernel),Linux Darwin))
-	@echo 'WARNING: Unknown kernel $(kernel)'
-endif
-ifndef FC
-	@echo 'Unable to find a Fortran compiler'; exit 1
-endif
-ifndef CXX
-	@echo 'Unable to find a C compiler'; exit 1
-endif
-	@echo 'Building PPIDD Library (Version $(VERSION))'
-	@echo
-ifeq ($(BUILD),MPI2)
-ifeq ($(NXTVAL),n)
-	@echo 'Helper process will not be compiled; PPIDD_Nxtval will be disabled'
-	@echo
-endif
-endif
 	@rm -rf lib
 	@mkdir lib
-	$(MAKE) -C src FC='$(if $(MPIFC),$(MPIFC),$(FC))' CXX='$(if $(MPICXX),$(MPICXX),$(CXX))' CFLAGS='$(CFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))' FFLAGS='$(FFLAGS) $(addprefix -I,$(realpath $(INCLUDE)))'
+	$(MAKE) -C src
 	@$(AR) $(ARFLAGS) lib/libppidd.a src/*.o
 	@$(RANLIB) lib/libppidd.a
 
@@ -149,14 +22,7 @@ test: library
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo
-ifneq ($(BUILD),SERIAL)
-ifndef MPILIB
-ifndef MPIFC
-	@echo 'both MPILIB and MPIFC variables are unset or cannot be determined'; exit 1
-endif
-endif
-endif
-	$(MAKE) -C test BUILD='$(BUILD)' FC='$(if $(MPIFC),$(MPIFC),$(FC))' CXX='$(if $(MPICXX),$(MPICXX),$(CXX))' CFLAGS='$(CFLAGS)' FFLAGS='$(FFLAGS)' LIBS='$(LIBS) $(MPILIB)'
+	$(MAKE) -C test
 
 .PHONY: doc
 doc:

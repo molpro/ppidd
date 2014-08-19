@@ -34,7 +34,8 @@ AC_PROG_FC()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in
  x4 ) true ;;
- x8 ) AC_DEFINE(_I8_) ;;
+ x8 ) AC_DEFINE(_I8_)
+      AC_MSG_WARN([building interface for 8-byte Fortran integers, check FCFLAGS set correctly]);;
  x* ) AC_MSG_ERROR([illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option]) ;;
 esac
 fi

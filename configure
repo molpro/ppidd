@@ -3451,7 +3451,9 @@ fi
 case "x${enable_fortran_integer}" in
  x4 ) true ;;
  x8 ) $as_echo "#define _I8_ 1" >>confdefs.h
- ;;
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: building interface for 8-byte Fortran integers, check FCFLAGS set correctly" >&5
+$as_echo "$as_me: WARNING: building interface for 8-byte Fortran integers, check FCFLAGS set correctly" >&2;};;
  x* ) as_fn_error $? "illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option" "$LINENO" 5 ;;
 esac
 fi

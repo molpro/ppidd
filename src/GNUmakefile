@@ -1,3 +1,4 @@
+include ../config.mk
 
 .PHONY: default
 default: $(addsuffix .o,$(basename $(wildcard *.cpp *.F)))

@@ -4,3 +4,4 @@
 doc/doxygen/
 doc/doxygen.log
 lib/
+config.mk

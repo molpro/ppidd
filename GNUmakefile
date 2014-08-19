@@ -1,3 +1,4 @@
+include config.mk
 
 VERSION=$(shell git rev-parse HEAD | cut -c 1-7)
 kernel=$(shell uname -s)

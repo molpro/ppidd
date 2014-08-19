@@ -71,10 +71,9 @@
 
     This should not be necessary since PPIDD is distributed with
     documentation precompiled. If you should choose to recompile, then
-    the doxygen program is required. The DOXYGEN variable defines the
-    executable used.
+    the doxygen program is required.
 
-    make doc [DOXYGEN=/path/to/doxygen]
+    make doc
 
  5. Directory and file structure
 

@@ -1,3 +1,4 @@
+include ../config.mk
 
 .PHONY: default
 default: ppidd_test.exe ppidd_sf_test.exe ppidd_ctest.exe

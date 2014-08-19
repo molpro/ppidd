@@ -1,8 +1,8 @@
 *.a
 *.exe
-*.o
 *.mod
+*.log
+*.o
 doc/doxygen/
-doc/doxygen.log
 config.mk
 src/config.h

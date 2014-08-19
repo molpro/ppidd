@@ -52,5 +52,10 @@ else
  # serial
 fi
 
+if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
+ AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
+ AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header files]))
+fi
+
 AC_OUTPUT()
 rm -f config.status config.log

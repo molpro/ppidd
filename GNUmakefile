@@ -13,10 +13,6 @@ ifeq ($(origin INCLUDE),environment)
 INCLUDE=
 endif
 
-AR=ar
-ARFLAGS=-rS
-RANLIB=ranlib
-
 # Generic Linux
 override MPICXX_Linux=mpicxx
 override MPIFC_Linux=mpif90 mpif77

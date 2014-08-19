@@ -48,8 +48,7 @@ elif test "x${with_mpi2}" != xno ; then
  AC_MSG_NOTICE([PPIDD with MPI2])
  AC_DEFINE(MPI2)
 else
- true
- # serial
+ AC_MSG_NOTICE([PPIDD for serial])
 fi
 
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then

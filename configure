@@ -3468,8 +3468,8 @@ $as_echo "$as_me: PPIDD with MPI2" >&6;}
  $as_echo "#define MPI2 1" >>confdefs.h
 
 else
- true
- # serial
+ { $as_echo "$as_me:${as_lineno-$LINENO}: PPIDD for serial" >&5
+$as_echo "$as_me: PPIDD for serial" >&6;}
 fi
 
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then

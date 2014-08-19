@@ -4,6 +4,9 @@
 #define	sizeofctype        FORT_Extern(sizeofctype,SIZEOFCTYPE)
 /* change argument type fortint to double, in order to obtain right numbers even if Integer type doesn't match between Fortran and C */
 /* void sizeofctype(fortint *sizeint, fortint *sizelog, fortint *sizedouble, fortint *sizefloat) */
+#ifdef __cplusplus
+extern "C" {
+#endif
 void sizeofctype(double *sizeint, double *sizelog, double *sizedouble, double *sizefloat)
 {
     int verbose=0;
@@ -22,3 +25,6 @@ void sizeofctype(double *sizeint, double *sizelog, double *sizedouble, double *s
     *sizedouble=(double)sizeof(double);
     *sizefloat=(double)sizeof(float);
 }
+#ifdef __cplusplus
+}
+#endif

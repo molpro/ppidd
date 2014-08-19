@@ -1,4 +1,6 @@
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 /*
  * Copyright (C) 2004 University of Chicago.
  * See COPYRIGHT notice in top-level directory.

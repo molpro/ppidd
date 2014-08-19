@@ -10,12 +10,12 @@
 #ifdef fortint
 #undef fortint
 #endif
-#define fortint int
+#define fortint int64_t
 
 #ifdef fortlogical
 #undef fortlogical
 #endif
-#define fortlogical int
+#define fortlogical int64_t
 
 #ifdef FALSE
 #undef FALSE

@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 
 int ppidd_ctest(void)
 {
-    int me, nproc;
+    int64_t me, nproc;
 
     PPIDD_Size(&nproc);
     PPIDD_Rank(&me);

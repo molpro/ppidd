@@ -10,11 +10,11 @@ libppidd.a:
 	@$(RANLIB) $@
 
 .PHONY: test
-test: library
+test: libppidd.a
 	@echo
 	@echo 'Building PPIDD test suite'
 	@echo
-	$(MAKE) -C test
+	@$(MAKE) -C test
 
 .PHONY: doc
 doc:

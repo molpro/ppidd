@@ -7,15 +7,13 @@ include config.mk
 #LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
 
 .PHONY: default
-default: library
+default: libppidd.a
 
-.PHONY: library
-library:
-	@rm -rf lib
-	@mkdir lib
-	$(MAKE) -C src
-	@$(AR) $(ARFLAGS) lib/libppidd.a src/*.o
-	@$(RANLIB) lib/libppidd.a
+libppidd.a:
+	@$(MAKE) -C src
+	@rm -f $@
+	@$(AR) $(ARFLAGS) $@ src/*.o
+	@$(RANLIB) $@
 
 .PHONY: test
 test: library
@@ -34,4 +32,4 @@ endif
 
 clean:
 	@$(foreach directory,src test,$(MAKE) -C $(directory) clean;)
-	@rm -rf lib
+	@rm -rf libppidd.a

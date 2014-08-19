@@ -5,15 +5,15 @@ default: ppidd_test.exe ppidd_sf_test.exe ppidd_ctest.exe
 
 ppidd_ctest.exe: ppidd_ctest.o
 ifeq ($(BUILD),MPI2)
-	$(CXX) $(CFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
+	$(CXX) $(CFLAGS) -o $@ $^ -L.. -lppidd $(LIBS)
 else
-	$(FC) $(patsubst -Vaxlib,-nofor_main,$(FFLAGS)) -o $@ $^ -L../lib -lppidd $(LIBS)
+	$(FC) $(patsubst -Vaxlib,-nofor_main,$(FFLAGS)) -o $@ $^ -L.. -lppidd $(LIBS)
 endif
 
 ppidd_test.exe: ppidd_test.o sizeofctypes.o sizeoffortypes.o ppidd_flush6.o
-	$(FC) $(FFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
+	$(FC) $(FFLAGS) -o $@ $^ -L.. -lppidd $(LIBS)
 ppidd_sf_test.exe: ppidd_sf_test.o ppidd_flush6.o
-	$(FC) $(FFLAGS) -o $@ $^ -L../lib -lppidd $(LIBS)
+	$(FC) $(FFLAGS) -o $@ $^ -L.. -lppidd $(LIBS)
 
 ppidd_test.o: ppidd_test.F
 ppidd_sf_test.o: ppidd_sf_test.F

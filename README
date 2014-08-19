@@ -7,52 +7,28 @@
 
  1. Prerequisites
 
-    - GNU make version 3.81 or higher
-
-    - A Fortran compiler which supports Fortran 2003 Standard features
+    - GNU make
 
     - A C compiler
+
+    - If compiling Fortran interface, a Fortran compiler which supports
+      Fortran 2003 Standard features
 
     - An MPI2 library
 
     OR
 
-    - Global Arrays library
+    - Global Arrays library and MPI library
 
       We strongly recommend that the same compilers are used for
       compiling the Global Arrays and PPIDD libraries.
 
  2. Building the library
 
-    By default, the supplied GNUmakefile attempts to build the library
-    using the commands 'mpif90' and 'mpicc', which are typically available
-    when an MPI2 library has been installed. If you wish to override this,
-    the following are some common variables which may need to be set on the
-    command line using the form
-
-    make VAR1=value1 VAR2=value2 ...
-
-    - CXX      C++ compiler
-    - FC       Fortran compiler
-    - MPICC    an MPI2-aware C compiler
-    - MPIFC    an MPI2-aware Fortran compiler
-    - INCLUDE  directory containing MPI2 or GA include files
-    - MPILIB   MPI linking options, eg. '-L/usr/lib -lmpi'
-    - BUILD    either MPI2 (default) or GA_MPI
-    - CFLAGS   C compiler flags
-    - FFLAGS   Fortran compiler flags
-    - INTEGER  setting INTEGER=8 lets make know that the compilers use 8-byte integers.
-	       Note, make does not force the compilers to do this, it is up to the
-               user to make any necessary changes to CFLAGS/FFLAGS.
-    - NXTVAL   setting NXTVAL=n disables the helper process (PPIDD_Nxtval)
-               for MPI2 builds, by default it is enabled.
-
-    Note: When the library is built on top of Global Arrays library, the -Vaxlib option is
-    needed for Intel Fortran compilers ( including an MPI2-aware Fortran compiler who invokes
-    Intel  Fortran compiler ) to link with a Fortran main program ( make .... FFLAGS=-Vaxlib ).
-    This option can allow getarg() and iargc(), which are not part of the Fortran standard, to
-    be resolved properly. In addition, when the library is built on top of GA 5.0 or higher,
-    BUILD=GA_MPI must be specified explicitly.
+    By default configure will build the library for serial, one should
+    therefore specify --with-ga or --with-mpi2 to build a parallel
+    interface. The normal autoconf influential variables can be used
+    with configure, run ./configure --help for full details.
 
     Building examples are avaible at ./doc/doxygen/html/index.html after the documentation is built.
 

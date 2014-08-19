@@ -1,11 +1,5 @@
 include config.mk
 
-#ifeq ($(notdir $(FC)),ifort)
-#override FFLAGS+=-Vaxlib
-#endif
-
-#LIBS+=-L$(realpath $(wildcard $(firstword $(INCLUDE))/../lib)) -lga -larmci
-
 .PHONY: default
 default: libppidd.a
 

@@ -38,7 +38,6 @@ CXX:=$(firstword $(CXX))
 FC:=$(firstword $(FC))
 MPICXX:=$(firstword $(MPICXX))
 MPIFC:=$(firstword $(MPIFC))
-DOXYGEN=$(shell if type doxygen 1>/dev/null 2>&1 ; then which doxygen; fi)
 
 ifeq ($(MPIFC),)
 ifeq ($(notdir $(FC)),ifort)

@@ -9,7 +9,7 @@ endif
 default: $(addsuffix .o,$(basename $(SOURCEFILES)))
 
 %.o: %.cpp
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $<
 
 %.o: %.F
 	$(FC) -c $(FFLAGS) $<

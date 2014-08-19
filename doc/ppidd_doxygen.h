@@ -66,7 +66,7 @@
      ./configure --enable-mpi2
 
      2. Build Global Arrays version of PPIDD.
-     ./configure --enable-ga
+     ./configure --enable-ga=/path/to/ga-install/include
 
   </pre>
  *

@@ -4,7 +4,7 @@ AC_CONFIG_HEADERS([src/config.h:src/configure/config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
-AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga],[build using Global Arrays])],,[with_ga="no"])
+AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])
 
@@ -51,9 +51,15 @@ else
  AC_MSG_NOTICE([PPIDD for serial])
 fi
 
+if test "x${with_ga}" != xno ; then
+ if test "x${with_ga}" != xyes ; then
+  CPPFLAGS="${CPPFLAGS} -I${with_ga}"
+ fi
+ AC_CHECK_HEADER([ga.h],,AC_MSG_ERROR([unable to locate ga.h header file]))
+fi
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
- AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header files]))
+ AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
 fi
 
 AC_OUTPUT()

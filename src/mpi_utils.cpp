@@ -1,3 +1,4 @@
+#include "config.h"
 
 /* ====================================================================== *\
  *                    Standalone Utility Tools for MPI                    *

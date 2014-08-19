@@ -1,3 +1,4 @@
+#include "config.h"
 
 /* ====================================================================== *\
  *                 PPIDD Exclusive Access File Library                    *

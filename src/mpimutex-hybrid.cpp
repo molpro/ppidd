@@ -1,3 +1,4 @@
+#include "config.h"
 /*
  * Copyright (C) 2004 University of Chicago.
  * See COPYRIGHT notice in top-level directory.

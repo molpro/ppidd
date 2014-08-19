@@ -1,3 +1,4 @@
+#include "config.h"
 
 /* ====================================================================== *\
  *                 MPI Version of Mutual Exclusion(Mutex)                 *

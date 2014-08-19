@@ -19,7 +19,7 @@ test: library
 .PHONY: doc
 doc:
 ifdef DOXYGEN
-	@cd doc; $(DOXYGEN) Doxyfile
+	@$(DOXYGEN) src/Doxyfile 1>$@.log
 else
 	@echo 'doxygen does not appear to be installed'
 endif

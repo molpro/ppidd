@@ -3,6 +3,6 @@
 *.mod
 *.log
 *.o
-doc/doxygen/
+doc/
 config.mk
 src/config.h

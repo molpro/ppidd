@@ -27,6 +27,12 @@
 #error "PPIDD_LANG not defined"
 #endif
 
+#if PPIDD_LANG == 2 && !defined(_I8_)
+#define ga_int int
+#else
+#define ga_int int64_t
+#endif
+
 #if defined(MPI2) || defined(GA_MPI)
 
 #ifdef MPI2
@@ -890,7 +896,7 @@ static int n_in_msg_mpiq=0;
       int gadtype=-1;
       int ndim=1;
       int nblock=(int)*nchunk;
-      int *dims, *block, *map;
+      ga_int *dims, *block, *map;
       int np;
       int i,iad,totlen;
       int gahandle;
@@ -923,11 +929,11 @@ static int n_in_msg_mpiq=0;
               free(errmsg);
       }
 
-      dims=(int *)malloc(ndim*sizeof(int));
-      block=(int *)malloc(ndim*sizeof(int));
+      dims=(ga_int *)malloc(ndim*sizeof(ga_int));
+      block=(ga_int *)malloc(ndim*sizeof(ga_int));
       np = GA_Nnodes();
 /* map[np] or map[nblock] ? */
-      map=(int *)malloc(np*sizeof(int));
+      map=(ga_int *)malloc(np*sizeof(ga_int));
 
       for(i=0;i<ndim;i++) block[i]=nblock;
 
@@ -940,7 +946,11 @@ static int n_in_msg_mpiq=0;
       totlen=iad;
       for(i=0;i<ndim;i++) dims[i]=totlen;
 
+#if PPIDD_LANG == 2 && !defined(_I8_)
       gahandle=NGA_Create_irreg(gadtype, ndim, dims, name2, block, map);
+#else
+      gahandle=NGA_Create_irreg64(gadtype, ndim, dims, name2, block, map);
+#endif
 
       free(name2);
       free(dims);
@@ -1025,7 +1035,7 @@ static int n_in_msg_mpiq=0;
       int dtype=(int)*datatype;
       int gadtype=-1;
       int ndim=1;
-      int *dims, *block;
+      ga_int *dims, *block;
       int galentot=(int)*lentot;
       int i;
       int gahandle;
@@ -1057,14 +1067,18 @@ static int n_in_msg_mpiq=0;
               free(errmsg);
       }
 
-      dims=(int *)malloc(ndim*sizeof(int));
-      block=(int *)malloc(ndim*sizeof(int));
+      dims=(ga_int *)malloc(ndim*sizeof(ga_int));
+      block=(ga_int *)malloc(ndim*sizeof(ga_int));
 
       for(i=0;i<ndim;i++) block[i]=-1;
 
       for(i=0;i<ndim;i++) dims[i]=galentot;
 
+#if PPIDD_LANG == 2 && !defined(_I8_)
       gahandle=NGA_Create(gadtype, ndim, dims, name2, block);
+#else
+      gahandle=NGA_Create64(gadtype, ndim, dims, name2, block);
+#endif
 
       free(name2);
       free(dims);
@@ -1137,13 +1151,17 @@ static int n_in_msg_mpiq=0;
       int gahandle=(int)*handle;
       int garank=(int)*rank;
       int ndim=1;
-      int *gailo;
-      int *gaihi;
+      ga_int *gailo;
+      ga_int *gaihi;
       int ARRAY_BASE=0;
 
-      gailo=(int *)malloc(ndim*sizeof(int));
-      gaihi=(int *)malloc(ndim*sizeof(int));
+      gailo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      gaihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+#if PPIDD_LANG == 2 && !defined(_I8_)
       NGA_Distribution(gahandle, garank, gailo, gaihi);
+#else
+      NGA_Distribution64(gahandle, garank, gailo, gaihi);
+#endif
 /* If no array elements are owned by process iproc, the range is returned as lo[ ]=0 and hi[ ]= -1 for all dimensions. */
       if (gailo[0]<=gaihi[0]) {
          *ilo = (fortint) (gailo[0] + 1 - ARRAY_BASE);
@@ -1211,23 +1229,28 @@ static int n_in_msg_mpiq=0;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      int *mpiilo;
-      int *mpiihi;
+      ga_int *mpiilo;
+      ga_int *mpiihi;
       int mpisize,mpinp;
-      int *mpimap,*mpiproclist;
+      ga_int *mpimap;
+      int *mpiproclist;
       int i;
       int ARRAY_BASE=0;
       int ndim=1;
 
       mpisize = GA_Nnodes();
-      mpimap=(int *)malloc(2*mpisize*sizeof(int));
+      mpimap=(ga_int *)malloc(2*mpisize*sizeof(ga_int));
       mpiproclist=(int *)malloc(mpisize*sizeof(int));
 
-      mpiilo=(int *)malloc(ndim*sizeof(int));
-      mpiihi=(int *)malloc(ndim*sizeof(int));
-      mpiilo[0]=(int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(int)*ihi-1+ARRAY_BASE;
+      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
+      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
+#if PPIDD_LANG == 2 && !defined(_I8_)
       mpinp=NGA_Locate_region( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
+#else
+      mpinp=NGA_Locate_region64( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
+#endif
 
       for (i=0;i<mpinp;i++) {
 	 map[2*i]=(fortint)(mpimap[2*i]+1-ARRAY_BASE);
@@ -1288,17 +1311,21 @@ static int n_in_msg_mpiq=0;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      int ld[1]={1};
+      ga_int ld[1]={1};
       int ndim=1;
-      int *mpiilo;
-      int *mpiihi;
+      ga_int *mpiilo;
+      ga_int *mpiihi;
       int ARRAY_BASE=0;
 
-      mpiilo=(int *)malloc(ndim*sizeof(int));
-      mpiihi=(int *)malloc(ndim*sizeof(int));
-      mpiilo[0]=(int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(int)*ihi-1+ARRAY_BASE;
+      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
+      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
+#if PPIDD_LANG == 2 && !defined(_I8_)
       NGA_Get(mpihandle, mpiilo, mpiihi, buff, ld);
+#else
+      NGA_Get64(mpihandle, mpiilo, mpiihi, buff, ld);
+#endif
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
@@ -1348,17 +1375,21 @@ static int n_in_msg_mpiq=0;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      int ld[1]={1};
+      ga_int ld[1]={1};
       int ndim=1;
-      int *mpiilo;
-      int *mpiihi;
+      ga_int *mpiilo;
+      ga_int *mpiihi;
       int ARRAY_BASE=0;
 
-      mpiilo=(int *)malloc(ndim*sizeof(int));
-      mpiihi=(int *)malloc(ndim*sizeof(int));
-      mpiilo[0]=(int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(int)*ihi-1+ARRAY_BASE;
+      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
+      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
+#if PPIDD_LANG == 2 && !defined(_I8_)
       NGA_Put(mpihandle, mpiilo, mpiihi, buff, ld);
+#else
+      NGA_Put64(mpihandle, mpiilo, mpiihi, buff, ld);
+#endif
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
@@ -1401,17 +1432,21 @@ static int n_in_msg_mpiq=0;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      int ld[1]={1};
+      ga_int ld[1]={1};
       int ndim=1;
-      int *mpiilo;
-      int *mpiihi;
+      ga_int *mpiilo;
+      ga_int *mpiihi;
       int ARRAY_BASE=0;
 
-      mpiilo=(int *)malloc(ndim*sizeof(int));
-      mpiihi=(int *)malloc(ndim*sizeof(int));
-      mpiilo[0]=(int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(int)*ihi-1+ARRAY_BASE;
+      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
+      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
+#if PPIDD_LANG == 2 && !defined(_I8_)
       NGA_Acc(mpihandle, mpiilo, mpiihi, buff, ld, fac);
+#else
+      NGA_Acc64(mpihandle, mpiilo, mpiihi, buff, ld, fac);
+#endif
       free(mpiilo);
       free(mpiihi);
       *ok = TRUE ;
@@ -1448,14 +1483,18 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int handle = (int) *ihandle;
       int ndim=1;
-      int *mpiinum;
+      ga_int *mpiinum;
       long gaincr = (long) *incr;
       long gavalue;
       int ARRAY_BASE=0;
 
-      mpiinum=(int *)malloc(ndim*sizeof(int));
-      mpiinum[0] = (int) *inum-1+ARRAY_BASE;
+      mpiinum=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiinum[0] = (ga_int) *inum-1+ARRAY_BASE;
+#if PPIDD_LANG == 2 && !defined(_I8_)
       gavalue=NGA_Read_inc(handle,mpiinum, gaincr);
+#else
+      gavalue=NGA_Read_inc64(handle,mpiinum, gaincr);
+#endif
       free(mpiinum);
       *returnval=(fortint)gavalue;
 #else
@@ -1484,16 +1523,20 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int handle = (int) *ihandle;
       int ndim=1;
-      int *mpiilo;
-      int *mpiihi;
+      ga_int *mpiilo;
+      ga_int *mpiihi;
       int ARRAY_BASE=0;
 
-      mpiilo=(int *)malloc(ndim*sizeof(int));
-      mpiihi=(int *)malloc(ndim*sizeof(int));
-      mpiilo[0]=(int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(int)*ihi-1+ARRAY_BASE;
+      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
+      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
+      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
 
+#if PPIDD_LANG == 2 && !defined(_I8_)
       NGA_Zero_patch (handle, mpiilo, mpiihi);
+#else
+      NGA_Zero_patch64 (handle, mpiilo, mpiihi);
+#endif
       free(mpiilo);
       free(mpiihi);
 #endif

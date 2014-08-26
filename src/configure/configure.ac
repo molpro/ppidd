@@ -3,6 +3,8 @@ AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
 AC_CONFIG_HEADERS([src/config.h:src/configure/config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
+m4_include([ppidd_macros.m4])
+
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
@@ -31,11 +33,23 @@ fi
 
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
+PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in
  x4 ) true ;;
  x8 ) AC_DEFINE(_I8_)
-      AC_MSG_WARN([building interface for 8-byte Fortran integers, check FCFLAGS set correctly]);;
+      case "x${FC_VENDOR}" in
+       xamd       ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xcray      ) FCFLAGS="${FCFLAGS} -s integer64" ;;
+       xg95       ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xgnu       ) FCFLAGS="${FCFLAGS} -fdefault-integer-8" ;;
+       xibm       ) FCFLAGS="${FCFLAGS} -qintsize=8" ;;
+       xintel     ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xpathscale ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xpgi       ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xsun       ) FCFLAGS="${FCFLAGS} -xtypemap=integer:64" ;;
+       x*         ) AC_MSG_WARN([unable to determine flag for 8-byte Fortran integers, check FCFLAGS set correctly]);;
+      esac ;;
  x* ) AC_MSG_ERROR([illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option]) ;;
 esac
 fi

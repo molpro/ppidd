@@ -895,7 +895,7 @@ static int n_in_msg_mpiq=0;
       int dtype=(int)*datatype;
       int gadtype=-1;
       int ndim=1;
-      int nblock=(int)*nchunk;
+      ga_int nblock=(ga_int)*nchunk;
       ga_int *dims, *block, *map;
       int np;
       int i;
@@ -940,7 +940,7 @@ static int n_in_msg_mpiq=0;
 
       for(iad=0,i=0;i<nblock;i++){
         map[i]=iad;
-        iad=iad+(int)lenin[i];
+        iad=iad+(ga_int)lenin[i];
       }
       for(i=nblock;i<np;i++) map[i]=iad;
 

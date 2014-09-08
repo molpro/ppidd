@@ -898,7 +898,8 @@ static int n_in_msg_mpiq=0;
       int nblock=(int)*nchunk;
       ga_int *dims, *block, *map;
       int np;
-      int i,iad,totlen;
+      int i;
+      ga_int iad,totlen;
       int gahandle;
       char *name2;
       char *errmsg;
@@ -947,8 +948,10 @@ static int n_in_msg_mpiq=0;
       for(i=0;i<ndim;i++) dims[i]=totlen;
 
 #if PPIDD_LANG == 2 && !defined(_I8_)
+/*      printf("\n NGA_Create_irreg: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
       gahandle=NGA_Create_irreg(gadtype, ndim, dims, name2, block, map);
 #else
+/*      printf("\n NGA_Create_irreg64: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
       gahandle=NGA_Create_irreg64(gadtype, ndim, dims, name2, block, map);
 #endif
 
@@ -1036,7 +1039,7 @@ static int n_in_msg_mpiq=0;
       int gadtype=-1;
       int ndim=1;
       ga_int *dims, *block;
-      int galentot=(int)*lentot;
+      ga_int galentot=(ga_int)*lentot;
       int i;
       int gahandle;
       char *name2, *p;
@@ -1075,8 +1078,10 @@ static int n_in_msg_mpiq=0;
       for(i=0;i<ndim;i++) dims[i]=galentot;
 
 #if PPIDD_LANG == 2 && !defined(_I8_)
+/*      printf("\n NGA_Create: %s created, dims=%d, ndim=%d\n",name2,*dims,ndim); */
       gahandle=NGA_Create(gadtype, ndim, dims, name2, block);
 #else
+/*      printf("\n NGA_Create64: %s created, dims=%d, ndim=%d, lentot=%d, galentot=%d \n",name2,*dims,ndim,*lentot,galentot); */
       gahandle=NGA_Create64(gadtype, ndim, dims, name2, block);
 #endif
 

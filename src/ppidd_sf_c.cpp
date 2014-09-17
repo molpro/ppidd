@@ -32,22 +32,9 @@
 #endif
 
 #include "ppidd_sf_c.h"   /* include ppidd_machines.h */
-
-#ifdef FORTCL_NEXT
-#undef FORTCL_NEXT
-#endif
-
-#ifdef FORTCL_END
-#undef FORTCL_END
-#endif
-
-#ifdef FORTINTC_DIVIDE
-#undef FORTINTC_DIVIDE
-#endif
+#include "ppidd_undefdtype.h"
 
 /* The following code should be the same as those in ppidd_sf_fortran.cpp (except ppidd_sf_rank). One should make it consistent once code in ppidd_sf_fortran.cpp is changed. */
-
-
 
 #ifdef GA_MPI
  #include <ga.h>

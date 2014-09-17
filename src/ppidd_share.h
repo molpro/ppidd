@@ -995,7 +995,7 @@ static int n_in_msg_mpiq=0;
       ) {
 #ifdef MPI2
       int mpierr;
-      int mpilentot=(int)*lentot;
+      int mpilentot;
       int dtype=(int)*datatype;
       MPI_Datatype mpidtype;
       int sizempidtype;
@@ -1012,6 +1012,11 @@ static int n_in_msg_mpiq=0;
 #else
       lxi=strlen(name);
 #endif
+      if (*lentot > INT_MAX) {
+       printf(" ERROR: PPIDD_Create: lentot too large for MPI\n");
+       exit(1);
+      }
+      else mpilentot=(int)*lentot;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: sizeof(fortint)=%d,sizeof(fortintc)=%d,sizeof(fortlogical)=%d,lxi=%d\n",
 	ProcID(),(int)sizeof(fortint),(int)sizeof(fortintc),(int)sizeof(fortlogical),lxi);
       strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);

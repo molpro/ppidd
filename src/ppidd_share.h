@@ -392,6 +392,10 @@
 /*! Get the next shared counter number(helper process should be enabled).
  *
  *  Increment a counter by 1 and returns the counter value (0, 1, ...). */
+#ifdef GA_MPI
+   static int PPIDD_Nxtval_initialised=0;
+   static fortint PPIDD_Nxtval_handle;
+#endif
    void PPIDD_Nxtval(fortint *numproc, fortint *val) {
 #ifdef MPI2
       if (use_helper_server==0) {
@@ -403,6 +407,15 @@
         *val= (fortint) NXTVAL(&mproc);
       }
 #elif defined(GA_MPI)
+      fortint ok;
+      if (! PPIDD_Nxtval_initialised) {
+	fortint lentot=1, datatype=0, storetype=1;
+	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
+	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
+	PPIDD_Nxtval_initialised=1;
+      }
+      fortint inum=1,incr=1;
+      PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
 #else
       printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
       exit(1);

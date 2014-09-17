@@ -1,6 +1,10 @@
 #ifndef __PPIDD_C_H__
 #define __PPIDD_C_H__
-   extern void PPIDD_Initialize(int64_t argc, char **argv);
+#include <stdint.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+   extern void PPIDD_Initialize(int argc, char **argv);
    extern void PPIDD_Initialize_data(void);
    extern int64_t  PPIDD_Worker_comm(void);
    extern void PPIDD_Finalize(void);
@@ -41,4 +45,7 @@
    extern void PPIDD_Lock_mutex(int64_t *inum);
    extern void PPIDD_Unlock_mutex(int64_t *inum);
    extern void PPIDD_Destroy_mutexes(int64_t *ok);
+#ifdef __cplusplus
+}
+#endif
 #endif

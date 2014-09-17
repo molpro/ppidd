@@ -40,6 +40,9 @@ extern  char  mpi_test_err_string[TEST_ERR_STR_LEN];
     mpi_utils Function Prototypes
 \* =========================== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
     extern int NNodes_Total(MPI_Comm, int *);
     extern int ProcID(void);
     extern void MPIGA_Error(const char *, int);
@@ -47,5 +50,8 @@ extern  char  mpi_test_err_string[TEST_ERR_STR_LEN];
     extern int mpiga_type_f2cmpi(int , MPI_Datatype *, int *);
     extern int mpiga_type_c2cmpi(int , MPI_Datatype *, int *);
     extern int mpiga_type_cmpi2c(MPI_Datatype , int *);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,8 +1,9 @@
 include ../config.mk
 
-SOURCEFILES+=$(wildcard *.cpp)
-ifneq ($(FC),)
-SOURCEFILES+=$(wildcard *.F)
+ifeq ($(FC),)
+SOURCEFILES+=$(filter-out %fortran.cpp,$(wildcard *.cpp))
+else
+SOURCEFILES+=$(wildcard *.cpp *.F)
 endif
 
 .PHONY: default

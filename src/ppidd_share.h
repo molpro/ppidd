@@ -408,14 +408,23 @@
       }
 #elif defined(GA_MPI)
       fortint ok;
-      if (! PPIDD_Nxtval_initialised) {
+      if (*numproc < 0) {
+	/* shutdown - collective */
+	if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
+	PPIDD_Nxtval_initialised=0;
+      }
+      else if (! PPIDD_Nxtval_initialised) {
+	/* first call needs to be collective and will return 0*/
 	fortint lentot=1, datatype=0, storetype=1;
 	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Nxtval_initialised=1;
+	*val=0;
       }
-      fortint inum=1,incr=1;
-      PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
+      else {
+	fortint inum=1,incr=1;
+	PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
+      }
 #else
       printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
       exit(1);

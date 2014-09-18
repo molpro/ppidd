@@ -389,50 +389,6 @@
    }
 
 
-/*! Get the next shared counter number(helper process should be enabled).
- *
- *  Increment a counter by 1 and returns the counter value (0, 1, ...). */
-#ifdef GA_MPI
-   static int PPIDD_Nxtval_initialised=0;
-   static fortint PPIDD_Nxtval_handle;
-#endif
-   void PPIDD_Nxtval(fortint *numproc, fortint *val) {
-#ifdef MPI2
-      if (use_helper_server==0) {
-        fprintf(stderr,"%5d: ERROR: Attemp to call NXTVAL routine without helper process!\n", ProcID());
-        MPI_Abort(mpigv(Compute_comm),911);
-      }
-      else {
-        int mproc = (int) *numproc;
-        *val= (fortint) NXTVAL(&mproc);
-      }
-#elif defined(GA_MPI)
-      fortint ok;
-      if (*numproc < 0) {
-	/* shutdown - collective */
-	if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Nxtval_initialised=0;
-      }
-      else if (! PPIDD_Nxtval_initialised) {
-	/* first call needs to be collective and will return 0*/
-	fortint lentot=1, datatype=0, storetype=1;
-	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Nxtval_initialised=1;
-	*val=0;
-      }
-      else {
-	fortint inum=1,incr=1;
-	PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
-      }
-#else
-      printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
-      exit(1);
-#endif
-   }
-
-
-
 /*!  Determine the total number of processes available (including helper process if there is one).
  *
  *  - \b GA calls GA_Nnodes,
@@ -1154,6 +1110,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
+
 /*! Return the range of a distributed array held by a specified process.
  *
  *  Return <tt>.true.</tt> if successful, otherwise <tt>.false.</tt>
@@ -1602,6 +1559,61 @@ static int n_in_msg_mpiq=0;
       exit(1);
 #endif
    }
+
+/*! Get the next shared counter number(helper process should be enabled).
+ *
+ *  Increment a counter by 1 and returns the counter value (0, 1, ...). */
+#ifdef GA_MPI
+   static int PPIDD_Nxtval_initialised=0;
+   static fortint PPIDD_Nxtval_handle;
+#endif
+   void PPIDD_Nxtval(fortint *numproc, fortint *val) {
+#ifdef MPI2
+      if (use_helper_server==0) {
+        fprintf(stderr,"%5d: ERROR: Attemp to call NXTVAL routine without helper process!\n", ProcID());
+        MPI_Abort(mpigv(Compute_comm),911);
+      }
+      else {
+        int mproc = (int) *numproc;
+        *val= (fortint) NXTVAL(&mproc);
+      }
+#elif defined(GA_MPI)
+      fortint ok;
+      if (*numproc < 0) {
+	/* shutdown - collective */
+	if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
+	PPIDD_Nxtval_initialised=0;
+      }
+      else if (! PPIDD_Nxtval_initialised) {
+	/* first call needs to be collective and will return 0*/
+	fortint lentot=1, datatype=0, storetype=1;
+	PPIDD_Create(strdup("Nxtval"),
+/*! \cond */
+#if defined(FORTCL_NEXT)
+	,(fortintc)6
+#endif
+/*! \endcond */
+&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok
+/*! \cond */
+#if defined(FORTCL_END)
+	,(fortintc)6
+#endif
+/*! \endcond */
+      );
+	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
+	PPIDD_Nxtval_initialised=1;
+	*val=0;
+      }
+      else {
+	fortint inum=1,incr=1;
+	PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
+      }
+#else
+      printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");
+      exit(1);
+#endif
+   }
+
 
 
 /*! Create a new global array by applying all the properties of another existing global.

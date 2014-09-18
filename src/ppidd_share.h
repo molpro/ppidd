@@ -1580,11 +1580,11 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       fortint ok;
       if (*numproc < 0) {
-	/* shutdown - collective */
+	/* reset - collective */
 	if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Nxtval_initialised=0;
-      }
-      else if (! PPIDD_Nxtval_initialised) {
+	//      }
+      	//else if (! PPIDD_Nxtval_initialised) {
 	/* first call needs to be collective and will return 0*/
 	fortint lentot=1, datatype=0, storetype=1;
 	PPIDD_Create(strdup("Nxtval"),

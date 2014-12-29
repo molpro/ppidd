@@ -13,6 +13,13 @@
         use, intrinsic :: iso_c_binding, only: c_int,c_ptr,c_loc,
      >                    c_null_char
         implicit none
+        integer, intent(in) :: nargs
+        character(len=*),dimension(nargs),intent(in) :: args
+        integer, parameter  :: lenmax=1024
+        character(len=lenmax),dimension(nargs),target :: array_strings
+        integer(c_int) :: nstrs
+        type(c_ptr), dimension(nargs) :: pt_string
+        integer i,l
         interface
           subroutine ppidd_initialize_f2c(nargs, args)
      >               bind(c,name="ppidd_initialize_f2c")
@@ -22,13 +29,6 @@
             type(c_ptr), dimension(nargs) :: args
           end subroutine ppidd_initialize_f2c
         end interface
-        integer, intent(in) :: nargs
-        character(len=*),dimension(nargs),intent(in) :: args
-        integer, parameter  :: lenmax=1024
-        character(len=lenmax),dimension(nargs),target :: array_strings
-        integer(c_int) :: nstrs
-        type(c_ptr), dimension(nargs) :: pt_string
-        integer i,l
 
         nstrs=int(nargs,kind=c_int)
         do i = 1, nargs

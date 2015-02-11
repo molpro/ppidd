@@ -20,9 +20,6 @@
 
 #include "mpi_utils.h"
 #include "ppidd_machines.h"  /* needed by fortint in mpiga_type_f2cmpi */
-#ifdef HAS_UTSNAME
-#include <sys/utsname.h>     /* needed by gethostname */
-#endif
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
@@ -49,7 +46,8 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
        nodename[i] = (char *)malloc(max_length * sizeof(char));
        nprocs_node[i] = 0;
     }
-#ifdef HAS_UTSNAME
+#ifdef __bg__
+    /* bug 4239 */
     gethostname(nodename[rank],max_length);
     length=strlen(nodename[rank]);
 #else

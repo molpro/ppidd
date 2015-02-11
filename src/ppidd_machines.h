@@ -124,11 +124,6 @@ typedef int int32_t;
 #define FORTCL
 #endif
 
-/* definition of HAS_UTSNAME for function gethostname from header file sys/utsname.h */
-#if defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(__uxp__) || defined(__bq__)
-#define HAS_UTSNAME
-#endif
-
 /* definitions of Fortran data types in C */
 
 #ifndef FORTINT

@@ -39,6 +39,16 @@ else
 	@echo 'doxygen does not appear to be installed'
 endif
 
+.PHONY: install
+install: default
+	@mkdir -p $(prefix)/bin
+	@cp -v ppiddcxx $(prefix)/bin/
+ifneq ($(FC),)
+	@cp -v ppiddfc $(prefix)/bin/
+endif
+	@mkdir -p $(prefix)/lib
+	@cp -v libppidd.a $(prefix)/lib/
+
 clean:
 	@$(foreach directory,src test,$(MAKE) -C $(directory) clean;)
 	@rm -rf libppidd.a

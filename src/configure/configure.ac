@@ -24,7 +24,8 @@ AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()
 if test "x${RANLIB}" = "x:" ; then RANLIB="true"; fi
 
-AC_PROG_CC()
+AC_PROG_CXX()
+AC_PATH_PROG(CXX,${CXX})
 
 if test "x${enable_nxtval}" = xno ; then
  AC_MSG_NOTICE([Helper process will not be compiled; PPIDD_Nxtval will be disabled])
@@ -33,6 +34,7 @@ fi
 
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
+AC_PATH_PROG(FC,${FC})
 PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in

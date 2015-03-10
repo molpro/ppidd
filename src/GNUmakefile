@@ -9,13 +9,13 @@ endif
 .PHONY: default
 default: $(addsuffix .o,$(basename $(SOURCEFILES)))
 
-ppidd_fortran.o ppidd_c.o:	ppidd_share.h
+ppidd_fortran.o ppidd_c.o: ppidd_share.h
 
 %.o: %.cpp
-	$(CC) -c $(CPPFLAGS) $(CFLAGS) $<
+	../ppiddcxx -c $(CPPFLAGS) $(CXXFLAGS) $<
 
 %.o: %.F
-	$(FC) -c $(FFLAGS) $<
+	../ppiddfc -c $(FFLAGS) $<
 
 clean:
 	@rm -f *.o *.mod

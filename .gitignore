@@ -6,3 +6,5 @@
 doc/
 config.mk
 src/config.h
+ppiddcxx
+ppiddfc

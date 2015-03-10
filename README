@@ -9,7 +9,7 @@
 
     - GNU make
 
-    - A C compiler
+    - A C++ compiler
 
     - If compiling Fortran interface, a Fortran compiler which supports
       Fortran 2003 Standard features
@@ -59,7 +59,6 @@
        |-- GNUmakefile                        Makefile to build PPIDD
        |-- README                             README for PPIDD
        |-- ./doc                              Document directory
-       |-- ./lib                              Final location of PPIDD library
        |-- ./src                              Source code directory for PPIDD library
        |-- ./test                             Test code directory for PPIDD library
 

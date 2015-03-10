@@ -68,6 +68,7 @@ else
  AC_MSG_NOTICE([PPIDD for serial])
 fi
 
+AC_LANG_PUSH([C++])
 if test "x${with_ga}" != xno ; then
  if test "x${with_ga}" != xyes ; then
   CPPFLAGS="${CPPFLAGS} -I${with_ga}"
@@ -78,6 +79,7 @@ if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
  AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
 fi
+AC_LANG_POP([C++])
 
 AC_OUTPUT()
 rm -f config.status config.log

@@ -101,17 +101,14 @@ typedef int int32_t;
 /* definitions of LARGEFILE settings for Parallel IO (in GA) */
 
 #if defined(linux) && !defined(NOLARGEFILES)
-#if defined(__x86_64__) || defined(__ia64)
 #ifndef _LARGEFILE64_SOURCE
 #define _LARGEFILE64_SOURCE
-/* #define _USE_LARGEFILE64  Probably this is needed too, but it seems to work!? */
 #endif
-#else
 #ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE
 #endif
 #define _FILE_OFFSET_BITS 64
-#endif
+#define _USE_LARGEFILE64
 #endif
 
 /* definitions of FORTCL settings for passing character string between Fortran and C */

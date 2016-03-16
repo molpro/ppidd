@@ -117,10 +117,6 @@ typedef int int32_t;
 #define FORTCL_END
 #endif
 
-#if defined(FORTCL_END) || defined(FORTCL_NEXT)
-#define FORTCL
-#endif
-
 /* definitions of Fortran data types in C */
 
 #ifndef FORTINT

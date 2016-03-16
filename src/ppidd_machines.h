@@ -42,7 +42,6 @@
  * linux	Linux
  * sun		SunOS
  * SX		SUPER-UX
- * __uxp__	Fujitsu
  * _WIN32	Windows
  */
 
@@ -88,11 +87,11 @@
 
 
 /* definitions of C data types in some special cases */
-#if ( defined(_WIN32) && !defined(__cplusplus) ) || defined(__uxp__)
+#if defined(_WIN32) && !defined(__cplusplus)
 typedef char int8_t;
 #endif
 
-#if defined(_WIN32) || defined(__uxp__)
+#if defined(_WIN32)
 typedef short int16_t;
 typedef int int32_t;
 #endif
@@ -113,7 +112,7 @@ typedef int int32_t;
 
 /* definitions of FORTCL settings for passing character string between Fortran and C */
 
-#if defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(__uxp__) || defined(_WIN32)
+#if defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(_WIN32)
 #define FORTCL_END
 #endif
 
@@ -128,7 +127,7 @@ typedef int int32_t;
 #define EXT_INT
 #endif
 #else
-#if defined(sgi) || defined(__APPLE__) || defined(SX) || defined(__uxp__) || ( defined(__x86_64__) && defined(linux) )
+#if defined(sgi) || defined(__APPLE__) || defined(SX) || ( defined(__x86_64__) && defined(linux) )
 #define FORTINT int
 #endif
 #endif
@@ -140,9 +139,6 @@ typedef int int32_t;
 typedef FORTINT fortint ; /* fortran integer type */
 
 #ifndef FORTINTC
-#ifdef __uxp__
-#define FORTINTC int
-#endif
 #ifdef _I8_
 #if defined(_AIX) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi)
 #define FORTINTC long

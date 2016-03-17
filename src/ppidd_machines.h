@@ -110,11 +110,8 @@ typedef int int32_t;
 #define _USE_LARGEFILE64
 #endif
 
-/* definitions of FORTCL settings for passing character string between Fortran and C */
-
-#if defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(_WIN32)
+/* every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT */
 #define FORTCL_END
-#endif
 
 /* definitions of Fortran data types in C */
 

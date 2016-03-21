@@ -1,5 +1,5 @@
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "ppidd_config.h"
 #endif
 /* ====================================================================== *\
  *                        MPI-2 Version of PPIDD                          *

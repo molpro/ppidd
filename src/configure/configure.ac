@@ -1,6 +1,6 @@
 AC_INIT(QMay,master)
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
-AC_CONFIG_HEADERS([src/config.h:src/configure/config.h.in])
+AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
 m4_include([ppidd_macros.m4])

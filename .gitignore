@@ -5,6 +5,6 @@
 *.o
 doc/
 config.mk
-src/config.h
+src/ppidd_config.h
 ppiddcxx
 ppiddfc

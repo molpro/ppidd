@@ -1,5 +1,5 @@
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "ppidd_config.h"
 #endif
 #define PPIDD_LANG 1
 #ifdef __cplusplus

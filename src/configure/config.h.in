@@ -15,6 +15,8 @@
 #undef FORTINT
 typedef FORTINT fortint ; /* fortran integer type */
 #undef FORTINT_MPI
+#undef FORTINTC
+typedef FORTINTC fortintc ; /* fortran character string length type */
 
 #undef FC_FUNC
 #undef FC_FUNC_

@@ -21,24 +21,4 @@
 /* every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT */
 #define FORTCL_END
 
-/* definitions of Fortran data types in C */
-
-#ifndef FORTINTC
-#ifdef _I8_
-#if defined(_AIX) || defined(__hpux) || defined(linux) || defined(sgi)
-#define FORTINTC long
-#elif defined(__CYGWIN__)
-#define FORTINTC int
-#endif
-#else
-#if defined(sgi)
-#define FORTINTC long
-#endif
-#endif
-#endif
-#ifndef FORTINTC
-#define FORTINTC FORTINT
-#endif
-typedef FORTINTC fortintc ; /* fortran character string length type */
-
 #endif /*  __PPIDD_MACHINES_H__ */

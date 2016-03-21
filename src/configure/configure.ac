@@ -77,6 +77,11 @@ elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
 else
  AC_MSG_ERROR([Problem determining FORTINT])
 fi
+if test "x${host_os}" = xcygwin && test "x${enable_fortran_integer}" = x8 ; then
+ AC_DEFINE([FORTINTC],[int])
+else
+ AC_DEFINE([FORTINTC],[FORTINT])
+fi
 
 if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
  AC_MSG_ERROR([both --with-ga and --with-mpi2 specified])

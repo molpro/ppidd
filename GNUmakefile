@@ -19,7 +19,7 @@ ifeq ($(FC),)
 ppiddfc:
 else
 ppiddfc: config.mk
-	@echo '"#/bin/sh' > $@
+	@echo '#/bin/sh' > $@
 	@echo '$(FC) $(CPPFLAGS) $$*' >> $@
 	@chmod +x $@
 endif

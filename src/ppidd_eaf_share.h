@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*
  * Common Fortran and C interfaces.                                       *
  * For Fortran interface, the subroutines in this file named PPIDD_Eaf_XXX*
- * are converted to the proper FORTRAN external by the FORT_Extern macro  *
+ * are converted to the proper FORTRAN external by the FC_FUNC macro      *
  * and the definitions in the ppidd_eaf_fortran.h header file.            *
  * For C interface, the subroutines in this file named PPIDD_Eaf_XXX can  *
  * be only called by C program directly. Any calling by Fortran progam    *

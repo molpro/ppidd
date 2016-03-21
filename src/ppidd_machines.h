@@ -3,46 +3,12 @@
  *
  * This include file should always be included by all PPIDD C files.
  *
- * \b FORT_Extern(subroutine_name,SUBROUTINE_NAME)
- *
- * Description: C Macro that converts the name of a C subroutine
- * into an external name that can be called by FORTRAN 77/90/95.
- *
- * This is commonly used for subroutines that need to be called
- * from both FORTRAN and C.  The subroutine is written in C and
- * a FORTRAN wrapper function is created to call the C code.
- *
- * FORTRAN externals are machine dependent.  Subroutine objects
- * names are generally augmented with 0, 1 or 2 underscores.
- *
- * _UNDERSCORES should be defined with the number of underscores
- * required by FORTRAN on a particular machine. If this is unknown,
- * compile a simple FORTRAN subroutine with the -c option and
- * use 'nm' to look at the object file.
- *
  * This header file is a subset of machines.h, and mainly includes:
  * (1) system include files on different machines
  * (2) definitions of C data types in some special cases
  * (3) definitions of LARGEFILE settings for Parallel IO (in GA)
  * (4) definitions of FORTCL settings for passing character string between Fortran and C
  * (5) definitions of Fortran data types in C
- * (6) definitions of _UNDERSCORES and Macro FORT_Extern for objects which can be called in Fortran
- */
-
-/* PPIDD header file for C programs:
- * include files
- * default definition values, override with -Dname=[definition] */
-
-/* cpp flag
- * _AIX		AIX
- * __APPLE__	Darwin
- * __CYGWIN__	Cygwin
- * __hpux	HP-UX
- * sgi		IRIX64
- * linux	Linux
- * sun		SunOS
- * SX		SUPER-UX
- * _WIN32	Windows
  */
 
 #ifndef __PPIDD_MACHINES_H__
@@ -85,55 +51,16 @@
 #include <stdint.h>
 #endif
 
-
-/* definitions of C data types in some special cases */
-#if defined(_WIN32) && !defined(__cplusplus)
-typedef char int8_t;
-#endif
-
-#if defined(_WIN32)
-typedef short int16_t;
-typedef int int32_t;
-#endif
-
-
 /* definitions of LARGEFILE settings for Parallel IO (in GA) */
 
-#if defined(linux) && !defined(NOLARGEFILES)
-#ifndef _LARGEFILE64_SOURCE
-#define _LARGEFILE64_SOURCE
-#endif
-#ifndef _LARGEFILE_SOURCE
-#define _LARGEFILE_SOURCE
-#endif
+#ifndef NOLARGEFILES
 #define _FILE_OFFSET_BITS 64
-#define _USE_LARGEFILE64
 #endif
 
 /* every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT */
 #define FORTCL_END
 
 /* definitions of Fortran data types in C */
-
-#ifndef FORTINT
-#ifdef _I8_
-#if defined(_AIX) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi)
-#define FORTINT long long
-/* set macro EXT_INT64 and EXT_INT in order to keep consistent with GA */
-#define EXT_INT64
-#define EXT_INT
-#endif
-#else
-#if defined(sgi) || defined(__APPLE__) || defined(SX) || ( defined(__x86_64__) && defined(linux) )
-#define FORTINT int
-#endif
-#endif
-#endif
-#ifndef FORTINT
-#define FORTINT	long
-#define EXT_INT
-#endif
-typedef FORTINT fortint ; /* fortran integer type */
 
 #ifndef FORTINTC
 #ifdef _I8_
@@ -150,47 +77,5 @@ typedef FORTINT fortint ; /* fortran integer type */
 #define FORTINTC FORTINT
 #endif
 typedef FORTINTC fortintc ; /* fortran character string length type */
-
-
-/* definitions of _UNDERSCORES and FORT_Extern for objects which can be called in Fortran */
-
-#if defined(NAME_LU) || defined(_AIX) || defined(__APPLE__) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi) || defined(sun) || defined(SX) || defined(_WIN32)
-#define _UNDERSCORES 1
-#endif
-#if defined(NAME_L)
-#define _UNDERSCORES 0
-#endif
-
-#if defined _UNDERSCORES
-
-#ifdef FORT_UPPERCASE
-
-#if _UNDERSCORES == 0
-#define FORT_Extern(funct,FUNCT) FUNCT
-#elif _UNDERSCORES == 1
-#define FORT_Extern(funct,FUNCT) FUNCT ## _
-#elif _UNDERSCORES == 2
-#define FORT_Extern(funct,FUNCT) FUNCT ## __
-#else
-#error "_UNDERSCORES not properly defined."
-#endif
-
-#else
-
-#if _UNDERSCORES == 0
-#define FORT_Extern(funct,FUNCT) funct
-#elif _UNDERSCORES == 1
-#define FORT_Extern(funct,FUNCT) funct ## _
-#elif _UNDERSCORES == 2
-#define FORT_Extern(funct,FUNCT) funct ## __
-#else
-#error "_UNDERSCORES not properly defined."
-#endif
-
-#endif
-
-#else
-#error "_UNDERSCORES not defined."
-#endif
 
 #endif /*  __PPIDD_MACHINES_H__ */

@@ -35,6 +35,7 @@ fi
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
 AC_PATH_PROG(FC,${FC})
+AC_FC_WRAPPERS()
 PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in
@@ -54,6 +55,24 @@ case "x${enable_fortran_integer}" in
       esac ;;
  x* ) AC_MSG_ERROR([illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option]) ;;
 esac
+else
+dnl assume Fortran standard if compiling without Fortran compiler
+enable_fortran_integer="4"
+fi
+AC_LANG_PUSH([C++])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([long long])
+AC_LANG_POP([C++])
+
+if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
+ AC_DEFINE([FORTINT],[int])
+elif test "x${ac_cv_sizeof_long}" = "x${enable_fortran_integer}" ; then
+ AC_DEFINE([FORTINT],[long])
+elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
+ AC_DEFINE([FORTINT],[long long])
+else
+ AC_MSG_ERROR([Problem determining FORTINT])
 fi
 
 if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then

@@ -12,4 +12,10 @@
 
 #undef NO_NXTVAL_SERVER
 
+#undef FORTINT
+typedef FORTINT fortint ; /* fortran integer type */
+
+#undef FC_FUNC
+#undef FC_FUNC_
+
 #endif

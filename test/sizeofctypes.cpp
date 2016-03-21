@@ -1,7 +1,7 @@
 #include "ppidd_machines.h"
 #include "ppidd_dtype.h"
 
-#define	sizeofctype        FORT_Extern(sizeofctype,SIZEOFCTYPE)
+#define	sizeofctype FC_FUNC(sizeofctype,SIZEOFCTYPE)
 /* change argument type fortint to double, in order to obtain right numbers even if Integer type doesn't match between Fortran and C */
 /* void sizeofctype(fortint *sizeint, fortint *sizelog, fortint *sizedouble, fortint *sizefloat) */
 #ifdef __cplusplus

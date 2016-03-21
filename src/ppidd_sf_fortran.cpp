@@ -19,7 +19,7 @@
  * -- read/writes are asynchronous                                                            *
  *--------------------------------------------------------------------------------------------*
  * FORTRAN interface.  The subroutines in this file named PPIDD_XXXXX are *
- * converted to the proper FORTRAN external by the FORT_Extern macro and  *
+ * converted to the proper FORTRAN external by the FC_FUNC macro and      *
  * the definitions in the ppidd_sf_fortran.h header file.                 *
  *                                                                        *
  * Written by: Manhui Wang                                                *

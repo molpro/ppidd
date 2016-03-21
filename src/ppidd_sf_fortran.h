@@ -22,12 +22,12 @@
 
  # include "ppidd_machines.h"
 
- #     define PPIDD_Sf_create               FORT_Extern(ppidd_sf_create,PPIDD_SF_CREATE)
- #     define PPIDD_Sf_write                FORT_Extern(ppidd_sf_write,PPIDD_SF_WRITE)
- #     define PPIDD_Sf_read                 FORT_Extern(ppidd_sf_read,PPIDD_SF_READ)
- #     define PPIDD_Sf_wait                 FORT_Extern(ppidd_sf_wait,PPIDD_SF_WAIT)
- #     define PPIDD_Sf_waitall              FORT_Extern(ppidd_sf_waitall,PPIDD_SF_WAITALL)
- #     define PPIDD_Sf_destroy              FORT_Extern(ppidd_sf_destroy,PPIDD_SF_DESTROY)
- #     define PPIDD_Sf_errmsg               FORT_Extern(ppidd_sf_errmsg,PPIDD_SF_ERRMSG)
+ #     define PPIDD_Sf_create               FC_FUNC_(ppidd_sf_create,PPIDD_SF_CREATE)
+ #     define PPIDD_Sf_write                FC_FUNC_(ppidd_sf_write,PPIDD_SF_WRITE)
+ #     define PPIDD_Sf_read                 FC_FUNC_(ppidd_sf_read,PPIDD_SF_READ)
+ #     define PPIDD_Sf_wait                 FC_FUNC_(ppidd_sf_wait,PPIDD_SF_WAIT)
+ #     define PPIDD_Sf_waitall              FC_FUNC_(ppidd_sf_waitall,PPIDD_SF_WAITALL)
+ #     define PPIDD_Sf_destroy              FC_FUNC_(ppidd_sf_destroy,PPIDD_SF_DESTROY)
+ #     define PPIDD_Sf_errmsg               FC_FUNC_(ppidd_sf_errmsg,PPIDD_SF_ERRMSG)
 
 #endif

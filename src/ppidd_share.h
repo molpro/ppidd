@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <cstring>
+#include <climits>
 /* ====================================================================== *\
  *          Parallel Programming Interface for Distributed Data           *
  *          ===================================================           *

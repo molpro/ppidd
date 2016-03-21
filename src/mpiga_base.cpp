@@ -710,7 +710,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     else if (ga->dtype==MPI_FLOAT) {
        isfloat=1;
        ffac=(float *)fac;
-       if (fabs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
+       if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
 	  isone=0;
 	  ftempbuf=(float *)buf;
@@ -721,7 +721,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     }
     else if (ga->dtype==MPI_DOUBLE) {
        dfac=(double *)fac;
-       if (fabs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
+       if (std::fabs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
 	  isone=0;
 	  dtempbuf=(double *)buf;

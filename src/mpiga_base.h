@@ -24,6 +24,8 @@
  #include <strings.h>
  #include <unistd.h>
  #include <time.h>
+ #include <cmath>
+ #include <cctype>
 
 
  #include "ppidd_machines.h"

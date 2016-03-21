@@ -20,6 +20,7 @@
 #include "mpi_utils.h"
 #include "ppidd_machines.h"
 #include "mpi_nxtval.h"
+#include <cmath>
 int mpiga_cleanup_finalize(void);
 
 /* twosided helpga global variables */
@@ -1766,7 +1767,7 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
     else if (dtype==MPI_FLOAT) {
        isfloat=1;
        ffac=(float *)fac;
-       if (fabs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
+       if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
 	  isone=0;
 	  ftempbuf=(float *)buf;
@@ -1777,7 +1778,7 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
     }
     else if (dtype==MPI_DOUBLE) {
        dfac=(double *)fac;
-       if (fabs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
+       if (std::abs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
 	  isone=0;
 	  dtempbuf=(double *)buf;

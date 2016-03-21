@@ -142,51 +142,16 @@ int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype, int *sizeofdtype)
     switch(fdtype){
     case 0:
             sizefdtype=sizeof(fortint);
-/* we don't decide fortint by this method, but according to EXT_INT64 and EXT_INT in ppidd_machines.h
-            if (sizefdtype==(int)sizeof(int)) {
-               MPI_Type_size(MPI_INT, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_INT;
-            }
-            else if (sizefdtype==(int)sizeof(long)) {
-               MPI_Type_size(MPI_LONG, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_LONG;
-            }
-            else if (sizefdtype==(int)sizeof(long long)) {
-               MPI_Type_size(MPI_LONG_LONG, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_LONG_LONG;
-            }
-            else {
-               MPIGA_Error("mpiga_type_f2cmpi: no matched C type for Fortran Integer ",fdtype);
-            }
-*/
-    /* if EXT_INT64 and EXT_INT are defined,        then fortint = long long , and corresponding MPI_Datatype is MPI_LONG_LONG */
-    /* if only EXT_INT is defined,                  then fortint = long      , and corresponding MPI_Datatype is MPI_LONG      */
-    /* if neither EXT_INT64 nor EXT_INT is defined, then fortint = int       , and corresponding MPI_Datatype is MPI_INT       */
-    #if defined(EXT_INT64) && defined(EXT_INT)
-               MPI_Type_size(MPI_LONG_LONG, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_LONG_LONG;
-    #else
-      #if defined(EXT_INT)
-               MPI_Type_size(MPI_LONG, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_LONG;
-      #else
-               MPI_Type_size(MPI_INT, &sizempidtype);
-               if (sizefdtype==sizempidtype) mpidtype=MPI_INT;
-      #endif
-    #endif
+            MPI_Type_size(FORTINT_MPI, &sizempidtype);
+            if (sizefdtype==sizempidtype) mpidtype=FORTINT_MPI;
             if (mpidtype==MPI_CHAR) MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran Integer ",fdtype);
             break;
-           /* MPI_INTEGER4 and MPI_INTEGER8 are not available in MPICH1 */
-           /* if (sizefdtype==4) mpitype=MPI_INTEGER4; */
-           /* if (sizefdtype==8) mpitype=MPI_INTEGER8; */
     case 1:
             sizefdtype=sizeof(double);
             MPI_Type_size(MPI_DOUBLE, &sizempidtype);
             if (sizefdtype==sizempidtype) mpidtype=MPI_DOUBLE;
             else  MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran Double Precision ",fdtype);
             break;
-           /* MPI_REAL4 is not available in MPICH1 */
-           /* if (sizefdtype==4) mpitype=MPI_REAL4; */
     default:
             MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran data type ",fdtype);
             break;

@@ -5788,11 +5788,17 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
  $as_echo "#define FORTINT int" >>confdefs.h
 
+ $as_echo "#define FORTINT_MPI MPI_INT" >>confdefs.h
+
 elif test "x${ac_cv_sizeof_long}" = "x${enable_fortran_integer}" ; then
  $as_echo "#define FORTINT long" >>confdefs.h
 
+ $as_echo "#define FORTINT_MPI MPI_LONG" >>confdefs.h
+
 elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
  $as_echo "#define FORTINT long long" >>confdefs.h
+
+ $as_echo "#define FORTINT_MPI MPI_LONG_LONG" >>confdefs.h
 
 else
  as_fn_error $? "Problem determining FORTINT" "$LINENO" 5

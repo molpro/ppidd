@@ -82,6 +82,8 @@ if test "x${host_os}" = xcygwin && test "x${enable_fortran_integer}" = x8 ; then
 else
  AC_DEFINE([FORTINTC],[FORTINT])
 fi
+dnl every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT
+AC_DEFINE([FORTCL_END])
 
 if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
  AC_MSG_ERROR([both --with-ga and --with-mpi2 specified])

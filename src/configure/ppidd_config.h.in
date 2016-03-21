@@ -18,6 +18,9 @@ typedef FORTINT fortint ; /* fortran integer type */
 #undef FORTINTC
 typedef FORTINTC fortintc ; /* fortran character string length type */
 
+#undef FORTCL_END
+#undef FORTCL_NEXT
+
 #undef FC_FUNC
 #undef FC_FUNC_
 

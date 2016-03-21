@@ -18,7 +18,4 @@
 #define _FILE_OFFSET_BITS 64
 #endif
 
-/* every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT */
-#define FORTCL_END
-
 #endif /*  __PPIDD_MACHINES_H__ */

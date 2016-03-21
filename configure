@@ -5810,6 +5810,8 @@ else
  $as_echo "#define FORTINTC FORTINT" >>confdefs.h
 
 fi
+$as_echo "#define FORTCL_END 1" >>confdefs.h
+
 
 if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
  as_fn_error $? "both --with-ga and --with-mpi2 specified" "$LINENO" 5

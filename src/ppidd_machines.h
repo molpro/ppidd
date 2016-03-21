@@ -64,8 +64,10 @@
 
 #ifndef FORTINTC
 #ifdef _I8_
-#if defined(_AIX) || defined( __CYGWIN__) || defined(__hpux) || defined(linux) || defined(sgi)
+#if defined(_AIX) || defined(__hpux) || defined(linux) || defined(sgi)
 #define FORTINTC long
+#elif defined(__CYGWIN__)
+#define FORTINTC int
 #endif
 #else
 #if defined(sgi)

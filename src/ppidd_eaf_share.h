@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <stdlib.h>
+#include <cstring>
 
 /* ====================================================================== *\
  *                 PPIDD Exclusive Access File Library                    *

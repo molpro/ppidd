@@ -1,3 +1,5 @@
+#include <cstdio>
+#include <stdlib.h>
 
 /* ====================================================================== *\
  *                    PPIDD Shared Files Library                          *

@@ -14,45 +14,6 @@
 #ifndef __PPIDD_MACHINES_H__
 #define __PPIDD_MACHINES_H__
 
-#if defined(__linux) && !defined(linux) /* needed for Linux/ppc64 */
-#define linux
-#endif
-
-/* system include files on different machines */
-
-#include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <math.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#ifndef _WIN32
-#include <sys/param.h>
-#endif
-#include <sys/stat.h>
-#include <time.h>
-#ifndef _WIN32
-#include <sys/time.h>
-#include <sys/times.h>
-#endif
-#include <sys/types.h>
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#ifndef _AIX
-#include <sys/unistd.h>
-#endif
-#endif
-
-#ifdef SX
-#include <stdint.h>
-#endif
-
-/* definitions of LARGEFILE settings for Parallel IO (in GA) */
-
 #ifndef NOLARGEFILES
 #define _FILE_OFFSET_BITS 64
 #endif

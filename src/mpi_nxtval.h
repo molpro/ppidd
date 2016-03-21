@@ -9,9 +9,8 @@
 #define __MPI_NXTVAL_H__
 
 /* **Include Files*** */
-/*  prerequisite: include ppidd_machines.h and mpi.h, and some basic libraries  */
+/*  prerequisite: include mpi.h, and some basic libraries  */
 #include "ppidd_mpi.h"
-#include "ppidd_machines.h"
 
 /* defined variables */
 

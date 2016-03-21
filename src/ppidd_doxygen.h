@@ -17,7 +17,6 @@
        |-- ./lib                          Final location of PPIDD library
        |-- ./src                          Source code directory for PPIDD library
        |   |-- GNUmakefile                    Makefile for src directory
-       |   |-- ppidd_machines.h               Head file for machine-related settings
        |   |-- mpi_helpmutex.cpp              Mutex source file using helper process
        |   |-- mpi_nxtval.cpp                 NXTVAL source file
        |   |-- mpi_nxtval.h                   NXTVAL header file

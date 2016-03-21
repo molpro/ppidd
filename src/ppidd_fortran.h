@@ -8,20 +8,10 @@
    prefixed with PPIDD_ and all FORTRAN wrapper subroutines are
    prefixed with FORT_.
 
-   The following C definitions substitute the FORTRAN wrapper
-   subroutine name with the correct machine dependent FORTRAN
-   external name.
-
-   Note: FORTRAN externals are generally all lowercase, but may
-   be uppercase.  Define FORT_UPPERCASE if your machine's FORTRAN
-   using uppercase externals.
-
 \* ------------------------------------------------------------- */
 
 #ifndef __PPIDD_FORTRAN_H__
 #define __PPIDD_FORTRAN_H__
-
- # include "ppidd_machines.h"
 
  #     define PPIDD_Initialize              FC_FUNC_(ppidd_initialize,PPIDD_INITIALIZE)
  #     define PPIDD_Initialize_data         FC_FUNC_(ppidd_initialize_data,PPIDD_INITIALIZE_DATA)

@@ -37,7 +37,7 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#include "ppidd_eaf_fortran.h"   /* include ppidd_machines.h */
+#include "ppidd_eaf_fortran.h"
 
 #ifdef GA_MPI
  #include <ga.h>

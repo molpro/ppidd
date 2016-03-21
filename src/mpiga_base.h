@@ -28,8 +28,6 @@
  #include <cctype>
 
 
- #include "ppidd_machines.h"
-
  #include "ppidd_dtype.h"
 
 

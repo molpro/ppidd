@@ -8,19 +8,10 @@
    from FORTRAN go through a C wrapper.  All FORTRAN wrapper
    subroutines are prefixed with PPIDD_.
 
-   The following C definitions substitute the FORTRAN wrapper
-   subroutine name with the correct machine dependent FORTRAN
-   external name.
-
-   Note: FORTRAN externals are generally all lowercase, but may
-   be uppercase.  See ppidd_machines.h for details.
-
 \* ------------------------------------------------------------- */
 
 #ifndef __PPIDD_SF_FORTRAN_H__
 #define __PPIDD_SF_FORTRAN_H__
-
- # include "ppidd_machines.h"
 
  #     define PPIDD_Sf_create               FC_FUNC_(ppidd_sf_create,PPIDD_SF_CREATE)
  #     define PPIDD_Sf_write                FC_FUNC_(ppidd_sf_write,PPIDD_SF_WRITE)

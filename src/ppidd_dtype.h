@@ -2,8 +2,6 @@
 /*! \file
  * \brief Data type for PPIDD.
  *
- *  Prerequisite: include ppidd_machines.h
- *
  *  Here use fortlogical instead of logical, since GA has already defined logical.
 */
 

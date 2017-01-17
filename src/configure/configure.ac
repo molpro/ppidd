@@ -58,6 +58,7 @@ esac
 else
 dnl assume Fortran standard if compiling without Fortran compiler
 enable_fortran_integer="4"
+FC=""
 fi
 AC_LANG_PUSH([C++])
 AC_CHECK_SIZEOF([int])

@@ -5270,6 +5270,7 @@ $as_echo "$as_me: WARNING: unable to determine flag for 8-byte Fortran integers,
 esac
 else
 enable_fortran_integer="4"
+FC=""
 fi
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'

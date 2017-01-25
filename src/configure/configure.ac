@@ -1,4 +1,4 @@
-AC_INIT(QMay,master)
+AC_INIT(PPIDD,master)
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])

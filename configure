@@ -5851,6 +5851,8 @@ fi
 
 fi
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
+ CPPFLAGS_save="${CPPFLAGS}"
+ CPPFLAGS="${CPPFLAGS} -DMPICH_SKIP_MPICXX"
  ac_fn_cxx_check_func "$LINENO" "MPI_Init" "ac_cv_func_MPI_Init"
 if test "x$ac_cv_func_MPI_Init" = xyes; then :
 
@@ -5866,6 +5868,7 @@ else
 fi
 
 
+ CPPFLAGS="${CPPFLAGS_save}"
 fi
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'

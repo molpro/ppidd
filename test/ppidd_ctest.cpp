@@ -1,5 +1,6 @@
 /*! PPIDD standalone c test suites */
 #include "ppidd_c.h"
+#include <stdio.h>
 
 int ppidd_ctest(void);
 

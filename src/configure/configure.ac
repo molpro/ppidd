@@ -106,11 +106,9 @@ if test "x${with_ga}" != xno ; then
  AC_CHECK_HEADER([ga.h],,AC_MSG_ERROR([unable to locate ga.h header file]))
 fi
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
- CPPFLAGS_save="${CPPFLAGS}"
- CPPFLAGS="${CPPFLAGS} -DMPICH_SKIP_MPICXX" 
+ PPIDD_CXX_PP_TEST([if CXX is intel],[defined(__INTEL_COMPILER)],[CPPFLAGS="${CPPFLAGS} -DMPICH_SKIP_MPICXX"])
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
  AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
- CPPFLAGS="${CPPFLAGS_save}"
 fi
 AC_LANG_POP([C++])
 

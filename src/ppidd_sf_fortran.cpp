@@ -30,7 +30,7 @@
 
 
 #ifdef MPI2
- #include "ppidd_mpi.h"
+ #include <mpi.h>
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 

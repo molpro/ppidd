@@ -30,7 +30,7 @@
 
 
 #ifdef MPI2
- #include "ppidd_mpi.h"
+ #include <mpi.h>
  #define   MPI_EAF_RW -1
  #define   MPI_EAF_W  -2
  #define   MPI_EAF_R  -3

@@ -1,4 +1,19 @@
 dnl msg,test,[true],[false]
+AC_DEFUN([PPIDD_CXX_PP_TEST],[
+AC_MSG_CHECKING([$1])
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
+#else
+      choke me
+#endif]])],
+[AC_MSG_RESULT([yes])
+$3],
+[AC_MSG_RESULT([no])
+$4])
+AC_LANG_POP([C++])
+])
+
+dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_FC_PP_TEST],[
 AC_MSG_CHECKING([$1])
 AC_LANG_PUSH([Fortran])

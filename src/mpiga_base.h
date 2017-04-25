@@ -160,7 +160,6 @@ typedef struct {
    int mpiga_zero_patch( int , int , int );
    int mpiga_zero( int );
    int MPI_GSum(MPI_Datatype , void *, int , char *);
-   char *strlower(char *);
    int mpiga_create_mutexes(int);
    int mpiga_lock_mutex(int);
    int mpiga_unlock_mutex(int);

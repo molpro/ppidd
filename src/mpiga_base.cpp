@@ -19,6 +19,8 @@
 #include "mpi_utils.h"
 #include "mpiga_base.h"
 #include "mpi_nxtval.h"
+#include <string>
+#include <algorithm>
 
 mpiglobal_array_t *mpiga_main_data_structure=NULL, *MPIGAIndex;
 mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
@@ -974,80 +976,19 @@ int mpiga_zero( int handle)
 
 
 /* sum over the buffer according to type and operator */
-int MPI_GSum(MPI_Datatype mpidtype, void *buffer,int len, char *op)
-{
-     MPI_Comm     mpicomm;
-     int sizeoftype;
+int MPI_GSum(MPI_Datatype mpidtype, void *buffer,int len, char *op) {
+     std::string oper=op;
+     std::transform(oper.begin(),oper.end(),oper.begin(),::tolower);
      MPI_Op mpiop=MPI_SUM;
-     char *op2;
-     int size,i;
-     int *ialphabuf,*itempbuf;
-     long *lalphabuf,*ltempbuf;
-     long long *llalphabuf,*lltempbuf;
-     float   *falphabuf,*ftempbuf;
-     double  *dalphabuf,*dtempbuf;
-
-     op2=(char *)malloc(strlen(op)+1);
-     strcpy(op2,op);
-     strlower(op2);
-     if(strstr(op2,"+")==op2) mpiop=MPI_SUM;
-     else if(strstr(op2,"*")==op2) mpiop=MPI_PROD;
-     else if(strstr(op2,"max")==op2) mpiop=MPI_MAX;
-     else if(strstr(op2,"min")==op2) mpiop=MPI_MIN;
-     free(op2);
-
-     MPI_Type_size( mpidtype, &sizeoftype );
-     size = len*sizeoftype;
-     mpicomm=mpigv(Compute_comm);
-     if (mpidtype==MPI_INT) {
-        ialphabuf=(int *)malloc(size);
-        MPI_Allreduce(buffer,ialphabuf,len,mpidtype,mpiop,mpicomm);
-	itempbuf=(int *)buffer;
-	for(i=0;i<len;i++) itempbuf[i]=ialphabuf[i];
-	free(ialphabuf);
-     }
-     else if ( mpidtype==MPI_LONG) {
-        lalphabuf=(long *)malloc(size);
-        MPI_Allreduce(buffer,lalphabuf,len,mpidtype,mpiop,mpicomm);
-	ltempbuf=(long *)buffer;
-	for(i=0;i<len;i++) ltempbuf[i]=lalphabuf[i];
-	free(lalphabuf);
-     }
-     else if ( mpidtype==MPI_LONG_LONG) {
-        llalphabuf=(long long *)malloc(size);
-        MPI_Allreduce(buffer,llalphabuf,len,mpidtype,mpiop,mpicomm);
-	lltempbuf=(long long *)buffer;
-	for(i=0;i<len;i++) lltempbuf[i]=llalphabuf[i];
-	free(llalphabuf);
-     }
-     else if ( mpidtype==MPI_FLOAT) {
-        falphabuf=(float *)malloc(size);
-        MPI_Allreduce(buffer,falphabuf,len,mpidtype,mpiop,mpicomm);
-	ftempbuf=(float *)buffer;
-	for(i=0;i<len;i++) ftempbuf[i]=falphabuf[i];
-	free(falphabuf);
-     }
-     else if ( mpidtype==MPI_DOUBLE) {
-        dalphabuf=(double *)malloc(size);
-        MPI_Allreduce(buffer,dalphabuf,len,mpidtype,mpiop,mpicomm);
-	dtempbuf=(double *)buffer;
-	for(i=0;i<len;i++) dtempbuf[i]=dalphabuf[i];
-	free(dalphabuf);
-     }
-     else
-        MPIGA_Error("MPI_GSum: wrong MPI_Datatype ",0);
-
+     if(oper.compare("+")==0) mpiop=MPI_SUM;
+     else if(oper.compare("*")==0) mpiop=MPI_PROD;
+     else if(oper.compare("max")==0) mpiop=MPI_MAX;
+     else if(oper.compare("min")==0) mpiop=MPI_MIN;
+     MPI_Comm mpicomm=mpigv(Compute_comm);
+     MPI_Allreduce(MPI_IN_PLACE,buffer,len,mpidtype,mpiop,mpicomm);
      return 0;
 }
 
-
-/* convert characters in a string  into lower case */
-char *strlower(char *s)
-{
-      char *p;
-      for (p=s; *p != '\0'; ++p) *p=tolower(*p);
-      return s;
-}
 
 /* creates a set containing the number of mutexes. Only one set of mutexes can exist at a time. Mutexes can be
 created and destroyed as many times as needed. Mutexes are numbered: 0, ..., number-1. */

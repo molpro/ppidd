@@ -2692,7 +2692,7 @@ else
   RANLIB="$ac_cv_prog_RANLIB"
 fi
 
-if test "x${RANLIB}" = "x:" ; then RANLIB="true"; fi
+test "x${RANLIB}" = "x:" && RANLIB="true"
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5150,10 +5150,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
   *          ) as_fn_error $? "unknown vendor '${i}'" "$LINENO" 5 ;;
  esac
 done
-if test "x${FC_VENDOR:+set}" != xset ; then
- { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unable to determine FC_VENDOR" >&5
+test "x${FC_VENDOR:+set}" = xset || { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unable to determine FC_VENDOR" >&5
 $as_echo "$as_me: WARNING: unable to determine FC_VENDOR" >&2;}
-fi
 
 # Check whether --enable-fortran-integer was given.
 if test "${enable_fortran_integer+set}" = set; then :

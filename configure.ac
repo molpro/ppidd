@@ -51,9 +51,7 @@ for i in amd intel pgi pathscale sun g95 ibm gnu cray; do
   *          ) AC_MSG_ERROR([unknown vendor '${i}']) ;;
  esac
 done
-if test "x${FC_VENDOR:+set}" != xset ; then
- AC_MSG_WARN([unable to determine FC_VENDOR])
-fi
+test "x${FC_VENDOR:+set}" = xset || AC_MSG_WARN([unable to determine FC_VENDOR])
 ])
 
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
@@ -65,7 +63,7 @@ AC_SUBST(AR,"ar")dnl
 AC_SUBST(ARFLAGS,"-rS")dnl
 AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()
-if test "x${RANLIB}" = "x:" ; then RANLIB="true"; fi
+test "x${RANLIB}" = "x:" && RANLIB="true"
 
 AC_PROG_CXX()
 AC_PATH_PROG(CXX,${CXX})

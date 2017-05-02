@@ -1,9 +1,60 @@
+dnl regnerate configure with: autoconf -Wall && rm -rf autom4te.cache
 AC_INIT(PPIDD,master)
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
-m4_include([ppidd_macros.m4])
+dnl msg,test,[true],[false]
+AC_DEFUN([PPIDD_CXX_PP_TEST],[
+AC_MSG_CHECKING([$1])
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
+#else
+      choke me
+#endif]])],
+[AC_MSG_RESULT([yes])
+$3],
+[AC_MSG_RESULT([no])
+$4])
+AC_LANG_POP([C++])
+])
+
+dnl msg,test,[true],[false]
+AC_DEFUN([PPIDD_FC_PP_TEST],[
+AC_MSG_CHECKING([$1])
+AC_LANG_PUSH([Fortran])
+AC_LANG_CASE([Fortran],[ac_ext=F])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
+#else
+      choke me
+#endif]])],
+[AC_MSG_RESULT([yes])
+$3],
+[AC_MSG_RESULT([no])
+$4])
+AC_LANG_POP([Fortran])
+])
+
+AC_DEFUN([PPIDD_FC_VENDOR],[
+for i in amd intel pgi pathscale sun g95 ibm gnu cray; do
+ if test "x${FC_VENDOR:+set}" = xset ; then break; fi
+ case "x${i}" in
+  xamd       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__OPEN64__)],[FC_VENDOR="${i}"]) ;;
+  xcray      ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(_CRAYFTN)],[FC_VENDOR="${i}"]) ;;
+  xg95       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__G95__)],[FC_VENDOR="${i}"]) ;;
+  xgnu       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__GFORTRAN__)],[FC_VENDOR="${i}"]) ;;
+  xibm       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__xlc__) || defined(__xlC__)],[FC_VENDOR="${i}"]) ;;
+  xintel     ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__INTEL_COMPILER)],[FC_VENDOR="${i}"]) ;;
+  xpathscale ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PATHSCALE__)],[FC_VENDOR="${i}"]) ;;
+  xpgi       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PGI)],[FC_VENDOR="${i}"]) ;;
+  xsun       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__SUNPRO_F90)],[FC_VENDOR="${i}"]) ;;
+  *          ) AC_MSG_ERROR([unknown vendor '${i}']) ;;
+ esac
+done
+if test "x${FC_VENDOR:+set}" != xset ; then
+ AC_MSG_WARN([unable to determine FC_VENDOR])
+fi
+])
 
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
@@ -12,14 +63,6 @@ AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="
 
 AC_SUBST(AR,"ar")dnl
 AC_SUBST(ARFLAGS,"-rS")dnl
-AC_PATH_PROG(AUTOCONF,autoconf)
-AC_PATH_PROG(AUTOMAKE,automake)
-AC_SUBST(AUTOMAKE_LIBDIR)dnl
-if test "x${AUTOMAKE:+set}" = xset ; then
- if ${AUTOMAKE} --print-libdir 1>/dev/null 2>&1; then
-  AUTOMAKE_LIBDIR="`${AUTOMAKE} --print-libdir`"
- fi
-fi
 AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()
 if test "x${RANLIB}" = "x:" ; then RANLIB="true"; fi

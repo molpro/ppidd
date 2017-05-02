@@ -24,6 +24,3 @@ ppidd_sf_test.o: ppidd_sf_test.F
 
 %.o: %.F
 	../ppiddfc -c -I ../src $(FCFLAGS) $<
-
-clean:
-	@rm -f *.o *.exe

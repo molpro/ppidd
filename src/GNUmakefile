@@ -16,6 +16,3 @@ ppidd_fortran.o ppidd_c.o: ppidd_share.h
 
 %.o: %.F
 	../ppiddfc -c $(FFLAGS) $<
-
-clean:
-	@rm -f *.o *.mod

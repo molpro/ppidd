@@ -49,6 +49,6 @@ endif
 	@mkdir -p $(prefix)/lib
 	@cp -v libppidd.a $(prefix)/lib/
 
+.PHONY: clean
 clean:
-	@$(foreach directory,src test,$(MAKE) -C $(directory) clean;)
-	@rm -rf libppidd.a
+	git clean -X -d -f

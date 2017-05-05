@@ -19,8 +19,7 @@
  * -- read/writes are asynchronous                                                            *
  *--------------------------------------------------------------------------------------------*
  * FORTRAN interface.  The subroutines in this file named PPIDD_XXXXX are *
- * converted to the proper FORTRAN external by the FC_FUNC macro and      *
- * the definitions in the ppidd_sf_fortran.h header file.                 *
+ * converted to the proper FORTRAN external by the FC_FUNC macro.         *
  *                                                                        *
  * Written by: Manhui Wang                                                *
  * Date:       15/07/2008                                                 *
@@ -34,7 +33,14 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#include "ppidd_sf_fortran.h"
+/* Map the function names to something the Fortran compiler can call */
+#define PPIDD_Sf_create  FC_FUNC_(ppidd_sf_create,PPIDD_SF_CREATE)
+#define PPIDD_Sf_write   FC_FUNC_(ppidd_sf_write,PPIDD_SF_WRITE)
+#define PPIDD_Sf_read    FC_FUNC_(ppidd_sf_read,PPIDD_SF_READ)
+#define PPIDD_Sf_wait    FC_FUNC_(ppidd_sf_wait,PPIDD_SF_WAIT)
+#define PPIDD_Sf_waitall FC_FUNC_(ppidd_sf_waitall,PPIDD_SF_WAITALL)
+#define PPIDD_Sf_destroy FC_FUNC_(ppidd_sf_destroy,PPIDD_SF_DESTROY)
+#define PPIDD_Sf_errmsg  FC_FUNC_(ppidd_sf_errmsg,PPIDD_SF_ERRMSG)
 
 #ifdef GA_MPI
  #include <ga.h>

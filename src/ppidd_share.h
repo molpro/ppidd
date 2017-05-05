@@ -10,11 +10,9 @@
  * ---------------------------------------------------------------------- *
  * Common Fortran and C interfaces.                                       *
  * For Fortran interface, the subroutines in this file named PPIDD_XXXXX  *
- * are converted to the proper FORTRAN external by the FC_FUNC macro      *
- * and the definitions in the ppidd_fortran.h header file.                *
+ * are converted to the proper FORTRAN external by the FC_FUNC macro.     *
  * For C interface, the subroutines in this file named PPIDD_XXXXX can be *
- * only called by C program directly. Any calling by Fortran progam       *
- * should refer to the routines in the ppidd_fortran.h file.              *
+ * only called by C program directly.                                     *
  *                                                                        *
  * Written by: Manhui Wang                                                *
  * Date:       09/10/2009                                                 *
@@ -88,7 +86,6 @@
 #endif
 
 #if (PPIDD_LANG == 2)
-#include "ppidd_fortran.h"
 #ifdef __cplusplus
  extern "C" {
 #endif

@@ -179,11 +179,6 @@
    }
 #endif
 
-#if (PPIDD_LANG == 1)
-/* Both fortint and fortlogical are defined as int. */
-/* FALSE and TRUE are (int)0 and (int)1, respectively. */
-#endif
-
 
 /*! Initialize the PPIDD data structure
  *

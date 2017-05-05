@@ -102,11 +102,7 @@ void MPIGA_Error(const char *string, int code)
     fprintf(stderr,"%5d: %s %d (%#x).\n", ProcID(), string,code,code);
 
     printf("%5d: In mpi_utils.cpp [MPIGA_Error]: now exiting...\n",ProcID());
-#ifdef USE_MPI_ABORT
-    MPI_Abort(MPI_COMM_WORLD,code);
-#else
     exit(1);
-#endif
 }
 
 

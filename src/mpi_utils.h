@@ -15,10 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef CRAY_YMP
-#define USE_MPI_ABORT
-#endif
-
 /* C datatypes */
 #define PPIDD_C_INT        0
 #define PPIDD_C_DOUBLE     1

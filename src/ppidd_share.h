@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <climits>
+#include <vector>
 /* ====================================================================== *\
  *          Parallel Programming Interface for Distributed Data           *
  *          ===================================================           *
@@ -846,7 +847,7 @@ static int n_in_msg_mpiq=0;
 /*! \endcond */
       ) {
 #ifdef MPI2
-      int *mpilenin,i,mpierr;
+      int mpierr;
       int mpinchunk=(int)*nchunk;
       int dtype=(int)*datatype;
       int stype=(int)*storetype;
@@ -866,23 +867,22 @@ static int n_in_msg_mpiq=0;
 #endif
       strncpy((name2=(char *)malloc(lxi+1)),name,lxi);
       name2[lxi]=(char)0;
-      for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-      mpilenin=(int *)malloc(mpinchunk*sizeof(int));
-      for (i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
+      for(int i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
+      std::vector<int> mpilenin(mpinchunk);
+      for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       if (use_helper_server==0) {
-        mpierr=mpiga_create_irreg(name2, mpilenin, mpinchunk, mpidtype, &mpihandle);
+        mpierr=mpiga_create_irreg(name2, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
       }
       else {
         if (stype==0)
-          mpierr=mpiga_create_irreg(name2, mpilenin, mpinchunk, mpidtype, &mpihandle);
+          mpierr=mpiga_create_irreg(name2, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, mpilenin, mpinchunk, &mpihandle, name2, mpidtype);
+          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name2, mpidtype);
         }
       }
       free(name2);
-      free(mpilenin);
       *handle=(fortint)mpihandle;
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
@@ -891,10 +891,9 @@ static int n_in_msg_mpiq=0;
       int gadtype=-1;
       int ndim=1;
       ga_int nblock=(ga_int)*nchunk;
-      ga_int *dims, *block, *map;
       int np;
       int i;
-      ga_int iad,totlen;
+      ga_int iad;
       int gahandle;
       char *name2;
       char *errmsg;
@@ -925,30 +924,22 @@ static int n_in_msg_mpiq=0;
               free(errmsg);
       }
 
-      dims=(ga_int *)malloc(ndim*sizeof(ga_int));
-      block=(ga_int *)malloc(ndim*sizeof(ga_int));
+      ga_int block[1]={nblock};
       np = GA_Nnodes();
 /* map[np] or map[nblock] ? */
-      map=(ga_int *)malloc(np*sizeof(ga_int));
-
-      for(i=0;i<ndim;i++) block[i]=nblock;
+      std::vector<ga_int> map(np);
 
       for(iad=0,i=0;i<nblock;i++){
         map[i]=iad;
         iad=iad+(ga_int)lenin[i];
       }
       for(i=nblock;i<np;i++) map[i]=iad;
-
-      totlen=iad;
-      for(i=0;i<ndim;i++) dims[i]=totlen;
+      ga_int dims[1]={iad};
 
 /*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
-      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name2, block, map);
+      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name2, block, &map[0]);
 
       free(name2);
-      free(dims);
-      free(block);
-      free(map);
 
       *handle=(fortint)gahandle;
       *ok = TRUE ;
@@ -1032,10 +1023,7 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int dtype=(int)*datatype;
       int gadtype=-1;
-      int ndim=1;
-      ga_int *dims, *block;
       ga_int galentot=(ga_int)*lentot;
-      int i;
       int gahandle;
       char *name2, *p;
       char *errmsg;
@@ -1065,20 +1053,13 @@ static int n_in_msg_mpiq=0;
               free(errmsg);
       }
 
-      dims=(ga_int *)malloc(ndim*sizeof(ga_int));
-      block=(ga_int *)malloc(ndim*sizeof(ga_int));
-
-      for(i=0;i<ndim;i++) block[i]=-1;
-
-      for(i=0;i<ndim;i++) dims[i]=galentot;
+      ga_int dims[1]={galentot};
+      ga_int block[1]={-1};
 
 /*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name2,*dims,ndim); */
-      gahandle=NGA_CREATE(gadtype, ndim, dims, name2, block);
+      gahandle=NGA_CREATE(gadtype, 1, dims, name2, block);
 
       free(name2);
-      free(dims);
-      free(block);
-
       *handle=(fortint)gahandle;
       *ok = TRUE ;
 #else
@@ -1187,57 +1168,46 @@ static int n_in_msg_mpiq=0;
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpisize,mpinp;
-      int *mpimap,*mpiproclist;
-      int mpierr,i;
+      int mpierr;
       MPI_Comm mpicomm;
 
       mpicomm=mpigv(Compute_comm);
       MPI_Comm_size(mpicomm, &mpisize);
-      mpimap=(int *)malloc(2*mpisize*sizeof(int));
-      mpiproclist=(int *)malloc(mpisize*sizeof(int));
+      std::vector<int> mpimap(2*mpisize);
+      std::vector<int> mpiproclist(mpisize);
 
       if ( mpiga_inquire_storetype(mpihandle) == 0 ) {
-         mpierr=mpiga_location( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist, &mpinp);
+         mpierr=mpiga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], &mpinp);
       }
       else {
-         mpierr=twosided_helpga_location( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist, &mpinp);
+         mpierr=twosided_helpga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], &mpinp);
       }
 
-      for (i=0;i<mpinp;i++) {
+      for (int i=0;i<mpinp;i++) {
          map[2*i]=(fortint)mpimap[2*i];
          map[2*i+1]=(fortint)mpimap[2*i+1];
          proclist[i]=(fortint)mpiproclist[i];
       }
       *np = (fortint) mpinp;
-      free(mpimap);
-      free(mpiproclist);
       if(mpierr==0) *ok = TRUE ;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      ga_int mpiilo[1];
-      ga_int mpiihi[1];
-      int mpisize,mpinp;
-      ga_int *mpimap;
-      int *mpiproclist;
-      int i;
+      ga_int mpiilo[1]={(ga_int)*ilo-1};
+      ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      mpisize = GA_Nnodes();
-      mpimap=(ga_int *)malloc(2*mpisize*sizeof(ga_int));
-      mpiproclist=(int *)malloc(mpisize*sizeof(int));
+      int mpisize = GA_Nnodes();
+      std::vector<ga_int> mpimap(2*mpisize);
+      std::vector<int> mpiproclist(mpisize);
 
-      mpiilo[0]=(ga_int)*ilo-1;
-      mpiihi[0]=(ga_int)*ihi-1;
-      mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
+      int mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
 
-      for (i=0;i<mpinp;i++) {
+      for (int i=0;i<mpinp;i++) {
 	 map[2*i]=(fortint)(mpimap[2*i]+1);
 	 map[2*i+1]=(fortint)(mpimap[2*i+1]+1);
 	 proclist[i]=(fortint)mpiproclist[i];
       }
       *np = (fortint) mpinp;
-      free(mpimap);
-      free(mpiproclist);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Location should not be called in serial case.\n");
@@ -1288,11 +1258,9 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      ga_int mpiilo[1];
-      ga_int mpiihi[1];
+      ga_int mpiilo[1]={(ga_int)*ilo-1};
+      ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      mpiilo[0]=(ga_int)*ilo-1;
-      mpiihi[0]=(ga_int)*ihi-1;
       NGA_GET(mpihandle, mpiilo, mpiihi, buff, ld);
       *ok = TRUE ;
 #else
@@ -1342,11 +1310,9 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      ga_int mpiilo[1];
-      ga_int mpiihi[1];
+      ga_int mpiilo[1]={(ga_int)*ilo-1};
+      ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      mpiilo[0]=(ga_int)*ilo-1;
-      mpiihi[0]=(ga_int)*ihi-1;
       NGA_PUT(mpihandle, mpiilo, mpiihi, buff, ld);
       *ok = TRUE ;
 #else
@@ -1389,11 +1355,9 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      ga_int mpiilo[1];
-      ga_int mpiihi[1];
+      ga_int mpiilo[1]={(ga_int)*ilo-1};
+      ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      mpiilo[0]=(ga_int)*ilo-1;
-      mpiihi[0]=(ga_int)*ihi-1;
       NGA_ACC(mpihandle, mpiilo, mpiihi, buff, ld, fac);
       *ok = TRUE ;
 #else
@@ -1460,11 +1424,9 @@ static int n_in_msg_mpiq=0;
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
 #elif defined(GA_MPI)
       int handle = (int) *ihandle;
-      ga_int mpiilo[1];
-      ga_int mpiihi[1];
+      ga_int mpiilo[1]={(ga_int)*ilo-1};
+      ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      mpiilo[0]=(ga_int)*ilo-1;
-      mpiihi[0]=(ga_int)*ihi-1;
       NGA_ZERO_PATCH(handle, mpiilo, mpiihi);
 #endif
    }

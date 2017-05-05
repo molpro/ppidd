@@ -34,8 +34,4 @@
 #undef FORTCL_END
 #endif
 
-#ifdef FORTINTC_DIVIDE
-#undef FORTINTC_DIVIDE
-#endif
-
 #endif

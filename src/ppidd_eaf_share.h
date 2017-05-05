@@ -66,9 +66,6 @@
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_open: begin.\n",ppidd_eaf_rank());
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(fname);
 #endif
@@ -444,9 +441,6 @@
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_delete: begin.\n",ppidd_eaf_rank());
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(fname);
 #endif
@@ -555,9 +549,6 @@
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(message);
 #endif

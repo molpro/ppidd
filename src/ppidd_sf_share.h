@@ -62,9 +62,6 @@
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_create: begin.\n",ppidd_sf_rank());
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(fname);
 #endif
@@ -323,9 +320,6 @@
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(message);
 #endif

@@ -341,9 +341,6 @@
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(message);
 #endif
@@ -791,9 +788,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(op);
 #endif
@@ -859,9 +853,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -901,9 +892,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -987,9 +975,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -1031,9 +1016,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -1536,9 +1518,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -1574,9 +1553,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif
@@ -1597,9 +1573,6 @@ static int n_in_msg_mpiq=0;
 
 #if defined(FORTCL_NEXT) || defined(FORTCL_END)
       lxi=(int)lx;
-#ifdef FORTINTC_DIVIDE
-      lxi=(int)lx/FORTINTC_DIVIDE;
-#endif
 #else
       lxi=strlen(name);
 #endif

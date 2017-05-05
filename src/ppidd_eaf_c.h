@@ -5,8 +5,7 @@
    =====================================================================
 
    All PPIDD subroutines are written in C.  The subroutines in this file
-   named PPIDD_XXXXX can be only called by C program directly.  Any calling
-   by Fortran progam should refer to the routines in the ppidd_eaf_fortran.h file.
+   named PPIDD_XXXXX can be only called by C program directly.
 
 \* ------------------------------------------------------------- */
 

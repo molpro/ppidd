@@ -18,9 +18,7 @@
  * implying success, non-zero implying some error condition.  Offsets are doubles and an      *
  * offset with a fractional component generates an error.                                     *
  *--------------------------------------------------------------------------------------------*
- * FORTRAN interface.  The subroutines in this file named PPIDD_XXXXX are *
- * converted to the proper FORTRAN external by the FC_FUNC macro and      *
- * the definitions in the ppidd_eaf_fortran.h header file.                *
+ * FORTRAN interface.
  *                                                                        *
  * Written by: Manhui Wang                                                *
  * Date:       15/07/2008                                                 *
@@ -37,7 +35,20 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#include "ppidd_eaf_fortran.h"
+/* Map the function names to something the Fortran compiler can call */
+#define PPIDD_Eaf_open     FC_FUNC_(ppidd_eaf_open,PPIDD_EAF_OPEN)
+#define PPIDD_Eaf_write    FC_FUNC_(ppidd_eaf_write,PPIDD_EAF_WRITE)
+#define PPIDD_Eaf_awrite   FC_FUNC_(ppidd_eaf_awrite,PPIDD_EAF_AWRITE)
+#define PPIDD_Eaf_read     FC_FUNC_(ppidd_eaf_read,PPIDD_EAF_READ)
+#define PPIDD_Eaf_aread    FC_FUNC_(ppidd_eaf_aread,PPIDD_EAF_AREAD)
+#define PPIDD_Eaf_wait     FC_FUNC_(ppidd_eaf_wait,PPIDD_EAF_WAIT)
+#define PPIDD_Eaf_waitall  FC_FUNC_(ppidd_eaf_waitall,PPIDD_EAF_WAITALL)
+#define PPIDD_Eaf_probe    FC_FUNC_(ppidd_eaf_probe,PPIDD_EAF_PROBE)
+#define PPIDD_Eaf_close    FC_FUNC_(ppidd_eaf_close,PPIDD_EAF_CLOSE)
+#define PPIDD_Eaf_delete   FC_FUNC_(ppidd_eaf_delete,PPIDD_EAF_DELETE)
+#define PPIDD_Eaf_length   FC_FUNC_(ppidd_eaf_length,PPIDD_EAF_LENGTH)
+#define PPIDD_Eaf_truncate FC_FUNC_(ppidd_eaf_truncate,PPIDD_EAF_TRUNCATE)
+#define PPIDD_Eaf_errmsg   FC_FUNC_(ppidd_eaf_errmsg,PPIDD_EAF_ERRMSG)
 
 #ifdef GA_MPI
  #include <ga.h>

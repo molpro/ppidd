@@ -32,7 +32,6 @@
        |   |-- ppidd_eaf_c.cpp                C interface source code for EAF
        |   |-- ppidd_eaf_c.h                  C interface header file for EAF
        |   |-- ppidd_eaf_fortran.cpp          Fortran interface source code for EAF
-       |   |-- ppidd_eaf_fortran.h            Fortran interface header file for EAF
        |   |-- ppidd_eaf_share.h              Code shared by both Fortran and C interfaces for EAF
        |   |-- ppidd_fortran.cpp              Fortran interface source code for PPIDD
        |   |-- ppidd_fortran.h                Fortran interface header file for PPIDD

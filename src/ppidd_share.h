@@ -81,12 +81,10 @@
 #include "ppidd_c.h"
 #endif
 
-#if (PPIDD_LANG == 2)
- extern "C" {
-#endif
-
 #define FALSE (fortlogical) 0
 #define TRUE  (fortlogical) 1
+
+extern "C" {
 
 /*! Initialize the PPIDD parallel environment
  *
@@ -1728,6 +1726,5 @@ static int n_in_msg_mpiq=0;
       *ok = TRUE ;
 #endif
    }
-#if (PPIDD_LANG == 2)
+
 }
-#endif

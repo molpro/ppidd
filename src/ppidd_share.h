@@ -33,8 +33,26 @@
 
 #if PPIDD_LANG == 2 && !defined(_I8_)
 #define ga_int int
+#define NGA_ACC NGA_Acc
+#define NGA_CREATE NGA_Create
+#define NGA_CREATE_IRREG NGA_Create_irreg
+#define NGA_DISTRIBUTION NGA_Distribution
+#define NGA_GET NGA_Get
+#define NGA_LOCATE_REGION NGA_Locate_region
+#define NGA_PUT NGA_Put
+#define NGA_READ_INC NGA_Read_inc
+#define NGA_ZERO_PATCH NGA_Zero_patch
 #else
 #define ga_int int64_t
+#define NGA_ACC NGA_Acc64
+#define NGA_CREATE NGA_Create64
+#define NGA_CREATE_IRREG NGA_Create_irreg64
+#define NGA_DISTRIBUTION NGA_Distribution64
+#define NGA_LOCATE_REGION NGA_Locate_region64
+#define NGA_GET NGA_Get64
+#define NGA_PUT NGA_Put64
+#define NGA_READ_INC NGA_Read_inc64
+#define NGA_ZERO_PATCH NGA_Zero_patch64
 #endif
 
 #if defined(MPI2) || defined(GA_MPI)
@@ -924,13 +942,8 @@ static int n_in_msg_mpiq=0;
       totlen=iad;
       for(i=0;i<ndim;i++) dims[i]=totlen;
 
-#if PPIDD_LANG == 2 && !defined(_I8_)
-/*      printf("\n NGA_Create_irreg: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
-      gahandle=NGA_Create_irreg(gadtype, ndim, dims, name2, block, map);
-#else
-/*      printf("\n NGA_Create_irreg64: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
-      gahandle=NGA_Create_irreg64(gadtype, ndim, dims, name2, block, map);
-#endif
+/*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
+      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name2, block, map);
 
       free(name2);
       free(dims);
@@ -1059,13 +1072,8 @@ static int n_in_msg_mpiq=0;
 
       for(i=0;i<ndim;i++) dims[i]=galentot;
 
-#if PPIDD_LANG == 2 && !defined(_I8_)
-/*      printf("\n NGA_Create: %s created, dims=%d, ndim=%d\n",name2,*dims,ndim); */
-      gahandle=NGA_Create(gadtype, ndim, dims, name2, block);
-#else
-/*      printf("\n NGA_Create64: %s created, dims=%d, ndim=%d, lentot=%d, galentot=%d \n",name2,*dims,ndim,*lentot,galentot); */
-      gahandle=NGA_Create64(gadtype, ndim, dims, name2, block);
-#endif
+/*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name2,*dims,ndim); */
+      gahandle=NGA_CREATE(gadtype, ndim, dims, name2, block);
 
       free(name2);
       free(dims);
@@ -1138,29 +1146,19 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       int garank=(int)*rank;
-      int ndim=1;
-      ga_int *gailo;
-      ga_int *gaihi;
-      int ARRAY_BASE=0;
+      ga_int gailo[1];
+      ga_int gaihi[1];
 
-      gailo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      gaihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      NGA_Distribution(gahandle, garank, gailo, gaihi);
-#else
-      NGA_Distribution64(gahandle, garank, gailo, gaihi);
-#endif
+      NGA_DISTRIBUTION(gahandle, garank, gailo, gaihi);
 /* If no array elements are owned by process iproc, the range is returned as lo[ ]=0 and hi[ ]= -1 for all dimensions. */
       if (gailo[0]<=gaihi[0]) {
-         *ilo = (fortint) (gailo[0] + 1 - ARRAY_BASE);
-         *ihi = (fortint) (gaihi[0] + 1 - ARRAY_BASE);
+         *ilo = (fortint) (gailo[0] + 1);
+         *ihi = (fortint) (gaihi[0] + 1);
       }
       else {
          *ilo = (fortint) (gailo[0]);
          *ihi = (fortint) (gaihi[0]);
       }
-      free(gailo);
-      free(gaihi);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Distrib should not be called in serial case.\n");
@@ -1217,39 +1215,29 @@ static int n_in_msg_mpiq=0;
       else *ok = FALSE ;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
-      ga_int *mpiilo;
-      ga_int *mpiihi;
+      ga_int mpiilo[1];
+      ga_int mpiihi[1];
       int mpisize,mpinp;
       ga_int *mpimap;
       int *mpiproclist;
       int i;
-      int ARRAY_BASE=0;
-      int ndim=1;
 
       mpisize = GA_Nnodes();
       mpimap=(ga_int *)malloc(2*mpisize*sizeof(ga_int));
       mpiproclist=(int *)malloc(mpisize*sizeof(int));
 
-      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      mpinp=NGA_Locate_region( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
-#else
-      mpinp=NGA_Locate_region64( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
-#endif
+      mpiilo[0]=(ga_int)*ilo-1;
+      mpiihi[0]=(ga_int)*ihi-1;
+      mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, mpimap, mpiproclist);
 
       for (i=0;i<mpinp;i++) {
-	 map[2*i]=(fortint)(mpimap[2*i]+1-ARRAY_BASE);
-	 map[2*i+1]=(fortint)(mpimap[2*i+1]+1-ARRAY_BASE);
+	 map[2*i]=(fortint)(mpimap[2*i]+1);
+	 map[2*i+1]=(fortint)(mpimap[2*i+1]+1);
 	 proclist[i]=(fortint)mpiproclist[i];
       }
       *np = (fortint) mpinp;
       free(mpimap);
       free(mpiproclist);
-      free(mpiilo);
-      free(mpiihi);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Location should not be called in serial case.\n");
@@ -1300,22 +1288,12 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      int ndim=1;
-      ga_int *mpiilo;
-      ga_int *mpiihi;
-      int ARRAY_BASE=0;
+      ga_int mpiilo[1];
+      ga_int mpiihi[1];
 
-      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      NGA_Get(mpihandle, mpiilo, mpiihi, buff, ld);
-#else
-      NGA_Get64(mpihandle, mpiilo, mpiihi, buff, ld);
-#endif
-      free(mpiilo);
-      free(mpiihi);
+      mpiilo[0]=(ga_int)*ilo-1;
+      mpiihi[0]=(ga_int)*ihi-1;
+      NGA_GET(mpihandle, mpiilo, mpiihi, buff, ld);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Get should not be called in serial case.\n");
@@ -1364,22 +1342,12 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      int ndim=1;
-      ga_int *mpiilo;
-      ga_int *mpiihi;
-      int ARRAY_BASE=0;
+      ga_int mpiilo[1];
+      ga_int mpiihi[1];
 
-      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      NGA_Put(mpihandle, mpiilo, mpiihi, buff, ld);
-#else
-      NGA_Put64(mpihandle, mpiilo, mpiihi, buff, ld);
-#endif
-      free(mpiilo);
-      free(mpiihi);
+      mpiilo[0]=(ga_int)*ilo-1;
+      mpiihi[0]=(ga_int)*ihi-1;
+      NGA_PUT(mpihandle, mpiilo, mpiihi, buff, ld);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Put should not be called in serial case.\n");
@@ -1421,22 +1389,12 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int mpihandle=(int)*handle;
       ga_int ld[1]={1};
-      int ndim=1;
-      ga_int *mpiilo;
-      ga_int *mpiihi;
-      int ARRAY_BASE=0;
+      ga_int mpiilo[1];
+      ga_int mpiihi[1];
 
-      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      NGA_Acc(mpihandle, mpiilo, mpiihi, buff, ld, fac);
-#else
-      NGA_Acc64(mpihandle, mpiilo, mpiihi, buff, ld, fac);
-#endif
-      free(mpiilo);
-      free(mpiihi);
+      mpiilo[0]=(ga_int)*ilo-1;
+      mpiihi[0]=(ga_int)*ihi-1;
+      NGA_ACC(mpihandle, mpiilo, mpiihi, buff, ld, fac);
       *ok = TRUE ;
 #else
       printf(" ERROR: PPIDD_Acc should not be called in serial case.\n");
@@ -1470,20 +1428,12 @@ static int n_in_msg_mpiq=0;
                             ProcID(),mpiinum,mpihandle,mpiincr);
 #elif defined(GA_MPI)
       int handle = (int) *ihandle;
-      int ndim=1;
-      ga_int *mpiinum;
+      ga_int mpiinum[1];
       long gaincr = (long) *incr;
       long gavalue;
-      int ARRAY_BASE=0;
 
-      mpiinum=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiinum[0] = (ga_int) *inum-1+ARRAY_BASE;
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      gavalue=NGA_Read_inc(handle,mpiinum, gaincr);
-#else
-      gavalue=NGA_Read_inc64(handle,mpiinum, gaincr);
-#endif
-      free(mpiinum);
+      mpiinum[0] = (ga_int) *inum-1;
+      gavalue=NGA_READ_INC(handle,mpiinum, gaincr);
       *returnval=(fortint)gavalue;
 #else
       printf(" ERROR: PPIDD_Read_inc should not be called in serial case.\n");
@@ -1510,23 +1460,12 @@ static int n_in_msg_mpiq=0;
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
 #elif defined(GA_MPI)
       int handle = (int) *ihandle;
-      int ndim=1;
-      ga_int *mpiilo;
-      ga_int *mpiihi;
-      int ARRAY_BASE=0;
+      ga_int mpiilo[1];
+      ga_int mpiihi[1];
 
-      mpiilo=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiihi=(ga_int *)malloc(ndim*sizeof(ga_int));
-      mpiilo[0]=(ga_int)*ilo-1+ARRAY_BASE;
-      mpiihi[0]=(ga_int)*ihi-1+ARRAY_BASE;
-
-#if PPIDD_LANG == 2 && !defined(_I8_)
-      NGA_Zero_patch (handle, mpiilo, mpiihi);
-#else
-      NGA_Zero_patch64 (handle, mpiilo, mpiihi);
-#endif
-      free(mpiilo);
-      free(mpiihi);
+      mpiilo[0]=(ga_int)*ilo-1;
+      mpiihi[0]=(ga_int)*ihi-1;
+      NGA_ZERO_PATCH(handle, mpiilo, mpiihi);
 #endif
    }
 

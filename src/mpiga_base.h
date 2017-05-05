@@ -28,9 +28,6 @@
  #include <cctype>
 
 
- #include "ppidd_dtype.h"
-
-
 /* --------------------------------------- *\
    Maximum number of global data structures
    To be safe, make divisible by 8.

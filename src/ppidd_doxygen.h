@@ -29,7 +29,6 @@
        |   |-- ppidd_c.cpp                    C interface source code
        |   |-- ppidd_c.h                      C interface header file
        |   |-- ppidd_doxygen.h                PPIDD document main page file
-       |   |-- ppidd_dtype.h                  PPIDD data type header file
        |   |-- ppidd_eaf_c.cpp                C interface source code for EAF
        |   |-- ppidd_eaf_c.h                  C interface header file for EAF
        |   |-- ppidd_eaf_fortran.cpp          Fortran interface source code for EAF

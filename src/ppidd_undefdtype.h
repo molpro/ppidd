@@ -16,16 +16,6 @@
 #endif
 #define fortlogical int64_t
 
-#ifdef FALSE
-#undef FALSE
-#endif
-#define FALSE (fortlogical) 0
-
-#ifdef TRUE
-#undef TRUE
-#endif
-#define TRUE (fortlogical) 1
-
 #ifdef FORTCL_NEXT
 #undef FORTCL_NEXT
 #endif

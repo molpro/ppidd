@@ -59,7 +59,7 @@
 #if defined(MPI2) || defined(GA_MPI)
 
 #ifdef MPI2
- #include "mpiga_base.h"         /* include mpi.h and ppidd_dtype.h */
+ #include "mpiga_base.h"         /* include mpi.h */
  #include "mpi_utils.h"
  #include "mpi_nxtval.h"
 #endif
@@ -88,12 +88,14 @@
 #endif
 
 #if (PPIDD_LANG == 2)
-#include "ppidd_dtype.h"
 #include "ppidd_fortran.h"
 #ifdef __cplusplus
  extern "C" {
 #endif
 #endif
+
+#define FALSE (fortlogical) 0
+#define TRUE  (fortlogical) 1
 
 /*! Initialize the PPIDD parallel environment
  *

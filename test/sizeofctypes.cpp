@@ -1,4 +1,3 @@
-#include "ppidd_dtype.h"
 
 #define	sizeofctype FC_FUNC(sizeofctype,SIZEOFCTYPE)
 /* change argument type fortint to double, in order to obtain right numbers even if Integer type doesn't match between Fortran and C */

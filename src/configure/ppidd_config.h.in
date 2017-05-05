@@ -17,6 +17,7 @@ typedef FORTINT fortint ; /* fortran integer type */
 #undef FORTINT_MPI
 #undef FORTINTC
 typedef FORTINTC fortintc ; /* fortran character string length type */
+typedef fortint fortlogical; /* fortran logical type */
 
 #undef FORTCL_END
 #undef FORTCL_NEXT

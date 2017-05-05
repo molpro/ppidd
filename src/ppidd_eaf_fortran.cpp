@@ -52,13 +52,9 @@
 
 #ifdef GA_MPI
  #include <ga.h>
-#ifdef __cplusplus
 extern "C" {
-#endif
  #include <eaf.h>
-#ifdef __cplusplus
 }
-#endif
 #endif
 
 #if defined(GA_MPI) || defined(MPI2)
@@ -84,10 +80,6 @@ extern "C" {
    }
 
 /* Common code shared by Fortran and C interfaces for PPIDD EAF Library.*/
-#ifdef __cplusplus
 extern "C" {
-#endif
 #include "ppidd_eaf_share.h"
-#ifdef __cplusplus
 }
-#endif

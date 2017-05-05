@@ -44,13 +44,9 @@
 
 #ifdef GA_MPI
  #include <ga.h>
-#ifdef __cplusplus
 extern "C" {
-#endif
  #include <sf.h>
-#ifdef __cplusplus
 }
-#endif
 #endif
 
 #if defined(GA_MPI) || defined(MPI2)
@@ -76,10 +72,6 @@ extern "C" {
    }
 
 /* Common code shared by Fortran and C interfaces for PPIDD Shared Files Library.*/
-#ifdef __cplusplus
 extern "C" {
-#endif
 #include "ppidd_sf_share.h"
-#ifdef __cplusplus
 }
-#endif

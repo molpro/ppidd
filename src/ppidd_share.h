@@ -67,14 +67,10 @@
  #include <ga.h>
  #include <macdecls.h>
 
-#ifdef __cplusplus
  extern "C" {
-#endif
  #include <ga-papi.h>
  #define ga_type_f2c pnga_type_f2c
-#ifdef __cplusplus
  }
-#endif
 
 #endif
  static int MPIGA_Debug=0;
@@ -86,9 +82,7 @@
 #endif
 
 #if (PPIDD_LANG == 2)
-#ifdef __cplusplus
  extern "C" {
-#endif
 #endif
 
 #define FALSE (fortlogical) 0
@@ -1735,7 +1729,5 @@ static int n_in_msg_mpiq=0;
 #endif
    }
 #if (PPIDD_LANG == 2)
-#ifdef __cplusplus
 }
-#endif
 #endif

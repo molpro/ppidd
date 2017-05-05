@@ -1,8 +1,12 @@
 dnl regnerate configure with: autoconf -Wall && rm -rf autom4te.cache
 AC_INIT(PPIDD,master)
+AC_PREREQ(2.69)
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
+
+AC_CANONICAL_BUILD()
+AC_CANONICAL_HOST()
 
 dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_CXX_PP_TEST],[
@@ -105,7 +109,6 @@ AC_LANG_PUSH([C++])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([long long])
-AC_LANG_POP([C++])
 
 if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
  AC_DEFINE([FORTINT],[int])
@@ -139,7 +142,6 @@ else
  AC_MSG_NOTICE([PPIDD for serial])
 fi
 
-AC_LANG_PUSH([C++])
 if test "x${with_ga}" != xno ; then
  if test "x${with_ga}" != xyes ; then
   CPPFLAGS="${CPPFLAGS} -I${with_ga}"
@@ -154,4 +156,3 @@ fi
 AC_LANG_POP([C++])
 
 AC_OUTPUT()
-rm -f config.status config.log

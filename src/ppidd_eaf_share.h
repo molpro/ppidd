@@ -70,7 +70,9 @@
       strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
       name2[lxi]=(char)0;
       for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
+#ifdef PPIDD_FORTRAN
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_open: sizeof(fortint)=%d,sizeof(fortintc)=%d,lxi=%d,filename=%s\n",ppidd_eaf_rank(),(int)sizeof(fortint),(int)sizeof(fortintc),lxi,name2);
+#endif
 
 #ifdef MPI2
       switch(modetype){

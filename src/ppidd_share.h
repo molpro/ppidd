@@ -958,8 +958,10 @@ static int n_in_msg_mpiq=0;
        exit(1);
       }
       else mpilentot=(int)*lentot;
+#ifdef PPIDD_FORTRAN
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: sizeof(fortint)=%d,sizeof(fortintc)=%d,sizeof(fortlogical)=%d,lxi=%d\n",
 	ProcID(),(int)sizeof(fortint),(int)sizeof(fortintc),(int)sizeof(fortlogical),lxi);
+#endif
       strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
       for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);

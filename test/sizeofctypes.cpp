@@ -1,3 +1,8 @@
+#ifdef HAVE_CONFIG_H
+#define PPIDD_FORTRAN
+#include "ppidd_config.h"
+#endif
+#include <cstdio>
 
 #define	sizeofctype FC_FUNC(sizeofctype,SIZEOFCTYPE)
 /* change argument type fortint to double, in order to obtain right numbers even if Integer type doesn't match between Fortran and C */

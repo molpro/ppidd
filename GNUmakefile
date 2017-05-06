@@ -11,10 +11,7 @@ libppidd.a: $(wildcard src/*.cpp src/*.h src/*.F)
 
 .PHONY: test
 test: libppidd.a
-	@echo
-	@echo 'Building PPIDD test suite'
-	@echo
-	@$(MAKE) -C test
+	@$(MAKE) -C $@
 
 .PHONY: doc
 doc:

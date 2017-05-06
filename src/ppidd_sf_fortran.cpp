@@ -1,4 +1,5 @@
 #ifdef HAVE_CONFIG_H
+#define PPIDD_FORTRAN
 #include "ppidd_config.h"
 #endif
 

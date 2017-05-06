@@ -1,4 +1,5 @@
 #ifdef HAVE_CONFIG_H
+#define PPIDD_FORTRAN
 #include "ppidd_config.h"
 #endif
 
@@ -45,5 +46,4 @@
 #define PPIDD_Unlock_mutex    FC_FUNC_(ppidd_unlock_mutex,PPIDD_UNLOCK_MUTEX)
 #define PPIDD_Destroy_mutexes FC_FUNC_(ppidd_destroy_mutexes,PPIDD_DESTROY_MUTEXES)
 
-#define PPIDD_LANG 2
 #include "ppidd_share.h"

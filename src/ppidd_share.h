@@ -21,16 +21,7 @@
 /*! \file
  * \brief This file contains the code shared by both Fortran and C interface routines to PPIDD */
 
-#ifdef PPIDD_LANG
-/* PPIDD_LANG
- * 1 = C
- * 2 = Fortran
- */
-#else
-#error "PPIDD_LANG not defined"
-#endif
-
-#if PPIDD_LANG == 2 && !defined(_I8_)
+#if defined(PPIDD_FORTRAN) && !defined(_I8_)
 #define ga_int int
 #define NGA_ACC NGA_Acc
 #define NGA_CREATE NGA_Create
@@ -76,8 +67,7 @@
  static int MPIGA_Debug=0;
 #endif
 
-#if (PPIDD_LANG == 1)
-#include "ppidd_undefdtype.h"
+#ifndef PPIDD_FORTRAN
 #include "ppidd_c.h"
 #endif
 
@@ -91,18 +81,17 @@ extern "C" {
  *  - For \b GA, includes initialization of MPI and GA.
  *  - For \b MPI2, calls MPI_Init.
  */
-#if (PPIDD_LANG == 1)
-   void PPIDD_Initialize(int argc, char **argv) {
-#endif
-#if (PPIDD_LANG == 2)
+#ifdef PPIDD_FORTRAN
    void ppidd_initialize_f2c(int nargs, char **args) {
+#else
+   void PPIDD_Initialize(int argc, char **argv) {
 #endif
 #if defined(MPI2) || defined(GA_MPI)
 
 #ifdef MPI2
     int mpierr;
 #endif
-#if (PPIDD_LANG == 2)
+#ifdef PPIDD_FORTRAN
       int i,argc=nargs;
       char **argv = NULL;
       char arg[256];
@@ -141,7 +130,7 @@ extern "C" {
     GA_Initialize_args(&argc,&argv);            /* initialize GA */
 #endif
 
-#if (PPIDD_LANG == 2)
+#ifdef PPIDD_FORTRAN
    /* ================================================================== *\
       Free the memory for argv[i] and argv itself after having used them
    \* ================================================================== */
@@ -160,7 +149,7 @@ extern "C" {
 #endif
    }
 
-#if (PPIDD_LANG == 2)
+#ifdef PPIDD_FORTRAN
    void PPIDD_Initialize(void) {
     int i=0;
     char **a = NULL;

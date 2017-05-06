@@ -7,22 +7,28 @@
 /* build with MPI2 */
 #undef MPI2
 
+#undef NO_NXTVAL_SERVER
+
+#ifdef PPIDD_FORTRAN
 /* build with 8-byte Fortran integers */
 #undef _I8_
 
-#undef NO_NXTVAL_SERVER
+#undef FC_FUNC
+#undef FC_FUNC_
 
 #undef FORTINT
 typedef FORTINT fortint ; /* fortran integer type */
 #undef FORTINT_MPI
 #undef FORTINTC
 typedef FORTINTC fortintc ; /* fortran character string length type */
-typedef fortint fortlogical; /* fortran logical type */
 
 #undef FORTCL_END
 #undef FORTCL_NEXT
+#else
+#include <stdint.h>
+typedef int64_t fortint ;
+#endif
 
-#undef FC_FUNC
-#undef FC_FUNC_
+typedef fortint fortlogical; /* fortran logical type */
 
 #endif

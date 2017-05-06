@@ -8,5 +8,3 @@ config.log
 config.status
 config.mk
 src/ppidd_config.h
-ppiddcxx
-ppiddfc

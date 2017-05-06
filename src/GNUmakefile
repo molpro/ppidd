@@ -12,7 +12,7 @@ default: $(addsuffix .o,$(basename $(SOURCEFILES)))
 ppidd_fortran.o ppidd_c.o: ppidd_share.h
 
 %.o: %.cpp
-	../ppiddcxx -c $(CPPFLAGS) $(CXXFLAGS) $<
+	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<
 
 %.o: %.F
-	../ppiddfc -c $(FFLAGS) $<
+	$(FC) -c $(FFLAGS) $<

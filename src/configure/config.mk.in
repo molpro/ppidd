@@ -1,14 +1,13 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
-bindir=@bindir@
 includedir=@includedir@
 libdir=@libdir@
 
 AR=@AR@
 ARFLAGS=@ARFLAGS@
 CXX=@CXX@
-CXXFLAGS=@DEFS@ @CXXFLAGS@
-CPPFLAGS=@CPPFLAGS@
+CXXFLAGS=@CXXFLAGS@
+CPPFLAGS=@DEFS@ @CPPFLAGS@
 DOXYGEN=@DOXYGEN@
 FC=@FC@
 FCFLAGS=@FCFLAGS@

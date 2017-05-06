@@ -41,13 +41,17 @@ endif
 
 .PHONY: install
 install: default
-	@mkdir -p $(prefix)/bin
-	@cp -v ppiddcxx $(prefix)/bin/
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) -t $(DESTDIR)$(bindir) ppiddcxx
 ifneq ($(FC),)
-	@cp -v ppiddfc $(prefix)/bin/
+	$(INSTALL_PROGRAM) -t $(DESTDIR)$(bindir) ppiddfc
 endif
-	@mkdir -p $(prefix)/lib
-	@cp -v libppidd.a $(prefix)/lib/
+	$(INSTALL) -d $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) -t $(DESTDIR)$(libdir) libppidd.a
+	$(INSTALL) -d $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_c.h
+	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_eaf_c.h
+	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_sf_c.h
 
 .PHONY: clean
 clean:

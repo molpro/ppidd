@@ -25,7 +25,6 @@
  * Date:       15/07/2008                                                 *
 \* ====================================================================== */
 
-
 #ifdef MPI2
  #include <mpi.h>
  #define   MPI_EAF_RW -1
@@ -34,6 +33,7 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
+#include "ppidd_eaf_c.h"
 #include "ppidd_undefdtype.h"
 
 /* The following code should be the same as those in ppidd_eaf_fortran.cpp (except ppidd_eaf_rank). One should make it consistent once code in ppidd_eaf_fortran.cpp is changed. */

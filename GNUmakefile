@@ -29,6 +29,8 @@ install: default
 	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_c.h
 	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_eaf_c.h
 	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_sf_c.h
+	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/mpimutex.h
+	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/mpiga_base.h
 ifdef FC
 	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/$(subst %M,PPIDD,$(subst %m,ppidd,$(FC_MODFMT)))
 endif

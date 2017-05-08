@@ -47,8 +47,6 @@ rm -rf conftest.dir
 AC_LANG_POP(Fortran)
 ])
 FC_MODFMT="${may_cv_fc_module_fmt}"
-if test "x${FC_MODFMT}" = xunknown; then
-  FC_MODFMT=""
-fi
+test "x${FC_MODFMT}" = xunknown && FC_MODFMT=""
 AC_SUBST([FC_MODFMT])dnl
 ])

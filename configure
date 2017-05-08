@@ -5053,9 +5053,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $may_cv_fc_module_fmt" >&5
 $as_echo "$may_cv_fc_module_fmt" >&6; }
 FC_MODFMT="${may_cv_fc_module_fmt}"
-if test "x${FC_MODFMT}" = xunknown; then
-  FC_MODFMT=""
-fi
+test "x${FC_MODFMT}" = xunknown && FC_MODFMT=""
 
 
 for i in amd intel pgi pathscale sun g95 ibm gnu cray; do

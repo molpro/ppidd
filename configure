@@ -623,6 +623,8 @@ LIBOBJS
 EGREP
 GREP
 CXXCPP
+FC_MODFMT
+FC_MODEXT
 ac_ct_CC
 CFLAGS
 CC
@@ -4934,6 +4936,126 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+# SYNOPSIS
+#
+#   MAY_FC_MODULE_FILENAME_FORMAT
+#
+# DESCRIPTION
+#
+#   Find the Fortran 90 module filename format. The format is stored in
+#   the variable FC_MODFMT and empty if it cannot be determined. The
+#   following modifiers may appear in FC_MODFMT:
+#
+#      %m - lower case module name
+#      %M - upper case module name
+#
+#   The result or "unknown" is cached in the cache variable
+#   may_cv_fc_module_fmt.
+#
+# LICENSE
+#
+#   Copyright (c) 2014 Andy May <ajmay81@gmail.com>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Fortran 90 module extension" >&5
+$as_echo_n "checking Fortran 90 module extension... " >&6; }
+if ${ac_cv_fc_module_ext+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_fc_compiler_gnu
+
+mkdir conftest.dir
+cd conftest.dir
+ac_cv_fc_module_ext=unknown
+cat > conftest.$ac_ext <<_ACEOF
+
+      module conftest_module
+      contains
+      subroutine conftest_routine
+      write(*,'(a)') 'gotcha!'
+      end subroutine
+      end module
+_ACEOF
+if ac_fn_fc_try_compile "$LINENO"; then :
+  ac_cv_fc_module_ext=`ls | sed -n 's,conftest_module\.,,p'`
+   if test x$ac_cv_fc_module_ext = x; then
+     ac_cv_fc_module_ext=`ls | sed -n 's,CONFTEST_MODULE\.,,p'`
+   fi
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+cd ..
+rm -rf conftest.dir
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_fc_module_ext" >&5
+$as_echo "$ac_cv_fc_module_ext" >&6; }
+FC_MODEXT=$ac_cv_fc_module_ext
+if test "$FC_MODEXT" = unknown; then
+  FC_MODEXT=
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Fortran 90 module filename format" >&5
+$as_echo_n "checking Fortran 90 module filename format... " >&6; }
+if ${may_cv_fc_module_fmt+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+   ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_fc_compiler_gnu
+
+mkdir conftest.dir
+cd conftest.dir
+may_cv_fc_module_fmt="unknown"
+cat > conftest.$ac_ext <<_ACEOF
+
+      module conftest_module
+      contains
+      subroutine conftest_routine
+      write(*,'(a)') 'hello world'
+      end subroutine conftest_routine
+      end module conftest_module
+_ACEOF
+if ac_fn_fc_try_compile "$LINENO"; then :
+  if test -r "conftest_module.${FC_MODEXT}" ; then
+    may_cv_fc_module_fmt="%m.${FC_MODEXT}"
+   elif test -r "CONFTEST_MODULE.${FC_MODEXT}" ; then
+    may_cv_fc_module_fmt="%M.${FC_MODEXT}"
+   fi
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+cd ..
+rm -rf conftest.dir
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $may_cv_fc_module_fmt" >&5
+$as_echo "$may_cv_fc_module_fmt" >&6; }
+FC_MODFMT="${may_cv_fc_module_fmt}"
+if test "x${FC_MODFMT}" = xunknown; then
+  FC_MODFMT=""
+fi
 
 
 for i in amd intel pgi pathscale sun g95 ibm gnu cray; do

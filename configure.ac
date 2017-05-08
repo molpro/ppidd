@@ -82,6 +82,8 @@ if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
 AC_PATH_PROG(FC,${FC})
 AC_FC_WRAPPERS()
+m4_include([src/configure/may_fc_module_filename_format.m4])
+MAY_FC_MODULE_FILENAME_FORMAT()
 PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in

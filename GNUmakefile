@@ -24,15 +24,15 @@ endif
 .PHONY: install
 install: default
 	$(INSTALL) -d $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) -t $(DESTDIR)$(libdir) libppidd.a
+	$(INSTALL_DATA) libppidd.a $(DESTDIR)$(libdir)
 	$(INSTALL) -d $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_c.h
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_eaf_c.h
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/ppidd_sf_c.h
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/mpimutex.h
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/mpiga_base.h
+	$(INSTALL_DATA) src/ppidd_c.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) src/ppidd_eaf_c.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) src/ppidd_sf_c.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) src/mpimutex.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) src/mpiga_base.h $(DESTDIR)$(includedir)
 ifdef FC
-	$(INSTALL_DATA) -t $(DESTDIR)$(includedir) src/$(subst %M,PPIDD,$(subst %m,ppidd,$(FC_MODFMT)))
+	$(INSTALL_DATA) src/$(subst %M,PPIDD,$(subst %m,ppidd,$(FC_MODFMT))) $(DESTDIR)$(includedir)
 endif
 
 .PHONY: clean

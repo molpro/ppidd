@@ -738,10 +738,7 @@ static int n_in_msg_mpiq=0;
  *  - \c type=1 : Fortran Double Precision */
    void PPIDD_Gsum(fortint *type,void *buffer,fortint *len, char *op
 /*! \cond */
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-#if defined(FORTCL_END)
+#if defined(FORTCL_NEXT) || defined(FORTCL_END)
 	       ,fortintc lx
 #endif
 /*! \endcond */

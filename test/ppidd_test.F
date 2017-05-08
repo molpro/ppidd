@@ -191,7 +191,7 @@ c
 31      format(1x,'ERROR: Data type ( ',a,t38,') does not match between'
      >           ,' C and Fortran types.')
         write(6,32)
-32      format(1x,'Please check INTEGER (related to CFLAGS/FFLAGS)',
+32      format(1x,'Please check INTEGER (related to CFLAGS/FCFLAGS)',
      >            ' option, and rebuild the library.')
         call ppidd_error('Data types failed to match',0)
       endif

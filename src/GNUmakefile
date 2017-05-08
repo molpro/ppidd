@@ -15,4 +15,4 @@ ppidd_fortran.o ppidd_c.o: ppidd_share.h
 	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<
 
 %.o: %.F
-	$(FC) -c $(FFLAGS) $<
+	$(FC) -c $(FCFLAGS) $<

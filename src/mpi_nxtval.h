@@ -10,6 +10,7 @@
 
 /* **Include Files*** */
 /*  prerequisite: include mpi.h, and some basic libraries  */
+#include <stdint.h>
 #include <mpi.h>
 
 /* defined variables */
@@ -124,7 +125,7 @@ typedef struct {
     extern int twosided_helpga_locate_server(int , int , int , int *, int *, int *);
     extern int twosided_helpga_distrib( int , int , int *, int *);
     extern int twosided_helpga_location( int , int , int , int *, int *, int *);
-    extern fortint twosided_helpga_one(int , fortint , int , int *);
+    extern int64_t twosided_helpga_one(int , int64_t , int , int *);
     extern int twosided_helpga_extra(int , int , int , int *, void *);
     extern int twosided_helpga_extra_acc(int , int , int , int *, void *, void *);
     extern int twosided_helpga_handle_orig( int );

@@ -1294,7 +1294,7 @@ int twosided_helpga_location( int handle, int ilo, int ihigh, int *map, int *pro
 
 /* one-element rma operations for helpga */
 /* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, and MPI_LONG_LONG, but not MPI_FLOAT and MPI_DOUBLE) */
-fortint twosided_helpga_one(int mproc, fortint nelem_valput, int ielem, int *handle)
+int64_t twosided_helpga_one(int mproc, int64_t nelem_valput, int ielem, int *handle)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -1307,7 +1307,7 @@ ________________________________________________________________________________
 {
   int  type = RMAONEFLAG;
   fortint  buf[4],val_recv;
-  fortint  local=0;
+  int64_t local=0;
   MPI_Status status;
   int  handle_orig;
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
@@ -1376,36 +1376,36 @@ ________________________________________________________________________________
     if (mproc == 0) {                 /* get a value from local helpga      */
       if (dtype==MPI_INT) {
          ibuf=(int *)helpga->ptr_buf;
-         local = (fortint)ibuf[ielem-1];
+         local = (int64_t)ibuf[ielem-1];
          ibuf=NULL;
       }
       else if (dtype==MPI_LONG) {
          lbuf=(long *)helpga->ptr_buf;
-         local = (fortint)lbuf[ielem-1];
+         local = (int64_t)lbuf[ielem-1];
          lbuf=NULL;
       }
       else {
          llbuf=(long long *)helpga->ptr_buf;
-         local = (fortint)llbuf[ielem-1];
+         local = (int64_t)llbuf[ielem-1];
          llbuf=NULL;
       }
     }
     else if (mproc == 1) {            /* fetch-and-add INCR to local helpga */
       if (dtype==MPI_INT) {
          ibuf=(int *)helpga->ptr_buf;
-         local = (fortint)ibuf[ielem-1];
+         local = (int64_t)ibuf[ielem-1];
          ibuf[ielem-1]+=(int)nelem_valput;
          ibuf=NULL;
       }
       else if (dtype==MPI_LONG) {
          lbuf=(long *)helpga->ptr_buf;
-         local = (fortint)lbuf[ielem-1];
+         local = (int64_t)lbuf[ielem-1];
          lbuf[ielem-1]+=(long)nelem_valput;
          lbuf=NULL;
       }
       else {
          llbuf=(long long *)helpga->ptr_buf;
-         local = (fortint)llbuf[ielem-1];
+         local = (int64_t)llbuf[ielem-1];
          llbuf[ielem-1]+=(long long)nelem_valput;
          llbuf=NULL;
       }
@@ -1413,19 +1413,19 @@ ________________________________________________________________________________
     else if (mproc == -1) {           /* put a value  to local helpga       */
       if (dtype==MPI_INT) {
          ibuf=(int *)helpga->ptr_buf;
-         local = (fortint)ibuf[ielem-1];
+         local = (int64_t)ibuf[ielem-1];
          ibuf[ielem-1]=(int)nelem_valput;
          ibuf=NULL;
       }
       else if (dtype==MPI_LONG) {
          lbuf=(long *)helpga->ptr_buf;
-         local = (fortint)lbuf[ielem-1];
+         local = (int64_t)lbuf[ielem-1];
          lbuf[ielem-1]=(long)nelem_valput;
          lbuf=NULL;
       }
       else {
          llbuf=(long long *)helpga->ptr_buf;
-         local = (fortint)llbuf[ielem-1];
+         local = (int64_t)llbuf[ielem-1];
          llbuf[ielem-1]=(long long)nelem_valput;
          llbuf=NULL;
       }

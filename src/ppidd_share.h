@@ -1191,10 +1191,10 @@ static int n_in_msg_mpiq=0;
       else {
          int mproc=0;
          int ielem=mpiilo;
-         fortint val;
+         int64_t val;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_get_inum */
-            fortint nelem_valput=1;
+            int64_t nelem_valput=1;
             fortint *ibuff;
 
             val=twosided_helpga_one(mproc, nelem_valput, ielem, &mpihandle);
@@ -1246,11 +1246,8 @@ static int n_in_msg_mpiq=0;
          int ielem=mpiilo;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_put_inum */
-            fortint valput;
-            fortint *ibuff;
-
-            ibuff=(fortint *)buff;
-            valput=(fortint)*ibuff;
+            fortint *ibuff=(fortint *)buff;
+            int64_t valput=(int64_t)*ibuff;
             twosided_helpga_one(mproc, valput, ielem, &mpihandle);
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_put */
@@ -1344,7 +1341,8 @@ static int n_in_msg_mpiq=0;
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 
-         mpivalue=twosided_helpga_one(mproc, *incr, mpiinum, &mpihandle);
+	 int64_t vincr=(int64_t)*incr;
+         mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, &mpihandle);
       }
       *returnval=(fortint)mpivalue;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",

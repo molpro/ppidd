@@ -210,9 +210,9 @@ void make_worker_comm( MPI_Comm old_comm, MPI_Comm *worker_comm )
 
 void DataHelperServer()
 {
-  fortint  cnt = (fortint)0;   /* actual counter */
-  fortint  buf[4];             /* buffer to get values */
-  fortint  nelem_valput;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
+  FORTINT  cnt = (FORTINT)0;   /* actual counter */
+  FORTINT  buf[4];             /* buffer to get values */
+  FORTINT  nelem_valput;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
   void  *buf_helpga=NULL;      /* help ga which is located in help process */
   void  *buf_ielem =NULL;      /* pointer to helpga[ielem-1]               */
   void  *buf_temp=NULL;        /* temporary buffer which are used to store data for accumulation */
@@ -244,7 +244,7 @@ void DataHelperServer()
   int  ielem_cdtype,ielem,handle,handle_orig;
   int  nelem=0;
   int  nelem_helpga=0;
-  fortint  returnval=(fortint)0;  /* returned value for helpha RMA opreations  */
+  FORTINT  returnval=(FORTINT)0;  /* returned value for helpha RMA opreations  */
   MPI_Request request,reqs[2];
   MPI_Status status,stats[2];
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
@@ -328,7 +328,7 @@ void DataHelperServer()
     } /* End of NXTVAL */
     else if ( opertype == COLLECFLAG ) {
        /* HELPGA collective operations: create (mproc=0) , zeroize(mproc>0), destroy (mproc<0) */
-      nelem_valput=(fortint)buf[1]; /* mproc=0: number of elements; mproc>0, <0: no use */
+      nelem_valput=(FORTINT)buf[1]; /* mproc=0: number of elements; mproc>0, <0: no use */
       ielem_cdtype=(int)buf[2];     /* COLLECFLAG and mproc=0: C Datatype for the helpga buffer; COLLECFLAG and mproc=others: no use */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
@@ -441,7 +441,7 @@ void DataHelperServer()
     } /* End of collective HELPGA */
     else if ( opertype == RMAONEFLAG ) {
        /* HELPGA RMA operations: get (mproc=0) , fetch-and-add(mproc>0), put (mproc<0) */
-      nelem_valput=(fortint)buf[1]; /* mproc=0: no use; mproc<0: value to be put; mproc>0: increment value */
+      nelem_valput=(FORTINT)buf[1]; /* mproc=0: no use; mproc<0: value to be put; mproc>0: increment value */
       ielem =(int)buf[2];           /* sequence number of element in helpga: 1,2,...,n      */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
@@ -451,17 +451,17 @@ void DataHelperServer()
       if (mproc == 0) { /* work process gets a value from help GA, ie server sends an element value to a work process */
         if (dtype==MPI_INT) {
            ibuf=(int *)helpga->ptr_buf;
-           returnval = (fortint)ibuf[ielem-1];
+           returnval = (FORTINT)ibuf[ielem-1];
            ibuf=NULL;
         }
         else if (dtype==MPI_LONG) {
            lbuf=(long *)helpga->ptr_buf;
-           returnval = (fortint)lbuf[ielem-1];
+           returnval = (FORTINT)lbuf[ielem-1];
            lbuf=NULL;
         }
         else {
            llbuf=(long long *)helpga->ptr_buf;
-           returnval = (fortint)llbuf[ielem-1];
+           returnval = (FORTINT)llbuf[ielem-1];
            llbuf=NULL;
         }
         MPI_Send(&returnval, 1, dtype_buf,  nodefrom, type_rma, MPI_COMM_WORLD);
@@ -470,19 +470,19 @@ void DataHelperServer()
       else if (mproc > 0) { /* fetch-and-add INCR to help GA */
         if (dtype==MPI_INT) {
            ibuf=(int *)helpga->ptr_buf;
-           returnval = (fortint)ibuf[ielem-1];
+           returnval = (FORTINT)ibuf[ielem-1];
            ibuf[ielem-1]+=(int)nelem_valput;
            ibuf=NULL;
         }
         else if (dtype==MPI_LONG) {
            lbuf=(long *)helpga->ptr_buf;
-           returnval = (fortint)lbuf[ielem-1];
+           returnval = (FORTINT)lbuf[ielem-1];
            lbuf[ielem-1]+=(long)nelem_valput;
            lbuf=NULL;
         }
         else {
            llbuf=(long long *)helpga->ptr_buf;
-           returnval = (fortint)llbuf[ielem-1];
+           returnval = (FORTINT)llbuf[ielem-1];
            llbuf[ielem-1]+=(long long)nelem_valput;
            llbuf=NULL;
         }
@@ -493,19 +493,19 @@ void DataHelperServer()
       else { /* put a value to help GA */
         if (dtype==MPI_INT) {
            ibuf=(int *)helpga->ptr_buf;
-           returnval = (fortint)ibuf[ielem-1];
+           returnval = (FORTINT)ibuf[ielem-1];
            ibuf[ielem-1]=(int)nelem_valput;
            ibuf=NULL;
         }
         else if (dtype==MPI_LONG) {
            lbuf=(long *)helpga->ptr_buf;
-           returnval = (fortint)lbuf[ielem-1];
+           returnval = (FORTINT)lbuf[ielem-1];
            lbuf[ielem-1]=(long)nelem_valput;
            lbuf=NULL;
         }
         else {
            llbuf=(long long *)helpga->ptr_buf;
-           returnval = (fortint)llbuf[ielem-1];
+           returnval = (FORTINT)llbuf[ielem-1];
            llbuf[ielem-1]=(long long)nelem_valput;
            llbuf=NULL;
         }
@@ -517,7 +517,7 @@ void DataHelperServer()
     } /* End of HELPGA RMA operations */
     else if ( opertype == RMAETRFLAG ) {
        /* HELPGA extra RMA operations (RMAETRFLAG): get(mproc=0), put(mproc<0), accumulate(mproc>0) */
-      nelem_valput=(fortint)buf[1]; /* mproc<=0: number of elements to be gotten/put/accumulated  */
+      nelem_valput=(FORTINT)buf[1]; /* mproc<=0: number of elements to be gotten/put/accumulated  */
       ielem =(int)buf[2];           /* sequence number of element in helpga: 1,2,...,n      */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
@@ -822,7 +822,7 @@ ________________________________________________________________________________
 */
 {
   int  type = COLLECFLAG;
-  fortint  buf[4];
+  FORTINT  buf[4];
   int  local=0;
   int  handle_orig;
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
@@ -852,10 +852,10 @@ ________________________________________________________________________________
   }
 
   if (SR_parallel) {
-     buf[0] = (fortint)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
-     buf[1] = (fortint)1;     /* COLLECFLAG (mproc=0: number of elements; others: no use). RMAONEFLAG: value to be put(mproc<0); increment value(mproc>0); no use(mproc=0)  */
-     buf[2] = (fortint)1;     /* COLLECFLAG (mproc=0: C data type; others: no use).        RMAONEFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (fortint)handle;      /* sequence number of helpga */
+     buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
+     buf[1] = (FORTINT)1;     /* COLLECFLAG (mproc=0: number of elements; others: no use). RMAONEFLAG: value to be put(mproc<0); increment value(mproc>0); no use(mproc=0)  */
+     buf[2] = (FORTINT)1;     /* COLLECFLAG (mproc=0: C data type; others: no use).        RMAONEFLAG: sequence number of element (1,2,...,n) */
+     buf[3] = (FORTINT)handle;      /* sequence number of helpga */
 
      if (use_helper_server) {
        MPI_Comm_rank(MPI_COMM_WORLD, &myid);
@@ -944,7 +944,7 @@ ________________________________________________________________________________
 */
 {
   int  type = COLLECFLAG;
-  fortint  buf[4];
+  FORTINT  buf[4];
   int  local=0;
   int  handle_orig=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
@@ -1049,16 +1049,16 @@ ________________________________________________________________________________
   if (DEBUG_) printf("%5d: twosided_helpga_create_irreg: mid. type=%d, mproc=%d,handle=%d\n",ProcID(),type,mproc,*handle);
 
   if (SR_parallel) {
-     buf[0] = (fortint)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
-     buf[1] = (fortint)lentot;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
-     buf[2] = (fortint)ielem_cdtype; /* COLLECFLAG and mproc=0: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (fortint)*handle;      /* sequence number of helpga */
+     buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
+     buf[1] = (FORTINT)lentot;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
+     buf[2] = (FORTINT)ielem_cdtype; /* COLLECFLAG and mproc=0: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
+     buf[3] = (FORTINT)*handle;      /* sequence number of helpga */
 
      if (use_helper_server) {
        MPI_Comm_rank(MPI_COMM_WORLD, &myid);
        server=Server_of_Rank(myid);
        ii=SerialNumber_of_Server(server);
-       buf[1] = (fortint) (helpga->len_help[ii]); /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
+       buf[1] = (FORTINT) (helpga->len_help[ii]); /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
 
        mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
@@ -1306,7 +1306,7 @@ ________________________________________________________________________________
 */
 {
   int  type = RMAONEFLAG;
-  fortint  buf[4],val_recv;
+  FORTINT  buf[4],val_recv;
   int64_t local=0;
   MPI_Status status;
   int  handle_orig;
@@ -1341,10 +1341,10 @@ ________________________________________________________________________________
   }
 
   if (SR_parallel) {
-     buf[0] = (fortint)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
-     buf[1] = (fortint)nelem_valput; /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
-     buf[2] = (fortint)ielem;        /* COLLECFLAG: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (fortint)*handle;      /* sequence number of helpga */
+     buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
+     buf[1] = (FORTINT)nelem_valput; /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
+     buf[2] = (FORTINT)ielem;        /* COLLECFLAG: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
+     buf[3] = (FORTINT)*handle;      /* sequence number of helpga */
 
 /* find out in which helper process the element is located */
      size=NUMBER_OF_SERVER;
@@ -1354,9 +1354,9 @@ ________________________________________________________________________________
      }
      server=RankNumber_of_Server(iserver);
 
-     buf[2] = (fortint)(ielem-lenleft); /* RMAONEFLAG: sequence number of element (1,2,...,len_help[i]) in len_help */
+     buf[2] = (FORTINT)(ielem-lenleft); /* RMAONEFLAG: sequence number of element (1,2,...,len_help[i]) in len_help */
 
-     if ( buf[2] >  (fortint) len_help[iserver] || buf[2] <= (fortint)0 ) {
+     if ( buf[2] >  (FORTINT) len_help[iserver] || buf[2] <= (FORTINT)0 ) {
        printf("%5d: twosided_helpga_one: ERROR mproc=%d, handle=%d,ielem_inhelp=%ld,len_help[i]=%d\n",ProcID(),mproc,*handle,(long)buf[2],len_help[iserver]);
        MPIGA_Error(" twosided_helpga_one: overange ",0);
      }
@@ -1456,7 +1456,7 @@ ________________________________________________________________________________
 */
 {
   int  type = RMAETRFLAG;
-  fortint  buf[4];
+  FORTINT  buf[4];
   MPI_Request *requests2,*requests3;
   int  local=0;
   int  handle_orig;
@@ -1481,10 +1481,10 @@ ________________________________________________________________________________
   if (SR_parallel) {
    if (use_helper_server) {
 
-     buf[0] = (fortint)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0); RMAETRFLAG: get n elements(=0), put n elements(<0) */
-     buf[1] = (fortint)nelem; /* RMAETRFLAG: number of elements to be gotten/put/accumulated */
-     buf[2] = (fortint)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (fortint)*handle;     /* sequence number of helpga */
+     buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0); RMAETRFLAG: get n elements(=0), put n elements(<0) */
+     buf[1] = (FORTINT)nelem; /* RMAETRFLAG: number of elements to be gotten/put/accumulated */
+     buf[2] = (FORTINT)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
+     buf[3] = (FORTINT)*handle;     /* sequence number of helpga */
 
      ilo=ielem;
      ihigh=ielem+nelem-1;
@@ -1510,8 +1510,8 @@ ________________________________________________________________________________
        ielem = ifirst-lenleft;
        nelem = ilast-ifirst+1;
 
-       buf[1] = (fortint)nelem; /* RMAETRFLAG: number of elements to be gotten/put */
-       buf[2] = (fortint)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
+       buf[1] = (FORTINT)nelem; /* RMAETRFLAG: number of elements to be gotten/put */
+       buf[2] = (FORTINT)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
 
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
        iserver=SerialNumber_of_Server(server);
@@ -1529,8 +1529,8 @@ ________________________________________________________________________________
        ielem = ifirst-lenleft;
        nelem = ilast-ifirst+1;
 
-       buf[1] = (fortint)nelem; /* RMAETRFLAG: number of elements to be gotten/put */
-       buf[2] = (fortint)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
+       buf[1] = (FORTINT)nelem; /* RMAETRFLAG: number of elements to be gotten/put */
+       buf[2] = (FORTINT)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
 
        if (mproc == 0) {                 /* get a set of elements from helpga  */
          MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
@@ -1888,7 +1888,7 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
 */
 {
   int  type = MUTCOLFLAG;
-  fortint  buf[3];
+  FORTINT  buf[3];
   int  local=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
   int sizedtype_buf;              /* Size of MPI Datatype */
@@ -1923,9 +1923,9 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
   }
 
   if (SR_parallel) {
-     buf[0] = (fortint)mproc;   /* MUTCOLFLAG: allocate(mproc>0), free(mproc<0);  MUTLOCFLAG: lock(mproc>0), unlock(mproc<0). */
-     buf[1] = (fortint)inum;    /* MUTCOLFLAG(inum): first sequential number of mutexes to be allocated (mproc > 0) or freed (mproc < 0)  */
-     buf[2] = (fortint)number;  /* MUTCOLFLAG(number): number of mutexes to be allocated (mproc > 0) or freed (mproc < 0) */
+     buf[0] = (FORTINT)mproc;   /* MUTCOLFLAG: allocate(mproc>0), free(mproc<0);  MUTLOCFLAG: lock(mproc>0), unlock(mproc<0). */
+     buf[1] = (FORTINT)inum;    /* MUTCOLFLAG(inum): first sequential number of mutexes to be allocated (mproc > 0) or freed (mproc < 0)  */
+     buf[2] = (FORTINT)number;  /* MUTCOLFLAG(number): number of mutexes to be allocated (mproc > 0) or freed (mproc < 0) */
 
      if (use_helper_server) {
        server = LastServerID();                     /* helpmutex server is always the last process(ie, NXTVAL server) */
@@ -1966,7 +1966,7 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
 */
 {
   int  type = MUTLOCFLAG;
-  fortint  buf[2];
+  FORTINT  buf[2];
   int  local=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
   int sizedtype_buf;              /* Size of MPI Datatype */
@@ -2007,8 +2007,8 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
   }
 
   if (SR_parallel) {
-     buf[0] = (fortint)mproc;   /* MUTCOLFLAG: allocate(mproc>0), free(mproc<0);  MUTLOCFLAG: lock(mproc>0), unlock(mproc<0). */
-     buf[1] = (fortint)inum;    /* MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc>0) and unlocked (mproc<0) */
+     buf[0] = (FORTINT)mproc;   /* MUTCOLFLAG: allocate(mproc>0), free(mproc<0);  MUTLOCFLAG: lock(mproc>0), unlock(mproc<0). */
+     buf[1] = (FORTINT)inum;    /* MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc>0) and unlocked (mproc<0) */
 
      if (use_helper_server) {
        server = LastServerID();                     /* helpmutex server is always the last process(ie, NXTVAL server) */

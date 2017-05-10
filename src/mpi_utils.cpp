@@ -124,7 +124,7 @@ void mpi_test_status(const char *msg_str, int status)
 ===========================================================================
    Fortran data type              (value)    MPI_Datatype
 ---------------------------------------------------------------------------
-   fortint(Integer and Logical)   (0)        MPI_INT,MPI_LONG,MPI_LONG_LONG
+   FORTINT(Integer and Logical)   (0)        MPI_INT,MPI_LONG,MPI_LONG_LONG
    Double Precision               (1)        MPI_DOUBLE
    others                                    not allowed so far, ERROR
 ===========================================================================
@@ -136,7 +136,7 @@ int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype, int *sizeofdtype)
     MPI_Datatype mpidtype=MPI_CHAR;
     switch(fdtype){
     case 0:
-            sizefdtype=sizeof(fortint);
+            sizefdtype=sizeof(FORTINT);
             MPI_Type_size(FORTINT_MPI, &sizempidtype);
             if (sizefdtype==sizempidtype) mpidtype=FORTINT_MPI;
             if (mpidtype==MPI_CHAR) MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran Integer ",fdtype);

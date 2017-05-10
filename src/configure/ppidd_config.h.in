@@ -9,6 +9,9 @@
 
 #undef NO_NXTVAL_SERVER
 
+/* This is available to both C and Fortran intefaces */
+#undef FORTINT
+
 #ifdef PPIDD_FORTRAN
 /* build with 8-byte Fortran integers */
 #undef _I8_
@@ -16,7 +19,6 @@
 #undef FC_FUNC
 #undef FC_FUNC_
 
-#undef FORTINT
 typedef FORTINT fortint ; /* fortran integer type */
 #undef FORTINTC
 typedef FORTINTC fortintc ; /* fortran character string length type */

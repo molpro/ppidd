@@ -1334,7 +1334,7 @@ static int n_in_msg_mpiq=0;
       fortint mpivalue;
 
       if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpivalue=mpiga_read_inc(mpihandle,mpiinum,mpiincr);
+         mpivalue=(fortint)mpiga_read_inc(mpihandle,mpiinum,mpiincr);
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 

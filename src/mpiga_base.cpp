@@ -793,10 +793,10 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 }
 
 
-fortint mpiga_read_inc( int handle, int inum, int inc )
+int mpiga_read_inc( int handle, int inum, int inc )
 {
     void  *buf=NULL, *incval=NULL;
-    fortint returnval;
+    int returnval;
     int ibuf, iincval=(int)inc;
     long lbuf, lincval=(long)inc;
     long long llbuf, llincval=(long long)inc;
@@ -879,9 +879,9 @@ fortint mpiga_read_inc( int handle, int inum, int inc )
 
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc after mutex. rank=%d,ga_win=%ld,disp=%d\n",ProcID(),rank,(long)ga->ga_win,(int)disp);
 
-    if(isint) returnval=(fortint)ibuf;
-    else if(islong) returnval=(fortint)lbuf;
-    else returnval=(fortint)llbuf;
+    if(isint) returnval=ibuf;
+    else if(islong) returnval=lbuf;
+    else returnval=llbuf;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc End. handle=%d, returnval=%ld\n",handle,ProcID(),(long)returnval);
 

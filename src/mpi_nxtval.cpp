@@ -745,7 +745,7 @@ void DataHelperServer()
 }
 
 
-fortint NXTVAL(int *mproc)
+int NXTVAL(int *mproc)
 /*
   Get next value of shared counter.
 
@@ -757,8 +757,8 @@ fortint NXTVAL(int *mproc)
 */
 {
   int  type = NXTVALFLAG;
-  fortint  buf,val_recv;
-  fortint  local=(fortint)0;
+  int  buf,val_recv;
+  int  local=0;
   MPI_Status status;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
   int sizedtype_buf;              /* Size of MPI Datatype */
@@ -768,7 +768,7 @@ fortint NXTVAL(int *mproc)
 
   if (SR_parallel) {
 
-     buf = (fortint)*mproc;
+     buf = *mproc;
 
      if (DEBUG_) {
        (void) printf("%5d: NXTVAL: mproc=%d\n",ProcID(), *mproc);
@@ -795,7 +795,7 @@ fortint NXTVAL(int *mproc)
   }
   else {
      /* Not running in parallel ... just do a simulation */
-     static fortint count = (fortint)0;
+     static int count = 0;
      if (*mproc == 1)
        local = count++;
      else if (*mproc == -1) {

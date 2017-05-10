@@ -153,7 +153,7 @@ typedef struct {
    int mpiga_put( int , int , int , void *);
    int mpiga_get( int , int , int , void *);
    int mpiga_acc( int , int , int , void * , void *);
-   fortint mpiga_read_inc( int ,  int , int );
+   int mpiga_read_inc( int ,  int , int );
    int mpiga_zero_patch( int , int , int );
    int mpiga_zero( int );
    int MPI_GSum(MPI_Datatype , void *, int , char *);

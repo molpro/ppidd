@@ -125,10 +125,14 @@ elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
 else
  AC_MSG_ERROR([Problem determining FORTINT])
 fi
-if test "x${host_os}" = xcygwin && test "x${enable_fortran_integer}" = x8 ; then
- AC_DEFINE([FORTINTC],[int])
+AC_ARG_ENABLE(fortran-char-len,[AS_HELP_STRING([--enable-fortran-char-len=<size>],[size of Fortran character length])])
+if test "x${enable_fortran_char_len}" = x ; then
+ case "x${FC_VENDOR}" in
+  xgnu | xintel | x ) AC_DEFINE([FORTINTC],[size_t]) ;;
+  x*                ) AC_DEFINE([FORTINTC],[FORTINT]) ;;
+ esac
 else
- AC_DEFINE([FORTINTC],[FORTINT])
+ AC_DEFINE_UNQUOTED([FORTINTC],[${enable_fortran_char_len}])
 fi
 dnl every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT
 AC_DEFINE([FORTCL_END])

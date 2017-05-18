@@ -1,6 +1,9 @@
 #ifndef _PPIDD_CONFIG_H
 #define _PPIDD_CONFIG_H
 
+/* needed for case when FORTINTC=size_t */
+#include <stdlib.h>
+
 /* build with GA */
 #undef GA_MPI
 

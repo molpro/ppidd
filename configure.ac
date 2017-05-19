@@ -1,6 +1,7 @@
 dnl regnerate configure with: autoconf -Wall && rm -rf autom4te.cache
 AC_INIT(PPIDD,master)
 AC_PREREQ(2.69)
+AC_LANG([C++])
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
@@ -11,7 +12,6 @@ AC_CANONICAL_HOST()
 dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_CXX_PP_TEST],[
 AC_MSG_CHECKING([$1])
-AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
 #else
       choke me
@@ -19,9 +19,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
 [AC_MSG_RESULT([yes])
 $3],
 [AC_MSG_RESULT([no])
-$4])
-AC_LANG_POP([C++])
-])
+$4])])
 
 dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_FC_PP_TEST],[
@@ -108,7 +106,6 @@ dnl assume Fortran standard if compiling without Fortran compiler
 enable_fortran_integer="4"
 FC=""
 fi
-AC_LANG_PUSH([C++])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([long long])
@@ -156,6 +153,5 @@ if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
  AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
 fi
-AC_LANG_POP([C++])
 
 AC_OUTPUT()

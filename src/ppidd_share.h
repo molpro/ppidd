@@ -56,6 +56,7 @@
 #ifdef GA_MPI
  #include "mpi_utils.h"
  #include <ga.h>
+ #include <ga-mpi.h>
  #include <macdecls.h>
 
  extern "C" {
@@ -191,8 +192,8 @@ extern "C" {
       fcomm=MPI_Comm_c2f(mycomm);
       return (fortint)fcomm;
 #elif defined(GA_MPI)
-      MPI_Fint fcomm;
-      fcomm=MPI_Comm_c2f(MPI_COMM_WORLD);
+      MPI_Comm mpicomm = GA_MPI_Comm();
+      MPI_Fint fcomm=MPI_Comm_c2f(mpicomm);
       return (fortint)fcomm;
 #else
       fprintf(stderr," ERROR: PPIDD_Worker_comm should not be called in NON-MPI2 cases.\n");
@@ -498,7 +499,7 @@ static int n_in_msg_mpiq=0;
       MPI_Comm	mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = MPI_COMM_WORLD;
+      MPI_Comm	mpicomm = GA_MPI_Comm();
   #endif
       int mpicount=(int)*count;
       int mpidest=(int)*dest;
@@ -552,7 +553,7 @@ static int n_in_msg_mpiq=0;
       MPI_Comm	mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = MPI_COMM_WORLD;
+      MPI_Comm	mpicomm = GA_MPI_Comm();
   #endif
       int mpicount=(int)*count;
       int mpitag=(int)*dtype;
@@ -645,7 +646,7 @@ static int n_in_msg_mpiq=0;
       MPI_Comm	mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = MPI_COMM_WORLD;
+      MPI_Comm	mpicomm = GA_MPI_Comm();
   #endif
       int mpitag=(int)*tag;
       int mpisource,mpierr,flag;

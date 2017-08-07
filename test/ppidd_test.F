@@ -3,9 +3,11 @@
       program main
       use ppidd
       implicit none
-      logical helper_server_flag
-      integer num_per_helper
-      integer iprocs,iout
+      integer(c_int64_t) :: helper_server_flag
+      integer(c_int64_t) :: num_per_helper
+      integer(c_int64_t) :: iprocs
+      type(c_ptr), target, dimension(1) :: argv
+      integer iout
 #ifdef PPIDD_USE_MA
       integer ma_heap, idtype
       logical status
@@ -17,14 +19,15 @@
 !  Intitialize PPIDD library
 !  Intitialize a message passing library
 !  Initialize GA
-      call ppidd_initialize_with_args(0,'')
+      argv(1)=c_null_ptr
+      call ppidd_initialize(0_c_int,c_loc(argv))
 #ifdef NO_NXTVAL_SERVER
-      helper_server_flag=.false.
-      num_per_helper=-1
+      helper_server_flag=0_c_int64_t
+      num_per_helper=-1_c_int64_t
 #else
 ! one helper server on every node */
-      helper_server_flag=.true.
-      num_per_helper=0
+      helper_server_flag=1_c_int64_t
+      num_per_helper=0_c_int64_t
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
@@ -61,21 +64,24 @@ c
 c... idtype=1: fortran double precision type
       idtype=1
       call ppidd_ma_init(idtype,stack,ma_heap,status)
-      if (.not. status) call ppidd_error('ppidd_ma_init failed',-1)
+      if (.not. status)
+     > call ppidd_error('ppidd_ma_init failed'//c_null_char,
+     >                  -1_c_int64_t)
 
       if(iprocs.eq.0) write(iout,*) 'MA initialized.'
 #endif
 
 ! Call ppiddtest      
-      call ppiddtest(helper_server_flag)
+      call ppiddtest(helper_server_flag.eq.1)
 
 ! Terminate and Tidy up PPIDD
       call ppidd_finalize()
       end
 
       subroutine ppiddtest(helper_server_flag)
+      use ppidd
       implicit double precision (a-h,o-z)
-      integer iprocs, nproc, nproc_total
+      integer(c_int64_t) :: iprocs, nproc, nproc_total
       logical helper_server_flag
 
 c...  Get the processes number and process id
@@ -155,6 +161,7 @@ c
 
 ! Checking whether C types match Fortran types
       subroutine ppidd_checkdtype
+      use ppidd
       implicit double precision (a-h,o-z)
       logical ok_int,ok_log,ok_dbl
 
@@ -193,26 +200,30 @@ c
         write(6,32)
 32      format(1x,'Please check INTEGER (related to CFLAGS/FCFLAGS)',
      >            ' option, and rebuild the library.')
-        call ppidd_error('Data types failed to match',0)
+        call ppidd_error('Data types failed to match'//c_null_char,
+     >                   0_c_int64_t)
       endif
 
       end
 
 
       subroutine ppidd_basictest(helper_server_flag)
+      use ppidd
       implicit double precision (a-h,o-z)
       logical helper_server_flag
-      double precision, allocatable :: buff(:)
-      double precision totsize,bufsize,z1
+      double precision, allocatable, target :: buff(:)
+      double precision totsize,bufsize
+      double precision, target :: z1
       double precision cpu1,cpu2,cpu,speed
       integer lentot,lenbuf,len,ioff,ilo,ihi
       integer lenseg,lenlat
-      integer maxprc,nloop,nprocs,iprocs,iout,i,ipr
+      integer(c_int64_t) :: nprocs, iprocs
+      integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot,dest_src,sync,lenre,srcre
       integer dtype,storetype
       integer ihandle,ihandlat
       character(len=80) :: name
-      logical ok
+      integer(c_int64_t) :: ok
       logical verbose
       logical arcca_test_flag
 
@@ -298,7 +309,8 @@ c
 c... ppidd_create
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
-      call ppidd_create('ppiddarray',lentot,dtype,storetype,ihandle,ok)
+      call ppidd_create('ppiddarray'//c_null_char,lentot,dtype,
+     >                  storetype,ihandle,ok)
       call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
@@ -313,7 +325,8 @@ c... ppidd_create
 cc    create global data struct for testing latency, lenseg elements per proc evenly
       lenseg=1
       lenlat=nprocs*lenseg
-      call ppidd_create('ppiddlat',lenlat,dtype,storetype,ihandlat,ok)
+      call ppidd_create('ppiddlat'//c_null_char,lenlat,dtype,storetype,
+     >                  ihandlat,ok)
 c
 c... ppidd_zero
       call ppidd_barrier()
@@ -333,7 +346,6 @@ c... measure the latency
 c  (1)  For integer global data structure stored on helper process, measure the time for operating 2 elements
 c    since 1 element operation is a special case
 c  (2)  But for double precision global data structure stored on helper process, measure the time for operating 1 element
-      n=1
       nrep=nrep_1side/(nprocs*nprocs)
       if(nrep.eq.0) nrep=1
 c ppidd_put latency trial test, in order to eliminate unstable behavior
@@ -345,7 +357,7 @@ c ppidd_put latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_put(ihandlat,inum,inum,buff(inum),ok)
+              call ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)),ok)
             end do
           end do
         end if
@@ -368,7 +380,7 @@ c ppidd_put latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_put(ihandlat,inum,inum,buff(inum),ok)
+              call ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)),ok)
             end do
           end do
         end if
@@ -399,7 +411,7 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_put(ihandle,ilo,ihi,buff,ok)
+            call ppidd_put(ihandle,ilo,ihi,c_loc(buff),ok)
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -435,7 +447,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_put(ihandle,ilo,ihi,buff,ok)
+            call ppidd_put(ihandle,ilo,ihi,c_loc(buff),ok)
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -487,7 +499,7 @@ c ppidd_get latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_get(ihandlat,inum,inum,buff(inum),ok)
+              call ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)),ok)
             end do
           end do
         end if
@@ -508,7 +520,7 @@ c ppidd_get latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_get(ihandlat,inum,inum,buff(inum),ok)
+              call ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)),ok)
             end do
           end do
         end if
@@ -534,7 +546,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_get(ihandle,ilo,ihi,buff,ok)
+            call ppidd_get(ihandle,ilo,ihi,c_loc(buff),ok)
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -579,7 +591,8 @@ c ppidd_acc latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_acc(ihandlat,inum,inum,buff(inum),z1,ok)
+              call ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
+     >                       c_loc(z1),ok)
             end do
           end do
         end if
@@ -600,7 +613,8 @@ c ppidd_acc latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_acc(ihandlat,inum,inum,buff(inum),z1,ok)
+              call ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
+     >                       c_loc(z1),ok)
             end do
           end do
         end if
@@ -626,7 +640,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_acc(ihandle,ilo,ihi,buff,z1,ok)
+            call ppidd_acc(ihandle,ilo,ihi,c_loc(buff),c_loc(z1),ok)
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -696,13 +710,13 @@ c ppidd_send/recv latency trial test, in order to eliminate unstable behavior
         call ppidd_wtime(wtime1)
         if(iprocs.eq.ipr) then
           do irep=1,nrep
-            call ppidd_send(buff(iprocs),n,dtype,dest_src,sync)
+            call ppidd_send(c_loc(buff(iprocs)),n,dtype,dest_src,sync)
           end do
         end if
         if(iprocs.eq.ipr_pair) then
           do irep=1,nrep
-            call ppidd_recv(buff(iprocs),n,dtype,dest_src,lenre,srcre,
-     >                      sync)
+            call ppidd_recv(c_loc(buff(iprocs)),n,dtype,dest_src,lenre,
+     >                      srcre,sync)
           end do
         end if
         call ppidd_barrier()
@@ -723,13 +737,13 @@ c ppidd_send/recv latency standard test
         call ppidd_wtime(wtime1)
         if(iprocs.eq.ipr) then
           do irep=1,nrep
-            call ppidd_send(buff(iprocs),n,dtype,dest_src,sync)
+            call ppidd_send(c_loc(buff(iprocs)),n,dtype,dest_src,sync)
           end do
         end if
         if(iprocs.eq.ipr_pair) then
           do irep=1,nrep
-            call ppidd_recv(buff(iprocs),n,dtype,dest_src,lenre,srcre,
-     >                      sync)
+            call ppidd_recv(c_loc(buff(iprocs)),n,dtype,dest_src,lenre,
+     >                      srcre,sync)
           end do
         end if
         call ppidd_barrier()
@@ -757,7 +771,7 @@ c.... measure bandwidth
           nrest=lentot
           do ioff=0,lentot-1,lenbuf
             len=min(lenbuf,nrest)
-            call ppidd_send(buff,len,dtype,dest_src,sync)
+            call ppidd_send(c_loc(buff),len,dtype,dest_src,sync)
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -768,7 +782,8 @@ c.... measure bandwidth
           nrest=lentot
           do ioff=0,lentot-1,lenbuf
             len=min(lenbuf,nrest)
-            call ppidd_recv(buff,len,dtype,dest_src,lenre,srcre,sync)
+            call ppidd_recv(c_loc(buff),len,dtype,dest_src,lenre,srcre,
+     >                      sync)
             nrest=nrest-len
           end do
           end do
@@ -814,7 +829,7 @@ c ppidd_bcast latency trial test, in order to eliminate unstable behavior
       call ppidd_wtime(wtime1)
       do irep=1,nrep
         do ipr=0,nprocs-1
-          call ppidd_bcast(buff,n,1,ipr)
+          call ppidd_bcast(c_loc(buff),n,1,ipr)
         end do
       end do
       call ppidd_barrier()
@@ -830,7 +845,7 @@ c ppidd_bcast latency standard test
       call ppidd_wtime(wtime1)
       do irep=1,nrep
         do ipr=0,nprocs-1
-          call ppidd_bcast(buff,n,1,ipr)
+          call ppidd_bcast(c_loc(buff),n,1,ipr)
         end do
       end do
       call ppidd_barrier()
@@ -854,7 +869,7 @@ c ppidd_bcast bandwidth test
         nrest=lentot
         do ioff=0,lentot-1,lenbuf
           len=min(lenbuf,nrest)
-          call ppidd_bcast(buff,len,1,ipr)
+          call ppidd_bcast(c_loc(buff),len,1,ipr)
           nopr=nopr+1
           nrest=nrest-len
         end do
@@ -899,7 +914,7 @@ c ppidd_gsum latency trial test, in order to eliminate unstable behavior
       call ppidd_barrier()
       call ppidd_wtime(wtime1)
       do irep=1,nrep
-        call ppidd_gsum(1,buff,n,'+')
+        call ppidd_gsum(1,c_loc(buff),n,'+'//c_null_char)
       end do
       call ppidd_barrier()
       call ppidd_wtime(wtime2)
@@ -913,7 +928,7 @@ c ppidd_gsum latency standard test
       call ppidd_barrier()
       call ppidd_wtime(wtime1)
       do irep=1,nrep
-        call ppidd_gsum(1,buff,n,'+')
+        call ppidd_gsum(1,c_loc(buff),n,'+'//c_null_char)
       end do
       call ppidd_barrier()
       call ppidd_wtime(wtime2)
@@ -929,7 +944,7 @@ c ppidd_gsum bandwidth standard test
       nrest=lentot
       do ioff=0,lentot-1,lenbuf
         len=min(lenbuf,nrest)
-        call ppidd_gsum(1,buff,len,'+')
+        call ppidd_gsum(1,c_loc(buff),len,'+'//c_null_char)
         nopr=nopr+1
         nrest=nrest-len
       end do
@@ -958,6 +973,7 @@ c... release the memory in buffer space
 
 c... get current CPU time from Fortran intrinsic function and wall time from MPI2/GA function
       subroutine get_current_times(cpu,wtime)
+      use ppidd
       implicit double precision (a-h,o-z)
       double precision cpu,wtime
 
@@ -970,15 +986,18 @@ c... get current CPU time from Fortran intrinsic function and wall time from MPI
 
 
       subroutine ppidd_sharedcounter_test
+      use ppidd
       implicit double precision (a-h,o-z)
-      integer, allocatable :: task_array(:)
-      double precision, allocatable :: sum_array(:)
-      double precision, allocatable :: tcpu_array1(:)
-      double precision, allocatable :: twt_array1(:),twt_array2(:)
+      integer,          allocatable, target :: task_array(:)
+      double precision, allocatable, target :: sum_array(:)
+      double precision, allocatable, target :: tcpu_array1(:)
+      double precision, allocatable, target :: twt_array1(:)
+      double precision, allocatable, target :: twt_array2(:)
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer nprocs,iprocs,iout,i
+      integer(c_int64_t) :: nprocs,iprocs
+      integer iout,i
       integer num_tasks,nscale_task,npart
       integer nval,junk
       logical verbose
@@ -1069,11 +1088,11 @@ c... release the shared counter number in NXTVAL Server and set it to zero
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(sum_array(i), 1,1,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array2(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array2(i)), 1,1,i-1)
       end do
 
 c... check whether right numbers are obtained
@@ -1082,7 +1101,8 @@ c... check whether right numbers are obtained
      >        - sum_array(i-1)/dble(task_array(i-1))
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
-     >       call ppidd_error('shared counter test failed',0)
+     >       call ppidd_error('shared counter test failed'//c_null_char,
+     >                        0_c_int64_t)
       end do
 
 c... print out the summary
@@ -1153,10 +1173,10 @@ c...(2)  distribute tasks evenly to every process without shared counter
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(sum_array(i), 1,1,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
       end do
 
 c... check whether right numbers are obtained
@@ -1165,7 +1185,8 @@ c... check whether right numbers are obtained
      >        - sum_array(i-1)/dble(task_array(i-1))
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
-     >       call ppidd_error('shared counter test failed',0)
+     >       call ppidd_error('shared counter test failed'//c_null_char,
+     >                        0_c_int64_t)
       end do
 
 c... print out the summary
@@ -1230,9 +1251,9 @@ c... release the shared counter number in NXTVAL Server and set it to zero
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
       end do
       call ppidd_barrier()
 
@@ -1284,19 +1305,22 @@ c... release the memory in buffer space
 
 
       subroutine ppidd_mutex_test(helper_server_flag)
+      use ppidd
       implicit double precision (a-h,o-z)
       logical helper_server_flag
-      integer, allocatable :: task_array(:)
-      double precision, allocatable :: sum_array(:)
-      double precision, allocatable :: tcpu_array1(:)
-      double precision, allocatable :: twt_array1(:)
+      integer,          allocatable, target :: task_array(:)
+      double precision, allocatable, target :: sum_array(:)
+      double precision, allocatable, target :: tcpu_array1(:)
+      double precision, allocatable, target :: twt_array1(:)
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer nprocs,iprocs,iout,i
+      integer(c_int64_t) :: nprocs,iprocs
+      integer iout,i
       integer num_tasks,nscale_task,npart
-      integer storetype
-      logical ok
+      integer(c_int64_t) :: storetype
+      integer(c_int64_t) :: number
+      integer(c_int64_t) :: ok
       logical verbose
       logical arcca_test_flag
 c
@@ -1399,18 +1423,18 @@ c... create mutexes
         if(iprocs.eq.0) write(iout,101) ' '
 101     format(/,a,'Mutex data are stored on compute process, and'
      >  ,' mutex is implemented through RMA operations:')
-        storetype=0
+        storetype=0_c_int64_t
       else
 c... case 1
         if (loop_array.eq.1) then
           if(iprocs.eq.0) write(iout,101) ' 1. '
-          storetype=0
+          storetype=0_c_int64_t
 c... case 2
         else
           if(iprocs.eq.0) write(iout,102)
 102       format(/' 2. Mutex data are stored on helper process, and'
      >  ,' mutex is implemented on top of two-sided operations:')
-          storetype=1
+          storetype=1_c_int64_t
         end if
       end if
 
@@ -1433,12 +1457,12 @@ c...(1)  mutex test with computing tasks
       call get_current_times(cpu1,wtime1)
 
       do i=iprocs+1,num_tasks,nprocs
-        call ppidd_lock_mutex(0)
+        call ppidd_lock_mutex(0_c_int64_t)
 c... critical section
         call compute_task(npart,nscale_task,sumtemp)
         sum_array(iprocs+1)=sum_array(iprocs+1)+sumtemp
         task_array(iprocs+1)=task_array(iprocs+1)+1
-        call ppidd_unlock_mutex(0)
+        call ppidd_unlock_mutex(0_c_int64_t)
         call ppidd_barrier()
       enddo
 
@@ -1451,10 +1475,10 @@ c... task time
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(sum_array(i), 1,1,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
       end do
 
 c... check whether right numbers are obtained
@@ -1463,7 +1487,8 @@ c... check whether right numbers are obtained
      >        - sum_array(i-1)/dble(task_array(i-1))
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
-     >       call ppidd_error('mutex test failed',0)
+     >       call ppidd_error('mutex test failed'//c_null_char,
+     >                        0_c_int64_t)
       end do
 
 c... print out the summary
@@ -1528,10 +1553,10 @@ c...(2)  distribute tasks evenly to every process without mutex (lock and unlock
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(sum_array(i), 1,1,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
       end do
 
 c... check whether right numbers are obtained
@@ -1540,7 +1565,8 @@ c... check whether right numbers are obtained
      >        - sum_array(i-1)/dble(task_array(i-1))
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
-     >       call ppidd_error('mutex test failed',0)
+     >       call ppidd_error('mutex test failed'//c_null_char,
+     >                        0_c_int64_t)
       end do
 
 c... print out the summary
@@ -1593,8 +1619,8 @@ c    2^31=2,147,483,648
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
       do i=1,num_tasks3
-        call ppidd_lock_mutex(0)
-        call ppidd_unlock_mutex(0)
+        call ppidd_lock_mutex(0_c_int64_t)
+        call ppidd_unlock_mutex(0_c_int64_t)
       enddo
       call get_current_times(cpu2,wtime2)
       call ppidd_barrier()
@@ -1606,9 +1632,9 @@ c    2^31=2,147,483,648
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(task_array(i),1,0,i-1)
-        call ppidd_bcast(tcpu_array1(i), 1,1,i-1)
-        call ppidd_bcast(twt_array1(i), 1,1,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0,i-1)
+        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1,i-1)
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1,i-1)
       end do
       call ppidd_barrier()
 

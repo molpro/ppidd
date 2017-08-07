@@ -21,18 +21,6 @@
 /*! \file
  * \brief This file contains the code shared by both Fortran and C interface routines to PPIDD */
 
-#if defined(PPIDD_FORTRAN) && !defined(_I8_)
-#define ga_int int
-#define NGA_ACC NGA_Acc
-#define NGA_CREATE NGA_Create
-#define NGA_CREATE_IRREG NGA_Create_irreg
-#define NGA_DISTRIBUTION NGA_Distribution
-#define NGA_GET NGA_Get
-#define NGA_LOCATE_REGION NGA_Locate_region
-#define NGA_PUT NGA_Put
-#define NGA_READ_INC NGA_Read_inc
-#define NGA_ZERO_PATCH NGA_Zero_patch
-#else
 #define ga_int int64_t
 #define NGA_ACC NGA_Acc64
 #define NGA_CREATE NGA_Create64
@@ -43,7 +31,6 @@
 #define NGA_PUT NGA_Put64
 #define NGA_READ_INC NGA_Read_inc64
 #define NGA_ZERO_PATCH NGA_Zero_patch64
-#endif
 
 #if defined(MPI2) || defined(GA_MPI)
 
@@ -68,9 +55,7 @@
  static int MPIGA_Debug=0;
 #endif
 
-#ifndef PPIDD_FORTRAN
 #include "ppidd_c.h"
-#endif
 
 #define FALSE (fortlogical) 0
 #define TRUE  (fortlogical) 1
@@ -82,81 +67,15 @@ extern "C" {
  *  - For \b GA, includes initialization of MPI and GA.
  *  - For \b MPI2, calls MPI_Init.
  */
-#ifdef PPIDD_FORTRAN
-   void ppidd_initialize_f2c(int nargs, char **args) {
-#else
    void PPIDD_Initialize(int argc, char **argv) {
-#endif
-#if defined(MPI2) || defined(GA_MPI)
-
 #ifdef MPI2
-    int mpierr;
-#endif
-#ifdef PPIDD_FORTRAN
-      int i,argc=nargs;
-      char **argv = NULL;
-      char arg[256];
-
-   /* ========================== *\
-      Get command line arguments
-   \* ========================== */
-      if(argc>0) {
-         argv = (char **)malloc(argc*sizeof(char*));
-         for(i=0; i<argc; ++i) {
-           argv[i] = (char *) strdup(args[i]);
-           if(MPIGA_Debug)printf("In ppidd_initialize: argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
-         }
-      }
-      else {
-/* If no argument is provided, use the dummy command arguments, since MPI_Init can't work if arguments are null for MPICH1.
-   For MPICH2 and other MPI2 library, no such limitation */
-         argc=1;
-         i=0;
-         argv = (char **)malloc(argc*sizeof(char*));
-         strcpy(arg,"DummyCommand");
-         argv[i] = (char *) strdup(arg);
-         if(MPIGA_Debug)printf("In ppidd_initialize: USE DUMMY ARGUMENTS. argc=%d, argv[%d]=%s\n",argc,i,argv[i]);
-      }
-#endif
-
-#endif
-   /* ================ *\
-      Initialize MPIGA
-   \* ================ */
-#ifdef MPI2
-    mpierr=mpiga_initialize(&argc,&argv);
+    int mpierr=mpiga_initialize(&argc,&argv);
     mpi_test_status("PPIDD_Initialize:",mpierr);
 #elif defined(GA_MPI)
     MPI_Init(&argc, &argv);                     /* initialize MPI */
     GA_Initialize_args(&argc,&argv);            /* initialize GA */
 #endif
-
-#ifdef PPIDD_FORTRAN
-   /* ================================================================== *\
-      Free the memory for argv[i] and argv itself after having used them
-   \* ================================================================== */
-   /* strdup implies copying a string to a particular location that will be automatically created by the function.
-    * The allocated memory for argv[i] needs to be explicitly freed before leaving this function */
-#if defined(MPI2) || defined(GA_MPI)
-      for (i = 0; i < argc; i++) {
-         if (argv[i]) free(argv[i]);
-      }
-   /* Also need to free argv itself */
-      if (argv) free(argv);
-  #ifdef MPI2
-      if(MPIGA_Debug)printf("%5d: In ppidd_share: end of ppidd_initialize.\n",ProcID());
-  #endif
-#endif
-#endif
    }
-
-#ifdef PPIDD_FORTRAN
-   void PPIDD_Initialize(void) {
-    int i=0;
-    char **a = NULL;
-    ppidd_initialize_f2c(i,a);
-   }
-#endif
 
 
 /*! Initialize the PPIDD data structure
@@ -298,28 +217,12 @@ extern "C" {
  *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
-   void PPIDD_Error(char *message
-/*! \cond */
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-	       ,fortint *code
-/*! \cond */
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Error(char *message,fortint *code) {
       char *msg2, *p;
       int icode=(int)*code;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(message);
-#endif
       strncpy((msg2=(char *)calloc(lxi+1,1)),message,lxi);
       for (p=msg2+lxi;p>=msg2;p--) if (*p==' ')*p=(char)0;
 
@@ -737,13 +640,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
-   void PPIDD_Gsum(fortint *type,void *buffer,fortint *len, char *op
-/*! \cond */
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Gsum(fortint *type,void *buffer,fortint *len, char *op) {
 #if defined(MPI2) || defined(GA_MPI)
       int dtype=(int)*type;
 #endif
@@ -759,11 +656,7 @@ static int n_in_msg_mpiq=0;
       char *errmsg;
 #endif
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(op);
-#endif
       strncpy(op2=(char *)calloc(lxi+1,1),op,lxi);
       for (p=op2+lxi;p>=op2;p--) if (*p==' ')*p=(char)0;
 
@@ -800,19 +693,7 @@ static int n_in_msg_mpiq=0;
 
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
-   void PPIDD_Create_irreg(char *name
-/*! \cond */
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-	       ,fortint *lenin, fortint *nchunk, fortint *datatype, fortint *storetype, fortint *handle, fortlogical *ok
-/*! \cond */
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Create_irreg(char *name, fortint *lenin, fortint *nchunk, fortint *datatype, fortint *storetype, fortint *handle, fortlogical *ok) {
 #ifdef MPI2
       int mpierr;
       int mpinchunk=(int)*nchunk;
@@ -824,11 +705,7 @@ static int n_in_msg_mpiq=0;
       char *name2;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       strncpy((name2=(char *)malloc(lxi+1)),name,lxi);
       name2[lxi]=(char)0;
       for(int i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
@@ -863,11 +740,7 @@ static int n_in_msg_mpiq=0;
       char *errmsg;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       strncpy((name2=(char *)malloc(lxi+1)),name,lxi);
       name2[lxi]=(char)0;
       for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
@@ -922,19 +795,7 @@ static int n_in_msg_mpiq=0;
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   void PPIDD_Create(char *name
-/*! \cond */
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-	       ,fortint *lentot, fortint *datatype, fortint *storetype, fortint *handle, fortlogical *ok
-/*! \cond */
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Create(char *name,fortint *lentot, fortint *datatype, fortint *storetype, fortint *handle, fortlogical *ok) {
 #ifdef MPI2
       int mpierr;
       int mpilentot;
@@ -946,20 +807,12 @@ static int n_in_msg_mpiq=0;
       char *name2, *p;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       if (*lentot > INT_MAX) {
        printf(" ERROR: PPIDD_Create: lentot too large for MPI\n");
        exit(1);
       }
       else mpilentot=(int)*lentot;
-#ifdef PPIDD_FORTRAN
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: sizeof(fortint)=%d,sizeof(fortintc)=%d,sizeof(fortlogical)=%d,lxi=%d\n",
-	ProcID(),(int)sizeof(fortint),(int)sizeof(fortintc),(int)sizeof(fortlogical),lxi);
-#endif
       strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
       for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
@@ -989,11 +842,7 @@ static int n_in_msg_mpiq=0;
       char *errmsg;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
       for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
 
@@ -1442,19 +1291,7 @@ static int n_in_msg_mpiq=0;
       	//else if (! PPIDD_Nxtval_initialised) {
 	/* first call needs to be collective and will return 0*/
 	fortint lentot=1, datatype=0, storetype=1;
-	PPIDD_Create(strdup("Nxtval"),
-/*! \cond */
-#if defined(FORTCL_NEXT)
-	,(fortintc)6
-#endif
-/*! \endcond */
-&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok
-/*! \cond */
-#if defined(FORTCL_END)
-	,(fortintc)6
-#endif
-/*! \endcond */
-      );
+	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Nxtval_initialised=1;
 	*val=0;
@@ -1476,24 +1313,14 @@ static int n_in_msg_mpiq=0;
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
  *  - \b MPI2  does nothing
  */
-   void PPIDD_Duplicate(fortint *handlei, fortint *handlej, char *name
-/*! \cond */
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Duplicate(fortint *handlei, fortint *handlej, char *name) {
 #ifdef GA_MPI
       int ga_a=(int)*handlei;
       int ga_b;
       char *name2, *p;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
       for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
       ga_b = GA_Duplicate(ga_a, name2);
@@ -1511,24 +1338,14 @@ static int n_in_msg_mpiq=0;
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
  *  - \c This operation is local.
  */
-   void PPIDD_Inquire_name(fortint *handle, char *name
-/*! \cond */
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-/*! \endcond */
-      ) {
+   void PPIDD_Inquire_name(fortint *handle, char *name) {
 #ifdef MPI2
       char *name2;
       int lxi;
       int i,len_actual;
       int mpihandle = (int) *handle;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
       if ( mpiga_inquire_storetype(mpihandle) == 0 )
          mpiga_inquire_name(mpihandle, &name2);
       else {
@@ -1544,11 +1361,7 @@ static int n_in_msg_mpiq=0;
       int i,len_actual;
       int gahandle = (int) *handle;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(name);
-#endif
 /*      strcpy(name2=malloc(80*sizeof(char)),GA_Inquire_name(gahandle));
       strncpy(name,name2,strlen(name2)); */
       name2=GA_Inquire_name(gahandle);

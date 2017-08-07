@@ -2,9 +2,7 @@
 /*! \mainpage PPIDD Reference Manual
  *
  * Parallel Programming Interface for Distributed Data (PPIDD) Reference
- * Manual. The Fortran interface subroutine descriptions can be found
- * in ppidd_fortran.cpp and ppidd_share.h, and the C interface subroutine
- * descriptions can be found in ppidd_c.cpp and ppidd_share.h.
+ * Manual. The function descriptions can be found in ppidd_c.cpp and ppidd_share.h.
 
 //   Directory and file structure in PPIDD:
   <pre>
@@ -33,7 +31,6 @@
        |   |-- ppidd_eaf_c.h                  C interface header file for EAF
        |   |-- ppidd_eaf_fortran.cpp          Fortran interface source code for EAF
        |   |-- ppidd_eaf_share.h              Code shared by both Fortran and C interfaces for EAF
-       |   |-- ppidd_fortran.cpp              Fortran interface source code for PPIDD
        |   |-- ppidd_sf_c.cpp                 C interface source code for SF
        |   |-- ppidd_sf_c.h                   C interface header file for SF
        |   |-- ppidd_sf_fortran.cpp           Fortran interface source code for SF

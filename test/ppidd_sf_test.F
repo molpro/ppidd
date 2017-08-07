@@ -7,18 +7,20 @@ c
       program main
       use ppidd
       implicit none
-      logical helper_server_flag
-      integer num_per_helper
+      integer(c_int64_t) :: helper_server_flag
+      integer(c_int64_t) :: num_per_helper
+      type(c_ptr), target, dimension(1) :: argv
 
 ! Intitialize PPIDD library
-      call ppidd_initialize_with_args(0,'')
+      argv(1)=c_null_ptr
+      call ppidd_initialize(0_c_int,c_loc(argv))
 #ifdef NO_NXTVAL_SERVER
-      helper_server_flag=.false.
-      num_per_helper=-1
+      helper_server_flag=0_c_int64_t
+      num_per_helper=-1_c_int64_t
 #else
 ! one helper server on every node */
-      helper_server_flag=.true.
-      num_per_helper=0
+      helper_server_flag=1_c_int64_t
+      num_per_helper=0_c_int64_t
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
@@ -30,6 +32,7 @@ c
       end
 
       subroutine ppidd_sf_test
+      use ppidd
       implicit none
       integer iout
 c
@@ -39,13 +42,15 @@ c
       parameter(maxid=5)           ! max number of outstanding I/O requests
       parameter(dimnsn=8192)
       double precision buffer(dimnsn,maxid)  ! need buffering for all maxid requests
-      double precision tt0,tt1,ttw, ttr, tcgtime
+      double precision tt0,tt1,tcgtime
+      double precision, target :: ttw, ttr
 c     integer stack, heap
       integer idlist(maxid), curid
       character(len=80) errmsg
 c
       integer nodeid, nnodes
-      integer me,nproc,handle,i,start,end,j, rc, chunk
+      integer handle,i,start,end,j, chunk
+      integer(c_int64_t) :: me,nproc,rc
 
 c...  Get the processes number and process id
       call ppidd_size(nproc)
@@ -94,19 +99,19 @@ c     everybody writes chunk of data
             call ppidd_sf_write(handle,  8.0d0*dble(i-1),
      &           8.0d0*dble(min(dimnsn,(end-i+1))), buffer(1,curid),
      &           idlist(curid),rc)
-            if (rc.ne.0)call ppidd_error('write failed',rc)
+            if (rc.ne.0)call ppidd_error('write failed'//c_null_char,rc)
 
          enddo
       endif
 c
       call ppidd_sf_waitall(idlist,curid,rc)
-      if(rc.ne.0)call ppidd_error('waitall failed',rc)
+      if(rc.ne.0)call ppidd_error('waitall failed'//c_null_char,rc)
       curid = 0
 
       call ppidd_wtime(tt1)
       ttw = tt1 -tt0
 c
-      call ppidd_gsum(1,ttw,1,'max')
+      call ppidd_gsum(1,c_loc(ttw),1,'max'//c_null_char)
       call ppidd_barrier()
       call ppidd_flush6
 c
@@ -125,10 +130,10 @@ c           read and test data chunk by chunk
                call ppidd_sf_errmsg(rc,errmsg)
                write(iout,*) 'read at offset ',8.0d0*dble(i-1),
      .                       ' failed:',errmsg
-               call ppidd_error('read failed',rc)
+               call ppidd_error('read failed'//c_null_char,rc)
             endif
             call ppidd_sf_wait(idlist(1),rc)
-            if (rc.ne.0)call ppidd_error('wait failed',rc)
+            if (rc.ne.0)call ppidd_error('wait failed'//c_null_char,rc)
 c
             do j = 1,min(dimnsn,(end-i+1))
                if(buffer(j,1).ne.dble(i+j-1)) then
@@ -140,7 +145,7 @@ c
       call ppidd_wtime(tt1)
       ttr = tt1 -tt0
 c
-      call ppidd_gsum(1,ttr,1,'max')
+      call ppidd_gsum(1,c_loc(ttr),1,'max'//c_null_char)
       call ppidd_barrier()
 c
       call ppidd_flush6

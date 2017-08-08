@@ -7,7 +7,7 @@ c
       program main
       use ppidd
       implicit none
-      integer(c_int64_t) :: helper_server_flag
+      integer(c_int)     :: helper_server_flag
       integer(c_int64_t) :: num_per_helper
       type(c_ptr), target, dimension(1) :: argv
 
@@ -15,11 +15,11 @@ c
       argv(1)=c_null_ptr
       call ppidd_initialize(0_c_int,c_loc(argv))
 #ifdef NO_NXTVAL_SERVER
-      helper_server_flag=0_c_int64_t
+      helper_server_flag=0_c_int
       num_per_helper=-1_c_int64_t
 #else
 ! one helper server on every node */
-      helper_server_flag=1_c_int64_t
+      helper_server_flag=1_c_int
       num_per_helper=0_c_int64_t
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)

@@ -21,10 +21,9 @@ void sizeofctype(double *sizeint, double *sizelog, double *sizedouble, double *s
        printf("                           float:%5d bytes\n", (int)sizeof(float));
        printf("                          double:%5d bytes\n", (int)sizeof(double));
        printf("                         fortint:%5d bytes\n", (int)sizeof(fortint));
-       printf("                     fortlogical:%5d bytes\n", (int)sizeof(fortlogical));
     }
     *sizeint=(double)sizeof(fortint);
-    *sizelog=(double)sizeof(fortlogical);
+    *sizelog=(double)sizeof(int);
     *sizedouble=(double)sizeof(double);
     *sizefloat=(double)sizeof(float);
 }

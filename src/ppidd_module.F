@@ -35,19 +35,19 @@
       interface
        subroutine ppidd_uses_ma(ok)
      >            bind(C,name='PPIDD_Uses_ma')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(out) :: ok
+       use iso_c_binding, only : c_int
+       integer(c_int), intent(out) :: ok
        end subroutine ppidd_uses_ma
       end interface
 
       interface
        subroutine ppidd_ma_init(dtype,stack,heap,ok)
      >            bind(C,name='PPIDD_MA_init')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: dtype
        integer(c_int64_t), intent(in)  :: stack
        integer(c_int64_t), intent(in)  :: heap
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_ma_init
       end interface
 
@@ -71,8 +71,8 @@
       interface
        subroutine ppidd_helper_server(flag,numprocs_per_server)
      >            bind(C,name='PPIDD_Helper_server')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in) :: flag
+       use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int),     intent(in) :: flag
        integer(c_int64_t), intent(in) :: numprocs_per_server
        end subroutine ppidd_helper_server
       end interface
@@ -151,10 +151,10 @@
       interface
        subroutine ppidd_iprobe(tag,source,ok)
      >            bind(C,name='PPIDD_Iprobe')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: tag
        integer(c_int64_t), intent(in)  :: source
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_iprobe
       end interface
 
@@ -190,99 +190,99 @@
        subroutine ppidd_create_irreg(name,lenin,nchunk,datatype,
      >            storetype,handle,ok)
      >            bind(C,name='PPIDD_Create_irreg')
-       use iso_c_binding, only : c_int64_t, c_char
+       use iso_c_binding, only : c_int, c_int64_t, c_char
        character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: nchunk
        integer(c_int64_t), intent(in)  :: lenin(nchunk)
        integer(c_int64_t), intent(in)  :: datatype
        integer(c_int64_t), intent(in)  :: storetype
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_create_irreg
       end interface
 
       interface
        subroutine ppidd_create(name,lentot,datatype,storetype,handle,ok)
      >            bind(C,name='PPIDD_Create')
-       use iso_c_binding, only : c_int64_t, c_char
+       use iso_c_binding, only : c_int, c_int64_t, c_char
        character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: lentot
        integer(c_int64_t), intent(in)  :: datatype
        integer(c_int64_t), intent(in)  :: storetype
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_create
       end interface
 
       interface
        subroutine ppidd_destroy(handle,ok)
      >            bind(C,name='PPIDD_Destroy')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_destroy
       end interface
 
       interface
        subroutine ppidd_distrib(handle,rank,ilo,ihi,ok)
      >            bind(C,name='PPIDD_Distrib')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: rank
        integer(c_int64_t), intent(out) :: ilo
        integer(c_int64_t), intent(out) :: ihi
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_distrib
       end interface
 
       interface
        subroutine ppidd_location(handle,ilo,ihi,map,proclist,np,ok)
      >            bind(C,name='PPIDD_Location')
-       use iso_c_binding, only : c_int64_t, c_ptr
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        type(c_ptr), intent(in), value  :: map      ! call ppidd_location(...,c_loc(f_map),...)
        type(c_ptr), intent(in), value  :: proclist ! call ppidd_location(...,c_loc(f_proclist),...)
        integer(c_int64_t), intent(out) :: np
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_location
       end interface
 
       interface
        subroutine ppidd_get(handle,ilo,ihi,buff,ok)
      >            bind(C,name='PPIDD_Get')
-       use iso_c_binding, only : c_int64_t, c_ptr
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        type(c_ptr), intent(in), value  :: buff ! call ppidd_get(...,c_loc(f_buff),...)
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_get
       end interface
 
       interface
        subroutine ppidd_put(handle,ilo,ihi,buff,ok)
      >            bind(C,name='PPIDD_Put')
-       use iso_c_binding, only : c_int64_t, c_ptr
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        type(c_ptr), intent(in), value  :: buff ! call ppidd_put(...,c_loc(f_buff),...)
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_put
       end interface
 
       interface
        subroutine ppidd_acc(handle,ilo,ihi,buff,fac,ok)
      >            bind(C,name='PPIDD_Acc')
-       use iso_c_binding, only : c_int64_t, c_ptr
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        type(c_ptr), intent(in), value  :: buff ! call ppidd_acc(...,c_loc(f_buff),...)
        type(c_ptr), intent(in), value  :: fac  ! call ppidd_acc(...,c_loc(f_fac),...)
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_acc
       end interface
 
@@ -310,9 +310,9 @@
       interface
        subroutine ppidd_zero(handle,ok)
      >            bind(C,name='PPIDD_Zero')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_zero
       end interface
 
@@ -364,10 +364,10 @@
       interface
        subroutine ppidd_create_mutexes(storetype,number,ok)
      >            bind(C,name='PPIDD_Create_mutexes')
-       use iso_c_binding, only : c_int64_t
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: storetype
        integer(c_int64_t), intent(in)  :: number
-       integer(c_int64_t), intent(out) :: ok
+       integer(c_int),     intent(out) :: ok
        end subroutine ppidd_create_mutexes
       end interface
 
@@ -390,8 +390,8 @@
       interface
        subroutine ppidd_destroy_mutexes(ok)
      >            bind(C,name='PPIDD_Destroy_mutexes')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(out) :: ok
+       use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int), intent(out) :: ok
        end subroutine ppidd_destroy_mutexes
       end interface
 

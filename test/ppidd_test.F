@@ -3,7 +3,7 @@
       program main
       use ppidd
       implicit none
-      integer(c_int64_t) :: helper_server_flag
+      integer(c_int)     :: helper_server_flag
       integer(c_int64_t) :: num_per_helper
       integer(c_int64_t) :: iprocs
       type(c_ptr), target, dimension(1) :: argv
@@ -22,8 +22,8 @@
       argv(1)=c_null_ptr
       call ppidd_initialize(0_c_int,c_loc(argv))
 #ifdef NO_NXTVAL_SERVER
-      helper_server_flag=0_c_int64_t
-      num_per_helper=-1_c_int64_t
+      helper_server_flag=0_c_int
+      num_per_helper=-1_c_int
 #else
 ! one helper server on every node */
       helper_server_flag=1_c_int64_t
@@ -223,7 +223,7 @@ c
       integer dtype,storetype
       integer ihandle,ihandlat
       character(len=80) :: name
-      integer(c_int64_t) :: ok
+      integer(c_int) :: ok
       logical verbose
       logical arcca_test_flag
 
@@ -1320,7 +1320,7 @@ c... release the memory in buffer space
       integer num_tasks,nscale_task,npart
       integer(c_int64_t) :: storetype
       integer(c_int64_t) :: number
-      integer(c_int64_t) :: ok
+      integer(c_int)     :: ok
       logical verbose
       logical arcca_test_flag
 c

@@ -31,6 +31,5 @@ typedef int64_t fortint ;
 #endif
 
 #undef FORTINT_MPI
-typedef fortint fortlogical; /* fortran logical type */
 
 #endif

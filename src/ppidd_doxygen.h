@@ -2,7 +2,7 @@
 /*! \mainpage PPIDD Reference Manual
  *
  * Parallel Programming Interface for Distributed Data (PPIDD) Reference
- * Manual. The function descriptions can be found in ppidd_c.cpp and ppidd_share.h.
+ * Manual. The function descriptions can be found in ppidd_c.cpp.
 
 //   Directory and file structure in PPIDD:
   <pre>
@@ -35,7 +35,6 @@
        |   |-- ppidd_sf_c.h                   C interface header file for SF
        |   |-- ppidd_sf_fortran.cpp           Fortran interface source code for SF
        |   |-- ppidd_sf_share.h               Code shared by both Fortran and C interfaces for SF
-       |   |-- ppidd_share.h                  Code shared by both Fortran and C interfaces
        `-- ./test                         Test code directory for PPIDD library
            |-- GNUmakefile                    Makefile for test directory
            |-- ppidd_ctest.cpp                C test program

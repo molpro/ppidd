@@ -9,8 +9,6 @@ endif
 .PHONY: default
 default: $(addsuffix .o,$(basename $(SOURCEFILES)))
 
-ppidd_c.o: ppidd_share.h
-
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<
 

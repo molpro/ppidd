@@ -1,5 +1,5 @@
-#ifndef __PPIDD_SF_C_H__
-#define __PPIDD_SF_C_H__
+#ifndef __PPIDD_SF_H__
+#define __PPIDD_SF_H__
 #include <stdint.h>
 #ifdef __cplusplus
 extern "C" {

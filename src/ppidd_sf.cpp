@@ -30,7 +30,7 @@
  extern MPI_Comm MPIGA_WORK_COMM;
 #endif
 
-#include "ppidd_sf_c.h"
+#include "ppidd_sf.h"
 
 #ifdef GA_MPI
  #include <ga.h>

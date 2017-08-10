@@ -32,8 +32,6 @@
 
 #include "ppidd_sf_c.h"
 
-/* The following code should be the same as those in ppidd_sf_fortran.cpp (except ppidd_sf_rank). One should make it consistent once code in ppidd_sf_fortran.cpp is changed. */
-
 #ifdef GA_MPI
  #include <ga.h>
  #include <sf.h>

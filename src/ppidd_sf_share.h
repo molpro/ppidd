@@ -35,15 +35,7 @@
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.
 \* ************************************************************************ */
-   void PPIDD_Sf_create(char *fname
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-	       ,double *size_hard_limit, double *size_soft_limit, double *req_size, fortint *handle, fortint *ierr
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-)  {
+   void PPIDD_Sf_create(char *fname ,double *size_hard_limit, double *size_soft_limit, double *req_size, fortint *handle, fortint *ierr) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
@@ -58,17 +50,10 @@
       int lxi;
 
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_create: begin.\n",ppidd_sf_rank());
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(fname);
-#endif
       strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
       name2[lxi]=(char)0;
       for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-#ifdef PPIDD_FORTRAN
-      if(MPI_Debug)printf("%5d: In PPIDD_Sf_create: midlle.sizeof(fortint)=%d,sizeof(fortintc)=%d,lxi=%d,filename=%s\n",ppidd_sf_rank(),(int)sizeof(fortint),(int)sizeof(fortintc),lxi,name2);
-#endif
 
 #ifdef MPI2
       mpierr=MPI_File_open(mpicomm,name2,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
@@ -301,14 +286,7 @@
         message          -- character string where the corresponding message
                             is written [out]
 \* ********************************************************************************* */
-   void PPIDD_Sf_errmsg(fortint *ierr,char *message
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-)  {
+   void PPIDD_Sf_errmsg(fortint *ierr,char *message) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       int eclass, len;
@@ -318,11 +296,7 @@
       int i;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(message);
-#endif
 
       if(MPI_Debug)printf("%5d: In PPIDD_Sf_errmsg: begin. perrcode=%d\n",ppidd_sf_rank(),perrcode);
 #ifdef MPI2

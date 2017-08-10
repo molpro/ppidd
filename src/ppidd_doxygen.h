@@ -33,7 +33,6 @@
        |   |-- ppidd_eaf_share.h              Code shared by both Fortran and C interfaces for EAF
        |   |-- ppidd_sf_c.cpp                 C interface source code for SF
        |   |-- ppidd_sf_c.h                   C interface header file for SF
-       |   |-- ppidd_sf_fortran.cpp           Fortran interface source code for SF
        |   |-- ppidd_sf_share.h               Code shared by both Fortran and C interfaces for SF
        `-- ./test                         Test code directory for PPIDD library
            |-- GNUmakefile                    Makefile for test directory

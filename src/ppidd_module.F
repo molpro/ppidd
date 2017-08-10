@@ -395,4 +395,83 @@
        end subroutine ppidd_destroy_mutexes
       end interface
 
+      interface
+       subroutine ppidd_sf_create(fname,size_hard_limit,size_soft_limit,
+     >            req_size,handle,ierr)
+     >            bind(C,name='PPIDD_Sf_create')
+       use iso_c_binding, only : c_double, c_int64_t, c_char
+       character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
+       real(c_double),     intent(in)  :: size_hard_limit
+       real(c_double),     intent(in)  :: size_soft_limit
+       real(c_double),     intent(in)  :: req_size
+       integer(c_int64_t), intent(out) :: handle
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_create
+      end interface
+
+      interface
+       subroutine ppidd_sf_write(handle,byte_offset,byte_length,buff,
+     >            request_id,ierr)
+     >            bind(C,name='PPIDD_Sf_write')
+       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       integer(c_int64_t), intent(in)  :: handle
+       real(c_double),     intent(in)  :: byte_offset
+       real(c_double),     intent(in)  :: byte_length
+       type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_write(c_loc(f_buff),...)
+       integer(c_int64_t), intent(out) :: request_id
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_write
+      end interface
+
+      interface
+       subroutine ppidd_sf_read(handle,byte_offset,byte_length,buff,
+     > request_id,ierr)
+     >            bind(C,name='PPIDD_Sf_read')
+       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       integer(c_int64_t), intent(in)  :: handle
+       real(c_double),     intent(in)  :: byte_offset
+       real(c_double),     intent(in)  :: byte_length
+       type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_read(c_loc(f_buff),...)
+       integer(c_int64_t), intent(out) :: request_id
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_read
+      end interface
+
+      interface
+       subroutine ppidd_sf_wait(request_id,ierr)
+     >            bind(C,name='PPIDD_Sf_wait')
+       use iso_c_binding, only : c_int64_t
+       integer(c_int64_t), intent(in)  :: request_id
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_wait
+      end interface
+
+      interface
+       subroutine ppidd_sf_waitall(list,num,ierr)
+     >            bind(C,name='PPIDD_Sf_waitall')
+       use iso_c_binding, only : c_int64_t
+       integer(c_int64_t), intent(in)  :: num
+       integer(c_int64_t), intent(in)  :: list(num)
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_waitall
+      end interface
+
+      interface
+       subroutine ppidd_sf_destroy(handle,ierr)
+     >            bind(C,name='PPIDD_Sf_destroy')
+       use iso_c_binding, only : c_int64_t
+       integer(c_int64_t), intent(in)  :: handle
+       integer(c_int64_t), intent(out) :: ierr
+       end subroutine ppidd_sf_destroy
+      end interface
+
+      interface
+       subroutine ppidd_sf_errmsg(ierr,message)
+     >            bind(C,name='PPIDD_Sf_errmsg')
+       use iso_c_binding, only : c_int64_t, c_char
+       integer(c_int64_t), intent(in)  :: ierr
+       character(c_char),  intent(out) :: message ! must to terminated by c_null_char
+       end subroutine ppidd_sf_errmsg
+      end interface
+
       end module ppidd

@@ -41,12 +41,13 @@ c
       integer maxid
       parameter(maxid=5)           ! max number of outstanding I/O requests
       parameter(dimnsn=8192)
-      double precision buffer(dimnsn,maxid)  ! need buffering for all maxid requests
+      double precision, target :: buffer(dimnsn,maxid)  ! need buffering for all maxid requests
       double precision tt0,tt1,tcgtime
       double precision, target :: ttw, ttr
 c     integer stack, heap
       integer idlist(maxid), curid
       character(len=80) errmsg
+      integer lerrmsg
 c
       integer nodeid, nnodes
       integer handle,i,start,end,j, chunk
@@ -71,7 +72,7 @@ c
       if(me.eq.0) write(iout,*) 'Creating shared file = ',
      >            trim(FNAME)
       call ppidd_flush6
-      call ppidd_sf_create(FNAME,
+      call ppidd_sf_create(FNAME//c_null_char,
      $     dble(16*size),dble(8*size),dble(8*dimnsn),handle,rc)
 c
       call ppidd_barrier()
@@ -97,7 +98,8 @@ c     everybody writes chunk of data
             endif
             curid = curid+1
             call ppidd_sf_write(handle,  8.0d0*dble(i-1),
-     &           8.0d0*dble(min(dimnsn,(end-i+1))), buffer(1,curid),
+     &           8.0d0*dble(min(dimnsn,(end-i+1))),
+     &           c_loc(buffer(1,curid)),
      &           idlist(curid),rc)
             if (rc.ne.0)call ppidd_error('write failed'//c_null_char,rc)
 
@@ -125,8 +127,11 @@ c     everybody reads different chunk of data
 
 c           read and test data chunk by chunk
             call ppidd_sf_read(handle, 8.0d0*dble(i-1),
-     .          8.0d0*dble(min(dimnsn,(end-i+1))), buffer, idlist(1),rc)
+     .          8.0d0*dble(min(dimnsn,(end-i+1))), c_loc(buffer),
+     &          idlist(1),rc)
             if (rc.ne.0)then
+               lerrmsg=len(errmsg)
+               errmsg(lerrmsg:lerrmsg)=c_null_char
                call ppidd_sf_errmsg(rc,errmsg)
                write(iout,*) 'read at offset ',8.0d0*dble(i-1),
      .                       ' failed:',errmsg

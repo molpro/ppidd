@@ -44,7 +44,7 @@
  static int MPIGA_Debug=0;
 #endif
 
-#include "ppidd_c.h"
+#include "ppidd.h"
 
 extern "C" {
 

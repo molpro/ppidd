@@ -26,7 +26,7 @@ install: default
 	$(INSTALL) -d $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) libppidd.a $(DESTDIR)$(libdir)
 	$(INSTALL) -d $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) src/ppidd_c.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) src/ppidd.h $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) src/ppidd_eaf_c.h $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) src/ppidd_sf_c.h $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) src/mpimutex.h $(DESTDIR)$(includedir)

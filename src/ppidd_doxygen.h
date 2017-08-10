@@ -2,7 +2,7 @@
 /*! \mainpage PPIDD Reference Manual
  *
  * Parallel Programming Interface for Distributed Data (PPIDD) Reference
- * Manual. The function descriptions can be found in ppidd_c.cpp.
+ * Manual. The function descriptions can be found in ppidd.cpp.
 
 //   Directory and file structure in PPIDD:
   <pre>
@@ -24,8 +24,8 @@
        |   |-- mpiga_base.h                   Head file for distributed data structure
        |   |-- mpimutex-hybrid.cpp            Mutex source file using distributed processes
        |   |-- mpimutex.h                     Mutex header file using distributed processes
-       |   |-- ppidd_c.cpp                    C interface source code
-       |   |-- ppidd_c.h                      C interface header file
+       |   |-- ppidd.cpp                      PPIDD interface source code
+       |   |-- ppidd.h                        C interface header file
        |   |-- ppidd_doxygen.h                PPIDD document main page file
        |   |-- ppidd_eaf_c.cpp                C interface source code for EAF
        |   |-- ppidd_eaf_c.h                  C interface header file for EAF

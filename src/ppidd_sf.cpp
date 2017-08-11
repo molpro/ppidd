@@ -12,7 +12,7 @@ extern "C" {
 }
 #endif
 
-#include "ppidd_sf.h"
+#include "ppidd.h"
 
 #if defined(GA_MPI) || defined(MPI2)
 static int MPI_Debug=0;

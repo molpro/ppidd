@@ -34,15 +34,7 @@
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   void PPIDD_Eaf_open(char *fname
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-	       ,fortint *type, fortint *handle, fortint *ierr
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-)  {
+   void PPIDD_Eaf_open(char *fname,fortint *type, fortint *handle, fortint *ierr) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_File mpi_fh;
@@ -62,17 +54,10 @@
 
 
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_open: begin.\n",ppidd_eaf_rank());
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(fname);
-#endif
       strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
       name2[lxi]=(char)0;
       for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-#ifdef PPIDD_FORTRAN
-      if(MPI_Debug)printf("%5d: In PPIDD_Eaf_open: sizeof(fortint)=%d,sizeof(fortintc)=%d,lxi=%d,filename=%s\n",ppidd_eaf_rank(),(int)sizeof(fortint),(int)sizeof(fortintc),lxi,name2);
-#endif
 
 #ifdef MPI2
       switch(modetype){
@@ -424,26 +409,14 @@
    character*(*) fname   -- [in]  File name.
    integer ierr          -- [out] Error code. 0 if the file was deleted, else returns error code.
 \* ********************************************************************************************* */
-   void PPIDD_Eaf_delete(char *fname
-#if defined(FORTCL_NEXT)
-	       ,fortintc lx
-#endif
-	       ,fortint *ierr
-#if defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-)  {
+   void PPIDD_Eaf_delete(char *fname,fortint *ierr) {
 #if defined(MPI2) || defined(GA_MPI)
       int i,pierr=0;
       char *name2;
       int lxi;
 
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_delete: begin.\n",ppidd_eaf_rank());
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(fname);
-#endif
       strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
       name2[lxi]=(char)0;
       for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
@@ -533,11 +506,7 @@
         code             -- [in]  error code returned by a previous call to EAF
         message          -- [out] character string where the corresponding message
 \* ********************************************************************************* */
-   void PPIDD_Eaf_errmsg(fortint *code,char *message
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-	       ,fortintc lx
-#endif
-)  {
+   void PPIDD_Eaf_errmsg(fortint *code,char *message) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       int eclass, len;
@@ -547,11 +516,7 @@
       int i;
       int lxi;
 
-#if defined(FORTCL_NEXT) || defined(FORTCL_END)
-      lxi=(int)lx;
-#else
       lxi=strlen(message);
-#endif
 
       if(MPI_Debug)printf("%5d: In PPIDD_Eaf_errmsg: begin. perrcode=%d\n",ppidd_eaf_rank(),perrcode);
 #ifdef MPI2

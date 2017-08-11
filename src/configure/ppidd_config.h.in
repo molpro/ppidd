@@ -12,23 +12,8 @@
 /* This is available to both C and Fortran intefaces */
 #undef FORTINT
 
-#ifdef PPIDD_FORTRAN
-/* build with 8-byte Fortran integers */
-#undef _I8_
-
-#undef FC_FUNC
-#undef FC_FUNC_
-
-typedef FORTINT fortint ; /* fortran integer type */
-#undef FORTINTC
-typedef FORTINTC fortintc ; /* fortran character string length type */
-
-#undef FORTCL_END
-#undef FORTCL_NEXT
-#else
 #include <stdint.h>
 typedef int64_t fortint ;
-#endif
 
 #undef FORTINT_MPI
 

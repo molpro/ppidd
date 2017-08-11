@@ -165,6 +165,17 @@ c
       implicit double precision (a-h,o-z)
       logical ok_int,ok_log,ok_dbl
 
+      interface
+       subroutine sizeofctype(sizeint,sizelog,sizedouble,sizefloat)
+     >            bind(C,name='sizeofctype')
+       use iso_c_binding, only : c_double
+       real(c_double), intent(out) :: sizeint
+       real(c_double), intent(out) :: sizelog
+       real(c_double), intent(out) :: sizedouble
+       real(c_double), intent(out) :: sizefloat
+       end subroutine sizeofctype
+      end interface
+
       write(6,*) 'Checking whether C types match Fortran types:'
       call sizeofctype(dbyte_int1,dbyte_log1,dbyte_dbl1,dbyte_float)
       nbyte_int1=nint(dbyte_int1)

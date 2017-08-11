@@ -79,15 +79,13 @@ fi
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
 AC_PATH_PROG(FC,${FC})
-AC_FC_WRAPPERS()
 m4_include([src/configure/may_fc_module_filename_format.m4])
 MAY_FC_MODULE_FILENAME_FORMAT()
 PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in
  x4 ) true ;;
- x8 ) AC_DEFINE(_I8_)
-      case "x${FC_VENDOR}" in
+ x8 ) case "x${FC_VENDOR}" in
        xamd       ) FCFLAGS="${FCFLAGS} -i8" ;;
        xcray      ) FCFLAGS="${FCFLAGS} -s integer64" ;;
        xg95       ) FCFLAGS="${FCFLAGS} -i8" ;;
@@ -122,13 +120,6 @@ elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
 else
  AC_MSG_ERROR([Problem determining FORTINT])
 fi
-if test "x${host_os}" = xcygwin && test "x${enable_fortran_integer}" = x8 ; then
- AC_DEFINE([FORTINTC],[int])
-else
- AC_DEFINE([FORTINTC],[FORTINT])
-fi
-dnl every current supported system is FORTCL_END, some historical ones are FORTCL_NEXT
-AC_DEFINE([FORTCL_END])
 
 if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
  AC_MSG_ERROR([both --with-ga and --with-mpi2 specified])

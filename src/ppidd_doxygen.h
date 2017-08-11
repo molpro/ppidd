@@ -27,8 +27,8 @@
        |   |-- ppidd.cpp                      PPIDD interface source code
        |   |-- ppidd.h                        C interface header file
        |   |-- ppidd_doxygen.h                PPIDD document main page file
-       |   |-- ppidd_eaf_c.cpp                C interface source code for EAF
-       |   |-- ppidd_eaf_c.h                  C interface header file for EAF
+       |   |-- ppidd_eaf.cpp                  PPIDD interface source code for EAF
+       |   |-- ppidd_eaf.h                    C interface header file for EAF
        |   |-- ppidd_eaf_share.h              Code shared by both Fortran and C interfaces for EAF
        |   |-- ppidd_sf.cpp                   PPIDD interface source code for SF
        |   |-- ppidd_sf.h                     C interface header file for SF

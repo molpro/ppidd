@@ -185,7 +185,7 @@ c
       write(6,*) 'The size (in bytes) of some C data types:'
       write(6,10) 'float:', nbyte_float
       write(6,10) 'double:', nbyte_dbl1
-      write(6,10) 'fortint:', nbyte_int1
+      write(6,10) 'int64_t:', nbyte_int1
       write(6,10) 'fortlogical:', nbyte_log1
 10    format(1x,'Size of C ',a,t35,i4,' bytes')
       call sizeoffortype(nbyte_int2,nbyte_log2,nbyte_dbl2,nbyte_real)

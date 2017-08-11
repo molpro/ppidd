@@ -84,7 +84,7 @@ extern "C" {
  *  - For \b MPI2, Return communicator for worker process group.
  *  - For \b GA and serial cases, should not be called.
  */
-   fortint PPIDD_Worker_comm(void) {
+   int64_t PPIDD_Worker_comm(void) {
 #ifdef MPI2
       MPI_Comm mycomm=mpigv(Compute_comm);
       MPI_Fint fcomm;
@@ -95,14 +95,14 @@ extern "C" {
       if(np_all==np_worker) mycomm=MPI_COMM_WORLD;
 
       fcomm=MPI_Comm_c2f(mycomm);
-      return (fortint)fcomm;
+      return (int64_t)fcomm;
 #elif defined(GA_MPI)
       MPI_Comm mpicomm = GA_MPI_Comm();
       MPI_Fint fcomm=MPI_Comm_c2f(mpicomm);
-      return (fortint)fcomm;
+      return (int64_t)fcomm;
 #else
       fprintf(stderr," ERROR: PPIDD_Worker_comm should not be called in NON-MPI2 cases.\n");
-      return (fortint)-1;
+      return (int64_t)-1;
 #endif
    }
 
@@ -145,7 +145,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/ma/MAapi.html
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
-   void PPIDD_MA_init(fortint *dtype, fortint *stack, fortint *heap, int *ok) {
+   void PPIDD_MA_init(int64_t *dtype, int64_t *stack, int64_t *heap, int *ok) {
 #ifdef MPI2
       *ok = 1;
 #elif defined(GA_MPI)
@@ -199,7 +199,7 @@ extern "C" {
  *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
-   void PPIDD_Error(char *message,fortint *code) {
+   void PPIDD_Error(char *message,int64_t *code) {
       char *msg2, *p;
       int icode=(int)*code;
       int lxi;
@@ -230,7 +230,7 @@ extern "C" {
 /*! Set the flag for data helper server and set the number of how many processes own one helper server
  *
  *  Set the helper_server flag: 1 (use); 0 (don't use). */
-   void PPIDD_Helper_server(int *flag, fortint *numprocs_per_server) {
+   void PPIDD_Helper_server(int *flag, int64_t *numprocs_per_server) {
 #ifdef MPI2
       if ((int)*flag) {                              /* mutilple helper servers, node helper server, and single helper server */
          use_helper_server=1;
@@ -271,17 +271,17 @@ extern "C" {
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
  *  - \b MPI2 calls MPI_Comm_size for communicator MPI_COMM_WORLD.
  */
-   void PPIDD_Size_all(fortint *np) {
+   void PPIDD_Size_all(int64_t *np) {
 #ifdef MPI2
       int mpinp;
       MPI_Comm	mpicomm=MPI_COMM_WORLD;
 
       MPI_Comm_size(mpicomm, &mpinp);
-      *np = (fortint) mpinp;
+      *np = (int64_t) mpinp;
 #elif defined(GA_MPI)
-      *np = (fortint)GA_Nnodes();
+      *np = (int64_t)GA_Nnodes();
 #else
-      *np = (fortint)1;
+      *np = (int64_t)1;
 #endif
    }
 
@@ -292,17 +292,17 @@ extern "C" {
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
  *  - \b MPI2 calls MPI_Comm_size for computational communicator.
  */
-   void PPIDD_Size(fortint *np) {
+   void PPIDD_Size(int64_t *np) {
 #ifdef MPI2
       int mpinp;
       MPI_Comm	mpicomm=mpigv(Compute_comm);
 
       MPI_Comm_size(mpicomm, &mpinp);
-      *np = (fortint) mpinp;
+      *np = (int64_t) mpinp;
 #elif defined(GA_MPI)
-      *np = (fortint)GA_Nnodes();
+      *np = (int64_t)GA_Nnodes();
 #else
-      *np = (fortint)1;
+      *np = (int64_t)1;
 #endif
    }
 
@@ -313,17 +313,17 @@ extern "C" {
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID
  *  - \b MPI2 calls MPI_Comm_rank in computational communicator.
  */
-   void PPIDD_Rank(fortint *me) {
+   void PPIDD_Rank(int64_t *me) {
 #ifdef MPI2
       int mpime;
       MPI_Comm	mpicomm=mpigv(Compute_comm);
 
       MPI_Comm_rank(mpicomm, &mpime);
-      *me = (fortint) mpime;
+      *me = (int64_t) mpime;
 #elif defined(GA_MPI)
-      *me = (fortint)GA_Nodeid();
+      *me = (int64_t)GA_Nodeid();
 #else
-      *me = (fortint)0;
+      *me = (int64_t)0;
 #endif
    }
 
@@ -378,7 +378,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA calls SND_.
  *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
-   void PPIDD_Send(void *buf,fortint *count,fortint *dtype,fortint *dest,fortint *sync) {
+   void PPIDD_Send(void *buf,int64_t *count,int64_t *dtype,int64_t *dest,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
       MPI_Comm	mpicomm=mpigv(Compute_comm);
@@ -432,7 +432,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA calls RCV_.
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
-   void PPIDD_Recv(void *buf,fortint *count,fortint *dtype,fortint *source,fortint *lenreal,fortint *sourcereal,fortint *sync) {
+   void PPIDD_Recv(void *buf,int64_t *count,int64_t *dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
       MPI_Comm	mpicomm=mpigv(Compute_comm);
@@ -471,8 +471,8 @@ static int n_in_msg_mpiq=0;
          mpierr = MPI_Irecv(buf,mpilenbuf,MPI_CHAR,mpinode,mpitag,mpicomm,&request);
          mpi_test_status("PPIDD_Recv: nonblocking RECV:",mpierr);
 
-         *sourcereal = (fortint) mpinode;          /* Get source node  */
-         *lenreal = (fortint) (-1);
+         *sourcereal = (int64_t) mpinode;          /* Get source node  */
+         *lenreal = (int64_t) (-1);
          msg_mpiq[n_in_msg_mpiq].request = request;
          msg_mpiq[n_in_msg_mpiq].node   = (long)*source;
          msg_mpiq[n_in_msg_mpiq].type   = (long)*dtype;
@@ -485,8 +485,8 @@ static int n_in_msg_mpiq=0;
          mpi_test_status("PPIDD_RECV: RECV:",mpierr);
          mpierr = MPI_Get_count(&status, MPI_CHAR, &mpilenbuf);
          mpi_test_status("PPIDD_RECV: Get_count:",mpierr);
-         *sourcereal = (fortint)status.MPI_SOURCE;
-         *lenreal    = (fortint)mpilenbuf;
+         *sourcereal = (int64_t)status.MPI_SOURCE;
+         *lenreal    = (int64_t)mpilenbuf;
       }
 #else
       printf(" ERROR: PPIDD_Recv should not be called in serial case.\n");
@@ -501,7 +501,7 @@ static int n_in_msg_mpiq=0;
 /*!
  *  - \b MPI2/GA_MPI calls MPI_Wait for all asynchronous requests.
  */
-   void PPIDD_Wait(fortint *nodesel) {
+   void PPIDD_Wait(int64_t *nodesel) {
 #if defined(MPI2) || defined(GA_MPI)
       int mpierr,i;
       MPI_Status status;
@@ -525,7 +525,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b MPI2/GA_MPI calls MPI_Iprobe
  */
-   void PPIDD_Iprobe(fortint *tag,fortint *source,int *ok) {
+   void PPIDD_Iprobe(int64_t *tag,int64_t *source,int *ok) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
       MPI_Comm	mpicomm=mpigv(Compute_comm);
@@ -556,7 +556,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \c type=0 : Fortran integer and logical types
  *  - \c type=1 : Fortran double precision type */
-   void PPIDD_BCast(void *buffer,fortint *count,fortint *type,fortint *root) {
+   void PPIDD_BCast(void *buffer,int64_t *count,int64_t *type,int64_t *root) {
 #ifdef MPI2
       int mpicount=(int)*count;
       int dtype =(int)*type;
@@ -581,7 +581,7 @@ static int n_in_msg_mpiq=0;
 
       switch(dtype){
       case 0:
-              ctype=sizeof(fortint);
+              ctype=sizeof(int64_t);
               break;
       case 1:
               ctype=sizeof(double);
@@ -622,7 +622,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
-   void PPIDD_Gsum(fortint *type,void *buffer,fortint *len, char *op) {
+   void PPIDD_Gsum(int64_t *type,void *buffer,int64_t *len, char *op) {
 #if defined(MPI2) || defined(GA_MPI)
       int dtype=(int)*type;
 #endif
@@ -675,7 +675,7 @@ static int n_in_msg_mpiq=0;
 
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
-   void PPIDD_Create_irreg(char *name, fortint *lenin, fortint *nchunk, fortint *datatype, fortint *storetype, fortint *handle, int *ok) {
+   void PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int64_t *datatype, int64_t *storetype, int64_t *handle, int *ok) {
 #ifdef MPI2
       int mpierr;
       int mpinchunk=(int)*nchunk;
@@ -706,7 +706,7 @@ static int n_in_msg_mpiq=0;
         }
       }
       free(name2);
-      *handle=(fortint)mpihandle;
+      *handle=(int64_t)mpihandle;
       if(mpierr==0) *ok = 1 ;
       else *ok = 0 ;
 #elif defined(GA_MPI)
@@ -757,7 +757,7 @@ static int n_in_msg_mpiq=0;
 
       free(name2);
 
-      *handle=(fortint)gahandle;
+      *handle=(int64_t)gahandle;
       *ok = 1 ;
 #else
       printf(" ERROR: PPIDD_Create_irreg should not be called in serial case.\n");
@@ -777,7 +777,7 @@ static int n_in_msg_mpiq=0;
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   void PPIDD_Create(char *name,fortint *lentot, fortint *datatype, fortint *storetype, fortint *handle, int *ok) {
+   void PPIDD_Create(char *name,int64_t *lentot, int64_t *datatype, int64_t *storetype, int64_t *handle, int *ok) {
 #ifdef MPI2
       int mpierr;
       int mpilentot;
@@ -812,7 +812,7 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, datatype=%d, storetype=%d\n",ProcID(),name2,stype,dtype);
 
       free(name2);
-      *handle=(fortint)mpihandle;
+      *handle=(int64_t)mpihandle;
       if(mpierr==0) *ok = 1 ;
       else *ok = 0 ;
 #elif defined(GA_MPI)
@@ -848,7 +848,7 @@ static int n_in_msg_mpiq=0;
       gahandle=NGA_CREATE(gadtype, 1, dims, name2, block);
 
       free(name2);
-      *handle=(fortint)gahandle;
+      *handle=(int64_t)gahandle;
       *ok = 1 ;
 #else
       printf(" ERROR: PPIDD_Create should not be called in serial case.\n");
@@ -861,7 +861,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY
  */
-   void PPIDD_Destroy(fortint *handle,int *ok) {
+   void PPIDD_Destroy(int64_t *handle,int *ok) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
       int mpierr;
@@ -893,7 +893,7 @@ static int n_in_msg_mpiq=0;
  *  If no array elements are owned by the process, the range is returned as [0,-1].
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION
  */
-   void PPIDD_Distrib(fortint *handle,fortint *rank,fortint *ilo,fortint *ihi,int *ok) {
+   void PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi,int *ok) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
       int mpirank=(int)*rank;
@@ -908,8 +908,8 @@ static int n_in_msg_mpiq=0;
          mpierr=twosided_helpga_distrib( mpihandle, mpirank, &mpiilo, &mpiihi);
       }
 
-      *ilo = (fortint) mpiilo;
-      *ihi = (fortint) mpiihi;
+      *ilo = (int64_t) mpiilo;
+      *ihi = (int64_t) mpiihi;
       if(mpierr==0) *ok = 1 ;
       else *ok = 0 ;
 #elif defined(GA_MPI)
@@ -921,12 +921,12 @@ static int n_in_msg_mpiq=0;
       NGA_DISTRIBUTION(gahandle, garank, gailo, gaihi);
 /* If no array elements are owned by process iproc, the range is returned as lo[ ]=0 and hi[ ]= -1 for all dimensions. */
       if (gailo[0]<=gaihi[0]) {
-         *ilo = (fortint) (gailo[0] + 1);
-         *ihi = (fortint) (gaihi[0] + 1);
+         *ilo = (int64_t) (gailo[0] + 1);
+         *ihi = (int64_t) (gaihi[0] + 1);
       }
       else {
-         *ilo = (fortint) (gailo[0]);
-         *ihi = (fortint) (gaihi[0]);
+         *ilo = (int64_t) (gailo[0]);
+         *ihi = (int64_t) (gaihi[0]);
       }
       *ok = 1 ;
 #else
@@ -943,12 +943,12 @@ static int n_in_msg_mpiq=0;
  *  np is the number of processes hold tha data (return 0  if ilo/ihi are out of bounds "0").
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCATE_REGION
  */
-   void PPIDD_Location(fortint *handle,     /*!< array handle */
-                       fortint *ilo,        /*!< lower element subscript, 1 (not 0) for fisrt element */
-                       fortint *ihi,        /*!< higher element subscript */
-                       fortint *map,        /*!< return start/end index for \c proclist */
-                       fortint *proclist,   /*!< proc id list */
-                       fortint *np,         /*!< proc number */
+   void PPIDD_Location(int64_t *handle,     /*!< array handle */
+                       int64_t *ilo,        /*!< lower element subscript, 1 (not 0) for fisrt element */
+                       int64_t *ihi,        /*!< higher element subscript */
+                       int64_t *map,        /*!< return start/end index for \c proclist */
+                       int64_t *proclist,   /*!< proc id list */
+                       int64_t *np,         /*!< proc number */
                        int *ok              /*!< return \c .true. if successful; otherwise \c .false. */
    ) {
 #ifdef MPI2
@@ -972,11 +972,11 @@ static int n_in_msg_mpiq=0;
       }
 
       for (int i=0;i<mpinp;i++) {
-         map[2*i]=(fortint)mpimap[2*i];
-         map[2*i+1]=(fortint)mpimap[2*i+1];
-         proclist[i]=(fortint)mpiproclist[i];
+         map[2*i]=(int64_t)mpimap[2*i];
+         map[2*i+1]=(int64_t)mpimap[2*i+1];
+         proclist[i]=(int64_t)mpiproclist[i];
       }
-      *np = (fortint) mpinp;
+      *np = (int64_t) mpinp;
       if(mpierr==0) *ok = 1 ;
       else *ok = 0 ;
 #elif defined(GA_MPI)
@@ -991,11 +991,11 @@ static int n_in_msg_mpiq=0;
       int mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
 
       for (int i=0;i<mpinp;i++) {
-	 map[2*i]=(fortint)(mpimap[2*i]+1);
-	 map[2*i+1]=(fortint)(mpimap[2*i+1]+1);
-	 proclist[i]=(fortint)mpiproclist[i];
+	 map[2*i]=(int64_t)(mpimap[2*i]+1);
+	 map[2*i+1]=(int64_t)(mpimap[2*i+1]+1);
+	 proclist[i]=(int64_t)mpiproclist[i];
       }
-      *np = (fortint) mpinp;
+      *np = (int64_t) mpinp;
       *ok = 1 ;
 #else
       printf(" ERROR: PPIDD_Location should not be called in serial case.\n");
@@ -1008,7 +1008,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET
  */
-   void PPIDD_Get(fortint *handle,fortint *ilo,fortint *ihi,void *buff,int *ok) {
+   void PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,int *ok) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
       int mpiilo=(int)*ilo;
@@ -1024,11 +1024,11 @@ static int n_in_msg_mpiq=0;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_get_inum */
             int64_t nelem_valput=1;
-            fortint *ibuff;
+            int64_t *ibuff;
 
             val=twosided_helpga_one(mproc, nelem_valput, ielem, &mpihandle);
-            ibuff=(fortint *)buff;
-            *ibuff=(fortint)val;
+            ibuff=(int64_t *)buff;
+            *ibuff=(int64_t)val;
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_get */
             int nelem=mpiihi-mpiilo+1;
@@ -1061,7 +1061,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT
  */
-   void PPIDD_Put(fortint *handle,fortint *ilo,fortint *ihi,void *buff,int *ok) {
+   void PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,int *ok) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
       int mpiilo=(int)*ilo;
@@ -1075,7 +1075,7 @@ static int n_in_msg_mpiq=0;
          int ielem=mpiilo;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_put_inum */
-            fortint *ibuff=(fortint *)buff;
+            int64_t *ibuff=(int64_t *)buff;
             int64_t valput=(int64_t)*ibuff;
             twosided_helpga_one(mproc, valput, ielem, &mpihandle);
          }
@@ -1112,7 +1112,7 @@ static int n_in_msg_mpiq=0;
  * Atomic operation.  global array section (ilo, ihi) += *fac * buffer
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC
  */
-   void PPIDD_Acc(fortint *handle,fortint *ilo,fortint *ihi,void *buff,void *fac,int *ok) {
+   void PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac,int *ok) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
       int mpiilo=(int)*ilo;
@@ -1158,22 +1158,22 @@ static int n_in_msg_mpiq=0;
     element by a given increment. This is a fetch-and-add operation.
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC
  */
-   void PPIDD_Read_inc(fortint *ihandle,fortint *inum,fortint *incr,fortint *returnval) {
+   void PPIDD_Read_inc(int64_t *ihandle,int64_t *inum,int64_t *incr,int64_t *returnval) {
 #ifdef MPI2
       int mpihandle = (int) *ihandle;
       int mpiinum = (int) *inum;
       int mpiincr = (int) *incr;
-      fortint mpivalue;
+      int64_t mpivalue;
 
       if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpivalue=(fortint)mpiga_read_inc(mpihandle,mpiinum,mpiincr);
+         mpivalue=(int64_t)mpiga_read_inc(mpihandle,mpiinum,mpiincr);
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 
 	 int64_t vincr=(int64_t)*incr;
          mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, &mpihandle);
       }
-      *returnval=(fortint)mpivalue;
+      *returnval=(int64_t)mpivalue;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
                             ProcID(),mpiinum,mpihandle,mpiincr);
 #elif defined(GA_MPI)
@@ -1184,7 +1184,7 @@ static int n_in_msg_mpiq=0;
 
       mpiinum[0] = (ga_int) *inum-1;
       gavalue=NGA_READ_INC(handle,mpiinum, gaincr);
-      *returnval=(fortint)gavalue;
+      *returnval=(int64_t)gavalue;
 #else
       printf(" ERROR: PPIDD_Read_inc should not be called in serial case.\n");
       exit(1);
@@ -1196,7 +1196,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH
  */
-   void PPIDD_Zero_patch(fortint *ihandle,fortint *ilo,fortint *ihi) {
+   void PPIDD_Zero_patch(int64_t *ihandle,int64_t *ilo,int64_t *ihi) {
 #ifdef MPI2
       int mpihandle = (int) *ihandle;
       int mpiilo = (int) *ilo;
@@ -1222,7 +1222,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO
  */
-   void PPIDD_Zero(fortint *handle,int *ok) {
+   void PPIDD_Zero(int64_t *handle,int *ok) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
       int mpierr;
@@ -1251,9 +1251,9 @@ static int n_in_msg_mpiq=0;
  *  Increment a counter by 1 and returns the counter value (0, 1, ...). */
 #ifdef GA_MPI
    static int PPIDD_Nxtval_initialised=0;
-   static fortint PPIDD_Nxtval_handle;
+   static int64_t PPIDD_Nxtval_handle;
 #endif
-   void PPIDD_Nxtval(fortint *numproc, fortint *val) {
+   void PPIDD_Nxtval(int64_t *numproc, int64_t *val) {
 #ifdef MPI2
       if (use_helper_server==0) {
         fprintf(stderr,"%5d: ERROR: Attemp to call NXTVAL routine without helper process!\n", ProcID());
@@ -1261,7 +1261,7 @@ static int n_in_msg_mpiq=0;
       }
       else {
         int mproc = (int) *numproc;
-        *val= (fortint) NXTVAL(&mproc);
+        *val= (int64_t) NXTVAL(&mproc);
       }
 #elif defined(GA_MPI)
       int ok;
@@ -1272,14 +1272,14 @@ static int n_in_msg_mpiq=0;
 	//      }
       	//else if (! PPIDD_Nxtval_initialised) {
 	/* first call needs to be collective and will return 0*/
-	fortint lentot=1, datatype=0, storetype=1;
+	int64_t lentot=1, datatype=0, storetype=1;
 	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
 	PPIDD_Nxtval_initialised=1;
 	*val=0;
       }
       else {
-	fortint inum=1,incr=1;
+	int64_t inum=1,incr=1;
 	PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
       }
 #else
@@ -1295,7 +1295,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
  *  - \b MPI2  does nothing
  */
-   void PPIDD_Duplicate(fortint *handlei, fortint *handlej, char *name) {
+   void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
 #ifdef GA_MPI
       int ga_a=(int)*handlei;
       int ga_b;
@@ -1307,7 +1307,7 @@ static int n_in_msg_mpiq=0;
       for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
       ga_b = GA_Duplicate(ga_a, name2);
       free(name2);
-      *handlej=(fortint)ga_b;
+      *handlej=(int64_t)ga_b;
 #else
       printf(" ERROR: PPIDD_Duplicate should not be called in serial and MPI2 cases.\n");
       exit(1);
@@ -1320,7 +1320,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
  *  - \c This operation is local.
  */
-   void PPIDD_Inquire_name(fortint *handle, char *name) {
+   void PPIDD_Inquire_name(int64_t *handle, char *name) {
 #ifdef MPI2
       char *name2;
       int lxi;
@@ -1365,12 +1365,12 @@ static int n_in_msg_mpiq=0;
  *  - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
  *  - \c This operation is local.
  */
-   void PPIDD_Inquire_stype(fortint *handle, fortint *storetype) {
+   void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
-      *storetype=(fortint)mpiga_inquire_storetype(mpihandle);
+      *storetype=(int64_t)mpiga_inquire_storetype(mpihandle);
 #elif defined(GA_MPI)
-      *storetype=(fortint)0;
+      *storetype=(int64_t)0;
 #else
       printf(" ERROR: PPIDD_Inquire_stype should not be called in serial case.\n");
       exit(1);
@@ -1382,17 +1382,17 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
  */
-   void PPIDD_Inquire_mem(fortint *mem_used) {
+   void PPIDD_Inquire_mem(int64_t *mem_used) {
 #ifdef MPI2
       long localmem;
       localmem=mpiga_localmem();
-      *mem_used=(fortint)localmem;
+      *mem_used=(int64_t)localmem;
 #elif defined(GA_MPI)
       size_t localmem;
       localmem=GA_Inquire_memory();
-      *mem_used=(fortint)localmem;
+      *mem_used=(int64_t)localmem;
 #else
-      *mem_used=(fortint)0;
+      *mem_used=(int64_t)0;
 #endif
    }
 
@@ -1411,7 +1411,7 @@ static int n_in_msg_mpiq=0;
  *   When helper process is disabled, \c storetype doesn't take effect, and mutex data are always stored across the distributed processes.
 
  */
-   void PPIDD_Create_mutexes(fortint *storetype,fortint *number,int *ok) {
+   void PPIDD_Create_mutexes(int64_t *storetype,int64_t *number,int *ok) {
 #ifdef MPI2
       int stype     = (int) *storetype;
       int mpinumber = (int) *number;
@@ -1447,7 +1447,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK
  */
-   void PPIDD_Lock_mutex(fortint *inum) {
+   void PPIDD_Lock_mutex(int64_t *inum) {
 #ifdef MPI2
       int mpiinum = (int) *inum;
       int mpierr;
@@ -1467,7 +1467,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK
  */
-   void PPIDD_Unlock_mutex(fortint *inum) {
+   void PPIDD_Unlock_mutex(int64_t *inum) {
 #ifdef MPI2
       int mpiinum = (int) *inum;
       int mpierr;

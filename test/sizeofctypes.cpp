@@ -1,10 +1,6 @@
-#ifdef HAVE_CONFIG_H
-#include "ppidd_config.h"
-#endif
 #include <cstdio>
+#include <stdint.h>
 
-/* change argument type fortint to double, in order to obtain right numbers even if Integer type doesn't match between Fortran and C */
-/* void sizeofctype(fortint *sizeint, fortint *sizelog, fortint *sizedouble, fortint *sizefloat) */
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,9 +14,9 @@ void sizeofctype(double *sizeint, double *sizelog, double *sizedouble, double *s
        printf("                       long long:%5d bytes\n", (int)sizeof(long long));
        printf("                           float:%5d bytes\n", (int)sizeof(float));
        printf("                          double:%5d bytes\n", (int)sizeof(double));
-       printf("                         fortint:%5d bytes\n", (int)sizeof(fortint));
+       printf("                         int64_t:%5d bytes\n", (int)sizeof(int64_t));
     }
-    *sizeint=(double)sizeof(fortint);
+    *sizeint=(double)sizeof(int64_t);
     *sizelog=(double)sizeof(int);
     *sizedouble=(double)sizeof(double);
     *sizefloat=(double)sizeof(float);

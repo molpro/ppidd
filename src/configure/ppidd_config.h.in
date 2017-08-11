@@ -9,11 +9,7 @@
 
 #undef NO_NXTVAL_SERVER
 
-/* This is available to both C and Fortran intefaces */
 #undef FORTINT
-
-#include <stdint.h>
-typedef int64_t fortint ;
 
 #undef FORTINT_MPI
 

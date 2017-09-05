@@ -20,7 +20,7 @@
 
       interface
        function ppidd_worker_comm()
-     >            bind(C,name='PPIDD_Worker_comm')
+     >          bind(C,name='PPIDD_Worker_comm')
        use iso_c_binding, only : c_int64_t
        integer(c_int64_t) :: ppidd_worker_comm
        end function ppidd_worker_comm
@@ -33,22 +33,22 @@
       end interface
 
       interface
-       subroutine ppidd_uses_ma(ok)
-     >            bind(C,name='PPIDD_Uses_ma')
+       function ppidd_uses_ma()
+     >          bind(C,name='PPIDD_Uses_ma')
        use iso_c_binding, only : c_int
-       integer(c_int), intent(out) :: ok
-       end subroutine ppidd_uses_ma
+       integer(c_int) :: ppidd_uses_ma
+       end function ppidd_uses_ma
       end interface
 
       interface
-       subroutine ppidd_ma_init(dtype,stack,heap,ok)
-     >            bind(C,name='PPIDD_MA_init')
+       function ppidd_ma_init(dtype,stack,heap)
+     >          bind(C,name='PPIDD_MA_init')
        use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                  :: ppidd_ma_init
        integer(c_int64_t), intent(in)  :: dtype
        integer(c_int64_t), intent(in)  :: stack
        integer(c_int64_t), intent(in)  :: heap
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_ma_init
+       end function ppidd_ma_init
       end interface
 
       interface
@@ -62,9 +62,9 @@
       interface
        subroutine ppidd_error(message,code)
      >            bind(C,name='PPIDD_Error')
-       use iso_c_binding, only : c_int64_t, c_char
-       character(c_char),  intent(in) :: message ! must to terminated by c_null_char
-       integer(c_int64_t), intent(in) :: code
+       use iso_c_binding, only : c_int, c_char
+       character(c_char), intent(in) :: message ! must to terminated by c_null_char
+       integer(c_int),    intent(in) :: code
        end subroutine ppidd_error
       end interface
 
@@ -149,13 +149,13 @@
       end interface
 
       interface
-       subroutine ppidd_iprobe(tag,source,ok)
-     >            bind(C,name='PPIDD_Iprobe')
+       function ppidd_iprobe(tag,source)
+     >          bind(C,name='PPIDD_Iprobe')
        use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                  :: ppidd_iprobe
        integer(c_int64_t), intent(in)  :: tag
        integer(c_int64_t), intent(in)  :: source
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_iprobe
+       end function ppidd_iprobe
       end interface
 
       interface
@@ -187,103 +187,103 @@
       end interface
 
       interface
-       subroutine ppidd_create_irreg(name,lenin,nchunk,datatype,
-     >            storetype,handle,ok)
-     >            bind(C,name='PPIDD_Create_irreg')
+       function ppidd_create_irreg(name,lenin,nchunk,datatype,
+     >          storetype,handle)
+     >          bind(C,name='PPIDD_Create_irreg')
        use iso_c_binding, only : c_int, c_int64_t, c_char
+       integer(c_int)                  :: ppidd_create_irreg
        character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: nchunk
        integer(c_int64_t), intent(in)  :: lenin(nchunk)
        integer(c_int64_t), intent(in)  :: datatype
        integer(c_int64_t), intent(in)  :: storetype
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_create_irreg
+       end function ppidd_create_irreg
       end interface
 
       interface
-       subroutine ppidd_create(name,lentot,datatype,storetype,handle,ok)
-     >            bind(C,name='PPIDD_Create')
+       function ppidd_create(name,lentot,datatype,storetype,handle)
+     >          bind(C,name='PPIDD_Create')
        use iso_c_binding, only : c_int, c_int64_t, c_char
+       integer(c_int)                  :: ppidd_create
        character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: lentot
        integer(c_int64_t), intent(in)  :: datatype
        integer(c_int64_t), intent(in)  :: storetype
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_create
+       end function ppidd_create
       end interface
 
       interface
-       subroutine ppidd_destroy(handle,ok)
-     >            bind(C,name='PPIDD_Destroy')
+       function ppidd_destroy(handle)
+     >          bind(C,name='PPIDD_Destroy')
        use iso_c_binding, only : c_int, c_int64_t
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_destroy
+       integer(c_int)                 :: ppidd_destroy
+       integer(c_int64_t), intent(in) :: handle
+       end function ppidd_destroy
       end interface
 
       interface
-       subroutine ppidd_distrib(handle,rank,ilo,ihi,ok)
-     >            bind(C,name='PPIDD_Distrib')
+       function ppidd_distrib(handle,rank,ilo,ihi)
+     >          bind(C,name='PPIDD_Distrib')
        use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                  :: ppidd_distrib
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: rank
        integer(c_int64_t), intent(out) :: ilo
        integer(c_int64_t), intent(out) :: ihi
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_distrib
+       end function ppidd_distrib
       end interface
 
       interface
-       subroutine ppidd_location(handle,ilo,ihi,map,proclist,np,ok)
-     >            bind(C,name='PPIDD_Location')
+       function ppidd_location(handle,ilo,ihi,map,proclist,np)
+     >          bind(C,name='PPIDD_Location')
        use iso_c_binding, only : c_int, c_int64_t, c_ptr
+       integer(c_int)                  :: ppidd_location
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        type(c_ptr), intent(in), value  :: map      ! call ppidd_location(...,c_loc(f_map),...)
        type(c_ptr), intent(in), value  :: proclist ! call ppidd_location(...,c_loc(f_proclist),...)
        integer(c_int64_t), intent(out) :: np
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_location
+       end function ppidd_location
       end interface
 
       interface
-       subroutine ppidd_get(handle,ilo,ihi,buff,ok)
-     >            bind(C,name='PPIDD_Get')
+       function ppidd_get(handle,ilo,ihi,buff)
+     >          bind(C,name='PPIDD_Get')
        use iso_c_binding, only : c_int, c_int64_t, c_ptr
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(in)  :: ilo
-       integer(c_int64_t), intent(in)  :: ihi
-       type(c_ptr), intent(in), value  :: buff ! call ppidd_get(...,c_loc(f_buff),...)
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_get
+       integer(c_int)                 :: ppidd_get
+       integer(c_int64_t), intent(in) :: handle
+       integer(c_int64_t), intent(in) :: ilo
+       integer(c_int64_t), intent(in) :: ihi
+       type(c_ptr), intent(in), value :: buff ! call ppidd_get(...,c_loc(f_buff),...)
+       end function ppidd_get
       end interface
 
       interface
-       subroutine ppidd_put(handle,ilo,ihi,buff,ok)
-     >            bind(C,name='PPIDD_Put')
+       function ppidd_put(handle,ilo,ihi,buff)
+     >          bind(C,name='PPIDD_Put')
        use iso_c_binding, only : c_int, c_int64_t, c_ptr
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(in)  :: ilo
-       integer(c_int64_t), intent(in)  :: ihi
-       type(c_ptr), intent(in), value  :: buff ! call ppidd_put(...,c_loc(f_buff),...)
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_put
+       integer(c_int)                 :: ppidd_put
+       integer(c_int64_t), intent(in) :: handle
+       integer(c_int64_t), intent(in) :: ilo
+       integer(c_int64_t), intent(in) :: ihi
+       type(c_ptr), intent(in), value :: buff ! call ppidd_put(...,c_loc(f_buff),...)
+       end function ppidd_put
       end interface
 
       interface
-       subroutine ppidd_acc(handle,ilo,ihi,buff,fac,ok)
-     >            bind(C,name='PPIDD_Acc')
+       function ppidd_acc(handle,ilo,ihi,buff,fac)
+     >          bind(C,name='PPIDD_Acc')
        use iso_c_binding, only : c_int, c_int64_t, c_ptr
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(in)  :: ilo
-       integer(c_int64_t), intent(in)  :: ihi
-       type(c_ptr), intent(in), value  :: buff ! call ppidd_acc(...,c_loc(f_buff),...)
-       type(c_ptr), intent(in), value  :: fac  ! call ppidd_acc(...,c_loc(f_fac),...)
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_acc
+       integer(c_int)                 :: ppidd_acc
+       integer(c_int64_t), intent(in) :: handle
+       integer(c_int64_t), intent(in) :: ilo
+       integer(c_int64_t), intent(in) :: ihi
+       type(c_ptr), intent(in), value :: buff ! call ppidd_acc(...,c_loc(f_buff),...)
+       type(c_ptr), intent(in), value :: fac  ! call ppidd_acc(...,c_loc(f_fac),...)
+       end function ppidd_acc
       end interface
 
       interface
@@ -308,12 +308,12 @@
       end interface
 
       interface
-       subroutine ppidd_zero(handle,ok)
-     >            bind(C,name='PPIDD_Zero')
+       function ppidd_zero(handle)
+     >          bind(C,name='PPIDD_Zero')
        use iso_c_binding, only : c_int, c_int64_t
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_zero
+       integer(c_int)                 :: ppidd_zero
+       integer(c_int64_t), intent(in) :: handle
+       end function ppidd_zero
       end interface
 
       interface
@@ -362,13 +362,13 @@
       end interface
 
       interface
-       subroutine ppidd_create_mutexes(storetype,number,ok)
-     >            bind(C,name='PPIDD_Create_mutexes')
+       function ppidd_create_mutexes(storetype,number)
+     >          bind(C,name='PPIDD_Create_mutexes')
        use iso_c_binding, only : c_int, c_int64_t
-       integer(c_int64_t), intent(in)  :: storetype
-       integer(c_int64_t), intent(in)  :: number
-       integer(c_int),     intent(out) :: ok
-       end subroutine ppidd_create_mutexes
+       integer(c_int)                 :: ppidd_create_mutexes
+       integer(c_int64_t), intent(in) :: storetype
+       integer(c_int64_t), intent(in) :: number
+       end function ppidd_create_mutexes
       end interface
 
       interface
@@ -388,231 +388,229 @@
       end interface
 
       interface
-       subroutine ppidd_destroy_mutexes(ok)
-     >            bind(C,name='PPIDD_Destroy_mutexes')
-       use iso_c_binding, only : c_int, c_int64_t
-       integer(c_int), intent(out) :: ok
-       end subroutine ppidd_destroy_mutexes
+       function ppidd_destroy_mutexes()
+     >          bind(C,name='PPIDD_Destroy_mutexes')
+       use iso_c_binding, only : c_int
+       integer(c_int) :: ppidd_destroy_mutexes
+       end function ppidd_destroy_mutexes
       end interface
 
       interface
-       subroutine ppidd_sf_create(fname,size_hard_limit,size_soft_limit,
-     >            req_size,handle,ierr)
-     >            bind(C,name='PPIDD_Sf_create')
-       use iso_c_binding, only : c_double, c_int64_t, c_char
+       function ppidd_sf_create(fname,size_hard_limit,size_soft_limit,
+     >            req_size,handle)
+     >          bind(C,name='PPIDD_Sf_create')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_char
+       integer(c_int)                  :: ppidd_sf_create
        character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
        real(c_double),     intent(in)  :: size_hard_limit
        real(c_double),     intent(in)  :: size_soft_limit
        real(c_double),     intent(in)  :: req_size
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_create
+       end function ppidd_sf_create
       end interface
 
       interface
-       subroutine ppidd_sf_write(handle,byte_offset,byte_length,buff,
-     >            request_id,ierr)
-     >            bind(C,name='PPIDD_Sf_write')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_sf_write(handle,byte_offset,byte_length,buff,
+     >          request_id)
+     >          bind(C,name='PPIDD_Sf_write')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+       integer(c_int)                  :: ppidd_sf_write
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        real(c_double),     intent(in)  :: byte_length
        type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_write(c_loc(f_buff),...)
        integer(c_int64_t), intent(out) :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_write
+       end function ppidd_sf_write
       end interface
 
       interface
-       subroutine ppidd_sf_read(handle,byte_offset,byte_length,buff,
-     > request_id,ierr)
-     >            bind(C,name='PPIDD_Sf_read')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_sf_read(handle,byte_offset,byte_length,buff,
+     >          request_id)
+     >          bind(C,name='PPIDD_Sf_read')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+       integer(c_int)                  :: ppidd_sf_read
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        real(c_double),     intent(in)  :: byte_length
        type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_read(c_loc(f_buff),...)
        integer(c_int64_t), intent(out) :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_read
+       end function ppidd_sf_read
       end interface
 
       interface
-       subroutine ppidd_sf_wait(request_id,ierr)
-     >            bind(C,name='PPIDD_Sf_wait')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in)  :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_wait
+       function ppidd_sf_wait(request_id)
+     >          bind(C,name='PPIDD_Sf_wait')
+       use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                 :: ppidd_sf_wait
+       integer(c_int64_t), intent(in) :: request_id
+       end function ppidd_sf_wait
       end interface
 
       interface
-       subroutine ppidd_sf_waitall(list,num,ierr)
-     >            bind(C,name='PPIDD_Sf_waitall')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in)  :: num
-       integer(c_int64_t), intent(in)  :: list(num)
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_waitall
+       function ppidd_sf_waitall(list,num)
+     >          bind(C,name='PPIDD_Sf_waitall')
+       use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                 :: ppidd_sf_waitall
+       integer(c_int64_t), intent(in) :: num
+       integer(c_int64_t), intent(in) :: list(num)
+       end function ppidd_sf_waitall
       end interface
 
       interface
-       subroutine ppidd_sf_destroy(handle,ierr)
-     >            bind(C,name='PPIDD_Sf_destroy')
-       use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_sf_destroy
+       function ppidd_sf_destroy(handle)
+     >          bind(C,name='PPIDD_Sf_destroy')
+       use iso_c_binding, only : c_int, c_int64_t
+       integer(c_int)                 :: ppidd_sf_destroy
+       integer(c_int64_t), intent(in) :: handle
+       end function ppidd_sf_destroy
       end interface
 
       interface
-       subroutine ppidd_sf_errmsg(ierr,message)
+       subroutine ppidd_sf_errmsg(code,message)
      >            bind(C,name='PPIDD_Sf_errmsg')
-       use iso_c_binding, only : c_int64_t, c_char
-       integer(c_int64_t), intent(in)  :: ierr
-       character(c_char),  intent(out) :: message ! must to terminated by c_null_char
+       use iso_c_binding, only : c_int, c_char
+       integer(c_int),    intent(in)  :: code
+       character(c_char), intent(out) :: message ! must to terminated by c_null_char
        end subroutine ppidd_sf_errmsg
       end interface
 
       interface
-       subroutine ppidd_eaf_open(fname,type,handle,ierr)
-     >            bind(C,name='PPIDD_Eaf_open')
-       use iso_c_binding, only : c_int64_t, c_char
+       function ppidd_eaf_open(fname,type,handle)
+     >          bind(C,name='PPIDD_Eaf_open')
+       use iso_c_binding, only : c_int, c_int64_t, c_char
        character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: type
        integer(c_int64_t), intent(out) :: handle
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_open
+       integer(c_int)                  :: ppidd_eaf_open
+       end function ppidd_eaf_open
       end interface
 
       interface
-       subroutine ppidd_eaf_write(handle,byte_offset,buff,byte_length,
-     >            ierr)
-     >            bind(C,name='PPIDD_Eaf_write')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_eaf_write(handle,byte_offset,buff,byte_length)
+     >          bind(C,name='PPIDD_Eaf_write')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_write(c_loc(f_buff),...)
        real(c_double),     intent(in)  :: byte_length
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_write
+       integer(c_int)                  :: ppidd_eaf_write
+       end function ppidd_eaf_write
       end interface
 
       interface
-       subroutine ppidd_eaf_awrite(handle,byte_offset,buff,byte_length,
-     >            request_id,ierr)
-     >            bind(C,name='PPIDD_Eaf_awrite')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_eaf_awrite(handle,byte_offset,buff,byte_length,
+     >          request_id)
+     >          bind(C,name='PPIDD_Eaf_awrite')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_awrite(c_loc(f_buff),...)
        real(c_double),     intent(in)  :: byte_length
        integer(c_int64_t), intent(out) :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_awrite
+       integer(c_int)                  :: ppidd_eaf_awrite
+       end function ppidd_eaf_awrite
       end interface
 
       interface
-       subroutine ppidd_eaf_read(handle,byte_offset,buff,byte_length,
-     >            ierr)
-     >            bind(C,name='PPIDD_Eaf_read')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_eaf_read(handle,byte_offset,buff,byte_length)
+     >          bind(C,name='PPIDD_Eaf_read')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_read(c_loc(f_buff),...)
        real(c_double),     intent(in)  :: byte_length
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_read
+       integer(c_int)                  :: ppidd_eaf_read
+       end function ppidd_eaf_read
       end interface
 
       interface
-       subroutine ppidd_eaf_aread(handle,byte_offset,buff,byte_length,
-     >            request_id,ierr)
-     >            bind(C,name='PPIDD_Eaf_aread')
-       use iso_c_binding, only : c_double, c_int64_t, c_ptr
+       function ppidd_eaf_aread(handle,byte_offset,buff,byte_length,
+     >            request_id)
+     >          bind(C,name='PPIDD_Eaf_aread')
+       use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(in)  :: byte_offset
        type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_aread(c_loc(f_buff),...)
        real(c_double),     intent(in)  :: byte_length
        integer(c_int64_t), intent(out) :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_aread
+       integer(c_int)                  :: ppidd_eaf_aread
+       end function ppidd_eaf_aread
       end interface
 
       interface
-       subroutine ppidd_eaf_wait(handle,request_id,ierr)
-     >            bind(C,name='PPIDD_Eaf_wait')
-       use iso_c_binding, only : c_int64_t
+       function ppidd_eaf_wait(handle,request_id)
+     >          bind(C,name='PPIDD_Eaf_wait')
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: request_id
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_wait
+       integer(c_int)                  :: ppidd_eaf_wait
+       end function ppidd_eaf_wait
       end interface
 
       interface
-       subroutine ppidd_eaf_waitall(list,num,ierr)
-     >            bind(C,name='PPIDD_Eaf_waitall')
-       use iso_c_binding, only : c_int64_t
+       function ppidd_eaf_waitall(list,num)
+     >          bind(C,name='PPIDD_Eaf_waitall')
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: num
        integer(c_int64_t), intent(in)  :: list(num)
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_waitall
+       integer(c_int)                  :: ppidd_eaf_waitall
+       end function ppidd_eaf_waitall
       end interface
 
       interface
-       subroutine ppidd_eaf_probe(request_id,status,ierr)
-     >            bind(C,name='PPIDD_Eaf_probe')
-       use iso_c_binding, only : c_int64_t
+       function ppidd_eaf_probe(request_id,status)
+     >          bind(C,name='PPIDD_Eaf_probe')
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: request_id
        integer(c_int64_t), intent(out) :: status
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_probe
+       integer(c_int)                  :: ppidd_eaf_probe
+       end function ppidd_eaf_probe
       end interface
 
       interface
-       subroutine ppidd_eaf_close(handle,ierr)
-     >            bind(C,name='PPIDD_Eaf_close')
-       use iso_c_binding, only : c_int64_t
+       function ppidd_eaf_close(handle)
+     >          bind(C,name='PPIDD_Eaf_close')
+       use iso_c_binding, only : c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_close
+       integer(c_int)                  :: ppidd_eaf_close
+       end function ppidd_eaf_close
       end interface
 
       interface
-       subroutine ppidd_eaf_delete(fname,ierr)
-     >            bind(C,name='PPIDD_Eaf_delete')
-       use iso_c_binding, only : c_char, c_int64_t
+       function ppidd_eaf_delete(fname)
+     >          bind(C,name='PPIDD_Eaf_delete')
+       use iso_c_binding, only : c_char, c_int
        character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_delete
+       integer(c_int)                  :: ppidd_eaf_delete
+       end function ppidd_eaf_delete
       end interface
 
       interface
-       subroutine ppidd_eaf_length(handle,fsize,ierr)
-     >            bind(C,name='PPIDD_Eaf_length')
-       use iso_c_binding, only : c_double, c_int64_t
+       function ppidd_eaf_length(handle,fsize)
+     >          bind(C,name='PPIDD_Eaf_length')
+       use iso_c_binding, only : c_double, c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(out) :: fsize
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_length
+       integer(c_int)                  :: ppidd_eaf_length
+       end function ppidd_eaf_length
       end interface
 
       interface
-       subroutine ppidd_eaf_truncate(handle,offset,ierr)
-     >            bind(C,name='PPIDD_Eaf_truncate')
-       use iso_c_binding, only : c_double, c_int64_t
+       function ppidd_eaf_truncate(handle,offset)
+     >          bind(C,name='PPIDD_Eaf_truncate')
+       use iso_c_binding, only : c_double, c_int, c_int64_t
        integer(c_int64_t), intent(in)  :: handle
        real(c_double),     intent(out) :: offset
-       integer(c_int64_t), intent(out) :: ierr
-       end subroutine ppidd_eaf_truncate
+       integer(c_int)                  :: ppidd_eaf_truncate
+       end function ppidd_eaf_truncate
       end interface
 
       interface
-       subroutine ppidd_eaf_errmsg(ierr,message)
+       subroutine ppidd_eaf_errmsg(code,message)
      >            bind(C,name='PPIDD_Eaf_errmsg')
-       use iso_c_binding, only : c_int64_t, c_char
-       integer(c_int64_t), intent(in)  :: ierr
-       character(c_char),  intent(out) :: message ! must to terminated by c_null_char
+       use iso_c_binding, only : c_int, c_char
+       integer(c_int),    intent(in)  :: code
+       character(c_char), intent(out) :: message ! must to terminated by c_null_char
        end subroutine ppidd_eaf_errmsg
       end interface
 

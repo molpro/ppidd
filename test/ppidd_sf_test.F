@@ -51,7 +51,8 @@ c     integer stack, heap
 c
       integer nodeid, nnodes
       integer handle,i,start,end,j, chunk
-      integer(c_int64_t) :: me,nproc,rc
+      integer(c_int64_t) me,nproc
+      integer(c_int) rc
 
 c...  Get the processes number and process id
       call ppidd_size(nproc)
@@ -72,8 +73,8 @@ c
       if(me.eq.0) write(iout,*) 'Creating shared file = ',
      >            trim(FNAME)
       call ppidd_flush6
-      call ppidd_sf_create(FNAME//c_null_char,
-     $     dble(16*size),dble(8*size),dble(8*dimnsn),handle,rc)
+      rc=ppidd_sf_create(FNAME//c_null_char,
+     $     dble(16*size),dble(8*size),dble(8*dimnsn),handle)
 c
       call ppidd_barrier()
       if(me.eq.0) write(iout,*) 'Writing and reading operations:'
@@ -93,20 +94,20 @@ c     everybody writes chunk of data
             enddo
 
             if(curid .eq. maxid)then
-               call ppidd_sf_waitall(idlist,maxid,rc)
+               rc=ppidd_sf_waitall(idlist,maxid)
                curid = 0
             endif
             curid = curid+1
-            call ppidd_sf_write(handle,  8.0d0*dble(i-1),
-     &           8.0d0*dble(min(dimnsn,(end-i+1))),
-     &           c_loc(buffer(1,curid)),
-     &           idlist(curid),rc)
+            rc=ppidd_sf_write(handle,  8.0d0*dble(i-1),
+     &         8.0d0*dble(min(dimnsn,(end-i+1))),
+     &         c_loc(buffer(1,curid)),
+     &         idlist(curid))
             if (rc.ne.0)call ppidd_error('write failed'//c_null_char,rc)
 
          enddo
       endif
 c
-      call ppidd_sf_waitall(idlist,curid,rc)
+      rc=ppidd_sf_waitall(idlist,curid)
       if(rc.ne.0)call ppidd_error('waitall failed'//c_null_char,rc)
       curid = 0
 
@@ -126,9 +127,9 @@ c     everybody reads different chunk of data
       do i = start,end,dimnsn
 
 c           read and test data chunk by chunk
-            call ppidd_sf_read(handle, 8.0d0*dble(i-1),
-     .          8.0d0*dble(min(dimnsn,(end-i+1))), c_loc(buffer),
-     &          idlist(1),rc)
+            rc=ppidd_sf_read(handle, 8.0d0*dble(i-1),
+     .         8.0d0*dble(min(dimnsn,(end-i+1))), c_loc(buffer),
+     &         idlist(1))
             if (rc.ne.0)then
                lerrmsg=len(errmsg)
                errmsg(lerrmsg:lerrmsg)=c_null_char
@@ -137,7 +138,7 @@ c           read and test data chunk by chunk
      .                       ' failed:',errmsg
                call ppidd_error('read failed'//c_null_char,rc)
             endif
-            call ppidd_sf_wait(idlist(1),rc)
+            rc=ppidd_sf_wait(idlist(1))
             if (rc.ne.0)call ppidd_error('wait failed'//c_null_char,rc)
 c
             do j = 1,min(dimnsn,(end-i+1))
@@ -162,7 +163,7 @@ c
         write(iout,*)
         write(iout,*) 'Destroying shared file = ',trim(FNAME)
       endif
-      call ppidd_sf_destroy(handle,rc)
+      rc=ppidd_sf_destroy(handle)
 c
       call ppidd_barrier()
 

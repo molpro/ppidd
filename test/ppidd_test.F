@@ -66,7 +66,7 @@ c... idtype=1: fortran double precision type
       call ppidd_ma_init(idtype,stack,ma_heap,status)
       if (.not. status)
      > call ppidd_error('ppidd_ma_init failed'//c_null_char,
-     >                  -1_c_int64_t)
+     >                  -1_c_int)
 
       if(iprocs.eq.0) write(iout,*) 'MA initialized.'
 #endif
@@ -212,7 +212,7 @@ c
 32      format(1x,'Please check INTEGER (related to CFLAGS/FCFLAGS)',
      >            ' option, and rebuild the library.')
         call ppidd_error('Data types failed to match'//c_null_char,
-     >                   0_c_int64_t)
+     >                   0_c_int)
       endif
 
       end
@@ -320,8 +320,8 @@ c
 c... ppidd_create
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
-      call ppidd_create('ppiddarray'//c_null_char,lentot,dtype,
-     >                  storetype,ihandle,ok)
+      ok=ppidd_create('ppiddarray'//c_null_char,lentot,dtype,
+     >                storetype,ihandle)
       call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
@@ -336,21 +336,21 @@ c... ppidd_create
 cc    create global data struct for testing latency, lenseg elements per proc evenly
       lenseg=1
       lenlat=nprocs*lenseg
-      call ppidd_create('ppiddlat'//c_null_char,lenlat,dtype,storetype,
-     >                  ihandlat,ok)
+      ok=ppidd_create('ppiddlat'//c_null_char,lenlat,dtype,storetype,
+     >                ihandlat)
 c
 c... ppidd_zero
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
       do i=1,nloop
-        call ppidd_zero(ihandle,ok)
+       ok=ppidd_zero(ihandle)
       end do
       call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
       if(iprocs.eq.0) write(iout,10) 'ppidd_zero:',cpu,wtime
       call ppidd_flush6
-      call ppidd_zero(ihandlat,ok)
+      ok=ppidd_zero(ihandlat)
 c
 c... ppidd_put
 c... measure the latency
@@ -368,7 +368,7 @@ c ppidd_put latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)),ok)
+              ok=ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)))
             end do
           end do
         end if
@@ -391,7 +391,7 @@ c ppidd_put latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)),ok)
+              ok=ppidd_put(ihandlat,inum,inum,c_loc(buff(inum)))
             end do
           end do
         end if
@@ -422,7 +422,7 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_put(ihandle,ilo,ihi,c_loc(buff),ok)
+            ok=ppidd_put(ihandle,ilo,ihi,c_loc(buff))
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -458,7 +458,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_put(ihandle,ilo,ihi,c_loc(buff),ok)
+            ok=ppidd_put(ihandle,ilo,ihi,c_loc(buff))
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -510,7 +510,7 @@ c ppidd_get latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)),ok)
+              ok=ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)))
             end do
           end do
         end if
@@ -531,7 +531,7 @@ c ppidd_get latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)),ok)
+              ok=ppidd_get(ihandlat,inum,inum,c_loc(buff(inum)))
             end do
           end do
         end if
@@ -557,7 +557,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_get(ihandle,ilo,ihi,c_loc(buff),ok)
+            ok=ppidd_get(ihandle,ilo,ihi,c_loc(buff))
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -602,8 +602,8 @@ c ppidd_acc latency trial test, in order to eliminate unstable behavior
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
-     >                       c_loc(z1),ok)
+              ok=ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
+     >                     c_loc(z1))
             end do
           end do
         end if
@@ -624,8 +624,8 @@ c ppidd_acc latency standard test
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
-              call ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
-     >                       c_loc(z1),ok)
+              ok=ppidd_acc(ihandlat,inum,inum,c_loc(buff(inum)),
+     >                     c_loc(z1))
             end do
           end do
         end if
@@ -651,7 +651,7 @@ c... measure the bandwidth
             len=min(lenbuf,nrest)
             ilo=ioff+1
             ihi=ioff+len
-            call ppidd_acc(ihandle,ilo,ihi,c_loc(buff),c_loc(z1),ok)
+            ok=ppidd_acc(ihandle,ilo,ihi,c_loc(buff),c_loc(z1))
             nopr=nopr+1
             nrest=nrest-len
           end do
@@ -686,14 +686,14 @@ c
 c... ppidd_destroy
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
-      call ppidd_destroy(ihandle,ok)
+      ok=ppidd_destroy(ihandle)
       call get_current_times(cpu2,wtime2)
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
       if(iprocs.eq.0) write(iout,10) 'ppidd_destroy:',cpu,wtime
       call ppidd_flush6
 
-      call ppidd_destroy(ihandlat,ok)
+      ok=ppidd_destroy(ihandlat)
 
       end do
 c...  end of loop_array
@@ -1113,7 +1113,7 @@ c... check whether right numbers are obtained
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
      >       call ppidd_error('shared counter test failed'//c_null_char,
-     >                        0_c_int64_t)
+     >                        0_c_int)
       end do
 
 c... print out the summary
@@ -1197,7 +1197,7 @@ c... check whether right numbers are obtained
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
      >       call ppidd_error('shared counter test failed'//c_null_char,
-     >                        0_c_int64_t)
+     >                        0_c_int)
       end do
 
 c... print out the summary
@@ -1449,7 +1449,7 @@ c... case 2
         end if
       end if
 
-      call ppidd_create_mutexes(storetype,number,ok)
+      ok=ppidd_create_mutexes(storetype,number)
 
       do i=1,nprocs
         task_array(i)=0
@@ -1499,7 +1499,7 @@ c... check whether right numbers are obtained
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
      >       call ppidd_error('mutex test failed'//c_null_char,
-     >                        0_c_int64_t)
+     >                        0_c_int)
       end do
 
 c... print out the summary
@@ -1577,7 +1577,7 @@ c... check whether right numbers are obtained
         if (verbose) write(iout,*) ' difference of average=',diffm
         if (abs(diffm).gt.1.0d-5)
      >       call ppidd_error('mutex test failed'//c_null_char,
-     >                        0_c_int64_t)
+     >                        0_c_int)
       end do
 
 c... print out the summary
@@ -1686,7 +1686,7 @@ c... convert time to nanosecond
 c... end of (3) mutex test
 
 c... destroy mutexes
-      call ppidd_destroy_mutexes(ok)
+      ok=ppidd_destroy_mutexes()
 
       end do
 c...  end of loop_array

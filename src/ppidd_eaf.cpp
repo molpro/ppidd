@@ -30,17 +30,15 @@ static int MPI_Debug=0;
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   void PPIDD_Eaf_open(char *fname,int64_t *type, int64_t *handle, int64_t *ierr) {
+   int PPIDD_Eaf_open(char *fname,int64_t *type, int64_t *handle) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       int amode=0;
-      int mpierr;
 #endif
 #ifdef GA_MPI
-      int gaerr;
       int gahandle;
 #endif
       int modetype=(int)*type;
@@ -68,18 +66,17 @@ static int MPI_Debug=0;
       }
 /*      MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN;*/
 
-      mpierr=MPI_File_open(MPI_COMM_SELF,name2,amode,MPI_INFO_NULL,&mpi_fh);
+      int ierr=MPI_File_open(MPI_COMM_SELF,name2,amode,MPI_INFO_NULL,&mpi_fh);
       mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
-      *ierr=(int64_t)mpierr;
 #endif
 #ifdef GA_MPI
-      gaerr=EAF_Open(name2, modetype, &gahandle);
+      int ierr=EAF_Open(name2, modetype, &gahandle);
       *handle=(int64_t)gahandle;
-      *ierr=(int64_t)gaerr;
 #endif
       free(name2);
-      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,(int)*ierr);
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_open is not available in serial case.\n");
       exit(1);
@@ -90,13 +87,12 @@ static int MPI_Debug=0;
    Synchronously write to the file specified by the file handle.
    Writes number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   void PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *ierr) {
+   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
-      int mpierr;
       MPI_Datatype datatype;
       MPI_Status status;
       if(MPI_Debug)printf("In PPIDD_Eaf_write : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
@@ -105,17 +101,16 @@ static int MPI_Debug=0;
       count=(int)(*byte_length/8);
       datatype=MPI_DOUBLE;
       if(MPI_Debug)printf("In PPIDD_Eaf_write : before MPI_File_write_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
-      mpierr=MPI_File_write_at(mpi_fh,offset,buff,count,datatype,&status);
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_write : end. handle=%d,ierr=%d\n",(int)mpifhandle,(int)*ierr);
+      int ierr=MPI_File_write_at(mpi_fh,offset,buff,count,datatype,&status);
+      if(MPI_Debug)printf("In PPIDD_Eaf_write : end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
-      int gaerr;
 
-      gaerr=EAF_Write(gahandle,offset,buff,bytes);
-      *ierr=(int64_t)gaerr;
+      int ierr=EAF_Write(gahandle,offset,buff,bytes);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_write is not available in serial case.\n");
       exit(1);
@@ -127,13 +122,12 @@ static int MPI_Debug=0;
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   void PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id,int64_t *ierr) {
+   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
-      int mpierr;
       MPI_Datatype datatype;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request;
@@ -146,20 +140,19 @@ static int MPI_Debug=0;
       count=(int)(*byte_length/8);
       datatype=MPI_DOUBLE;
       if(MPI_Debug)printf("In PPIDD_Eaf_awrite : before MPI_File_iwrite_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
-      mpierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,datatype,&request);
+      int ierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,datatype,&request);
       *request_id=(int64_t)request;
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_awrite : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
+      if(MPI_Debug)printf("In PPIDD_Eaf_awrite : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
       int request;
-      int gaerr;
 
-      gaerr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
+      int ierr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
       *request_id=(int64_t)request;
-      *ierr=(int64_t)gaerr;
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_awrite is not available in serial case.\n");
       exit(1);
@@ -171,13 +164,12 @@ static int MPI_Debug=0;
    Synchronously read from the file specified by the file handle.
    Reads number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   void PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *ierr) {
+   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
-      int mpierr;
       MPI_Datatype datatype;
       MPI_Status status;
       if(MPI_Debug)printf("In PPIDD_Eaf_read  : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
@@ -186,17 +178,16 @@ static int MPI_Debug=0;
       count=(int)(*byte_length/8);
       datatype=MPI_DOUBLE;
       if(MPI_Debug)printf("In PPIDD_Eaf_read  : before MPI_File_read_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
-      mpierr=MPI_File_read_at(mpi_fh,offset,buff,count,datatype,&status);
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_read  : end. handle=%d,ierr=%d\n",(int)mpifhandle,(int)*ierr);
+      int ierr=MPI_File_read_at(mpi_fh,offset,buff,count,datatype,&status);
+      if(MPI_Debug)printf("In PPIDD_Eaf_read  : end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
-      int gaerr;
 
-      gaerr=EAF_Read(gahandle,offset,buff,bytes);
-      *ierr=(int64_t)gaerr;
+      int ierr=EAF_Read(gahandle,offset,buff,bytes);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_read is not available in serial case.\n");
       exit(1);
@@ -209,13 +200,12 @@ static int MPI_Debug=0;
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   void PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id,int64_t *ierr) {
+   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
-      int mpierr;
       MPI_Datatype datatype;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request;
@@ -228,20 +218,19 @@ static int MPI_Debug=0;
       count=(int)(*byte_length/8);
       datatype=MPI_DOUBLE;
       if(MPI_Debug)printf("In PPIDD_Eaf_aread  : before MPI_File_iread_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
-      mpierr=MPI_File_iread_at(mpi_fh,offset,buff,count,datatype,&request);
+      int ierr=MPI_File_iread_at(mpi_fh,offset,buff,count,datatype,&request);
       *request_id=(int64_t)request;
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)*ierr,(int)*request_id,(long)request);
+      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
       int request;
-      int gaerr;
 
-      gaerr=EAF_Aread(gahandle,offset,buff,bytes,&request);
+      int ierr=EAF_Aread(gahandle,offset,buff,bytes,&request);
       *request_id=(int64_t)request;
-      *ierr=(int64_t)gaerr;
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_aread is not available in serial case.\n");
       exit(1);
@@ -256,10 +245,9 @@ static int MPI_Debug=0;
    integer ierr         --[out] Error code. 0 if it is able to wait for completion,
                           else returns error code.
 \* ************************************************************************************ */
-   void PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id,int64_t *ierr) {
+   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
-      int mpierr;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request=(MPI_Request)(*request_id);
 #else
@@ -269,19 +257,18 @@ static int MPI_Debug=0;
       if(MPI_Debug)printf("In PPIDD_Eaf_wait  : begin. handle=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)*request_id,(long)request);
 
 #ifdef MPIO_USES_MPI_REQUEST
-      mpierr=MPI_Wait( &request, &status );
+      int ierr=MPI_Wait( &request, &status );
 #else
-      mpierr=MPIO_Wait(&request, &status);
+      int ierr=MPIO_Wait(&request, &status);
 #endif
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : end. ierr=%d\n",(int)*ierr);
+      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : end. ierr=%d\n",ierr);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       int request=(int)*request_id;
-      int gaerr;
 
-      gaerr=EAF_Wait(gahandle,request);
-      *ierr=(int64_t)gaerr;
+      int ierr=EAF_Wait(gahandle,request);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_wait is not available in serial case.\n");
       exit(1);
@@ -293,34 +280,30 @@ static int MPI_Debug=0;
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Finally invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   void PPIDD_Eaf_waitall(int64_t *list, int64_t *num,int64_t *ierr) {
+   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
 #ifdef MPI2
-      int i;
-      int mpierr;
       int count=(int)(*num);
       MPI_Status *array_of_statuses;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request *array_of_requests;
       array_of_requests=(MPI_Request*)malloc(count*sizeof(MPI_Request));
 #else
-      int mpierrsub;
       MPIO_Request *array_of_requests;
       array_of_requests=(MPIO_Request*)malloc(count*sizeof(MPIO_Request));
 #endif
 
       array_of_statuses=(MPI_Status*)malloc(count*sizeof(MPI_Status));
-      for(i=0;i<count;i++) array_of_requests[i]=(MPI_Request)list[i];
+      for(int i=0;i<count;i++) array_of_requests[i]=(MPI_Request)list[i];
 
 #ifdef MPIO_USES_MPI_REQUEST
-      mpierr=MPI_Waitall(count,array_of_requests,array_of_statuses);
+      int ierr=MPI_Waitall(count,array_of_requests,array_of_statuses);
 #else
-      for(i=0,mpierr=0;i<count;i++) {
-        mpierrsub=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
-        mpierr=mpierr+mpierrsub;
-      }
+      int ierr=0;
+      for(int i=0;i<count;i++) ierr+=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
 #endif
-      *ierr=(int64_t)mpierr;
+      return ierr;
 #elif defined(GA_MPI)
+      return 0;
 #else
       printf(" ERROR: PPIDD_Eaf_waitall is not available in serial case.\n");
       exit(1);
@@ -335,10 +318,9 @@ static int MPI_Debug=0;
                           If the asynchronous request is complete, id is invalidated.
    integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
 \* ************************************************************************************ */
-   void PPIDD_Eaf_probe(int64_t *request_id,int64_t *status,int64_t *ierr) {
+   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
 #ifdef MPI2
       int flag;
-      int mpierr;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request=(MPI_Request)(*request_id);
 #else
@@ -348,23 +330,22 @@ static int MPI_Debug=0;
       if(MPI_Debug)printf("In PPIDD_Eaf_probe  : begin. request_id=%d,request=%ld\n",(int)*request_id,(long)request);
 
 #ifdef MPIO_USES_MPI_REQUEST
-      mpierr=MPI_Test(&request, &flag, &mpistatus);
+      int ierr=MPI_Test(&request, &flag, &mpistatus);
 #else
-      mpierr=MPIO_Test(&request, &flag, &mpistatus);
+      int ierr=MPIO_Test(&request, &flag, &mpistatus);
 #endif
       if(flag) *status=(int64_t)0;
       else *status=(int64_t)1;
 
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : end. ierr=%d\n",(int)*ierr);
+      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : end. ierr=%d\n",ierr);
+      return ierr;
 #elif defined(GA_MPI)
       int garequest=(int)*request_id;
       int gastatus;
-      int gaerr;
 
-      gaerr=EAF_Probe(garequest, &gastatus);
+      int ierr=EAF_Probe(garequest, &gastatus);
       *status=(int64_t)gastatus;
-      *ierr=(int64_t)gaerr;
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_probe is not available in serial case.\n");
       exit(1);
@@ -377,22 +358,20 @@ static int MPI_Debug=0;
    integer handle  --[in]  File Handle.
    integer ierr    --[out] Error code. 0 if the file was closed, else returns error code.
 \* ************************************************************************************ */
-   void PPIDD_Eaf_close(int64_t *handle,int64_t *ierr) {
+   int PPIDD_Eaf_close(int64_t *handle) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
-      int mpierr;
       if(MPI_Debug)printf("In PPIDD_Eaf_close: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);
-      mpierr=MPI_File_close( &mpi_fh );
-      *ierr=(int64_t)mpierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_close: end. handle=%d,ierr=%d\n",(int)mpifhandle,(int)*ierr);
+      int ierr=MPI_File_close( &mpi_fh );
+      if(MPI_Debug)printf("In PPIDD_Eaf_close: end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
-      int gaerr;
 
-      gaerr=EAF_Close(gahandle);
-      *ierr=(int64_t)gaerr;
+      int ierr=EAF_Close(gahandle);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_close is not available in serial case.\n");
       exit(1);
@@ -405,9 +384,8 @@ static int MPI_Debug=0;
    character*(*) fname   -- [in]  File name.
    integer ierr          -- [out] Error code. 0 if the file was deleted, else returns error code.
 \* ********************************************************************************************* */
-   void PPIDD_Eaf_delete(char *fname,int64_t *ierr) {
+   int PPIDD_Eaf_delete(char *fname) {
 #if defined(MPI2) || defined(GA_MPI)
-      int i,pierr=0;
       char *name2;
       int lxi;
 
@@ -415,18 +393,18 @@ static int MPI_Debug=0;
       lxi=strlen(fname);
       strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
       name2[lxi]=(char)0;
-      for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
+      for(int i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
 
 #ifdef MPI2
-      pierr=MPI_File_delete(name2,MPI_INFO_NULL);
+      int ierr=MPI_File_delete(name2,MPI_INFO_NULL);
 #elif defined(GA_MPI)
-      pierr=EAF_Delete(name2);
+      int ierr=EAF_Delete(name2);
 #endif
 
-      if(MPI_Debug)printf("In PPIDD_Eaf_delete: mid. fname=%s,pierr=%d\n",name2,pierr);
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: mid. fname=%s,ierr=%d\n",name2,ierr);
       free(name2);
-      *ierr=(int64_t)pierr;
-      if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",(int)*ierr);
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_delete is not available in serial case.\n");
       exit(1);
@@ -439,26 +417,24 @@ static int MPI_Debug=0;
    integer handle    --[in]  File Handle.
    double fsize      --[out] File length in bytes.
 \* ************************************************************************************ */
-   void PPIDD_Eaf_length(int64_t *handle,double *fsize,int64_t *ierr) {
+   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset size;
-      int mpierr;
       if(MPI_Debug)printf("In PPIDD_Eaf_length: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);
-      mpierr=MPI_File_get_size(mpi_fh, &size);
+      int ierr=MPI_File_get_size(mpi_fh, &size);
       *fsize=(double)size;
-      *ierr=(int64_t)mpierr;
       if(MPI_Debug)printf("In PPIDD_Eaf_length: end. handle=%d,fsize=%f\n",(int)mpifhandle,*fsize);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t length;
-      int gaerr;
 
-      gaerr=EAF_Length(gahandle,&length);
+      int ierr=EAF_Length(gahandle,&length);
       *fsize=(double)length;
-      *ierr=(int64_t)gaerr;
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_length is not available in serial case.\n");
       exit(1);
@@ -471,24 +447,22 @@ static int MPI_Debug=0;
    double offset  --[in]  Offset in bytes.
    integer ierr   --[out] Error code. 0 if the file was truncated, else returns error code.
 \* *************************************************************************************** */
-   void PPIDD_Eaf_truncate(int64_t *handle,double *offset,int64_t *ierr) {
+   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
 #ifdef MPI2
       MPI_Fint mpifhandle=(MPI_Fint)*handle;
       MPI_File mpi_fh;
       MPI_Offset size=(MPI_Offset)(*offset);
-      int mpierr;
       if(MPI_Debug)printf("In PPIDD_Eaf_truncate: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);
-      mpierr=MPI_File_set_size(mpi_fh,size);
-      *ierr=(int64_t)mpierr;
+      int ierr=MPI_File_set_size(mpi_fh,size);
       if(MPI_Debug)printf("In PPIDD_Eaf_truncate: end. handle=%d,size=%ld\n",(int)mpifhandle,(long)size);
+      return ierr;
 #elif defined(GA_MPI)
       int gahandle=(int)*handle;
       eaf_off_t length=(eaf_off_t)*offset;
-      int gaerr;
 
-      gaerr=EAF_Truncate(gahandle,length);
-      *ierr=(int64_t)gaerr;
+      int ierr=EAF_Truncate(gahandle,length);
+      return ierr;
 #else
       printf(" ERROR: PPIDD_Eaf_truncate is not available in serial case.\n");
       exit(1);
@@ -502,30 +476,26 @@ static int MPI_Debug=0;
         code             -- [in]  error code returned by a previous call to EAF
         message          -- [out] character string where the corresponding message
 \* ********************************************************************************* */
-   void PPIDD_Eaf_errmsg(int64_t *code,char *message) {
+   void PPIDD_Eaf_errmsg(int *code,char *message) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
 #endif
-      int perrcode=(int)*code;
-      int i;
-      int lxi;
+      int lxi=strlen(message);
 
-      lxi=strlen(message);
-
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. perrcode=%d\n",perrcode);
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. code=%d\n",*code);
 #ifdef MPI2
-      MPI_Error_class(perrcode, &eclass);
-      MPI_Error_string(perrcode, estring, &len);
+      MPI_Error_class(*code, &eclass);
+      MPI_Error_string(*code, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
       strcpy(message,estring2);
 #elif defined(GA_MPI)
-      EAF_Errmsg(perrcode, message);
+      EAF_Errmsg(*code, message);
 #endif
       if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: middle. message=%s\n",message);
-      for(i=strlen(message);i<lxi;i++) message[i]=' ';
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. perrcode=%d\n",perrcode);
+      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. code=%d\n",*code);
 #else
       printf(" ERROR: PPIDD_Eaf_errmsg is not available in serial case.\n");
       exit(1);

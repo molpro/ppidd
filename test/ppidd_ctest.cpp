@@ -1,6 +1,7 @@
 /*! PPIDD standalone c test suites */
 #include "ppidd.h"
 #include <stdio.h>
+#include <inttypes.h>
 
 int ppidd_ctest(void);
 
@@ -26,7 +27,7 @@ int ppidd_ctest(void)
 
     if(me==0) {
        printf(" PPIDD initialized\n");
-       printf(" Nprocs= %d    My proc= %d\n",nproc,me);
+       printf(" Nprocs= %" PRIu64 "    My proc= %" PRIu64 "\n",nproc,me);
        printf(" Performing PPIDD C tests:\n");
        fflush(stdout);
     }

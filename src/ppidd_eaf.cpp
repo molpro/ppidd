@@ -332,7 +332,7 @@ static int MPI_Debug=0;
    integer request_id   --[in]  Handle of asynchronous request.
    integer status       --[out] Pending or completed status argument.
                           status returns 0 if the asynchronous operation is complete, or 1 otherwise.
-			  If the asynchronous request is complete, id is invalidated.
+                          If the asynchronous request is complete, id is invalidated.
    integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
 \* ************************************************************************************ */
    void PPIDD_Eaf_probe(int64_t *request_id,int64_t *status,int64_t *ierr) {

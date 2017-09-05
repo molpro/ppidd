@@ -71,7 +71,7 @@ c... idtype=1: fortran double precision type
       if(iprocs.eq.0) write(iout,*) 'MA initialized.'
 #endif
 
-! Call ppiddtest      
+! Call ppiddtest
       call ppiddtest(helper_server_flag.eq.1)
 
 ! Terminate and Tidy up PPIDD

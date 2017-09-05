@@ -274,7 +274,7 @@ extern "C" {
    void PPIDD_Size_all(int64_t *np) {
 #ifdef MPI2
       int mpinp;
-      MPI_Comm	mpicomm=MPI_COMM_WORLD;
+      MPI_Comm mpicomm=MPI_COMM_WORLD;
 
       MPI_Comm_size(mpicomm, &mpinp);
       *np = (int64_t) mpinp;
@@ -295,7 +295,7 @@ extern "C" {
    void PPIDD_Size(int64_t *np) {
 #ifdef MPI2
       int mpinp;
-      MPI_Comm	mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpigv(Compute_comm);
 
       MPI_Comm_size(mpicomm, &mpinp);
       *np = (int64_t) mpinp;
@@ -316,7 +316,7 @@ extern "C" {
    void PPIDD_Rank(int64_t *me) {
 #ifdef MPI2
       int mpime;
-      MPI_Comm	mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpigv(Compute_comm);
 
       MPI_Comm_rank(mpicomm, &mpime);
       *me = (int64_t) mpime;
@@ -381,10 +381,10 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Send(void *buf,int64_t *count,int64_t *dtype,int64_t *dest,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm	mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = GA_MPI_Comm();
+      MPI_Comm mpicomm = GA_MPI_Comm();
   #endif
       int mpicount=(int)*count;
       int mpidest=(int)*dest;
@@ -410,7 +410,7 @@ static int n_in_msg_mpiq=0;
       else {
          if (n_in_msg_mpiq >= MAX_MPIQ_LEN) {
             MPIGA_Error("PPIDD_SEND: nonblocking SEND: overflowing async Queue limit",n_in_msg_mpiq);
-	 }
+         }
          mpierr = MPI_Isend(buf, mpilenbuf, MPI_CHAR,mpidest, mpitag,mpicomm,
                      &msg_mpiq[n_in_msg_mpiq].request);
          mpi_test_status("PPIDD_SEND: nonblocking SEND:",mpierr);
@@ -435,10 +435,10 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Recv(void *buf,int64_t *count,int64_t *dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm	mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = GA_MPI_Comm();
+      MPI_Comm mpicomm = GA_MPI_Comm();
   #endif
       int mpicount=(int)*count;
       int mpitag=(int)*dtype;
@@ -467,7 +467,7 @@ static int n_in_msg_mpiq=0;
       if(mpisync==0){
          if (n_in_msg_mpiq >= MAX_MPIQ_LEN) {
             MPIGA_Error("PPIDD_Recv: nonblocking RECV: overflowing async Queue limit", n_in_msg_mpiq);
-	 }
+         }
          mpierr = MPI_Irecv(buf,mpilenbuf,MPI_CHAR,mpinode,mpitag,mpicomm,&request);
          mpi_test_status("PPIDD_Recv: nonblocking RECV:",mpierr);
 
@@ -528,10 +528,10 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Iprobe(int64_t *tag,int64_t *source,int *ok) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm	mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpigv(Compute_comm);
   #endif
   #ifdef GA_MPI
-      MPI_Comm	mpicomm = GA_MPI_Comm();
+      MPI_Comm mpicomm = GA_MPI_Comm();
   #endif
       int mpitag=(int)*tag;
       int mpisource,mpierr,flag;
@@ -991,9 +991,9 @@ static int n_in_msg_mpiq=0;
       int mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
 
       for (int i=0;i<mpinp;i++) {
-	 map[2*i]=(int64_t)(mpimap[2*i]+1);
-	 map[2*i+1]=(int64_t)(mpimap[2*i+1]+1);
-	 proclist[i]=(int64_t)mpiproclist[i];
+         map[2*i]=(int64_t)(mpimap[2*i]+1);
+         map[2*i+1]=(int64_t)(mpimap[2*i+1]+1);
+         proclist[i]=(int64_t)mpiproclist[i];
       }
       *np = (int64_t) mpinp;
       *ok = 1 ;
@@ -1170,7 +1170,7 @@ static int n_in_msg_mpiq=0;
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 
-	 int64_t vincr=(int64_t)*incr;
+         int64_t vincr=(int64_t)*incr;
          mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, &mpihandle);
       }
       *returnval=(int64_t)mpivalue;
@@ -1266,21 +1266,21 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int ok;
       if (*numproc < 0) {
-	/* reset - collective */
-	if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Nxtval_initialised=0;
-	//      }
-      	//else if (! PPIDD_Nxtval_initialised) {
-	/* first call needs to be collective and will return 0*/
-	int64_t lentot=1, datatype=0, storetype=1;
-	PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
-	PPIDD_Nxtval_initialised=1;
-	*val=0;
+        /* reset - collective */
+        if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle,&ok);
+        PPIDD_Nxtval_initialised=0;
+        //      }
+        //else if (! PPIDD_Nxtval_initialised) {
+        /* first call needs to be collective and will return 0*/
+        int64_t lentot=1, datatype=0, storetype=1;
+        PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle,&ok);
+        PPIDD_Zero(&PPIDD_Nxtval_handle,&ok);
+        PPIDD_Nxtval_initialised=1;
+        *val=0;
       }
       else {
-	int64_t inum=1,incr=1;
-	PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
+        int64_t inum=1,incr=1;
+        PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
       }
 #else
       printf(" ERROR: PPIDD_Nxtval should not be called in serial case.\n");

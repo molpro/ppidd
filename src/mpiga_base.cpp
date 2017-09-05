@@ -52,12 +52,12 @@ int mpiga_initialize(int *argcmain, char ***argvmain)
     if (!flag)    {
        mpierr=MPI_Init(argcmain,argvmain);
        if (mpierr!=MPI_SUCCESS) {
-	  fprintf(stderr,"ERROR in mpiga_initialize. MPI_Init failed. mpierr=%d\n",mpierr);
-	  return 1;
+          fprintf(stderr,"ERROR in mpiga_initialize. MPI_Init failed. mpierr=%d\n",mpierr);
+          return 1;
        }
     }
     else {
-	fprintf(stderr,"WARNING in mpiga_initialize! MPI_Init has been called before MPI_Init.\n");
+        fprintf(stderr,"WARNING in mpiga_initialize! MPI_Init has been called before MPI_Init.\n");
     }
 
     MPI_Comm_size(MPI_COMM_WORLD, &size_all);
@@ -256,7 +256,7 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
     for(i=0;i<MAX_MPI_ARRAYS;i++){
        if ( MPIGAIndex[i].actv == 0 ) {
           handle_orig=i;  /* original sequence number of mpiga */
-	  break;
+          break;
        }
     }
 
@@ -678,8 +678,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        ifac=(int *)fac;
        if ((*ifac)==(int)1) alphabuf=buf;
        else {
-	  isone=0;
-	  itempbuf=(int *)buf;
+          isone=0;
+          itempbuf=(int *)buf;
           ialphabuf=(int *)malloc(len*sizeof(int));
           for(i=0;i<len;i++)ialphabuf[i]=(*ifac)*itempbuf[i];
           alphabuf=(void *)ialphabuf;
@@ -690,8 +690,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        lfac=(long *)fac;
        if ((*lfac)==(long)1) alphabuf=buf;
        else {
-	  isone=0;
-	  ltempbuf=(long *)buf;
+          isone=0;
+          ltempbuf=(long *)buf;
           lalphabuf=(long *)malloc(len*sizeof(long));
           for(i=0;i<len;i++)lalphabuf[i]=(*lfac)*ltempbuf[i];
           alphabuf=(void *)lalphabuf;
@@ -702,8 +702,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        llfac=(long long *)fac;
        if ((*llfac)==(long long)1) alphabuf=buf;
        else {
-	  isone=0;
-	  lltempbuf=(long long *)buf;
+          isone=0;
+          lltempbuf=(long long *)buf;
           llalphabuf=(long long *)malloc(len*sizeof(long long));
           for(i=0;i<len;i++)llalphabuf[i]=(*llfac)*lltempbuf[i];
           alphabuf=(void *)llalphabuf;
@@ -714,8 +714,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        ffac=(float *)fac;
        if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-	  isone=0;
-	  ftempbuf=(float *)buf;
+          isone=0;
+          ftempbuf=(float *)buf;
           falphabuf=(float *)malloc(len*sizeof(float));
           for(i=0;i<len;i++) falphabuf[i]=(*ffac)*ftempbuf[i];
           alphabuf=(void *)falphabuf;
@@ -725,8 +725,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        dfac=(double *)fac;
        if (std::fabs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-	  isone=0;
-	  dtempbuf=(double *)buf;
+          isone=0;
+          dtempbuf=(double *)buf;
           dalphabuf=(double *)malloc(len*sizeof(double));
           for(i=0;i<len;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
           alphabuf=(void *)dalphabuf;
@@ -744,7 +744,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     /* In order to ensure that the entire update is atomic, we must
        first mutex-lock all of the windows that we will access */
 /*    for (rank = rank_first; rank <= rank_last; rank++) {
-	MPE_Mutex_lock( rank, ga->lock_win );
+        MPE_Mutex_lock( rank, ga->lock_win );
     }
 */
 
@@ -922,7 +922,7 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
          ifirst = mpigv(map)[2*i];
          ilast  = mpigv(map)[2*i+1];
          disp = ifirst-lenleft - 1;
-	 ilen = ilast -ifirst  + 1;
+         ilen = ilast -ifirst  + 1;
 
          if (ga->dtype==MPI_INT) {
             ibuf=(int *)ga->win_ptr;

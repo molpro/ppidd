@@ -979,7 +979,7 @@ ________________________________________________________________________________
     for(i=0;i<MAX_TWOSIDED_HELPGA_ARRAYS;i++){
        if ( twosided_helpga_index[i].actv == 0 ) {
           handle_orig=i;  /* original sequence number of helpga */
-	  break;
+          break;
        }
     }
 
@@ -1732,8 +1732,8 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
        ifac=(int *)fac;
        if ((*ifac)==(int)1) alphabuf=buf;
        else {
-	  isone=0;
-	  itempbuf=(int *)buf;
+          isone=0;
+          itempbuf=(int *)buf;
           ialphabuf=(int *)malloc(len*sizeof(int));
           for(i=0;i<len;i++)ialphabuf[i]=(*ifac)*itempbuf[i];
           alphabuf=(void *)ialphabuf;
@@ -1744,8 +1744,8 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
        lfac=(long *)fac;
        if ((*lfac)==(long)1) alphabuf=buf;
        else {
-	  isone=0;
-	  ltempbuf=(long *)buf;
+          isone=0;
+          ltempbuf=(long *)buf;
           lalphabuf=(long *)malloc(len*sizeof(long));
           for(i=0;i<len;i++)lalphabuf[i]=(*lfac)*ltempbuf[i];
           alphabuf=(void *)lalphabuf;
@@ -1756,8 +1756,8 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
        llfac=(long long *)fac;
        if ((*llfac)==(long long)1) alphabuf=buf;
        else {
-	  isone=0;
-	  lltempbuf=(long long *)buf;
+          isone=0;
+          lltempbuf=(long long *)buf;
           llalphabuf=(long long *)malloc(len*sizeof(long long));
           for(i=0;i<len;i++)llalphabuf[i]=(*llfac)*lltempbuf[i];
           alphabuf=(void *)llalphabuf;
@@ -1768,8 +1768,8 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
        ffac=(float *)fac;
        if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-	  isone=0;
-	  ftempbuf=(float *)buf;
+          isone=0;
+          ftempbuf=(float *)buf;
           falphabuf=(float *)malloc(len*sizeof(float));
           for(i=0;i<len;i++) falphabuf[i]=(*ffac)*ftempbuf[i];
           alphabuf=(void *)falphabuf;
@@ -1779,8 +1779,8 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
        dfac=(double *)fac;
        if (std::abs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-	  isone=0;
-	  dtempbuf=(double *)buf;
+          isone=0;
+          dtempbuf=(double *)buf;
           dalphabuf=(double *)malloc(len*sizeof(double));
           for(i=0;i<len;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
           alphabuf=(void *)dalphabuf;

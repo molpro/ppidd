@@ -565,7 +565,7 @@ static int n_in_msg_mpiq=0;
 
       switch(dtype){
       case 0:
-              ctype=sizeof(int64_t);
+              ctype=sizeof(FORTINT);
               break;
       case 1:
               ctype=sizeof(double);

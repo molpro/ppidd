@@ -26,11 +26,11 @@ static int MPI_Debug=0;
 #include <string.h>
 
 /* ************************************************************************ *\
-   Creates an EAF file using name and path specified in fname as a template.
+   Creates an EAF file using name and path specified in name as a template.
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   int PPIDD_Eaf_open(char *fname,int64_t *type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_File mpi_fh;
@@ -57,12 +57,12 @@ static int MPI_Debug=0;
       }
 /*      MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN;*/
 
-      int ierr=MPI_File_open(MPI_COMM_SELF,fname,amode,MPI_INFO_NULL,&mpi_fh);
+      int ierr=MPI_File_open(MPI_COMM_SELF,name,amode,MPI_INFO_NULL,&mpi_fh);
       mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
 #endif
 #ifdef GA_MPI
-      int ierr=EAF_Open(fname, modetype, &gahandle);
+      int ierr=EAF_Open(name, modetype, &gahandle);
       *handle=(int64_t)gahandle;
 #endif
       if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
@@ -371,16 +371,16 @@ static int MPI_Debug=0;
 
 /* ********************************************************************************************* *\
    Delete an EAF file
-   character*(*) fname   -- [in]  File name.
-   integer ierr          -- [out] Error code. 0 if the file was deleted, else returns error code.
+   character*(*) name   -- [in]  File name.
+   integer ierr         -- [out] Error code. 0 if the file was deleted, else returns error code.
 \* ********************************************************************************************* */
-   int PPIDD_Eaf_delete(char *fname) {
+   int PPIDD_Eaf_delete(char *name) {
 #if defined(MPI2) || defined(GA_MPI)
-      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. fname=%s\n",fname);
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. name=%s\n",name);
 #ifdef MPI2
-      int ierr=MPI_File_delete(fname,MPI_INFO_NULL);
+      int ierr=MPI_File_delete(name,MPI_INFO_NULL);
 #elif defined(GA_MPI)
-      int ierr=EAF_Delete(fname);
+      int ierr=EAF_Delete(name);
 #endif
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
       return ierr;

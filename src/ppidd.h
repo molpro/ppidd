@@ -46,7 +46,7 @@ extern "C" {
  extern void PPIDD_Unlock_mutex(int64_t *inum);
  extern int  PPIDD_Destroy_mutexes();
 
- extern int  PPIDD_Eaf_open(char *fname, int64_t *type, int64_t *handle);
+ extern int  PPIDD_Eaf_open(char *name, int64_t *type, int64_t *handle);
  extern int  PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length);
  extern int  PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id);
  extern int  PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length);
@@ -55,12 +55,12 @@ extern "C" {
  extern int  PPIDD_Eaf_waitall(int64_t *list, int64_t *num);
  extern int  PPIDD_Eaf_probe(int64_t *request_id,int64_t *status);
  extern int  PPIDD_Eaf_close(int64_t *handle);
- extern int  PPIDD_Eaf_delete(char *fname);
+ extern int  PPIDD_Eaf_delete(char *name);
  extern int  PPIDD_Eaf_length(int64_t *handle,double *fsize);
  extern int  PPIDD_Eaf_truncate(int64_t *handle,double *offset);
  extern void PPIDD_Eaf_errmsg(int *code,char *message);
 
- extern int  PPIDD_Sf_create(char *fname, double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle);
+ extern int  PPIDD_Sf_create(char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle);
  extern int  PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id);
  extern int  PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id);
  extern int  PPIDD_Sf_wait(int64_t *request_id);

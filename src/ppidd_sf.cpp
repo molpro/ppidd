@@ -23,11 +23,11 @@ static int MPI_Debug=0;
 #include <string.h>
 
 /* ************************************************************************ *\
-   Creates shared file using name and path specified in fname as a template.
+   Creates shared file using name and path specified in name as a template.
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.
 \* ************************************************************************ */
-   int PPIDD_Sf_create(char *fname ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
 #if defined(MPI2) || defined(GA_MPI)
 #ifdef MPI2
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
@@ -38,7 +38,7 @@ static int MPI_Debug=0;
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
 #ifdef MPI2
-      int ierr=MPI_File_open(mpicomm,fname,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
+      int ierr=MPI_File_open(mpicomm,name,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
       MPI_Fint mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
 #elif defined(GA_MPI)
@@ -59,7 +59,7 @@ static int MPI_Debug=0;
          free(errmsg);
       }
 
-      int ierr=SF_Create(fname, *size_hard_limit, *size_soft_limit, *req_size, &i);
+      int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, &i);
       *handle=(int64_t)i;
 #endif
 

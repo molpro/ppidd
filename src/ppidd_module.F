@@ -396,12 +396,12 @@
       end interface
 
       interface
-       function ppidd_sf_create(fname,size_hard_limit,size_soft_limit,
+       function ppidd_sf_create(name,size_hard_limit,size_soft_limit,
      >            req_size,handle)
      >          bind(C,name='PPIDD_Sf_create')
        use iso_c_binding, only : c_double, c_int, c_int64_t, c_char
        integer(c_int)                  :: ppidd_sf_create
-       character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
+       character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        real(c_double),     intent(in)  :: size_hard_limit
        real(c_double),     intent(in)  :: size_soft_limit
        real(c_double),     intent(in)  :: req_size
@@ -475,10 +475,10 @@
       end interface
 
       interface
-       function ppidd_eaf_open(fname,type,handle)
+       function ppidd_eaf_open(name,type,handle)
      >          bind(C,name='PPIDD_Eaf_open')
        use iso_c_binding, only : c_int, c_int64_t, c_char
-       character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
+       character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int64_t), intent(in)  :: type
        integer(c_int64_t), intent(out) :: handle
        integer(c_int)                  :: ppidd_eaf_open
@@ -577,10 +577,10 @@
       end interface
 
       interface
-       function ppidd_eaf_delete(fname)
+       function ppidd_eaf_delete(name)
      >          bind(C,name='PPIDD_Eaf_delete')
        use iso_c_binding, only : c_char, c_int
-       character(c_char),  intent(in)  :: fname ! must to terminated by c_null_char
+       character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
        integer(c_int)                  :: ppidd_eaf_delete
        end function ppidd_eaf_delete
       end interface

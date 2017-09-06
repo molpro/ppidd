@@ -146,13 +146,10 @@ extern "C" {
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
    int PPIDD_MA_init(int64_t *dtype, int64_t *stack, int64_t *heap) {
-#ifdef MPI2
-      return 1;
-#elif defined(GA_MPI)
-      int istack=(int)*stack;
-      int iheap=(int)*heap;
-      int gadtype=-1;
-      char *errmsg;
+#ifdef GA_MPI
+      Integer istack=(Integer)*stack;
+      Integer iheap=(Integer)*heap;
+      Integer gadtype=-1;
 
       switch((int)*dtype){
       case 0:
@@ -162,7 +159,7 @@ extern "C" {
               gadtype=MT_F_DBL;
               break;
       default:
-              errmsg=strdup(" In PPIDD_MA_Init: wrong data type ");
+              char *errmsg=strdup(" In PPIDD_MA_Init: wrong data type ");
               GA_Error(errmsg,(int)*dtype);
               free(errmsg);
       }

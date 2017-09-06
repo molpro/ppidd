@@ -200,27 +200,16 @@ extern "C" {
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
    void PPIDD_Error(char *message,int *code) {
-      char *msg2, *p;
-      int lxi;
-
-      lxi=strlen(message);
-      strncpy((msg2=(char *)calloc(lxi+1,1)),message,lxi);
-      for (p=msg2+lxi;p>=msg2;p--) if (*p==' ')*p=(char)0;
-
 #ifdef MPI2
-      MPIGA_Error(msg2,*code);
+      MPIGA_Error(message,*code);
 #elif defined(GA_MPI)
-      GA_Error(msg2,*code);
-#endif
-#if defined(MPI2) || defined(GA_MPI)
-      free(msg2);
+      GA_Error(message,*code);
 #else
-      fprintf(stdout," %s %d (%#x).\n", msg2,*code,*code);
+      fprintf(stdout," %s %d (%#x).\n", message,*code,*code);
       fflush(stdout);
-      fprintf(stderr," %s %d (%#x).\n", msg2,*code,*code);
+      fprintf(stderr," %s %d (%#x).\n", message,*code,*code);
 
       printf(" PPIDD_Error: now exiting...\n");
-      free(msg2);
       exit(1);
 #endif
    }
@@ -576,7 +565,6 @@ static int n_in_msg_mpiq=0;
       int garoot=(int)*root;
       int galenbuf;  /* in bytes */
       size_t ctype=8;
-      char *errmsg;
 
       switch(dtype){
       case 0:
@@ -586,7 +574,7 @@ static int n_in_msg_mpiq=0;
               ctype=sizeof(double);
               break;
      default:
-              errmsg=strdup(" In PPIDD_BCast: wrong data type ");
+              char *errmsg=strdup(" In PPIDD_BCast: wrong data type ");
               GA_Error(errmsg,dtype);
               free(errmsg);
       }
@@ -625,26 +613,16 @@ static int n_in_msg_mpiq=0;
 #if defined(MPI2) || defined(GA_MPI)
       int dtype=(int)*type;
 #endif
-      char *op2, *p;
-      int lxi;
+
 #ifdef MPI2
       MPI_Datatype mpidtype;
       int sizempidtype;
       int mpilen=(int)*len;
+      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
+      MPI_GSum(mpidtype,buffer,mpilen, op);
 #elif defined(GA_MPI)
       int buflen=(int)*len;
       int gadtype_f=-1,gadtype_c;
-      char *errmsg;
-#endif
-
-      lxi=strlen(op);
-      strncpy(op2=(char *)calloc(lxi+1,1),op,lxi);
-      for (p=op2+lxi;p>=op2;p--) if (*p==' ')*p=(char)0;
-
-#ifdef MPI2
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
-      MPI_GSum(mpidtype,buffer,mpilen, op2);
-#elif defined(GA_MPI)
       switch(dtype){
       case 0:
               gadtype_f=MT_F_INT;
@@ -653,14 +631,13 @@ static int n_in_msg_mpiq=0;
               gadtype_f=MT_F_DBL;
               break;
       default:
-              errmsg=strdup(" In PPIDD_Gsum: wrong data type ");
+              char *errmsg=strdup(" In PPIDD_Gsum: wrong data type ");
               GA_Error(errmsg,dtype);
               free(errmsg);
       }
       gadtype_c=ga_type_f2c(gadtype_f);
-      GA_Gop(gadtype_c, buffer, buflen, op2);
+      GA_Gop(gadtype_c, buffer, buflen, op);
 #endif
-      free(op2);
    }
 
 
@@ -683,28 +660,21 @@ static int n_in_msg_mpiq=0;
       MPI_Datatype mpidtype;
       int sizempidtype;
       int mpihandle;
-      char *name2;
-      int lxi;
 
-      lxi=strlen(name);
-      strncpy((name2=(char *)malloc(lxi+1)),name,lxi);
-      name2[lxi]=(char)0;
-      for(int i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
       std::vector<int> mpilenin(mpinchunk);
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       if (use_helper_server==0) {
-        mpierr=mpiga_create_irreg(name2, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
+        mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
       }
       else {
         if (stype==0)
-          mpierr=mpiga_create_irreg(name2, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
+          mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name2, mpidtype);
+          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name, mpidtype);
         }
       }
-      free(name2);
       *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;
       else return 0 ;
@@ -717,14 +687,6 @@ static int n_in_msg_mpiq=0;
       int i;
       ga_int iad;
       int gahandle;
-      char *name2;
-      char *errmsg;
-      int lxi;
-
-      lxi=strlen(name);
-      strncpy((name2=(char *)malloc(lxi+1)),name,lxi);
-      name2[lxi]=(char)0;
-      for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
 
       switch(dtype){
       case 0:
@@ -734,7 +696,7 @@ static int n_in_msg_mpiq=0;
               gadtype=MT_F_DBL;
               break;
       default:
-              errmsg=strdup(" In PPIDD_Create_irreg: wrong data type ");
+              char *errmsg=strdup(" In PPIDD_Create_irreg: wrong data type ");
               GA_Error(errmsg,dtype);
               free(errmsg);
       }
@@ -751,10 +713,8 @@ static int n_in_msg_mpiq=0;
       for(i=nblock;i<np;i++) map[i]=iad;
       ga_int dims[1]={iad};
 
-/*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name2,dims[1],ndim); */
-      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name2, block, &map[0]);
-
-      free(name2);
+/*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name,dims[1],ndim); */
+      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name, block, &map[0]);
 
       *handle=(int64_t)gahandle;
       return 1 ;
@@ -785,32 +745,26 @@ static int n_in_msg_mpiq=0;
       int sizempidtype;
       int stype=(int)*storetype;
       int mpihandle;
-      char *name2, *p;
-      int lxi;
 
-      lxi=strlen(name);
       if (*lentot > INT_MAX) {
        printf(" ERROR: PPIDD_Create: lentot too large for MPI\n");
        exit(1);
       }
       else mpilentot=(int)*lentot;
-      strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
-      for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
       mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       if (use_helper_server==0) {
-        mpierr=mpiga_create( name2, mpilentot, mpidtype, &mpihandle );
+        mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
       }
       else {
         if (stype==0)
-         mpierr=mpiga_create( name2, mpilentot, mpidtype, &mpihandle );
+         mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
         else {
          int mproc=0;
-         mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name2, mpidtype);
+         mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, mpidtype);
         }
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, datatype=%d, storetype=%d\n",ProcID(),name2,stype,dtype);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, datatype=%d, storetype=%d\n",ProcID(),name,stype,dtype);
 
-      free(name2);
       *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;
       else return 0 ;
@@ -819,13 +773,6 @@ static int n_in_msg_mpiq=0;
       int gadtype=-1;
       ga_int galentot=(ga_int)*lentot;
       int gahandle;
-      char *name2, *p;
-      char *errmsg;
-      int lxi;
-
-      lxi=strlen(name);
-      strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
-      for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
 
       switch(dtype){
       case 0:
@@ -835,7 +782,7 @@ static int n_in_msg_mpiq=0;
               gadtype=MT_F_DBL;
               break;
       default:
-              errmsg=strdup(" In PPIDD_Create: wrong data type ");
+              char *errmsg=strdup(" In PPIDD_Create: wrong data type ");
               GA_Error(errmsg,dtype);
               free(errmsg);
       }
@@ -843,10 +790,9 @@ static int n_in_msg_mpiq=0;
       ga_int dims[1]={galentot};
       ga_int block[1]={-1};
 
-/*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name2,*dims,ndim); */
-      gahandle=NGA_CREATE(gadtype, 1, dims, name2, block);
+/*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name,*dims,ndim); */
+      gahandle=NGA_CREATE(gadtype, 1, dims, name, block);
 
-      free(name2);
       *handle=(int64_t)gahandle;
       return 1 ;
 #else
@@ -1295,15 +1241,7 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
 #ifdef GA_MPI
       int ga_a=(int)*handlei;
-      int ga_b;
-      char *name2, *p;
-      int lxi;
-
-      lxi=strlen(name);
-      strncpy((name2=(char *)calloc(lxi+1,1)),name,lxi);
-      for (p=name2+lxi;p>=name2;p--) if (*p==' ')*p=(char)0;
-      ga_b = GA_Duplicate(ga_a, name2);
-      free(name2);
+      int ga_b = GA_Duplicate(ga_a, name);
       *handlej=(int64_t)ga_b;
 #else
       printf(" ERROR: PPIDD_Duplicate should not be called in serial and MPI2 cases.\n");

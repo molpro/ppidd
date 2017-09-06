@@ -42,17 +42,8 @@ static int MPI_Debug=0;
       int gahandle;
 #endif
       int modetype=(int)*type;
-      int i;
-      char *name2;
-      int lxi;
-
 
       if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
-      lxi=strlen(fname);
-      strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
-      name2[lxi]=(char)0;
-      for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-
 #ifdef MPI2
       switch(modetype){
         case MPI_EAF_RW: amode = MPI_MODE_RDWR|MPI_MODE_CREATE ;
@@ -66,15 +57,14 @@ static int MPI_Debug=0;
       }
 /*      MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN;*/
 
-      int ierr=MPI_File_open(MPI_COMM_SELF,name2,amode,MPI_INFO_NULL,&mpi_fh);
+      int ierr=MPI_File_open(MPI_COMM_SELF,fname,amode,MPI_INFO_NULL,&mpi_fh);
       mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
 #endif
 #ifdef GA_MPI
-      int ierr=EAF_Open(name2, modetype, &gahandle);
+      int ierr=EAF_Open(fname, modetype, &gahandle);
       *handle=(int64_t)gahandle;
 #endif
-      free(name2);
       if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
       return ierr;
 #else
@@ -386,23 +376,12 @@ static int MPI_Debug=0;
 \* ********************************************************************************************* */
    int PPIDD_Eaf_delete(char *fname) {
 #if defined(MPI2) || defined(GA_MPI)
-      char *name2;
-      int lxi;
-
-      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin.\n");
-      lxi=strlen(fname);
-      strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
-      name2[lxi]=(char)0;
-      for(int i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. fname=%s\n",fname);
 #ifdef MPI2
-      int ierr=MPI_File_delete(name2,MPI_INFO_NULL);
+      int ierr=MPI_File_delete(fname,MPI_INFO_NULL);
 #elif defined(GA_MPI)
-      int ierr=EAF_Delete(name2);
+      int ierr=EAF_Delete(fname);
 #endif
-
-      if(MPI_Debug)printf("In PPIDD_Eaf_delete: mid. fname=%s,ierr=%d\n",name2,ierr);
-      free(name2);
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
       return ierr;
 #else

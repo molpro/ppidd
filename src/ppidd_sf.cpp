@@ -32,23 +32,14 @@ static int MPI_Debug=0;
 #ifdef MPI2
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       MPI_File mpi_fh;
-      MPI_Fint mpifhandle;
 #elif defined(GA_MPI)
-      char *errmsg;
-#endif
       int i;
-      char *name2;
-      int lxi;
+#endif
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
-      lxi=strlen(fname);
-      strncpy((name2=(char *)malloc(lxi+1)),fname,lxi);
-      name2[lxi]=(char)0;
-      for(i=lxi-1; (i>=0 && name2[i]==' '); i--) name2[i]=(char)0;
-
 #ifdef MPI2
-      int ierr=MPI_File_open(mpicomm,name2,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
-      mpifhandle = MPI_File_c2f( mpi_fh );
+      int ierr=MPI_File_open(mpicomm,fname,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
+      MPI_Fint mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
 #elif defined(GA_MPI)
       if(MPI_Debug) {
@@ -68,11 +59,10 @@ static int MPI_Debug=0;
          free(errmsg);
       }
 
-      int ierr=SF_Create(name2, *size_hard_limit, *size_soft_limit, *req_size, &i);
+      int ierr=SF_Create(fname, *size_hard_limit, *size_soft_limit, *req_size, &i);
       *handle=(int64_t)i;
 #endif
 
-      free(name2);
       if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
       return ierr;
 #else

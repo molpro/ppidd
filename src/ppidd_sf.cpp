@@ -42,23 +42,6 @@ static int MPI_Debug=0;
       MPI_Fint mpifhandle = MPI_File_c2f( mpi_fh );
       *handle=(int64_t)mpifhandle;
 #elif defined(GA_MPI)
-      if(MPI_Debug) {
-         printf("PPIDD_Sf_create: sizeof(double) =%d, sizeof(SFsize_t)=%d\n",(int)sizeof(double),(int)sizeof(SFsize_t));
-         printf("PPIDD_Sf_create: sizeof(int64_t)=%d, sizeof(Integer) =%d\n",(int)sizeof(int64_t),(int)sizeof(Integer));
-      }
-      if ( sizeof(double) != sizeof(SFsize_t) ) {
-         printf("PPIDD_Sf_create: sizeof(double) =%d, sizeof(SFsize_t)=%d\n",(int)sizeof(double),(int)sizeof(SFsize_t));
-         errmsg=strdup(" PPIDD_Sf_create: Data types do not match between [double] and [SFsize_t]");
-         GA_Error(errmsg,0);
-         free(errmsg);
-      }
-      if ( sizeof(int64_t) != sizeof(Integer) ) {
-         printf("PPIDD_Sf_create: sizeof(int64_t)=%d, sizeof(Integer) =%d\n",(int)sizeof(int64_t),(int)sizeof(Integer));
-         errmsg=strdup(" PPIDD_Sf_create: Data types do not match between [int64_t] and [Integer]");
-         GA_Error(errmsg,0);
-         free(errmsg);
-      }
-
       int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, &i);
       *handle=(int64_t)i;
 #endif

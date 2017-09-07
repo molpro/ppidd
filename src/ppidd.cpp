@@ -1099,9 +1099,9 @@ static int n_in_msg_mpiq=0;
     element by a given increment. This is a fetch-and-add operation.
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC
  */
-   void PPIDD_Read_inc(int64_t *ihandle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
 #ifdef MPI2
-      int mpihandle = (int) *ihandle;
+      int mpihandle = (int) *handle;
       int mpiinum = (int) *inum;
       int mpiincr = (int) *incr;
       int64_t mpivalue;
@@ -1118,13 +1118,13 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
                             ProcID(),mpiinum,mpihandle,mpiincr);
 #elif defined(GA_MPI)
-      int handle = (int) *ihandle;
+      int ihandle = (int) *handle;
       ga_int mpiinum[1];
       long gaincr = (long) *incr;
       long gavalue;
 
       mpiinum[0] = (ga_int) *inum-1;
-      gavalue=NGA_READ_INC(handle,mpiinum, gaincr);
+      gavalue=NGA_READ_INC(ihandle,mpiinum, gaincr);
       *returnval=(int64_t)gavalue;
 #else
       printf(" ERROR: PPIDD_Read_inc should not be called in serial case.\n");
@@ -1137,9 +1137,9 @@ static int n_in_msg_mpiq=0;
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH
  */
-   void PPIDD_Zero_patch(int64_t *ihandle,int64_t *ilo,int64_t *ihi) {
+   void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
 #ifdef MPI2
-      int mpihandle = (int) *ihandle;
+      int mpihandle = (int) *handle;
       int mpiilo = (int) *ilo;
       int mpiihi = (int) *ihi;
       int mpierr=0;
@@ -1150,11 +1150,11 @@ static int n_in_msg_mpiq=0;
 
       if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
 #elif defined(GA_MPI)
-      int handle = (int) *ihandle;
+      int ihandle = (int) *handle;
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      NGA_ZERO_PATCH(handle, mpiilo, mpiihi);
+      NGA_ZERO_PATCH(ihandle, mpiilo, mpiihi);
 #endif
    }
 

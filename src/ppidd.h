@@ -34,8 +34,8 @@ extern "C" {
  extern int  PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff);
  extern int  PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff);
  extern int  PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac);
- extern void PPIDD_Read_inc(int64_t *ihandle,int64_t *inum,int64_t *incr,int64_t *returnval);
- extern void PPIDD_Zero_patch(int64_t *ihandle,int64_t *ilo,int64_t *ihi);
+ extern void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval);
+ extern void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi);
  extern int  PPIDD_Zero(int64_t *handle);
  extern void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name);
  extern void PPIDD_Inquire_name(int64_t *handle, char *name);

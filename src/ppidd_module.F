@@ -287,10 +287,10 @@
       end interface
 
       interface
-       subroutine ppidd_read_inc(ihandle,inum,incr,returnval)
+       subroutine ppidd_read_inc(handle,inum,incr,returnval)
      >            bind(C,name='PPIDD_Read_inc')
        use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in)  :: ihandle
+       integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: inum
        integer(c_int64_t), intent(in)  :: incr
        integer(c_int64_t), intent(out) :: returnval
@@ -298,10 +298,10 @@
       end interface
 
       interface
-       subroutine ppidd_zero_patch(ihandle,ilo,ihi)
+       subroutine ppidd_zero_patch(handle,ilo,ihi)
      >            bind(C,name='PPIDD_Zero_patch')
        use iso_c_binding, only : c_int64_t
-       integer(c_int64_t), intent(in)  :: ihandle
+       integer(c_int64_t), intent(in)  :: handle
        integer(c_int64_t), intent(in)  :: ilo
        integer(c_int64_t), intent(in)  :: ihi
        end subroutine ppidd_zero_patch

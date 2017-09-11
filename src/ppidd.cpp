@@ -145,13 +145,13 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/ma/MAapi.html
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
-   int PPIDD_MA_init(int64_t *dtype, int64_t *stack, int64_t *heap) {
+   int PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap) {
 #ifdef GA_MPI
       Integer istack=(Integer)*stack;
       Integer iheap=(Integer)*heap;
       Integer gadtype=-1;
 
-      switch((int)*dtype){
+      switch(dtype){
       case 0:
               gadtype=MT_F_INT;
               break;
@@ -160,7 +160,7 @@ extern "C" {
               break;
       default:
               char *errmsg=strdup(" In PPIDD_MA_Init: wrong data type ");
-              GA_Error(errmsg,(int)*dtype);
+              GA_Error(errmsg,dtype);
               free(errmsg);
       }
       if( MA_init(gadtype, istack, iheap)) return 1;
@@ -363,7 +363,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA calls SND_.
  *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
-   void PPIDD_Send(void *buf,int64_t *count,int64_t *dtype,int64_t *dest,int64_t *sync) {
+   void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
       MPI_Comm mpicomm=mpigv(Compute_comm);
@@ -373,13 +373,13 @@ static int n_in_msg_mpiq=0;
   #endif
       int mpicount=(int)*count;
       int mpidest=(int)*dest;
-      int mpitag=(int)*dtype;
+      int mpitag=dtype;
       int mpisync=(int)*sync;
       int mpilenbuf,mpierr;
       MPI_Datatype mpidtype;
       int sizempidtype;
 
-      mpiga_type_f2cmpi((int)*dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       mpilenbuf=mpicount*sizempidtype;
 
       if (MPIGA_Debug) {
@@ -401,7 +401,7 @@ static int n_in_msg_mpiq=0;
          mpi_test_status("PPIDD_SEND: nonblocking SEND:",mpierr);
 
          msg_mpiq[n_in_msg_mpiq].node   =(long) mpidest;
-         msg_mpiq[n_in_msg_mpiq].type   =(long) *dtype;
+         msg_mpiq[n_in_msg_mpiq].type   =(long) dtype;
          msg_mpiq[n_in_msg_mpiq].lenbuf =(long) mpilenbuf;
          msg_mpiq[n_in_msg_mpiq].snd = (long)1;
       }
@@ -417,7 +417,7 @@ static int n_in_msg_mpiq=0;
  *  - \b GA calls RCV_.
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
-   void PPIDD_Recv(void *buf,int64_t *count,int64_t *dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
+   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
       MPI_Comm mpicomm=mpigv(Compute_comm);
@@ -426,7 +426,7 @@ static int n_in_msg_mpiq=0;
       MPI_Comm mpicomm = GA_MPI_Comm();
   #endif
       int mpicount=(int)*count;
-      int mpitag=(int)*dtype;
+      int mpitag=dtype;
       int mpisource=(int)*source;
       int mpisync=(int)*sync;
       int mpinode,mpilenbuf,mpierr;
@@ -435,7 +435,7 @@ static int n_in_msg_mpiq=0;
       MPI_Datatype mpidtype;
       int sizempidtype;
 
-      mpiga_type_f2cmpi((int)*dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
       mpilenbuf=mpicount*sizempidtype;
 
       if (mpisource == -1)
@@ -460,7 +460,7 @@ static int n_in_msg_mpiq=0;
          *lenreal = (int64_t) (-1);
          msg_mpiq[n_in_msg_mpiq].request = request;
          msg_mpiq[n_in_msg_mpiq].node   = (long)*source;
-         msg_mpiq[n_in_msg_mpiq].type   = (long)*dtype;
+         msg_mpiq[n_in_msg_mpiq].type   = (long)dtype;
          msg_mpiq[n_in_msg_mpiq].lenbuf = (long)mpilenbuf;
          msg_mpiq[n_in_msg_mpiq].snd = (long)0;
          n_in_msg_mpiq++;
@@ -539,12 +539,11 @@ static int n_in_msg_mpiq=0;
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#BRDCST
  *  - \b MPI2 calls MPI_Bcast
  *
- *  - \c type=0 : Fortran integer and logical types
- *  - \c type=1 : Fortran double precision type */
-   void PPIDD_BCast(void *buffer,int64_t *count,int64_t *type,int64_t *root) {
+ *  - \c dtype=0 : Fortran integer and logical types
+ *  - \c dtype=1 : Fortran double precision type */
+   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
 #ifdef MPI2
       int mpicount=(int)*count;
-      int dtype =(int)*type;
       int mpiroot=(int)*root;
       MPI_Datatype mpidtype;
       int sizempidtype;
@@ -558,7 +557,6 @@ static int n_in_msg_mpiq=0;
       mpi_test_status("PPIDD_BCast:",mpierr);
 #elif defined(GA_MPI)
       int gacount=(int)*count;
-      int dtype =(int)*type;
       int garoot=(int)*root;
       int galenbuf;  /* in bytes */
       size_t ctype=8;
@@ -606,11 +604,7 @@ static int n_in_msg_mpiq=0;
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
-   void PPIDD_Gsum(int64_t *type,void *buffer,int64_t *len, char *op) {
-#if defined(MPI2) || defined(GA_MPI)
-      int dtype=(int)*type;
-#endif
-
+   void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
 #ifdef MPI2
       MPI_Datatype mpidtype;
       int sizempidtype;
@@ -643,16 +637,15 @@ static int n_in_msg_mpiq=0;
 /*! Create an array by following the user-specified distribution and return integer handle representing the array.
  *
  * Irregular distributed array data are stored across the distributed processes.
- *  - \c datatype=0 : Fortran integer and logical types
- *  - \c datatype=1 : Fortran double precision type
+ *  - \c dtype=0 : Fortran integer and logical types
+ *  - \c dtype=1 : Fortran double precision type
 
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int64_t *datatype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int dtype, int64_t *storetype, int64_t *handle) {
 #ifdef MPI2
       int mpierr;
       int mpinchunk=(int)*nchunk;
-      int dtype=(int)*datatype;
       int stype=(int)*storetype;
       MPI_Datatype mpidtype;
       int sizempidtype;
@@ -676,7 +669,6 @@ static int n_in_msg_mpiq=0;
       if(mpierr==0) return 1 ;
       else return 0 ;
 #elif defined(GA_MPI)
-      int dtype=(int)*datatype;
       int gadtype=-1;
       int ndim=1;
       ga_int nblock=(ga_int)*nchunk;
@@ -724,8 +716,8 @@ static int n_in_msg_mpiq=0;
 
 /*! Create an array using the regular distribution model and return integer handle representing the array.
  *
- *  - \c datatype=0  : Fortran integer and logical types
- *  - \c datatype=1  : Fortran double precision type
+ *  - \c dtype=0  : Fortran integer and logical types
+ *  - \c dtype=1  : Fortran double precision type
  *  - \c storetype=0 : Normal distributed array stored across the distributed processes
  *  - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled). \c storetype is advisory: the underlying implementation will use up to \c storetype helpers.
 
@@ -733,11 +725,10 @@ static int n_in_msg_mpiq=0;
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   int PPIDD_Create(char *name,int64_t *lentot, int64_t *datatype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
 #ifdef MPI2
       int mpierr;
       int mpilentot;
-      int dtype=(int)*datatype;
       MPI_Datatype mpidtype;
       int sizempidtype;
       int stype=(int)*storetype;
@@ -760,13 +751,12 @@ static int n_in_msg_mpiq=0;
          mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, mpidtype);
         }
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, datatype=%d, storetype=%d\n",ProcID(),name,stype,dtype);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,stype,dtype);
 
       *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;
       else return 0 ;
 #elif defined(GA_MPI)
-      int dtype=(int)*datatype;
       int gadtype=-1;
       ga_int galentot=(ga_int)*lentot;
       int gahandle;
@@ -1212,8 +1202,8 @@ static int n_in_msg_mpiq=0;
         //      }
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
-        int64_t lentot=1, datatype=0, storetype=1;
-        PPIDD_Create(strdup("Nxtval"),&lentot,&datatype,&storetype,&PPIDD_Nxtval_handle);
+        int64_t lentot=1, storetype=1;
+        PPIDD_Create(strdup("Nxtval"),&lentot,0,&storetype,&PPIDD_Nxtval_handle);
         PPIDD_Zero(&PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         *val=0;

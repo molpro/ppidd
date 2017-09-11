@@ -44,10 +44,10 @@
        function ppidd_ma_init(dtype,stack,heap)
      >          bind(C,name='PPIDD_MA_init')
        use iso_c_binding, only : c_int, c_int64_t
-       integer(c_int)                  :: ppidd_ma_init
-       integer(c_int64_t), intent(in)  :: dtype
-       integer(c_int64_t), intent(in)  :: stack
-       integer(c_int64_t), intent(in)  :: heap
+       integer(c_int)                     :: ppidd_ma_init
+       integer(c_int), intent(in), value  :: dtype
+       integer(c_int64_t), intent(in)     :: stack
+       integer(c_int64_t), intent(in)     :: heap
        end function ppidd_ma_init
       end interface
 
@@ -116,12 +116,12 @@
       interface
        subroutine ppidd_send(buf,count,dtype,dest,sync)
      >            bind(C,name='PPIDD_Send')
-       use iso_c_binding, only : c_int64_t, c_ptr
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
        type(c_ptr), intent(in), value :: buf ! call ppidd_send(c_loc(f_buffer),...)
-       integer(c_int64_t), intent(in) :: count
-       integer(c_int64_t), intent(in) :: dtype
-       integer(c_int64_t), intent(in) :: dest
-       integer(c_int64_t), intent(in) :: sync
+       integer(c_int64_t), intent(in)        :: count
+       integer(c_int),     intent(in), value :: dtype
+       integer(c_int64_t), intent(in)        :: dest
+       integer(c_int64_t), intent(in)        :: sync
        end subroutine ppidd_send
       end interface
 
@@ -129,14 +129,14 @@
        subroutine ppidd_recv(buf,count,dtype,source,lenreal,sourcereal,
      >            sync)
      >            bind(C,name='PPIDD_Recv')
-       use iso_c_binding, only : c_int64_t, c_ptr
-       type(c_ptr), intent(in), value  :: buf ! call ppidd_recv(c_loc(f_buffer),...)
-       integer(c_int64_t), intent(in)  :: count
-       integer(c_int64_t), intent(in)  :: dtype
-       integer(c_int64_t), intent(in)  :: source
-       integer(c_int64_t), intent(out) :: lenreal
-       integer(c_int64_t), intent(out) :: sourcereal
-       integer(c_int64_t), intent(in)  :: sync
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
+       type(c_ptr), intent(in), value         :: buf ! call ppidd_recv(c_loc(f_buffer),...)
+       integer(c_int64_t), intent(in)         :: count
+       integer(c_int),     intent(in), value  :: dtype
+       integer(c_int64_t), intent(in)         :: source
+       integer(c_int64_t), intent(out)        :: lenreal
+       integer(c_int64_t), intent(out)        :: sourcereal
+       integer(c_int64_t), intent(in)         :: sync
        end subroutine ppidd_recv
       end interface
 
@@ -159,13 +159,13 @@
       end interface
 
       interface
-       subroutine ppidd_bcast(buffer,count,type,root)
+       subroutine ppidd_bcast(buffer,count,dtype,root)
      >            bind(C,name='PPIDD_BCast')
-       use iso_c_binding, only : c_int64_t, c_ptr
-       type(c_ptr), intent(in), value :: buffer ! call ppidd_bcast(c_loc(f_buffer),...)
-       integer(c_int64_t), intent(in) :: count
-       integer(c_int64_t), intent(in) :: type
-       integer(c_int64_t), intent(in) :: root
+       use iso_c_binding, only : c_int, c_int64_t, c_ptr
+       type(c_ptr),        intent(in), value :: buffer ! call ppidd_bcast(c_loc(f_buffer),...)
+       integer(c_int64_t), intent(in)        :: count
+       integer(c_int),     intent(in), value :: dtype
+       integer(c_int64_t), intent(in)        :: root
        end subroutine ppidd_bcast
       end interface
 
@@ -176,41 +176,41 @@
       end interface
 
       interface
-       subroutine ppidd_gsum(type,buffer,len,op)
+       subroutine ppidd_gsum(dtype,buffer,len,op)
      >            bind(C,name='PPIDD_Gsum')
-       use iso_c_binding, only : c_int64_t, c_char, c_ptr
-       integer(c_int64_t), intent(in)  :: type
-       type(c_ptr), intent(in), value :: buffer ! call ppidd_gsum(c_loc(f_buffer),...)
-       integer(c_int64_t), intent(in) :: len
-       character(c_char),  intent(in) :: op ! must to terminated by c_null_char
+       use iso_c_binding, only : c_int, c_int64_t, c_char, c_ptr
+       integer(c_int),     intent(in), value :: dtype
+       type(c_ptr),        intent(in), value :: buffer ! call ppidd_gsum(c_loc(f_buffer),...)
+       integer(c_int64_t), intent(in)        :: len
+       character(c_char),  intent(in)        :: op ! must to terminated by c_null_char
        end subroutine ppidd_gsum
       end interface
 
       interface
-       function ppidd_create_irreg(name,lenin,nchunk,datatype,
-     >          storetype,handle)
+       function ppidd_create_irreg(name,lenin,nchunk,dtype,storetype,
+     >          handle)
      >          bind(C,name='PPIDD_Create_irreg')
        use iso_c_binding, only : c_int, c_int64_t, c_char
-       integer(c_int)                  :: ppidd_create_irreg
-       character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
-       integer(c_int64_t), intent(in)  :: nchunk
-       integer(c_int64_t), intent(in)  :: lenin(nchunk)
-       integer(c_int64_t), intent(in)  :: datatype
-       integer(c_int64_t), intent(in)  :: storetype
-       integer(c_int64_t), intent(out) :: handle
+       integer(c_int)                        :: ppidd_create_irreg
+       character(c_char),  intent(in)        :: name ! must to terminated by c_null_char
+       integer(c_int64_t), intent(in)        :: nchunk
+       integer(c_int64_t), intent(in)        :: lenin(nchunk)
+       integer(c_int),     intent(in), value :: dtype
+       integer(c_int64_t), intent(in)        :: storetype
+       integer(c_int64_t), intent(out)       :: handle
        end function ppidd_create_irreg
       end interface
 
       interface
-       function ppidd_create(name,lentot,datatype,storetype,handle)
+       function ppidd_create(name,lentot,dtype,storetype,handle)
      >          bind(C,name='PPIDD_Create')
        use iso_c_binding, only : c_int, c_int64_t, c_char
-       integer(c_int)                  :: ppidd_create
-       character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
-       integer(c_int64_t), intent(in)  :: lentot
-       integer(c_int64_t), intent(in)  :: datatype
-       integer(c_int64_t), intent(in)  :: storetype
-       integer(c_int64_t), intent(out) :: handle
+       integer(c_int)                        :: ppidd_create
+       character(c_char),  intent(in)        :: name ! must to terminated by c_null_char
+       integer(c_int64_t), intent(in)        :: lentot
+       integer(c_int),     intent(in), value :: dtype
+       integer(c_int64_t), intent(in)        :: storetype
+       integer(c_int64_t), intent(out)       :: handle
        end function ppidd_create
       end interface
 

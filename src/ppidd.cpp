@@ -24,27 +24,57 @@
 #if defined(MPI2) || defined(GA_MPI)
 
 #ifdef MPI2
- #include "mpiga_base.h"         /* include mpi.h */
- #include "mpi_utils.h"
- #include "mpi_nxtval.h"
+#include "mpiga_base.h"         /* include mpi.h */
+#include "mpi_utils.h"
+#include "mpi_nxtval.h"
 #endif
 
 #ifdef GA_MPI
- #include "mpi_utils.h"
- #include <ga.h>
- #include <ga-mpi.h>
- #include <macdecls.h>
+#include "mpi_utils.h"
+#include <ga.h>
+#include <ga-mpi.h>
+#include <macdecls.h>
 
- extern "C" {
- #include <ga-papi.h>
- #define ga_type_f2c pnga_type_f2c
- }
+extern "C" {
+#include <ga-papi.h>
+#define ga_type_f2c pnga_type_f2c
+}
 
 #endif
- static int MPIGA_Debug=0;
+static int MPIGA_Debug=0;
 #endif
 
 #include "ppidd.h"
+
+#ifdef GA_MPI
+static int dtype_ga(int dtype) {
+ switch (dtype) {
+  case 0:
+   return MT_F_INT;
+  case 1:
+   return MT_F_DBL;
+  default:
+   char *errmsg=strdup(" In dtype_ga: wrong data type ");
+   GA_Error(errmsg,dtype);
+   free(errmsg);
+ }
+ return -1;
+}
+
+static size_t dtype_ga_bytes(int dtype) {
+ switch (dtype) {
+  case 0:
+   return sizeof(FORTINT);
+  case 1:
+   return sizeof(double);
+  default:
+   char *errmsg=strdup(" In dtype_ga_bytes: wrong data type ");
+   GA_Error(errmsg,dtype);
+   free(errmsg);
+ }
+ return -1;
+}
+#endif
 
 extern "C" {
 
@@ -149,20 +179,7 @@ extern "C" {
 #ifdef GA_MPI
       Integer istack=(Integer)*stack;
       Integer iheap=(Integer)*heap;
-      Integer gadtype=-1;
-
-      switch(dtype){
-      case 0:
-              gadtype=MT_F_INT;
-              break;
-      case 1:
-              gadtype=MT_F_DBL;
-              break;
-      default:
-              char *errmsg=strdup(" In PPIDD_MA_Init: wrong data type ");
-              GA_Error(errmsg,dtype);
-              free(errmsg);
-      }
+      Integer gadtype=(Integer)dtype_ga(dtype);
       if( MA_init(gadtype, istack, iheap)) return 1;
       else return 0;
 #else
@@ -558,22 +575,8 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int gacount=(int)*count;
       int garoot=(int)*root;
-      int galenbuf;  /* in bytes */
-      size_t ctype=8;
-
-      switch(dtype){
-      case 0:
-              ctype=sizeof(FORTINT);
-              break;
-      case 1:
-              ctype=sizeof(double);
-              break;
-     default:
-              char *errmsg=strdup(" In PPIDD_BCast: wrong data type ");
-              GA_Error(errmsg,dtype);
-              free(errmsg);
-      }
-      galenbuf=ctype*gacount;
+      size_t ctype=dtype_ga_bytes(dtype);
+      int galenbuf=ctype*gacount;
       GA_Brdcst(buffer, galenbuf, garoot);
 #endif
    }
@@ -613,20 +616,8 @@ static int n_in_msg_mpiq=0;
       MPI_GSum(mpidtype,buffer,mpilen, op);
 #elif defined(GA_MPI)
       int buflen=(int)*len;
-      int gadtype_f=-1,gadtype_c;
-      switch(dtype){
-      case 0:
-              gadtype_f=MT_F_INT;
-              break;
-      case 1:
-              gadtype_f=MT_F_DBL;
-              break;
-      default:
-              char *errmsg=strdup(" In PPIDD_Gsum: wrong data type ");
-              GA_Error(errmsg,dtype);
-              free(errmsg);
-      }
-      gadtype_c=ga_type_f2c(gadtype_f);
+      int gadtype_f=dtype_ga(dtype);
+      int gadtype_c=ga_type_f2c(gadtype_f);
       GA_Gop(gadtype_c, buffer, buflen, op);
 #endif
    }
@@ -669,26 +660,13 @@ static int n_in_msg_mpiq=0;
       if(mpierr==0) return 1 ;
       else return 0 ;
 #elif defined(GA_MPI)
-      int gadtype=-1;
       int ndim=1;
       ga_int nblock=(ga_int)*nchunk;
       int np;
       int i;
       ga_int iad;
       int gahandle;
-
-      switch(dtype){
-      case 0:
-              gadtype=MT_F_INT;
-              break;
-      case 1:
-              gadtype=MT_F_DBL;
-              break;
-      default:
-              char *errmsg=strdup(" In PPIDD_Create_irreg: wrong data type ");
-              GA_Error(errmsg,dtype);
-              free(errmsg);
-      }
+      int gadtype=dtype_ga(dtype);
 
       ga_int block[1]={nblock};
       np = GA_Nnodes();
@@ -757,22 +735,9 @@ static int n_in_msg_mpiq=0;
       if(mpierr==0) return 1 ;
       else return 0 ;
 #elif defined(GA_MPI)
-      int gadtype=-1;
       ga_int galentot=(ga_int)*lentot;
       int gahandle;
-
-      switch(dtype){
-      case 0:
-              gadtype=MT_F_INT;
-              break;
-      case 1:
-              gadtype=MT_F_DBL;
-              break;
-      default:
-              char *errmsg=strdup(" In PPIDD_Create: wrong data type ");
-              GA_Error(errmsg,dtype);
-              free(errmsg);
-      }
+      int gadtype=dtype_ga(dtype);
 
       ga_int dims[1]={galentot};
       ga_int block[1]={-1};

@@ -21,8 +21,6 @@
 #define NGA_READ_INC NGA_Read_inc64
 #define NGA_ZERO_PATCH NGA_Zero_patch64
 
-#if defined(MPI2) || defined(GA_MPI)
-
 #ifdef MPI2
 #include "mpiga_base.h"         /* include mpi.h */
 #include "mpi_utils.h"
@@ -34,13 +32,9 @@
 #include <ga.h>
 #include <ga-mpi.h>
 #include <macdecls.h>
-
-extern "C" {
-#include <ga-papi.h>
-#define ga_type_f2c pnga_type_f2c
-}
-
 #endif
+
+#if defined(MPI2) || defined(GA_MPI)
 static int MPIGA_Debug=0;
 #endif
 
@@ -48,13 +42,20 @@ static int MPIGA_Debug=0;
 
 #ifdef GA_MPI
 static int dtype_ga(int dtype) {
+ char *errmsg;
  switch (dtype) {
   case 0:
-   return MT_F_INT;
+   if (sizeof(FORTINT)==sizeof(int)) return MT_C_INT;
+   if (sizeof(FORTINT)==sizeof(long)) return MT_C_LONGINT;
+   if (sizeof(FORTINT)==sizeof(long long)) return MT_C_LONGLONG;
+   errmsg=strdup(" In dtype_ga: unable to map FORTINT ");
+   GA_Error(errmsg,dtype);
+   free(errmsg);
+   break;
   case 1:
-   return MT_F_DBL;
+   return MT_C_DBL;
   default:
-   char *errmsg=strdup(" In dtype_ga: wrong data type ");
+   errmsg=strdup(" In dtype_ga: wrong data type ");
    GA_Error(errmsg,dtype);
    free(errmsg);
  }
@@ -616,9 +617,8 @@ static int n_in_msg_mpiq=0;
       MPI_GSum(mpidtype,buffer,mpilen, op);
 #elif defined(GA_MPI)
       int buflen=(int)*len;
-      int gadtype_f=dtype_ga(dtype);
-      int gadtype_c=ga_type_f2c(gadtype_f);
-      GA_Gop(gadtype_c, buffer, buflen, op);
+      int gadtype=dtype_ga(dtype);
+      GA_Gop(gadtype, buffer, buflen, op);
 #endif
    }
 

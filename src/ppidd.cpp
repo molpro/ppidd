@@ -44,15 +44,15 @@ static int MPIGA_Debug=0;
 static int dtype_ga(int dtype) {
  char *errmsg;
  switch (dtype) {
-  case 0:
+  case PPIDD_FORTINT :
    if (sizeof(FORTINT)==sizeof(int)) return MT_C_INT;
    if (sizeof(FORTINT)==sizeof(long)) return MT_C_LONGINT;
    if (sizeof(FORTINT)==sizeof(long long)) return MT_C_LONGLONG;
-   errmsg=strdup(" In dtype_ga: unable to map FORTINT ");
+   errmsg=strdup(" dtype_ga: unable to map FORTINT ");
    GA_Error(errmsg,dtype);
    free(errmsg);
    break;
-  case 1:
+  case PPIDD_DOUBLE :
    return MT_C_DBL;
   default:
    errmsg=strdup(" dtype_ga: wrong data type ");
@@ -67,9 +67,9 @@ static int dtype_ga(int dtype) {
 /*! \brief Return <tt>sizeof(dtype)</tt> */
 static size_t dtype_size(int dtype) {
  switch (dtype) {
-  case 0:
+  case PPIDD_FORTINT :
    return sizeof(FORTINT);
-  case 1:
+  case PPIDD_DOUBLE :
    return sizeof(double);
   default:
 #ifdef MPI2
@@ -81,6 +81,27 @@ static size_t dtype_size(int dtype) {
 #endif
  }
  return -1;
+}
+
+extern "C" MPI_Datatype dtype_mpi(int dtype) {
+ MPI_Datatype mpi_dtype=MPI_CHAR;
+ switch (dtype) {
+  case PPIDD_FORTINT :
+        if (sizeof(FORTINT)==sizeof(int)) mpi_dtype=MPI_INT;
+   else if (sizeof(FORTINT)==sizeof(long)) mpi_dtype=MPI_LONG;
+   else if (sizeof(FORTINT)==sizeof(long long)) mpi_dtype=MPI_LONG_LONG;
+   else MPIGA_Error(" dtype_mpi: unable to map FORTINT ",dtype);
+   break;
+  case PPIDD_DOUBLE :
+   mpi_dtype=MPI_DOUBLE;
+   break;
+  default:
+   MPIGA_Error(" dtype_mpi: wrong data type ",dtype);
+ }
+ int mpi_size;
+ MPI_Type_size(mpi_dtype,&mpi_size);
+ if (mpi_size != dtype_size(dtype)) MPIGA_Error(" dtype_mpi: mapped data type wrong ",dtype);
+ return mpi_dtype;
 }
 #endif
 
@@ -562,11 +583,10 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       int mpicount=(int)*count;
       int mpiroot=(int)*root;
-      MPI_Datatype mpidtype;
       MPI_Comm mpicomm;
       int mpierr;
 
-      mpiga_type_f2cmpi(dtype,&mpidtype);
+      MPI_Datatype mpidtype=dtype_mpi(dtype);
       mpicomm=mpigv(Compute_comm);
 
       mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpicomm);
@@ -607,9 +627,8 @@ static int n_in_msg_mpiq=0;
  *  - \c type=1 : Fortran Double Precision */
    void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
 #ifdef MPI2
-      MPI_Datatype mpidtype;
       int mpilen=(int)*len;
-      mpiga_type_f2cmpi(dtype,&mpidtype);
+      MPI_Datatype mpidtype=dtype_mpi(dtype);
       MPI_GSum(mpidtype,buffer,mpilen, op);
 #elif defined(GA_MPI)
       int buflen=(int)*len;
@@ -634,12 +653,11 @@ static int n_in_msg_mpiq=0;
       int mpierr;
       int mpinchunk=(int)*nchunk;
       int stype=(int)*storetype;
-      MPI_Datatype mpidtype;
       int mpihandle;
 
       std::vector<int> mpilenin(mpinchunk);
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
-      mpiga_type_f2cmpi(dtype,&mpidtype);
+      MPI_Datatype mpidtype=dtype_mpi(dtype);
       if (use_helper_server==0) {
         mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
       }
@@ -702,7 +720,6 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       int mpierr;
       int mpilentot;
-      MPI_Datatype mpidtype;
       int stype=(int)*storetype;
       int mpihandle;
 
@@ -711,7 +728,7 @@ static int n_in_msg_mpiq=0;
        exit(1);
       }
       else mpilentot=(int)*lentot;
-      mpiga_type_f2cmpi(dtype,&mpidtype);
+      MPI_Datatype mpidtype=dtype_mpi(dtype);
       if (use_helper_server==0) {
         mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
       }

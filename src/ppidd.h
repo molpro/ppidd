@@ -1,6 +1,10 @@
 #ifndef __PPIDD_H__
 #define __PPIDD_H__
 #include <stdint.h>
+
+#define PPIDD_FORTINT 0
+#define PPIDD_DOUBLE  1
+
 #ifdef __cplusplus
 extern "C" {
 #endif

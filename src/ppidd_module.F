@@ -3,6 +3,9 @@
 ! for convenience of the module user
       use iso_c_binding
 
+      integer(c_int), parameter :: PPIDD_FORTINT=0
+      integer(c_int), parameter :: PPIDD_DOUBLE =0
+
       interface
        subroutine ppidd_initialize(argc, argv)
      >            bind(c,name="PPIDD_Initialize")

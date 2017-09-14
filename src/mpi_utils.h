@@ -43,7 +43,7 @@ extern "C" {
     extern int ProcID(void);
     extern void MPIGA_Error(const char *, int);
     extern void mpi_test_status(const char *, int);
-    extern int mpiga_type_f2cmpi(int , MPI_Datatype *);
+    extern MPI_Datatype dtype_mpi(int);
     extern int mpiga_type_c2cmpi(int , MPI_Datatype *, int *);
     extern int mpiga_type_cmpi2c(MPI_Datatype , int *);
 #ifdef __cplusplus

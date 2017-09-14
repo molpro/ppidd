@@ -117,44 +117,6 @@ void mpi_test_status(const char *msg_str, int status)
     }
 }
 
-/* Convert Fortran data type to C MPI_Datatype */
-/*
-   Input : Fortran Data type ( an int )
-   Output: C MPI_Datatype, and size of datatype
-===========================================================================
-   Fortran data type              (value)    MPI_Datatype
----------------------------------------------------------------------------
-   FORTINT(Integer and Logical)   (0)        MPI_INT,MPI_LONG,MPI_LONG_LONG
-   Double Precision               (1)        MPI_DOUBLE
-   others                                    not allowed so far, ERROR
-===========================================================================
-*/
-int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype)
-{
-    int sizefdtype;
-    int sizempidtype;
-    MPI_Datatype mpidtype=MPI_CHAR;
-    switch(fdtype){
-    case 0:
-            sizefdtype=sizeof(FORTINT);
-            MPI_Type_size(FORTINT_MPI, &sizempidtype);
-            if (sizefdtype==sizempidtype) mpidtype=FORTINT_MPI;
-            if (mpidtype==MPI_CHAR) MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran Integer ",fdtype);
-            break;
-    case 1:
-            sizefdtype=sizeof(double);
-            MPI_Type_size(MPI_DOUBLE, &sizempidtype);
-            if (sizefdtype==sizempidtype) mpidtype=MPI_DOUBLE;
-            else  MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran Double Precision ",fdtype);
-            break;
-    default:
-            MPIGA_Error("mpiga_type_f2cmpi: can't assign C MPI_Datatype for Fortran data type ",fdtype);
-            break;
-    }
-    *dtype=mpidtype;
-    return 0;
-}
-
 
 /* Convert C data type to C MPI_Datatype */
 /*

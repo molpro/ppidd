@@ -11,6 +11,4 @@
 
 #undef FORTINT
 
-#undef FORTINT_MPI
-
 #endif

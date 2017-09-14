@@ -110,13 +110,10 @@ AC_CHECK_SIZEOF([long long])
 
 if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
  AC_DEFINE([FORTINT],[int])
- AC_DEFINE([FORTINT_MPI],[MPI_INT])
 elif test "x${ac_cv_sizeof_long}" = "x${enable_fortran_integer}" ; then
  AC_DEFINE([FORTINT],[long])
- AC_DEFINE([FORTINT_MPI],[MPI_LONG])
 elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
  AC_DEFINE([FORTINT],[long long])
- AC_DEFINE([FORTINT_MPI],[MPI_LONG_LONG])
 else
  AC_MSG_ERROR([Problem determining FORTINT])
 fi

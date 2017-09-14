@@ -160,15 +160,13 @@ extern "C" {
  *  - \b MPI2 always returns <tt>.false.</tt>
  */
    int PPIDD_Uses_ma() {
-#ifdef MPI2
-      return 0;
-#elif defined(GA_MPI)
-      if (GA_Uses_ma()) return 1;
-      else return 0;
+#ifdef GA_MPI
+    if (GA_Uses_ma()) return 1;
+    else return 0;
 #else
-      return 0;
+    return 0;
 #endif
-  }
+   }
 
 
 /*  Initialize the memory allocator.
@@ -1076,10 +1074,9 @@ static int n_in_msg_mpiq=0;
       int ihandle = (int) *handle;
       ga_int mpiinum[1];
       long gaincr = (long) *incr;
-      long gavalue;
 
       mpiinum[0] = (ga_int) *inum-1;
-      gavalue=NGA_READ_INC(ihandle,mpiinum, gaincr);
+      long gavalue=NGA_READ_INC(ihandle,mpiinum, gaincr);
       *returnval=(int64_t)gavalue;
 #else
       printf(" ERROR: PPIDD_Read_inc should not be called in serial case.\n");
@@ -1210,33 +1207,29 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Inquire_name(int64_t *handle, char *name) {
 #ifdef MPI2
       char *name2;
-      int lxi;
-      int i,len_actual;
       int mpihandle = (int) *handle;
 
-      lxi=strlen(name);
+      int lxi=strlen(name);
       if ( mpiga_inquire_storetype(mpihandle) == 0 )
          mpiga_inquire_name(mpihandle, &name2);
       else {
          twosided_helpga_inquire_name(mpihandle, &name2);
       }
-      len_actual=strlen(name2);
+      int len_actual=strlen(name2);
       strncpy(name,name2,len_actual);
-      for(i=len_actual;i<lxi;i++) name[i]=' ';
+      for(int i=len_actual;i<lxi;i++) name[i]=' ';
       if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
 #elif defined(GA_MPI)
       char *name2;
-      int lxi;
-      int i,len_actual;
       int gahandle = (int) *handle;
 
-      lxi=strlen(name);
+      int lxi=strlen(name);
 /*      strcpy(name2=malloc(80*sizeof(char)),GA_Inquire_name(gahandle));
       strncpy(name,name2,strlen(name2)); */
       name2=GA_Inquire_name(gahandle);
-      len_actual=strlen(name2);
+      int len_actual=strlen(name2);
       strncpy(name,name2,len_actual);
-      for(i=len_actual;i<lxi;i++) name[i]=' ';
+      for(int i=len_actual;i<lxi;i++) name[i]=' ';
       if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
 #else
       printf(" ERROR: PPIDD_Inquire_name should not be called in serial case.\n");
@@ -1385,8 +1378,7 @@ static int n_in_msg_mpiq=0;
       if(mpierr==0) return 1 ;
       else return 0 ;
 #elif defined(GA_MPI)
-      int mpierr;
-      mpierr=GA_Destroy_mutexes();
+      int mpierr=GA_Destroy_mutexes();
 /* This is one of exceptions in GA (see global/src/capi.c) : Returns [1] if the operation succeeded or [0] when failed */
       if(MPIGA_Debug)printf("In PPIDD_Destroy_Mutexes: mpierr=%d.\n",mpierr);
       if(mpierr==1) return 1 ;

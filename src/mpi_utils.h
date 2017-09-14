@@ -15,13 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* C datatypes */
-#define PPIDD_C_INT        0
-#define PPIDD_C_DOUBLE     1
-#define PPIDD_C_LONG       2
-#define PPIDD_C_LONG_LONG  3
-#define PPIDD_C_FLOAT      4
-
 /* some definitions for mpi_test_status */
 #if !defined PPIDD_MIN
   #define PPIDD_MIN(a,b) (((a) <= (b)) ? (a) : (b))
@@ -44,8 +37,7 @@ extern "C" {
     extern void MPIGA_Error(const char *, int);
     extern void mpi_test_status(const char *, int);
     extern MPI_Datatype dtype_mpi(int);
-    extern int mpiga_type_c2cmpi(int , MPI_Datatype *, int *);
-    extern int mpiga_type_cmpi2c(MPI_Datatype , int *);
+    extern size_t dtype_size(int);
 #ifdef __cplusplus
 }
 #endif

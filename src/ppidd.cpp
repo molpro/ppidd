@@ -65,7 +65,7 @@ static int dtype_ga(int dtype) {
 
 #if defined(MPI2) || defined(GA_MPI)
 /*! \brief Return <tt>sizeof(dtype)</tt> */
-static size_t dtype_size(int dtype) {
+extern "C" size_t dtype_size(int dtype) {
  switch (dtype) {
   case PPIDD_FORTINT :
    return sizeof(FORTINT);
@@ -666,7 +666,7 @@ static int n_in_msg_mpiq=0;
           mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name, mpidtype);
+          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name, dtype);
         }
       }
       *handle=(int64_t)mpihandle;
@@ -737,7 +737,7 @@ static int n_in_msg_mpiq=0;
          mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
         else {
          int mproc=0;
-         mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, mpidtype);
+         mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, dtype);
         }
       }
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,stype,dtype);

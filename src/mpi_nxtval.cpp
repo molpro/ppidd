@@ -347,7 +347,8 @@ void DataHelperServer()
         done_list_crt[ndone_crt++] = nodefrom;
         if (ndone_crt == Nprocs_server) {
           nelem_helpga=(int)nelem_valput;
-          mpiga_type_c2cmpi(ielem_cdtype, &dtype, &sizeofdtype);
+          dtype=dtype_mpi(ielem_cdtype);
+          sizeofdtype=dtype_size(ielem_cdtype);
 
           /* create  a new structure */
           helpga =(MPIHELPGA)malloc( sizeof(struct STRUC_MPIHELPGA) );
@@ -930,7 +931,7 @@ ________________________________________________________________________________
 }
 
 
-int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, char *name, MPI_Datatype mpidtype)
+int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, char *name, int dtype)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -947,7 +948,6 @@ ________________________________________________________________________________
   int  handle_orig=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
   int sizeofdtype;                /* Size of MPI Datatype */
-  int ielem_cdtype;
   int  myid;                      /* id of compute process        */
   int  server;                    /* id of server process         */
   int  lentot;                    /* total number of elements     */
@@ -1016,6 +1016,8 @@ ________________________________________________________________________________
 
     strcpy(helpganame=(char *)malloc(strlen(name)+1),name);
 
+    MPI_Datatype mpidtype=dtype_mpi(dtype);
+
     helpga->name=helpganame;
     helpga->ptr_buf=NULL;
     helpga->dtype=mpidtype;
@@ -1036,8 +1038,6 @@ ________________________________________________________________________________
 
     *handle=handle_orig+TWOSIDED_HELPGA_OFFSET;  /* adjusted sequence number of helpga */
 
-    mpiga_type_cmpi2c(mpidtype,&ielem_cdtype); /* ielem_cdtype will be used in send */
-
     len=NULL;
     len_help=NULL;
     helpganame=NULL;
@@ -1049,7 +1049,7 @@ ________________________________________________________________________________
   if (SR_parallel) {
      buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
      buf[1] = (FORTINT)lentot;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
-     buf[2] = (FORTINT)ielem_cdtype; /* COLLECFLAG and mproc=0: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
+     buf[2] = (FORTINT)dtype;        /* COLLECFLAG and mproc=0: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
      buf[3] = (FORTINT)*handle;      /* sequence number of helpga */
 
      if (use_helper_server) {
@@ -1089,7 +1089,7 @@ ________________________________________________________________________________
 
 /* create a normal helpga */
 /* here  mproc = 0 ;  lentot: total number of elements     */
-int twosided_helpga_create(int mproc, int lentot, int *handle, char *name, MPI_Datatype mpidtype)
+int twosided_helpga_create(int mproc, int lentot, int *handle, char *name, int dtype)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -1131,7 +1131,7 @@ ________________________________________________________________________________
       }
     }
 
-    twosided_helpga_create_irreg(mproc, len, sizeoflen, handle, name, mpidtype);
+    twosided_helpga_create_irreg(mproc, len, sizeoflen, handle, name, dtype);
 
     free(len);
 

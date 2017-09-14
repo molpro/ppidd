@@ -107,11 +107,10 @@ extern "C" MPI_Datatype dtype_mpi(int dtype) {
 
 extern "C" {
 
-/*! Initialize the PPIDD parallel environment
- *
- *  - For \b GA, includes initialization of MPI and GA.
- *  - For \b MPI2, calls MPI_Init.
- */
+/*! \brief Initialize the PPIDD parallel environment
+    \details
+    - For \b GA, includes initialization of MPI and GA.
+    - For \b MPI2, calls MPI_Init. */
    void PPIDD_Initialize(int argc, char **argv) {
 #ifdef MPI2
     int mpierr=mpiga_initialize(&argc,&argv);
@@ -911,10 +910,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Copies data from array section to the local array buffer according to starting and ending index.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET
- */
+/*! \brief Copies data from array section to the local array buffer according to starting and ending index.
+    \details analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET */
    int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
@@ -964,10 +961,8 @@ static int n_in_msg_mpiq=0;
 #endif
    }
 
-/*! Put local buffer data into a section of a global array according to starting and ending index.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT
- */
+/*! \brief Put local buffer data into a section of a global array according to starting and ending index.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT */
    int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
@@ -1014,11 +1009,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Accumulate data into a section of a global array.
- *
- * Atomic operation.  global array section (ilo, ihi) += *fac * buffer
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC
- */
+/*! \brief Accumulate data into a section of a global array.
+    \details Atomic operation. global array section (ilo, ihi) += *fac * buffer.
+    Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC */
    int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
 #ifdef MPI2
       int mpihandle=(int)*handle;
@@ -1059,12 +1052,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Atomically read and increment an element in an integer array.
- *
- *  Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum)
+/*! \brief Atomically read and increment an element in an integer array.
+    \details Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum)
     element by a given increment. This is a fetch-and-add operation.
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC
- */
+    Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC */
    void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
@@ -1098,10 +1089,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Set all the elements in an array patch to zero.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH
- */
+/*! \brief Set all the elements in an array patch to zero.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH */
    void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
@@ -1124,10 +1113,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Set all the elements of a global data structure to zero.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO
- */
+/*! \brief Set all the elements of a global data structure to zero.
+ *  \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO */
    int PPIDD_Zero(int64_t *handle) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
@@ -1152,9 +1139,8 @@ static int n_in_msg_mpiq=0;
 #endif
    }
 
-/*! Get the next shared counter number(helper process should be enabled).
- *
- *  Increment a counter by 1 and returns the counter value (0, 1, ...). */
+/*! \brief Get the next shared counter number(helper process should be enabled).
+    \details Increment a counter by 1 and returns the counter value (0, 1, ...). */
 #ifdef GA_MPI
    static int PPIDD_Nxtval_initialised=0;
    static int64_t PPIDD_Nxtval_handle;
@@ -1195,11 +1181,10 @@ static int n_in_msg_mpiq=0;
 
 
 
-/*! Create a new global array by applying all the properties of another existing global.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
- *  - \b MPI2  does nothing
- */
+/*! \brief Create a new global array by applying all the properties of another existing global.
+    \details
+    - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
+    - \b MPI2 does nothing */
    void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
 #ifdef GA_MPI
       int ga_a=(int)*handlei;
@@ -1212,11 +1197,9 @@ static int n_in_msg_mpiq=0;
 }
 
 
-/*! Returns the name of a global array represented by the handle.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
- *  - \c This operation is local.
- */
+/*! \brief Returns the name of a global array represented by the handle.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
+    This operation is local. */
    void PPIDD_Inquire_name(int64_t *handle, char *name) {
 #ifdef MPI2
       char *name2;
@@ -1251,13 +1234,11 @@ static int n_in_msg_mpiq=0;
 }
 
 
-/*! Returns the storetype of a global array represented by the handle.
- *
- *     storetype: number of helper processes for storing this global array.
- *  - \c storetype=0 : Normal distributed array stored across the distributed processes
- *  - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
- *  - \c This operation is local.
- */
+/* \brief Returns the storetype of a global array represented by the handle.
+   \details storetype: number of helper processes for storing this global array.
+   - \c storetype=0 : Normal distributed array stored across the distributed processes
+   - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
+   - \c This operation is local. */
    void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
 #ifdef MPI2
       int mpihandle = (int) *handle;
@@ -1271,10 +1252,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
- */
+/*! \brief Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME */
    void PPIDD_Inquire_mem(int64_t *mem_used) {
 #ifdef MPI2
       long localmem;
@@ -1336,10 +1315,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Lock a mutex object identified by a given mutex number.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK
- */
+/*! \brief Lock a mutex object identified by a given mutex number.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK */
    void PPIDD_Lock_mutex(int64_t *inum) {
 #ifdef MPI2
       int mpiinum = (int) *inum;
@@ -1356,10 +1333,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Unlock  a mutex object identified by a given mutex number.
- *
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK
- */
+/*! \brief Unlock a mutex object identified by a given mutex number.
+    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK */
    void PPIDD_Unlock_mutex(int64_t *inum) {
 #ifdef MPI2
       int mpiinum = (int) *inum;
@@ -1376,11 +1351,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-/*! Destroy the set of mutexes created with PPIDD_Create_mutexes.
- *
- * Returns <tt>.true.</tt> if the operation succeeded or <tt>.false.</tt> when failed. This is a collective operation.
- *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES
- */
+/*! \brief Destroy the set of mutexes created with PPIDD_Create_mutexes.
+    \return 1 if the operation succeeded or 0 when failed.
+    \details This is a collective operation. Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES */
    int PPIDD_Destroy_mutexes() {
 #ifdef MPI2
       int mpierr;

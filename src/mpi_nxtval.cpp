@@ -248,7 +248,7 @@ void DataHelperServer()
   MPI_Request request,reqs[2];
   MPI_Status status,stats[2];
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
-  int sizeofdtype,sizedtype_buf;  /* Size of MPI Datatype */
+  int sizeofdtype;                /* Size of MPI Datatype */
   MPIHELPGA helpga=NULL;
   char *p_mutex=NULL;
 
@@ -256,7 +256,7 @@ void DataHelperServer()
 
   totworkproc=NProcs_Work();
   Nprocs_server=Nprocs_of_Server(ProcID());
-  mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+  mpiga_type_f2cmpi(0, &dtype_buf);
 
   if (!done_list)      done_list     =(int *)malloc(totworkproc*sizeof(int));
   if (!done_list_crt)  done_list_crt =(int *)malloc(Nprocs_server*sizeof(int));
@@ -761,7 +761,6 @@ int NXTVAL(int *mproc)
   int  local=0;
   MPI_Status status;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
-  int sizedtype_buf;              /* Size of MPI Datatype */
   int  server;                    /* id of server process */
   int  myid;                      /* id of current process */
 
@@ -780,7 +779,7 @@ int NXTVAL(int *mproc)
        if (*mproc == 0) server=Server_of_Rank(myid); /* terminate all helper servers */
        else server = LastServerID();                 /* last server process */
 
-       mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+       mpiga_type_f2cmpi(0, &dtype_buf);
        MPI_Send(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD);
        MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
        if (*mproc == 0 && myid == 0 ) { /* rank(0) sends signal to terminate last server process if the last server process doesn't serve any compute process */
@@ -826,7 +825,6 @@ ________________________________________________________________________________
   int  local=0;
   int  handle_orig;
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
-  int sizedtype_buf;              /* Size of MPI Datatype */
   int  myid;                      /* id of server compute process */
   int  server;                    /* id of server process         */
   MPIHELPGA helpga=NULL;
@@ -861,7 +859,7 @@ ________________________________________________________________________________
        MPI_Comm_rank(MPI_COMM_WORLD, &myid);
        server=Server_of_Rank(myid);
 
-       mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+       mpiga_type_f2cmpi(0, &dtype_buf);
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
        MPI_Recv(NULL, 0, MPI_BYTE, server, WAKEUPTAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE); /* SUCCESS: receive notification from server */
      }
@@ -948,7 +946,7 @@ ________________________________________________________________________________
   int  local=0;
   int  handle_orig=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
-  int sizeofdtype,sizedtype_buf;  /* Size of MPI Datatype */
+  int sizeofdtype;                /* Size of MPI Datatype */
   int ielem_cdtype;
   int  myid;                      /* id of compute process        */
   int  server;                    /* id of server process         */
@@ -1060,7 +1058,7 @@ ________________________________________________________________________________
        ii=SerialNumber_of_Server(server);
        buf[1] = (FORTINT) (helpga->len_help[ii]); /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
 
-       mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+       mpiga_type_f2cmpi(0, &dtype_buf);
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
        MPI_Recv(NULL, 0, MPI_BYTE, server, WAKEUPTAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE); /* SUCCESS: receive notification from server */
      }
@@ -1461,7 +1459,7 @@ ________________________________________________________________________________
   int  local=0;
   int  handle_orig;
   MPI_Datatype dtype,dtype_buf;  /* MPI Datatype */
-  int sizeofdtype,sizedtype_buf; /* Size of MPI Datatype */
+  int sizeofdtype;               /* Size of MPI Datatype */
   int  server;                   /* id of server process */
   int  np_help, lenleft,lenleft_save;
   int  i,ilo,ihigh,ifirst,ilast,iserver_first,iserver;
@@ -1493,7 +1491,7 @@ ________________________________________________________________________________
      iserver_first=SerialNumber_of_Server(twosided_helpga_proclist[0]);
      for (lenleft=0,i=0;i<iserver_first;i++) lenleft=lenleft + len_help[i];
 
-     mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+     mpiga_type_f2cmpi(0, &dtype_buf);
 
      requests2 = (MPI_Request *)malloc(np_help*sizeof(MPI_Request));
      requests3 = (MPI_Request *)malloc(np_help*sizeof(MPI_Request));
@@ -1891,7 +1889,6 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
   FORTINT  buf[3];
   int  local=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
-  int sizedtype_buf;              /* Size of MPI Datatype */
   int  server;                    /* id of server process */
   int  i;
 
@@ -1929,7 +1926,7 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
 
      if (use_helper_server) {
        server = LastServerID();                     /* helpmutex server is always the last process(ie, NXTVAL server) */
-       mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+       mpiga_type_f2cmpi(0, &dtype_buf);
        MPI_Send(buf, 3, dtype_buf, server, type, MPI_COMM_WORLD);
        MPI_Recv(NULL, 0, MPI_BYTE, server, type, MPI_COMM_WORLD, MPI_STATUS_IGNORE); /* SUCCESS: receive notification from server */
      }
@@ -1969,7 +1966,6 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
   FORTINT  buf[2];
   int  local=0;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
-  int sizedtype_buf;              /* Size of MPI Datatype */
   int  server;                    /* id of server process */
 
   if (DEBUG_) printf("%5d: twosided_helpmutex_lock: begin. type=%d, mproc=%d, inum(mutex)=%d\n",ProcID(),type,mproc,inum);
@@ -2012,7 +2008,7 @@ MUTLOCFLAG(inum): sequential number of mutex to be locked (mproc > 0) and unlock
 
      if (use_helper_server) {
        server = LastServerID();                     /* helpmutex server is always the last process(ie, NXTVAL server) */
-       mpiga_type_f2cmpi(0, &dtype_buf, &sizedtype_buf);
+       mpiga_type_f2cmpi(0, &dtype_buf);
        MPI_Send(buf, 2, dtype_buf, server, type, MPI_COMM_WORLD);
        MPI_Recv(NULL, 0, MPI_BYTE, server, type, MPI_COMM_WORLD, MPI_STATUS_IGNORE); /* SUCCESS: receive notification from server */
      }

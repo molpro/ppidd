@@ -129,7 +129,7 @@ void mpi_test_status(const char *msg_str, int status)
    others                                    not allowed so far, ERROR
 ===========================================================================
 */
-int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype, int *sizeofdtype)
+int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype)
 {
     int sizefdtype;
     int sizempidtype;
@@ -152,7 +152,6 @@ int mpiga_type_f2cmpi(int fdtype, MPI_Datatype *dtype, int *sizeofdtype)
             break;
     }
     *dtype=mpidtype;
-    *sizeofdtype=sizempidtype;
     return 0;
 }
 

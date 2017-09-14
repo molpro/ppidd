@@ -55,23 +55,30 @@ static int dtype_ga(int dtype) {
   case 1:
    return MT_C_DBL;
   default:
-   errmsg=strdup(" In dtype_ga: wrong data type ");
+   errmsg=strdup(" dtype_ga: wrong data type ");
    GA_Error(errmsg,dtype);
    free(errmsg);
  }
  return -1;
 }
+#endif
 
-static size_t dtype_ga_bytes(int dtype) {
+#if defined(MPI2) || defined(GA_MPI)
+/*! \brief Return <tt>sizeof(dtype)</tt> */
+static size_t dtype_size(int dtype) {
  switch (dtype) {
   case 0:
    return sizeof(FORTINT);
   case 1:
    return sizeof(double);
   default:
-   char *errmsg=strdup(" In dtype_ga_bytes: wrong data type ");
+#ifdef MPI2
+   MPIGA_Error(" dtype_size: wrong data type ",dtype);
+#else
+   char *errmsg=strdup(" dtype_size: wrong data type ");
    GA_Error(errmsg,dtype);
    free(errmsg);
+#endif
  }
  return -1;
 }
@@ -391,12 +398,9 @@ static int n_in_msg_mpiq=0;
       int mpidest=(int)*dest;
       int mpitag=dtype;
       int mpisync=(int)*sync;
-      int mpilenbuf,mpierr;
-      MPI_Datatype mpidtype;
-      int sizempidtype;
+      int mpierr;
 
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
-      mpilenbuf=mpicount*sizempidtype;
+      int mpilenbuf = mpicount * dtype_size(dtype);
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
@@ -445,14 +449,11 @@ static int n_in_msg_mpiq=0;
       int mpitag=dtype;
       int mpisource=(int)*source;
       int mpisync=(int)*sync;
-      int mpinode,mpilenbuf,mpierr;
+      int mpinode,mpierr;
       MPI_Status status;
       MPI_Request request;
-      MPI_Datatype mpidtype;
-      int sizempidtype;
 
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
-      mpilenbuf=mpicount*sizempidtype;
+      int mpilenbuf = mpicount * dtype_size(dtype);
 
       if (mpisource == -1)
          mpinode = MPI_ANY_SOURCE;
@@ -562,11 +563,10 @@ static int n_in_msg_mpiq=0;
       int mpicount=(int)*count;
       int mpiroot=(int)*root;
       MPI_Datatype mpidtype;
-      int sizempidtype;
       MPI_Comm mpicomm;
       int mpierr;
 
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype);
       mpicomm=mpigv(Compute_comm);
 
       mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpicomm);
@@ -574,8 +574,7 @@ static int n_in_msg_mpiq=0;
 #elif defined(GA_MPI)
       int gacount=(int)*count;
       int garoot=(int)*root;
-      size_t ctype=dtype_ga_bytes(dtype);
-      int galenbuf=ctype*gacount;
+      int galenbuf = gacount * dtype_size(dtype);
       GA_Brdcst(buffer, galenbuf, garoot);
 #endif
    }
@@ -609,9 +608,8 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
 #ifdef MPI2
       MPI_Datatype mpidtype;
-      int sizempidtype;
       int mpilen=(int)*len;
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype);
       MPI_GSum(mpidtype,buffer,mpilen, op);
 #elif defined(GA_MPI)
       int buflen=(int)*len;
@@ -637,12 +635,11 @@ static int n_in_msg_mpiq=0;
       int mpinchunk=(int)*nchunk;
       int stype=(int)*storetype;
       MPI_Datatype mpidtype;
-      int sizempidtype;
       int mpihandle;
 
       std::vector<int> mpilenin(mpinchunk);
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype);
       if (use_helper_server==0) {
         mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
       }
@@ -706,7 +703,6 @@ static int n_in_msg_mpiq=0;
       int mpierr;
       int mpilentot;
       MPI_Datatype mpidtype;
-      int sizempidtype;
       int stype=(int)*storetype;
       int mpihandle;
 
@@ -715,7 +711,7 @@ static int n_in_msg_mpiq=0;
        exit(1);
       }
       else mpilentot=(int)*lentot;
-      mpiga_type_f2cmpi(dtype,&mpidtype,&sizempidtype);
+      mpiga_type_f2cmpi(dtype,&mpidtype);
       if (use_helper_server==0) {
         mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
       }

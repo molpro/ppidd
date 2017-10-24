@@ -10,6 +10,15 @@
 /*! \file
  * \brief This file contains the PPIDD functions */
 
+#ifdef MPI2
+#include "mpiga_base.h"
+#include "mpi_nxtval.h"
+#endif
+
+#ifdef GA_MPI
+#include <ga.h>
+#include <ga-mpi.h>
+#include <macdecls.h>
 #define ga_int int64_t
 #define NGA_ACC NGA_Acc64
 #define NGA_CREATE NGA_Create64
@@ -20,25 +29,14 @@
 #define NGA_PUT NGA_Put64
 #define NGA_READ_INC NGA_Read_inc64
 #define NGA_ZERO_PATCH NGA_Zero_patch64
-
-#ifdef MPI2
-#include "mpiga_base.h"         /* include mpi.h */
-#include "mpi_utils.h"
-#include "mpi_nxtval.h"
-#endif
-
-#ifdef GA_MPI
-#include "mpi_utils.h"
-#include <ga.h>
-#include <ga-mpi.h>
-#include <macdecls.h>
 #endif
 
 #if defined(MPI2) || defined(GA_MPI)
-static int MPIGA_Debug=0;
+#include "mpi_utils.h"
 #endif
 
 #include "ppidd.h"
+static int MPIGA_Debug=0;
 
 #ifdef GA_MPI
 static int dtype_ga(int dtype) {
@@ -63,48 +61,6 @@ static int dtype_ga(int dtype) {
 }
 #endif
 
-#if defined(MPI2) || defined(GA_MPI)
-/*! \brief Return <tt>sizeof(dtype)</tt> */
-extern "C" size_t dtype_size(int dtype) {
- switch (dtype) {
-  case PPIDD_FORTINT :
-   return sizeof(FORTINT);
-  case PPIDD_DOUBLE :
-   return sizeof(double);
-  default:
-#ifdef MPI2
-   MPIGA_Error(" dtype_size: wrong data type ",dtype);
-#else
-   char *errmsg=strdup(" dtype_size: wrong data type ");
-   GA_Error(errmsg,dtype);
-   free(errmsg);
-#endif
- }
- return -1;
-}
-
-extern "C" MPI_Datatype dtype_mpi(int dtype) {
- MPI_Datatype mpi_dtype=MPI_CHAR;
- switch (dtype) {
-  case PPIDD_FORTINT :
-        if (sizeof(FORTINT)==sizeof(int)) mpi_dtype=MPI_INT;
-   else if (sizeof(FORTINT)==sizeof(long)) mpi_dtype=MPI_LONG;
-   else if (sizeof(FORTINT)==sizeof(long long)) mpi_dtype=MPI_LONG_LONG;
-   else MPIGA_Error(" dtype_mpi: unable to map FORTINT ",dtype);
-   break;
-  case PPIDD_DOUBLE :
-   mpi_dtype=MPI_DOUBLE;
-   break;
-  default:
-   MPIGA_Error(" dtype_mpi: wrong data type ",dtype);
- }
- int mpi_size;
- MPI_Type_size(mpi_dtype,&mpi_size);
- if (mpi_size != dtype_size(dtype)) MPIGA_Error(" dtype_mpi: mapped data type wrong ",dtype);
- return mpi_dtype;
-}
-#endif
-
 extern "C" {
 
 /*! \brief Initialize the PPIDD parallel environment
@@ -119,6 +75,7 @@ extern "C" {
     MPI_Init(&argc, &argv);                     /* initialize MPI */
     GA_Initialize_args(&argc,&argv);            /* initialize GA */
 #endif
+    if(MPIGA_Debug)printf("[PPIDD_Initialize] library compiled with debugging output active\n");
    }
 
 

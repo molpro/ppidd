@@ -19,6 +19,7 @@
 
 
 #include "mpi_utils.h"
+#include "ppidd.h"
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
@@ -115,6 +116,40 @@ void mpi_test_status(const char *msg_str, int status)
        MPI_Error_string(status, mpi_test_err_string + len_msg_str, &len_err_str);
        MPIGA_Error(mpi_test_err_string, status);
     }
+}
+
+/*! \brief Return <tt>sizeof(dtype)</tt> */
+extern "C" size_t dtype_size(int dtype) {
+ switch (dtype) {
+  case PPIDD_FORTINT :
+   return sizeof(FORTINT);
+  case PPIDD_DOUBLE :
+   return sizeof(double);
+  default:
+   MPIGA_Error(" dtype_size: wrong data type ",dtype);
+ }
+ return -1;
+}
+
+extern "C" MPI_Datatype dtype_mpi(int dtype) {
+ MPI_Datatype mpi_dtype=MPI_CHAR;
+ switch (dtype) {
+  case PPIDD_FORTINT :
+        if (sizeof(FORTINT)==sizeof(int)) mpi_dtype=MPI_INT;
+   else if (sizeof(FORTINT)==sizeof(long)) mpi_dtype=MPI_LONG;
+   else if (sizeof(FORTINT)==sizeof(long long)) mpi_dtype=MPI_LONG_LONG;
+   else MPIGA_Error(" dtype_mpi: unable to map FORTINT ",dtype);
+   break;
+  case PPIDD_DOUBLE :
+   mpi_dtype=MPI_DOUBLE;
+   break;
+  default:
+   MPIGA_Error(" dtype_mpi: wrong data type ",dtype);
+ }
+ int mpi_size;
+ MPI_Type_size(mpi_dtype,&mpi_size);
+ if (mpi_size != dtype_size(dtype)) MPIGA_Error(" dtype_mpi: mapped data type wrong ",dtype);
+ return mpi_dtype;
 }
 
 #else

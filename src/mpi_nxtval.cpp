@@ -17,6 +17,7 @@
 
 #ifdef MPI2
 
+#include "ppidd.h"
 #include "mpi_utils.h"
 #include "mpi_nxtval.h"
 #include <cmath>

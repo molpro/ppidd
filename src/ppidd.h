@@ -8,7 +8,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
- extern void PPIDD_Initialize(int argc, char **argv);
+ extern void PPIDD_Initialize(int *argc, char ***argv);
  extern void PPIDD_Initialize_data(void);
  extern int64_t  PPIDD_Worker_comm(void);
  extern void PPIDD_Finalize(void);

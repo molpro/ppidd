@@ -6,6 +6,7 @@
       integer(c_int)     :: helper_server_flag
       integer(c_int64_t) :: num_per_helper
       integer(c_int64_t) :: iprocs
+      integer(c_int)     :: argc=0_c_int
       type(c_ptr), target, dimension(1) :: argv
       integer iout
 #ifdef PPIDD_USE_MA
@@ -20,7 +21,7 @@
 !  Intitialize a message passing library
 !  Initialize GA
       argv(1)=c_null_ptr
-      call ppidd_initialize(0_c_int,c_loc(argv))
+      call ppidd_initialize(argc,c_loc(argv))
 #ifdef NO_NXTVAL_SERVER
       helper_server_flag=0_c_int
       num_per_helper=-1_c_int

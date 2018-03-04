@@ -8,7 +8,7 @@ int ppidd_ctest(void);
 int main(int argc, char **argv)
 {
     /* Initialize PPIDD */
-    PPIDD_Initialize(argc, argv);
+    PPIDD_Initialize(&argc, &argv);
     PPIDD_Initialize_data();
 
     ppidd_ctest();

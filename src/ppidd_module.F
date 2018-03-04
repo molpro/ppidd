@@ -10,8 +10,8 @@
        subroutine ppidd_initialize(argc, argv)
      >            bind(c,name="PPIDD_Initialize")
        use iso_c_binding, only: c_int, c_ptr
-       integer(c_int), intent(in), value :: argc
-       type(c_ptr), intent(in), value    :: argv
+       integer(c_int), intent(in) :: argc
+       type(c_ptr), intent(in)    :: argv
        end subroutine ppidd_initialize
       end interface
 

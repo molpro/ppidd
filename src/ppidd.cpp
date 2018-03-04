@@ -67,13 +67,13 @@ extern "C" {
     \details
     - For \b GA, includes initialization of MPI and GA.
     - For \b MPI2, calls MPI_Init. */
-   void PPIDD_Initialize(int argc, char **argv) {
+   void PPIDD_Initialize(int *argc, char ***argv) {
 #ifdef MPI2
-    int mpierr=mpiga_initialize(&argc,&argv);
+    int mpierr=mpiga_initialize(argc,argv);
     mpi_test_status("PPIDD_Initialize:",mpierr);
 #elif defined(GA_MPI)
-    MPI_Init(&argc, &argv);                     /* initialize MPI */
-    GA_Initialize_args(&argc,&argv);            /* initialize GA */
+    MPI_Init(argc, argv);                     /* initialize MPI */
+    GA_Initialize_args(argc,argv);            /* initialize GA */
 #endif
     if(MPIGA_Debug)printf("[PPIDD_Initialize] library compiled with debugging output active\n");
    }

@@ -38,7 +38,7 @@ AC_LANG_POP([Fortran])
 ])
 
 AC_DEFUN([PPIDD_FC_VENDOR],[
-for i in amd intel pgi pathscale sun g95 ibm gnu cray; do
+for i in amd intel pgi pathscale sun llvm g95 ibm gnu cray; do
  if test "x${FC_VENDOR:+set}" = xset ; then break; fi
  case "x${i}" in
   xamd       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__OPEN64__)],[FC_VENDOR="${i}"]) ;;
@@ -47,6 +47,7 @@ for i in amd intel pgi pathscale sun g95 ibm gnu cray; do
   xgnu       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__GFORTRAN__)],[FC_VENDOR="${i}"]) ;;
   xibm       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__xlc__) || defined(__xlC__)],[FC_VENDOR="${i}"]) ;;
   xintel     ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__INTEL_COMPILER)],[FC_VENDOR="${i}"]) ;;
+  xllvm      ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__FLANG)],[FC_VENDOR="${i}"]) ;;
   xpathscale ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PATHSCALE__)],[FC_VENDOR="${i}"]) ;;
   xpgi       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PGI)],[FC_VENDOR="${i}"]) ;;
   xsun       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__SUNPRO_F90)],[FC_VENDOR="${i}"]) ;;
@@ -92,6 +93,7 @@ case "x${enable_fortran_integer}" in
        xgnu       ) FCFLAGS="${FCFLAGS} -fdefault-integer-8" ;;
        xibm       ) FCFLAGS="${FCFLAGS} -qintsize=8" ;;
        xintel     ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xllvm      ) FCFLAGS="${FCFLAGS} -i8" ;;
        xpathscale ) FCFLAGS="${FCFLAGS} -i8" ;;
        xpgi       ) FCFLAGS="${FCFLAGS} -i8" ;;
        xsun       ) FCFLAGS="${FCFLAGS} -xtypemap=integer:64" ;;

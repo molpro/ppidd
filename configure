@@ -3650,7 +3650,7 @@ FC_MODFMT="${may_cv_fc_module_fmt}"
 test "x${FC_MODFMT}" = xunknown && FC_MODFMT=""
 
 
-for i in amd intel pgi pathscale sun g95 ibm gnu cray; do
+for i in amd intel pgi pathscale sun llvm g95 ibm gnu cray; do
  if test "x${FC_VENDOR:+set}" = xset ; then break; fi
  case "x${i}" in
   xamd       )
@@ -3857,6 +3857,40 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
  ;;
+  xllvm      )
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
+$as_echo_n "checking if FC is ${i}... " >&6; }
+ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_fc_compiler_gnu
+
+ac_ext=F
+cat > conftest.$ac_ext <<_ACEOF
+      program main
+#if defined(__FLANG)
+#else
+      choke me
+#endif
+      end
+_ACEOF
+if ac_fn_fc_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+FC_VENDOR="${i}"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+ ;;
   xpathscale )
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
 $as_echo_n "checking if FC is ${i}... " >&6; }
@@ -3981,6 +4015,7 @@ case "x${enable_fortran_integer}" in
        xgnu       ) FCFLAGS="${FCFLAGS} -fdefault-integer-8" ;;
        xibm       ) FCFLAGS="${FCFLAGS} -qintsize=8" ;;
        xintel     ) FCFLAGS="${FCFLAGS} -i8" ;;
+       xllvm      ) FCFLAGS="${FCFLAGS} -i8" ;;
        xpathscale ) FCFLAGS="${FCFLAGS} -i8" ;;
        xpgi       ) FCFLAGS="${FCFLAGS} -i8" ;;
        xsun       ) FCFLAGS="${FCFLAGS} -xtypemap=integer:64" ;;

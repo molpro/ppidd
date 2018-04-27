@@ -126,12 +126,6 @@ typedef struct {
    extern int NUM_TOTAL_NNODES; /* total nodes for MPI_COMM_WORLD */
    extern int NNODES_SYMMETRY;    /* if all the nodes are symmetric: 1 (yes), 0 (no) */
 
-/* ------------------------------------- *\
-   Global Variables -- MPI Communicators
-\* ------------------------------------- */
-   extern MPI_Comm mpigv(Compute_comm);  /* computation communicator    */
-
-
 
 /* =========================== *\
     MPIGA Function Prototypes
@@ -161,6 +155,7 @@ typedef struct {
    int mpiga_lock_mutex(int);
    int mpiga_unlock_mutex(int);
    int mpiga_destroy_mutexes(void);
+   MPI_Comm mpiga_compute_comm(void);
 
    /* MPI one-sided helpmutex Function Prototypes, from mpi_helpmutex.cpp */
    void initialize_onesided_helpmutexes(void);

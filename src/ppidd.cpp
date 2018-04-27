@@ -101,7 +101,7 @@ extern "C" {
  */
    int64_t PPIDD_Worker_comm(void) {
 #ifdef MPI2
-      MPI_Comm mycomm=mpigv(Compute_comm);
+      MPI_Comm mycomm=mpiga_compute_comm();
       MPI_Fint fcomm;
 
 /* test whether worker communicator contains all the processes, if so then return MPI_COMM_WORLD */
@@ -278,7 +278,7 @@ extern "C" {
    void PPIDD_Size(int64_t *np) {
 #ifdef MPI2
       int mpinp;
-      MPI_Comm mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpiga_compute_comm();
 
       MPI_Comm_size(mpicomm, &mpinp);
       *np = (int64_t) mpinp;
@@ -299,7 +299,7 @@ extern "C" {
    void PPIDD_Rank(int64_t *me) {
 #ifdef MPI2
       int mpime;
-      MPI_Comm mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpiga_compute_comm();
 
       MPI_Comm_rank(mpicomm, &mpime);
       *me = (int64_t) mpime;
@@ -364,7 +364,7 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpiga_compute_comm();
   #endif
   #ifdef GA_MPI
       MPI_Comm mpicomm = GA_MPI_Comm();
@@ -415,7 +415,7 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpiga_compute_comm();
   #endif
   #ifdef GA_MPI
       MPI_Comm mpicomm = GA_MPI_Comm();
@@ -505,7 +505,7 @@ static int n_in_msg_mpiq=0;
    int PPIDD_Iprobe(int64_t *tag,int64_t *source) {
 #if defined(MPI2) || defined(GA_MPI)
   #ifdef MPI2
-      MPI_Comm mpicomm=mpigv(Compute_comm);
+      MPI_Comm mpicomm=mpiga_compute_comm();
   #endif
   #ifdef GA_MPI
       MPI_Comm mpicomm = GA_MPI_Comm();
@@ -541,7 +541,7 @@ static int n_in_msg_mpiq=0;
       int mpierr;
 
       MPI_Datatype mpidtype=dtype_mpi(dtype);
-      mpicomm=mpigv(Compute_comm);
+      mpicomm=mpiga_compute_comm();
 
       mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpicomm);
       mpi_test_status("PPIDD_BCast:",mpierr);
@@ -563,7 +563,7 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       int mpierr;
 
-      mpierr=MPI_Barrier(mpigv(Compute_comm));
+      mpierr=MPI_Barrier(mpiga_compute_comm());
       mpi_test_status("PPIDD_Barrier:",mpierr);
 #elif defined(GA_MPI)
       GA_Sync();
@@ -820,7 +820,7 @@ static int n_in_msg_mpiq=0;
       int mpierr;
       MPI_Comm mpicomm;
 
-      mpicomm=mpigv(Compute_comm);
+      mpicomm=mpiga_compute_comm();
       MPI_Comm_size(mpicomm, &mpisize);
       std::vector<int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
@@ -1057,7 +1057,7 @@ static int n_in_msg_mpiq=0;
       else
          MPIGA_Error("PPIDD_Zero_patch: invalid storetype, should be 0. handle=",mpihandle);
 
-      if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
+      if(mpierr!=0) MPI_Abort(mpiga_compute_comm(),911);
 #elif defined(GA_MPI)
       int ihandle = (int) *handle;
       ga_int mpiilo[1]={(ga_int)*ilo-1};
@@ -1104,7 +1104,7 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       if (use_helper_server==0) {
         fprintf(stderr,"%5d: ERROR: Attemp to call NXTVAL routine without helper process!\n", ProcID());
-        MPI_Abort(mpigv(Compute_comm),911);
+        MPI_Abort(mpiga_compute_comm(),911);
       }
       else {
         int mproc = (int) *numproc;
@@ -1280,7 +1280,7 @@ static int n_in_msg_mpiq=0;
          mpierr=mpiga_lock_mutex(mpiinum);   /* mutexes data store by a global array across the distributed processes */
       else
          mpierr=lock_general_helpmutex(mpiinum); /* mutexes data on helper process */
-      if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
+      if(mpierr!=0) MPI_Abort(mpiga_compute_comm(),911);
 #elif defined(GA_MPI)
       int mpiinum = (int) *inum;
       GA_Lock(mpiinum);
@@ -1298,7 +1298,7 @@ static int n_in_msg_mpiq=0;
          mpierr=mpiga_unlock_mutex(mpiinum);    /* mutexes data store by a global array across the distributed processes */
       else
          mpierr=unlock_general_helpmutex(mpiinum);  /* mutexes data on helper process */
-      if(mpierr!=0) MPI_Abort(mpigv(Compute_comm),911);
+      if(mpierr!=0) MPI_Abort(mpiga_compute_comm(),911);
 #elif defined(GA_MPI)
       int mpiinum = (int) *inum;
       GA_Unlock(mpiinum);

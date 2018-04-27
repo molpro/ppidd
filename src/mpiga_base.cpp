@@ -27,6 +27,7 @@ mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
 int *mpigv(map)=NULL,*mpigv(proclist)=NULL;
 static int MPIGAinitialized = 0;
 static int MPIGA_Debug = 0;
+static MPI_Comm Compute_comm;
 
 int SR_parallel;
 int NUM_TOTAL_NNODES;
@@ -37,8 +38,10 @@ MPI_Comm MPIGA_WORK_COMM;
 long  mpigv(curmem),mpigv(maxmem),mpigv(grsmem);  /* current, maximum, gross memory of MPIGA */
 int  mpigv(nga),mpigv(nmutex);
 int mpigv(nprocs), mpigv(myproc); /* Number of processes and rank of the calling process in the group of MPI comm */
-MPI_Comm  mpigv(Compute_comm);
 
+MPI_Comm mpiga_compute_comm() {
+ return Compute_comm;
+}
 
 int mpiga_initialize(int *argcmain, char ***argvmain)
 {
@@ -67,7 +70,7 @@ int mpiga_initialize(int *argcmain, char ***argvmain)
     if (NNODES_SYMMETRY) NPROCS_PER_HELPER=size_all/NUM_TOTAL_NNODES;
     if (NPROCS_PER_HELPER==1) NPROCS_PER_HELPER=99999999;
     MPIGA_WORK_COMM=(MPI_Comm)MPI_COMM_WORLD;
-    mpigv(Compute_comm)=(MPI_Comm)MPIGA_WORK_COMM;
+    Compute_comm=(MPI_Comm)MPIGA_WORK_COMM;
     MPI_Barrier(MPI_COMM_WORLD);
 
     if (MPIGA_Debug) printf("%5d: In mpiga_initilize end. rank_all=%d, size_all=%d\n",ProcID(),rank_all,size_all);
@@ -109,10 +112,10 @@ int mpiga_initialize_data(void)
     mpigv(nga)=0;         /* initialize MPIGA number */
     mpigv(nmutex)=0;      /* initialize MPIGA mutex number */
 
-/*    mpierr1=MPI_Comm_dup(MPIGA_WORK_COMM,&mpigv(Compute_comm));*/
-    mpigv(Compute_comm)=(MPI_Comm)MPIGA_WORK_COMM;
-    MPI_Comm_size(mpigv(Compute_comm), &size);
-    MPI_Comm_rank(mpigv(Compute_comm), &rank);
+/*    mpierr1=MPI_Comm_dup(MPIGA_WORK_COMM,&Compute_comm);*/
+    Compute_comm=(MPI_Comm)MPIGA_WORK_COMM;
+    MPI_Comm_size(Compute_comm, &size);
+    MPI_Comm_rank(Compute_comm, &rank);
     mpigv(nprocs) = size;
     mpigv(myproc) = rank;
 
@@ -151,9 +154,9 @@ int mpiga_terminate(void)
     if(mpigv(map)) free(mpigv(map));      /* free the memory for list of lower and upper indices */
     if(mpigv(proclist)) free(mpigv(proclist)); /* free the memory for list of list of processors */
 
-    MPI_Barrier(mpigv(Compute_comm));
+    MPI_Barrier(Compute_comm);
 
-    if ( mpigv(Compute_comm) != MPI_COMM_NULL) {
+    if ( Compute_comm != MPI_COMM_NULL) {
       if (use_helper_server) {
         int zero=0;
         if( SR_parallel )  NXTVAL(&zero);
@@ -204,8 +207,8 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
     if (!new_ga) return 1;
 
     /* Determine size of MPIGA memory */
-    MPI_Comm_size( mpigv(Compute_comm), &size );
-    MPI_Comm_rank( mpigv(Compute_comm), &rank );
+    MPI_Comm_size( Compute_comm, &size );
+    MPI_Comm_rank( Compute_comm, &rank );
 
     len= (int *)malloc( size *sizeof( int) );
     if (nchunk<0 || nchunk>size) {
@@ -225,10 +228,10 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
     else  MPI_Alloc_mem( local_size, MPI_INFO_NULL, &new_ga->win_ptr );
 
     MPI_Win_create( new_ga->win_ptr, local_size, sizeoftype,
-                    MPI_INFO_NULL, mpigv(Compute_comm), &new_ga->ga_win );
+                    MPI_INFO_NULL, Compute_comm, &new_ga->ga_win );
 
 /*    printf("In mpiga_create_irreg 1: size= %d \n", size); */
-    MPI_Barrier(mpigv(Compute_comm));
+    MPI_Barrier(Compute_comm);
     strcpy(mpiganame=(char *)malloc(strlen(name)+1),name);
     /* Save other data and return */
     new_ga->mutex_p    = NULL;
@@ -268,8 +271,8 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
 /*  use mutex stored on compute processes */
     /* Create critical section window */
       homerank=0;
-      mpierr = MPIMUTEX_Create(homerank, mpigv(Compute_comm), &mutex);
-      if (mpierr != MPI_SUCCESS) MPI_Abort(mpigv(Compute_comm), MPI_ERR_UNKNOWN);
+      mpierr = MPIMUTEX_Create(homerank, Compute_comm, &mutex);
+      if (mpierr != MPI_SUCCESS) MPI_Abort(Compute_comm, MPI_ERR_UNKNOWN);
       new_ga->mutex_p    = mutex;
     }
 
@@ -298,7 +301,7 @@ int mpiga_create( char *name, int lentot, MPI_Datatype datatype, int *handle )
     if (MPIGA_Debug) printf("%5d: In mpiga_create begin.\n",ProcID());
     /* Determine size of MPIGA memory */
 
-    MPI_Comm_size( mpigv(Compute_comm), &size );
+    MPI_Comm_size( Compute_comm, &size );
 
     minlen = lentot / size;
     nbiglen= lentot % size;
@@ -951,7 +954,7 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
        lenleft=lenleft + ga->len[rank];
     }
 
-    MPI_Barrier(mpigv(Compute_comm));
+    MPI_Barrier(Compute_comm);
     if (MPIGA_Debug) printf("%5d: In mpiga_zero_patch end. handle=%d, ga_win=%12ld\n",ProcID(),handle,(long)ga->ga_win);
     return 0;
 }
@@ -984,7 +987,7 @@ int MPI_GSum(MPI_Datatype mpidtype, void *buffer,int len, char *op) {
      else if(oper.compare("*")==0) mpiop=MPI_PROD;
      else if(oper.compare("max")==0) mpiop=MPI_MAX;
      else if(oper.compare("min")==0) mpiop=MPI_MIN;
-     MPI_Comm mpicomm=mpigv(Compute_comm);
+     MPI_Comm mpicomm=Compute_comm;
      MPI_Allreduce(MPI_IN_PLACE,buffer,len,mpidtype,mpiop,mpicomm);
      return 0;
 }
@@ -1016,8 +1019,8 @@ int mpiga_create_mutexes(int number)
 
     for (i=0;i<number;i++) {
        homerank=0;
-       mpierr = MPIMUTEX_Create(homerank, mpigv(Compute_comm), &mutex);
-       if (mpierr != MPI_SUCCESS) MPI_Abort(mpigv(Compute_comm), MPI_ERR_UNKNOWN);
+       mpierr = MPIMUTEX_Create(homerank, Compute_comm, &mutex);
+       if (mpierr != MPI_SUCCESS) MPI_Abort(Compute_comm, MPI_ERR_UNKNOWN);
        mpiga_mutexindex[i].actv   = 1;
        mpiga_mutexindex[i].lock   = 0;
        mpiga_mutexindex[i].ptr    = mutex;

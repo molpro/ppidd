@@ -259,9 +259,7 @@ extern "C" {
    void PPIDD_Size_all(int64_t *np) {
 #ifdef MPI2
       int mpinp;
-      MPI_Comm mpicomm=MPI_COMM_WORLD;
-
-      MPI_Comm_size(mpicomm, &mpinp);
+      MPI_Comm_size(MPI_COMM_WORLD,&mpinp);
       *np = (int64_t) mpinp;
 #elif defined(GA_MPI)
       *np = (int64_t)GA_Nnodes();

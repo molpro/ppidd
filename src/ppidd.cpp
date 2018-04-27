@@ -102,14 +102,13 @@ extern "C" {
    int64_t PPIDD_Worker_comm(void) {
 #ifdef MPI2
       MPI_Comm mycomm=mpiga_compute_comm();
-      MPI_Fint fcomm;
 
 /* test whether worker communicator contains all the processes, if so then return MPI_COMM_WORLD */
       int np_all, np_worker=mpigv(nprocs);
       MPI_Comm_size(MPI_COMM_WORLD, &np_all);
       if(np_all==np_worker) mycomm=MPI_COMM_WORLD;
 
-      fcomm=MPI_Comm_c2f(mycomm);
+      MPI_Fint fcomm=MPI_Comm_c2f(mycomm);
       return (int64_t)fcomm;
 #elif defined(GA_MPI)
       MPI_Comm mpicomm = GA_MPI_Comm();
@@ -278,9 +277,7 @@ extern "C" {
    void PPIDD_Size(int64_t *np) {
 #ifdef MPI2
       int mpinp;
-      MPI_Comm mpicomm=mpiga_compute_comm();
-
-      MPI_Comm_size(mpicomm, &mpinp);
+      MPI_Comm_size(mpiga_compute_comm(),&mpinp);
       *np = (int64_t) mpinp;
 #elif defined(GA_MPI)
       *np = (int64_t)GA_Nnodes();
@@ -299,9 +296,7 @@ extern "C" {
    void PPIDD_Rank(int64_t *me) {
 #ifdef MPI2
       int mpime;
-      MPI_Comm mpicomm=mpiga_compute_comm();
-
-      MPI_Comm_rank(mpicomm, &mpime);
+      MPI_Comm_rank(mpiga_compute_comm(),&mpime);
       *me = (int64_t) mpime;
 #elif defined(GA_MPI)
       *me = (int64_t)GA_Nodeid();
@@ -480,15 +475,14 @@ static int n_in_msg_mpiq=0;
  */
    void PPIDD_Wait(int64_t *nodesel) {
 #if defined(MPI2) || defined(GA_MPI)
-      int mpierr,i;
       MPI_Status status;
 
-      for (i=0; i<n_in_msg_mpiq; i++){
+      for (int i=0; i<n_in_msg_mpiq; i++){
          if (MPIGA_Debug) {
             printf("PPIDD_Wait: node %d waiting for msg to/from %ld, #%d\n", ProcID(), msg_mpiq[i].node, i);
             fflush(stdout);
          }
-         mpierr = MPI_Wait(&msg_mpiq[i].request, &status);
+         int mpierr = MPI_Wait(&msg_mpiq[i].request, &status);
          mpi_test_status("PPIDD_Wait:",mpierr);
       }
       n_in_msg_mpiq = 0;
@@ -511,11 +505,11 @@ static int n_in_msg_mpiq=0;
       MPI_Comm mpicomm = GA_MPI_Comm();
   #endif
       int mpitag=(int)*tag;
-      int mpisource,mpierr,flag;
+      int flag;
       MPI_Status status;
 
-      mpisource = (*source < 0) ? MPI_ANY_SOURCE  : (int) *source;
-      mpierr = MPI_Iprobe(mpisource, mpitag, mpicomm, &flag, &status);
+      int mpisource = (*source < 0) ? MPI_ANY_SOURCE  : (int) *source;
+      int mpierr = MPI_Iprobe(mpisource, mpitag, mpicomm, &flag, &status);
       mpi_test_status("PPIDD_Iprobe:",mpierr);
       if(flag) return 1 ;
       else return 0 ;
@@ -537,13 +531,10 @@ static int n_in_msg_mpiq=0;
 #ifdef MPI2
       int mpicount=(int)*count;
       int mpiroot=(int)*root;
-      MPI_Comm mpicomm;
-      int mpierr;
 
       MPI_Datatype mpidtype=dtype_mpi(dtype);
-      mpicomm=mpiga_compute_comm();
 
-      mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpicomm);
+      int mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpiga_compute_comm());
       mpi_test_status("PPIDD_BCast:",mpierr);
 #elif defined(GA_MPI)
       int gacount=(int)*count;
@@ -561,9 +552,7 @@ static int n_in_msg_mpiq=0;
  */
    void PPIDD_Barrier(void) {
 #ifdef MPI2
-      int mpierr;
-
-      mpierr=MPI_Barrier(mpiga_compute_comm());
+      int mpierr=MPI_Barrier(mpiga_compute_comm());
       mpi_test_status("PPIDD_Barrier:",mpierr);
 #elif defined(GA_MPI)
       GA_Sync();
@@ -818,10 +807,8 @@ static int n_in_msg_mpiq=0;
       int mpiihi=(int)*ihi;
       int mpisize,mpinp;
       int mpierr;
-      MPI_Comm mpicomm;
 
-      mpicomm=mpiga_compute_comm();
-      MPI_Comm_size(mpicomm, &mpisize);
+      MPI_Comm_size(mpiga_compute_comm(), &mpisize);
       std::vector<int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
 

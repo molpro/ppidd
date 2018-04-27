@@ -144,4 +144,10 @@ if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
  AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
 fi
 
+AC_SUBST_FILE(PPIDD_DEFINES_H)
+PPIDD_DEFINES_H="src/ppidd_defines.h"
+AC_SUBST_FILE(PPIDD_PROTOTYPES_H)
+PPIDD_PROTOTYPES_H="src/ppidd_prototypes.h"
+
+AC_CONFIG_FILES([src/ppidd.h])
 AC_OUTPUT()

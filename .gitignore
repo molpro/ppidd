@@ -7,4 +7,5 @@ doc/
 config.log
 config.status
 config.mk
+src/ppidd.h
 src/ppidd_config.h

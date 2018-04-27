@@ -1,0 +1,13 @@
+#ifndef __PPIDD_H__
+#define __PPIDD_H__
+
+@PPIDD_DEFINES_H@
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+@PPIDD_PROTOTYPES_H@
+#ifdef __cplusplus
+}
+#endif
+#endif

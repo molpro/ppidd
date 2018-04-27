@@ -1,13 +1,3 @@
-#ifndef __PPIDD_H__
-#define __PPIDD_H__
-#include <stdint.h>
-
-#define PPIDD_FORTINT 0
-#define PPIDD_DOUBLE  1
-
-#ifdef __cplusplus
-extern "C" {
-#endif
  extern void PPIDD_Initialize(int *argc, char ***argv);
  extern void PPIDD_Initialize_data(void);
  extern int64_t  PPIDD_Worker_comm(void);
@@ -71,7 +61,3 @@ extern "C" {
  extern int  PPIDD_Sf_waitall(int64_t *list, int64_t *num);
  extern int  PPIDD_Sf_destroy(int64_t *handle);
  extern void PPIDD_Sf_errmsg(int *code,char *message);
-#ifdef __cplusplus
-}
-#endif
-#endif

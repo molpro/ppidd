@@ -192,17 +192,13 @@ void make_worker_comm( MPI_Comm old_comm, MPI_Comm *worker_comm )
     if(DEBUG_) fprintf(stdout,"%5d: In make_worker_comm begin: use_helper_server=%d\n",ProcID(),use_helper_server);
     MPI_Bcast ( &use_helper_server, 1, MPI_INT, 0, old_comm );
     MPI_Bcast ( &NPROCS_PER_HELPER, 1, MPI_INT, 0, old_comm );
-    if (use_helper_server) {
-      if( SR_parallel ){
-          /* data servers can be more than a single process */
-          MPI_Comm_size(old_comm, &numprocs);
-          MPI_Comm_rank(old_comm, &myid);
-          if (myid == Server_of_Rank(myid)) color = MPI_UNDEFINED;
-          else color = 0;
-          MPI_Comm_split( old_comm, color, myid, worker_comm );
-      }
-      else
-          MPI_Comm_dup( old_comm, worker_comm ); /* duplicate old_com to worker_comm */
+    if (use_helper_server && SR_parallel) {
+     /* data servers can be more than a single process */
+     MPI_Comm_size(old_comm, &numprocs);
+     MPI_Comm_rank(old_comm, &myid);
+     if (myid == Server_of_Rank(myid)) color = MPI_UNDEFINED;
+     else color = 0;
+     MPI_Comm_split( old_comm, color, myid, worker_comm );
     }
     else MPI_Comm_dup( old_comm, worker_comm ); /* duplicate old_com to worker_comm */
     if(DEBUG_) fprintf(stdout,"%5d: In make_worker_comm end: use_helper_server=%d\n",ProcID(),use_helper_server);

@@ -1,13 +1,12 @@
 include ../config.mk
 
-ifeq ($(FC),)
-SOURCEFILES+=$(filter-out %fortran.cpp,$(wildcard *.cpp))
-else
-SOURCEFILES+=$(wildcard *.cpp *.F)
+OBJECTS=$(addsuffix .o,$(basename $(wildcard *.cpp)))
+ifneq ($(FC),)
+OBJECTS+=ppidd_module.o
 endif
 
 .PHONY: default
-default: $(addsuffix .o,$(basename $(SOURCEFILES)))
+default: $(OBJECTS)
 
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<

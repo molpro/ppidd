@@ -129,19 +129,19 @@ elif test "x${with_mpi2}" != xno ; then
  AC_MSG_NOTICE([PPIDD with MPI2])
  AC_DEFINE(MPI2)
 else
- AC_MSG_NOTICE([PPIDD for serial])
+ AC_MSG_NOTICE([PPIDD without MPI])
 fi
 
 if test "x${with_ga}" != xno ; then
  if test "x${with_ga}" != xyes ; then
   CPPFLAGS="${CPPFLAGS} -I${with_ga}"
  fi
- AC_CHECK_HEADER([ga.h],,AC_MSG_ERROR([unable to locate ga.h header file]))
+ AC_CHECK_HEADERS([ga.h],,AC_MSG_ERROR([unable to locate ga.h header file]))
 fi
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
  PPIDD_CXX_PP_TEST([if CXX is intel],[defined(__INTEL_COMPILER)],[CPPFLAGS="${CPPFLAGS} -DMPICH_SKIP_MPICXX"])
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
- AC_CHECK_HEADER([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
+ AC_CHECK_HEADERS([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))
 fi
 
 AC_SUBST_FILE(PPIDD_DEFINES_H)

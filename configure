@@ -4549,21 +4549,27 @@ $as_echo "$as_me: PPIDD with MPI2" >&6;}
  $as_echo "#define MPI2 1" >>confdefs.h
 
 else
- { $as_echo "$as_me:${as_lineno-$LINENO}: PPIDD for serial" >&5
-$as_echo "$as_me: PPIDD for serial" >&6;}
+ { $as_echo "$as_me:${as_lineno-$LINENO}: PPIDD without MPI" >&5
+$as_echo "$as_me: PPIDD without MPI" >&6;}
 fi
 
 if test "x${with_ga}" != xno ; then
  if test "x${with_ga}" != xyes ; then
   CPPFLAGS="${CPPFLAGS} -I${with_ga}"
  fi
- ac_fn_cxx_check_header_mongrel "$LINENO" "ga.h" "ac_cv_header_ga_h" "$ac_includes_default"
+ for ac_header in ga.h
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "ga.h" "ac_cv_header_ga_h" "$ac_includes_default"
 if test "x$ac_cv_header_ga_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_GA_H 1
+_ACEOF
 
 else
   as_fn_error $? "unable to locate ga.h header file" "$LINENO" 5
 fi
 
+done
 
 fi
 if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
@@ -4601,13 +4607,19 @@ else
   as_fn_error $? "unable to locate MPI library" "$LINENO" 5
 fi
 
- ac_fn_cxx_check_header_mongrel "$LINENO" "mpi.h" "ac_cv_header_mpi_h" "$ac_includes_default"
+ for ac_header in mpi.h
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "mpi.h" "ac_cv_header_mpi_h" "$ac_includes_default"
 if test "x$ac_cv_header_mpi_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_MPI_H 1
+_ACEOF
 
 else
   as_fn_error $? "unable to locate mpi.h header file" "$LINENO" 5
 fi
 
+done
 
 fi
 

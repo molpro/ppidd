@@ -8,9 +8,6 @@
 #include <climits>
 #include <vector>
 
-/*! \file
- * \brief This file contains the PPIDD functions */
-
 #ifdef MPI2
 #include "mpiga_base.h"
 #include "mpi_nxtval.h"

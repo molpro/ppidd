@@ -44,7 +44,7 @@ extern "C" {
 #ifdef HAVE_GA_H
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size == 1) impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail */
+    if (size == 1) impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
 #endif
 #endif
 

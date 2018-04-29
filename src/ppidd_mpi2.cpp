@@ -601,9 +601,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Inquire_mem(int64_t *mem_used) {
-      long localmem;
-      localmem=mpiga_localmem();
-      *mem_used=(int64_t)localmem;
+      *mem_used=(int64_t)mpiga_localmem();
    }
 
 

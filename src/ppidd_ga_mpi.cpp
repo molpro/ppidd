@@ -484,9 +484,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Inquire_mem(int64_t *mem_used) {
-      size_t localmem;
-      localmem=GA_Inquire_memory();
-      *mem_used=(int64_t)localmem;
+      *mem_used=(int64_t)GA_Inquire_memory();
    }
 
 

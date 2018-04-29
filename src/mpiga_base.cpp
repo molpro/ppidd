@@ -44,23 +44,9 @@ MPI_Comm mpiga_compute_comm() {
 
 int mpiga_initialize(int *argcmain, char ***argvmain)
 {
-    int flag;
-    int mpierr;
     int size_all,rank_all;
     if (MPIGA_Debug) printf("In mpiga_initilize begin.\n");
     if(MPIGAinitialized) return 0;
-    flag = 0;
-    mpierr=MPI_Initialized(&flag);
-    if (!flag)    {
-       mpierr=MPI_Init(argcmain,argvmain);
-       if (mpierr!=MPI_SUCCESS) {
-          fprintf(stderr,"ERROR in mpiga_initialize. MPI_Init failed. mpierr=%d\n",mpierr);
-          return 1;
-       }
-    }
-    else {
-        fprintf(stderr,"WARNING in mpiga_initialize! MPI_Init has been called before MPI_Init.\n");
-    }
 
     MPI_Comm_size(MPI_COMM_WORLD, &size_all);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_all);

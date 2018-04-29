@@ -133,7 +133,6 @@ namespace mpi2 {
    }
 
 
-#if defined(MPI2) || defined(GA_MPI)
 /* =================== nonblocking mpi message list ================= */
 #define MAX_MPIQ_LEN 128      /* Maximum no. of outstanding messages */
 /* In application programs, nonblocking send/recv may be never used, so here set it to a small number. It could be increased if necessary. */
@@ -150,7 +149,6 @@ static struct msg_mpiq_struct{
 
 static int n_in_msg_mpiq=0;
 /* =================================================================== */
-#endif
 
 
    void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync) {

@@ -15,7 +15,7 @@
  * Date:       11/03/2009                                                 *
 \* ====================================================================== */
 
-#if defined(MPI2) || defined(GA_MPI)
+#ifdef HAVE_MPI_H
 
 
 #include "mpi_utils.h"
@@ -156,4 +156,4 @@ extern "C" MPI_Datatype dtype_mpi(int dtype) {
 
 void mpi_utils_dummy () {}
 
-#endif /* end of MPI2 or GA_MPI */
+#endif

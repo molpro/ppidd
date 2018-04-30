@@ -15,7 +15,8 @@
 
 namespace mpi2 {
 
-    static int MPIGA_Debug=0;
+   static int MPIGA_Debug=0;
+   static int MPI_Debug=0;
 
    static void do_not_call(const char* function) {
     fprintf(stderr,"%s should not be called in mpi2 case\n",function);
@@ -655,6 +656,133 @@ static int n_in_msg_mpiq=0;
          mpierr=free_general_helpmutexes();   /* mutexes data on helper process */
       if(mpierr==0) return 1 ;
       else return 0 ;
+   }
+
+
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+      MPI_Comm mpicomm=MPIGA_WORK_COMM;
+      MPI_File mpi_fh;
+
+      if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
+      int ierr=MPI_File_open(mpicomm,name,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
+      MPI_Fint mpifhandle = MPI_File_c2f( mpi_fh );
+      *handle=(int64_t)mpifhandle;
+
+      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request;
+#else
+      MPIO_Request request;
+#endif
+      if(MPI_Debug)printf("In PPIDD_Sf_write : begin. handle=%d,byte_offset=%f,byte_length=%f\n",(int)mpifhandle,*byte_offset,*byte_length);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)((*byte_length)/sizeof(double));
+      if(MPI_Debug)printf("In PPIDD_Sf_write : before MPI_File_iwrite_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,MPI_DOUBLE,&request);
+      *request_id=(int64_t)request;
+      if(MPI_Debug)printf("In PPIDD_Sf_write : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request;
+#else
+      MPIO_Request request;
+#endif
+      if(MPI_Debug) printf("In PPIDD_Sf_read  : begin. handle=%d\n",(int)mpifhandle);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)((*byte_length)/sizeof(double));
+      if(MPI_Debug)printf("In PPIDD_Sf_read  : before MPI_File_iread_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_iread_at(mpi_fh,offset,buff,count,MPI_DOUBLE,&request);
+      *request_id=(int64_t)request;
+      if(MPI_Debug)printf("In PPIDD_Sf_read  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_wait(int64_t *request_id) {
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request=(MPI_Request)(*request_id);
+#else
+      MPIO_Request request=(MPIO_Request)(*request_id);
+#endif
+      MPI_Status status;
+      if(MPI_Debug)printf("In PPIDD_Sf_wait  : begin. request_id=%d,request=%ld\n",(int)*request_id,(long)request);
+#ifdef MPIO_USES_MPI_REQUEST
+      int ierr=MPI_Wait( &request, &status );
+#else
+      int ierr=MPIO_Wait(&request, &status);
+#endif
+      if(MPI_Debug)printf("In PPIDD_Sf_wait  : end. ierr=%d\n",ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
+      int count=(int)(*num);
+      MPI_Status *array_of_statuses;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request *array_of_requests;
+      array_of_requests=(MPI_Request*)malloc(count*sizeof(MPI_Request));
+#else
+      MPIO_Request *array_of_requests;
+      array_of_requests=(MPIO_Request*)malloc(count*sizeof(MPIO_Request));
+#endif
+
+      array_of_statuses=(MPI_Status*)malloc(count*sizeof(MPI_Status));
+      for(int i=0;i<count;i++) array_of_requests[i]=(MPI_Request)list[i];
+
+#ifdef MPIO_USES_MPI_REQUEST
+      int ierr=MPI_Waitall(count,array_of_requests,array_of_statuses);
+#else
+      int ierr=0;
+      for(int i=0;i<count;i++) ierr+=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
+#endif
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_destroy(int64_t *handle) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      if(MPI_Debug)printf("In PPIDD_Sf_destroy: begin. handle=%d\n",(int)mpifhandle);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      int ierr=MPI_File_close( &mpi_fh );
+      if(MPI_Debug)printf("In PPIDD_Sf_destroy: end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
+   }
+
+
+   void PPIDD_Sf_errmsg(int *code,char *message) {
+      int eclass, len;
+      char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
+      int lxi=strlen(message);
+
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: begin. code=%d\n",*code);
+      MPI_Error_class(*code, &eclass);
+      MPI_Error_string(*code, estring, &len);
+      sprintf(estring2," Error %d: %s", eclass, estring);
+      strcpy(message,estring2);
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: middle. message=%s\n",message);
+      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: end. code=%d\n",*code);
    }
 
 }

@@ -209,4 +209,39 @@ namespace no_mpi {
       return 1 ;
    }
 
+
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+      do_not_call("PPIDD_Sf_create");
+   }
+
+
+   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      do_not_call("PPIDD_Sf_write");
+   }
+
+
+   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      do_not_call("PPIDD_Sf_read");
+   }
+
+
+   int PPIDD_Sf_wait(int64_t *request_id) {
+      do_not_call("PPIDD_Sf_wait");
+   }
+
+
+   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
+      do_not_call("PPIDD_Sf_waitall");
+   }
+
+
+   int PPIDD_Sf_destroy(int64_t *handle) {
+      do_not_call("PPIDD_Sf_destroy");
+   }
+
+
+   void PPIDD_Sf_errmsg(int *code,char *message) {
+      do_not_call("PPIDD_Sf_errmsg");
+   }
+
 }

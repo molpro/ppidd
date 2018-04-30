@@ -12,6 +12,9 @@
 #include <ga.h>
 #include <ga-mpi.h>
 #include <macdecls.h>
+extern "C" {
+#include <sf.h>
+}
 #define ga_int int64_t
 #define NGA_ACC NGA_Acc64
 #define NGA_CREATE NGA_Create64
@@ -50,6 +53,7 @@ static int dtype_ga(int dtype) {
 namespace ga_mpi {
 
    static int MPIGA_Debug=0;
+   static int MPI_Debug=0;
 
    void PPIDD_Initialize(int *argc, char ***argv) {
     GA_Initialize_args(argc,argv);            /* initialize GA */
@@ -517,6 +521,81 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("In PPIDD_Destroy_Mutexes: mpierr=%d.\n",mpierr);
       if(mpierr==1) return 1 ;
       else return 0 ;
+   }
+
+
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+      int i;
+
+      if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
+      int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, &i);
+      *handle=(int64_t)i;
+
+      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      char *buffer=(char *)buff;
+
+      int ihandle=(int)*handle;
+      int irequest_id;
+      int ierr=SF_Write(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
+      *request_id=(int64_t)irequest_id;
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      char *buffer=(char *)buff;
+
+      int ihandle=(int)*handle;
+      int irequest_id;
+      int ierr=SF_Read(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
+      *request_id=(int64_t)irequest_id;
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_wait(int64_t *request_id) {
+      int irequest_id=(int)*request_id;
+      int ierr=SF_Wait(&irequest_id);
+      *request_id=(int64_t)irequest_id;
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
+      int inum=(int)*num;
+      int *ilist;
+
+      ilist=(int *)malloc(inum * sizeof(int));
+      for (int i=0; i<inum; ++i) ilist[i] = (int) list[i];
+
+      int ierr=SF_Waitall(ilist, inum);
+
+      for (int i=0; i<inum; ++i) list[i] = (int64_t) ilist[i];
+      free(ilist);
+      return ierr;
+   }
+
+
+   int PPIDD_Sf_destroy(int64_t *handle) {
+      int ihandle=(int)*handle;
+      int ierr=SF_Destroy(ihandle);
+      return ierr;
+   }
+
+
+   void PPIDD_Sf_errmsg(int *code,char *message) {
+      int lxi=strlen(message);
+
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: begin. code=%d\n",*code);
+      SF_Errmsg(*code, message);
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: middle. message=%s\n",message);
+      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: end. code=%d\n",*code);
    }
 
 }

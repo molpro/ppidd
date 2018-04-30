@@ -906,4 +906,149 @@ extern "C" {
     }
    }
 
+
+/* ************************************************************************ *\
+   Creates shared file using name and path specified in name as a template.
+   req_size specifies size of a typical request (-1. means "don't know").
+   It is a collective operation.
+\* ************************************************************************ */
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
+    }
+   }
+
+
+/* ******************************************************************************************** *\
+   Asynchronous write operation.
+   Writes number of bytes to the file identified by handle at location offset.
+   Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
+\* ******************************************************************************************** */
+   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
+    }
+   }
+
+/* ******************************************************************************************** *\
+   Asynchronous read operation.
+   Reads number of bytes to the file identified by handle at location offset.
+   Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
+\* ******************************************************************************************** */
+   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
+    }
+   }
+
+
+/* ************************************************************************************ *\
+   Blocks the calling process until I/O operation associated with request_id completes.
+   Invalidates request_id.
+\* ************************************************************************************ */
+   int PPIDD_Sf_wait(int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_wait(request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_wait(request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_wait(request_id);
+    }
+   }
+
+
+/* ********************************************************************************** *\
+   Blocks the calling process until all of the num I/O operations associated with ids
+   specified in list complete. Invalidates (modifies) ids on the list.
+\* ********************************************************************************** */
+   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_waitall(list,num);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_waitall(list,num);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_waitall(list,num);
+    }
+   }
+
+
+/* ************************************************ *\
+   Destroys the shared file associated with handle.
+   It is a collective operation.
+\* ************************************************ */
+   int PPIDD_Sf_destroy(int64_t *handle) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_destroy(handle);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_destroy(handle);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_destroy(handle);
+    }
+   }
+
+
+/* ********************************************************************************* *\
+   Returns a string interpretation of the error code, or an empty string
+   (Fortran all blanks, C null first character) if the error code is not recognized.
+        code             -- error code returned by a previous call to SF [in]
+        message          -- character string where the corresponding message
+                            is written [out]
+\* ********************************************************************************* */
+   void PPIDD_Sf_errmsg(int *code,char *message) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Sf_errmsg(code,message);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Sf_errmsg(code,message);
+#endif
+     default:
+      return no_mpi::PPIDD_Sf_errmsg(code,message);
+    }
+   }
+
 }

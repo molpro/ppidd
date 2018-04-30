@@ -13,6 +13,7 @@
 #include <ga-mpi.h>
 #include <macdecls.h>
 extern "C" {
+#include <eaf.h>
 #include <sf.h>
 }
 #define ga_int int64_t
@@ -521,6 +522,132 @@ static int n_in_msg_mpiq=0;
       if(MPIGA_Debug)printf("In PPIDD_Destroy_Mutexes: mpierr=%d.\n",mpierr);
       if(mpierr==1) return 1 ;
       else return 0 ;
+   }
+
+
+   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+      int gahandle;
+      int modetype=(int)*type;
+
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
+      int ierr=EAF_Open(name, modetype, &gahandle);
+      *handle=(int64_t)gahandle;
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      int gahandle=(int)*handle;
+      eaf_off_t offset=(eaf_off_t)*byte_offset;
+      size_t bytes=(size_t)*byte_length;
+
+      int ierr=EAF_Write(gahandle,offset,buff,bytes);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      int gahandle=(int)*handle;
+      eaf_off_t offset=(eaf_off_t)*byte_offset;
+      size_t bytes=(size_t)*byte_length;
+      int request;
+
+      int ierr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
+      *request_id=(int64_t)request;
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      int gahandle=(int)*handle;
+      eaf_off_t offset=(eaf_off_t)*byte_offset;
+      size_t bytes=(size_t)*byte_length;
+
+      int ierr=EAF_Read(gahandle,offset,buff,bytes);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      int gahandle=(int)*handle;
+      eaf_off_t offset=(eaf_off_t)*byte_offset;
+      size_t bytes=(size_t)*byte_length;
+      int request;
+
+      int ierr=EAF_Aread(gahandle,offset,buff,bytes,&request);
+      *request_id=(int64_t)request;
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
+      int gahandle=(int)*handle;
+      int request=(int)*request_id;
+
+      int ierr=EAF_Wait(gahandle,request);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+      return 0;
+   }
+
+
+   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+      int garequest=(int)*request_id;
+      int gastatus;
+
+      int ierr=EAF_Probe(garequest, &gastatus);
+      *status=(int64_t)gastatus;
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_close(int64_t *handle) {
+      int gahandle=(int)*handle;
+
+      int ierr=EAF_Close(gahandle);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_delete(char *name) {
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. name=%s\n",name);
+      int ierr=EAF_Delete(name);
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
+      int gahandle=(int)*handle;
+      eaf_off_t length;
+
+      int ierr=EAF_Length(gahandle,&length);
+      *fsize=(double)length;
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
+      int gahandle=(int)*handle;
+      eaf_off_t length=(eaf_off_t)*offset;
+
+      int ierr=EAF_Truncate(gahandle,length);
+      return ierr;
+   }
+
+
+   void PPIDD_Eaf_errmsg(int *code,char *message) {
+      int lxi=strlen(message);
+
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. code=%d\n",*code);
+      EAF_Errmsg(*code, message);
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: middle. message=%s\n",message);
+      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. code=%d\n",*code);
    }
 
 

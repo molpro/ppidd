@@ -11,6 +11,9 @@
 #include "mpi_nxtval.h"
 #include "mpi_utils.h"
 #include "ppidd_mpi2.h"
+#define   MPI_EAF_RW -1
+#define   MPI_EAF_W  -2
+#define   MPI_EAF_R  -3
 
 
 namespace mpi2 {
@@ -656,6 +659,247 @@ static int n_in_msg_mpiq=0;
          mpierr=free_general_helpmutexes();   /* mutexes data on helper process */
       if(mpierr==0) return 1 ;
       else return 0 ;
+   }
+
+
+   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+      MPI_File mpi_fh;
+      MPI_Fint mpifhandle;
+      MPI_Comm mpicomm=MPIGA_WORK_COMM;
+      int amode=0;
+      int modetype=(int)*type;
+
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
+      switch(modetype){
+        case MPI_EAF_RW: amode = MPI_MODE_RDWR|MPI_MODE_CREATE ;
+                         break;
+        case MPI_EAF_W:  amode = MPI_MODE_WRONLY|MPI_MODE_CREATE ;
+                         break;
+        case MPI_EAF_R:  amode = MPI_MODE_RDONLY ;
+                         break;
+        default:
+                         MPI_Abort(mpicomm,911);
+      }
+/*      MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN;*/
+
+      int ierr=MPI_File_open(MPI_COMM_SELF,name,amode,MPI_INFO_NULL,&mpi_fh);
+      mpifhandle = MPI_File_c2f( mpi_fh );
+      *handle=(int64_t)mpifhandle;
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+      MPI_Datatype datatype;
+      MPI_Status status;
+      if(MPI_Debug)printf("In PPIDD_Eaf_write : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)(*byte_length/8);
+      datatype=MPI_DOUBLE;
+      if(MPI_Debug)printf("In PPIDD_Eaf_write : before MPI_File_write_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_write_at(mpi_fh,offset,buff,count,datatype,&status);
+      if(MPI_Debug)printf("In PPIDD_Eaf_write : end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+      MPI_Datatype datatype;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request;
+#else
+      MPIO_Request request;
+#endif
+      if(MPI_Debug)printf("In PPIDD_Eaf_awrite : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)(*byte_length/8);
+      datatype=MPI_DOUBLE;
+      if(MPI_Debug)printf("In PPIDD_Eaf_awrite : before MPI_File_iwrite_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,datatype,&request);
+      *request_id=(int64_t)request;
+      if(MPI_Debug)printf("In PPIDD_Eaf_awrite : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+      MPI_Datatype datatype;
+      MPI_Status status;
+      if(MPI_Debug)printf("In PPIDD_Eaf_read  : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)(*byte_length/8);
+      datatype=MPI_DOUBLE;
+      if(MPI_Debug)printf("In PPIDD_Eaf_read  : before MPI_File_read_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_read_at(mpi_fh,offset,buff,count,datatype,&status);
+      if(MPI_Debug)printf("In PPIDD_Eaf_read  : end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset offset;
+      int count;
+      MPI_Datatype datatype;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request;
+#else
+      MPIO_Request request;
+#endif
+      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      offset=(MPI_Offset)(*byte_offset);
+      count=(int)(*byte_length/8);
+      datatype=MPI_DOUBLE;
+      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : before MPI_File_iread_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
+      int ierr=MPI_File_iread_at(mpi_fh,offset,buff,count,datatype,&request);
+      *request_id=(int64_t)request;
+      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request=(MPI_Request)(*request_id);
+#else
+      MPIO_Request request=(MPIO_Request)(*request_id);
+#endif
+      MPI_Status status;
+      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : begin. handle=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)*request_id,(long)request);
+
+#ifdef MPIO_USES_MPI_REQUEST
+      int ierr=MPI_Wait( &request, &status );
+#else
+      int ierr=MPIO_Wait(&request, &status);
+#endif
+      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : end. ierr=%d\n",ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+      int count=(int)(*num);
+      MPI_Status *array_of_statuses;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request *array_of_requests;
+      array_of_requests=(MPI_Request*)malloc(count*sizeof(MPI_Request));
+#else
+      MPIO_Request *array_of_requests;
+      array_of_requests=(MPIO_Request*)malloc(count*sizeof(MPIO_Request));
+#endif
+
+      array_of_statuses=(MPI_Status*)malloc(count*sizeof(MPI_Status));
+      for(int i=0;i<count;i++) array_of_requests[i]=(MPI_Request)list[i];
+
+#ifdef MPIO_USES_MPI_REQUEST
+      int ierr=MPI_Waitall(count,array_of_requests,array_of_statuses);
+#else
+      int ierr=0;
+      for(int i=0;i<count;i++) ierr+=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
+#endif
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+      int flag;
+#ifdef MPIO_USES_MPI_REQUEST
+      MPI_Request request=(MPI_Request)(*request_id);
+#else
+      MPIO_Request request=(MPIO_Request)(*request_id);
+#endif
+      MPI_Status mpistatus;
+      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : begin. request_id=%d,request=%ld\n",(int)*request_id,(long)request);
+
+#ifdef MPIO_USES_MPI_REQUEST
+      int ierr=MPI_Test(&request, &flag, &mpistatus);
+#else
+      int ierr=MPIO_Test(&request, &flag, &mpistatus);
+#endif
+      if(flag) *status=(int64_t)0;
+      else *status=(int64_t)1;
+
+      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : end. ierr=%d\n",ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_close(int64_t *handle) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      if(MPI_Debug)printf("In PPIDD_Eaf_close: begin. handle=%d\n",(int)mpifhandle);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      int ierr=MPI_File_close( &mpi_fh );
+      if(MPI_Debug)printf("In PPIDD_Eaf_close: end. handle=%d,ierr=%d\n",(int)mpifhandle,ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_delete(char *name) {
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. name=%s\n",name);
+      int ierr=MPI_File_delete(name,MPI_INFO_NULL);
+      if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset size;
+      if(MPI_Debug)printf("In PPIDD_Eaf_length: begin. handle=%d\n",(int)mpifhandle);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      int ierr=MPI_File_get_size(mpi_fh, &size);
+      *fsize=(double)size;
+      if(MPI_Debug)printf("In PPIDD_Eaf_length: end. handle=%d,fsize=%f\n",(int)mpifhandle,*fsize);
+      return ierr;
+   }
+
+
+   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
+      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+      MPI_File mpi_fh;
+      MPI_Offset size=(MPI_Offset)(*offset);
+      if(MPI_Debug)printf("In PPIDD_Eaf_truncate: begin. handle=%d\n",(int)mpifhandle);
+      mpi_fh = MPI_File_f2c(mpifhandle);
+      int ierr=MPI_File_set_size(mpi_fh,size);
+      if(MPI_Debug)printf("In PPIDD_Eaf_truncate: end. handle=%d,size=%ld\n",(int)mpifhandle,(long)size);
+      return ierr;
+   }
+
+
+   void PPIDD_Eaf_errmsg(int *code,char *message) {
+      int eclass, len;
+      char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
+      int lxi=strlen(message);
+
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. code=%d\n",*code);
+      MPI_Error_class(*code, &eclass);
+      MPI_Error_string(*code, estring, &len);
+      sprintf(estring2," Error %d: %s", eclass, estring);
+      strcpy(message,estring2);
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: middle. message=%s\n",message);
+      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. code=%d\n",*code);
    }
 
 

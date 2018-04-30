@@ -908,6 +908,283 @@ extern "C" {
 
 
 /* ************************************************************************ *\
+   Creates an EAF file using name and path specified in name as a template.
+   Return the EAF file descriptor in handle.
+   It is a non-collective operation.
+\* ************************************************************************ */
+   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_open(name,type,handle);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_open(name,type,handle);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_open(name,type,handle);
+    }
+   }
+
+
+/* ******************************************************************************************** *\
+   Synchronously write to the file specified by the file handle.
+   Writes number of bytes to the file identified by handle at location offset.
+\* ******************************************************************************************** */
+   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
+    }
+   }
+
+
+/* ******************************************************************************************** *\
+   Asynchronously write to the file specified by the file handle, and return a handle to the asynchronous operation.
+   Writes number of bytes to the file identified by handle at location offset.
+   Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
+\* ******************************************************************************************** */
+   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
+    }
+   }
+
+
+/* ******************************************************************************************** *\
+   Synchronously read from the file specified by the file handle.
+   Reads number of bytes to the file identified by handle at location offset.
+\* ******************************************************************************************** */
+   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
+    }
+   }
+
+
+/* ******************************************************************************************** *\
+   Asynchronously read from the file specified by the file handle, and return a handle to the asynchronous operation.
+   Reads number of bytes to the file identified by handle at location offset.
+   Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
+\* ******************************************************************************************** */
+   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
+    }
+   }
+
+
+/* ************************************************************************************ *\
+   Wait for the completion of the asynchronous request associated with request_id.
+   Request_id is invalidated after the calling.
+   integer request_id   --[in]  Handle of asynchronous request.
+   integer ierr         --[out] Error code. 0 if it is able to wait for completion,
+                          else returns error code.
+\* ************************************************************************************ */
+   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_wait(handle,request_id);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_wait(handle,request_id);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_wait(handle,request_id);
+    }
+   }
+
+
+/* ********************************************************************************** *\
+   Blocks the calling process until all of the num I/O operations associated with ids
+   specified in list complete. Finally invalidates (modifies) ids on the list.
+\* ********************************************************************************** */
+   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_waitall(list,num);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_waitall(list,num);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_waitall(list,num);
+    }
+   }
+
+
+/* ************************************************************************************ *\
+   Determine if an asynchronous request has completed or is pending.
+   integer request_id   --[in]  Handle of asynchronous request.
+   integer status       --[out] Pending or completed status argument.
+                          status returns 0 if the asynchronous operation is complete, or 1 otherwise.
+                          If the asynchronous request is complete, id is invalidated.
+   integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
+\* ************************************************************************************ */
+   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_probe(request_id,status);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_probe(request_id,status);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_probe(request_id,status);
+    }
+   }
+
+
+/* ************************************************************************************ *\
+   Close an EAF file.
+   integer handle  --[in]  File Handle.
+   integer ierr    --[out] Error code. 0 if the file was closed, else returns error code.
+\* ************************************************************************************ */
+   int PPIDD_Eaf_close(int64_t *handle) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_close(handle);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_close(handle);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_close(handle);
+    }
+   }
+
+
+/* ********************************************************************************************* *\
+   Delete an EAF file
+   character*(*) name   -- [in]  File name.
+   integer ierr         -- [out] Error code. 0 if the file was deleted, else returns error code.
+\* ********************************************************************************************* */
+   int PPIDD_Eaf_delete(char *name) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_delete(name);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_delete(name);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_delete(name);
+    }
+   }
+
+
+/* ************************************************************************************ *\
+   Determine the length (in bytes) of an EAF file.
+   integer handle    --[in]  File Handle.
+   double fsize      --[out] File length in bytes.
+\* ************************************************************************************ */
+   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_length(handle,fsize);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_length(handle,fsize);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_length(handle,fsize);
+    }
+   }
+
+
+/* *************************************************************************************** *\
+   Truncate an EAF file at specified offset (in bytes).
+   integer handle --[in]  File Handle.
+   double offset  --[in]  Offset in bytes.
+   integer ierr   --[out] Error code. 0 if the file was truncated, else returns error code.
+\* *************************************************************************************** */
+   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_truncate(handle,offset);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_truncate(handle,offset);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_truncate(handle,offset);
+    }
+   }
+
+
+/* ********************************************************************************* *\
+   Returns a string interpretation of the error code, or an empty string
+   (Fortran all blanks, C null first character) if the error code is not recognized.
+        code             -- [in]  error code returned by a previous call to EAF
+        message          -- [out] character string where the corresponding message
+\* ********************************************************************************* */
+   void PPIDD_Eaf_errmsg(int *code,char *message) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+      return ga_mpi::PPIDD_Eaf_errmsg(code,message);
+#endif
+     case (ppidd_impl_mpi2):
+      return mpi2::PPIDD_Eaf_errmsg(code,message);
+#endif
+     default:
+      return no_mpi::PPIDD_Eaf_errmsg(code,message);
+    }
+   }
+
+
+/* ************************************************************************ *\
    Creates shared file using name and path specified in name as a template.
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.

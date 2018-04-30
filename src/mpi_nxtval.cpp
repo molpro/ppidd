@@ -15,7 +15,7 @@
  * Date:       02/11/2008                                                 *
 \* ====================================================================== */
 
-#ifdef MPI2
+#ifdef HAVE_MPI_H
 
 #include "ppidd.h"
 #include "mpi_utils.h"
@@ -2376,4 +2376,4 @@ void finalize_twosided_nxtval()
 
 void mpi_nxtval_dummy () {}
 
-#endif /* end of MPI2 */
+#endif

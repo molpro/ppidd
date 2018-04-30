@@ -14,7 +14,7 @@
  * Date:       02/04/2008                                                 *
 \* ====================================================================== */
 
-#ifdef MPI2
+#ifdef HAVE_MPI_H
 
 #include "mpi_utils.h"
 #include "mpiga_base.h"
@@ -1104,4 +1104,4 @@ int mpiga_destroy_mutexes(void)
 void mpiga_base_dummy () {
 }
 
-#endif /* end of MPI2 */
+#endif

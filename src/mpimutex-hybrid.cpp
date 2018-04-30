@@ -8,7 +8,7 @@
 
 /* mpimutex implementation */
 
-#ifdef MPI2
+#ifdef HAVE_MPI_H
 
 #include "mpimutex.h"
 #include <stdio.h>
@@ -250,4 +250,4 @@ int MPIMUTEX_Free(mpimutex_t *mutex_p)
 void mpimutex_hybrid_dummy () {
 }
 
-#endif /* end of MPI2 */
+#endif

@@ -15,7 +15,7 @@
  * Date:       30/01/2009                                                 *
 \* ====================================================================== */
 
-#ifdef MPI2
+#ifdef HAVE_MPI_H
 
 #include "mpi_utils.h"
 #include "mpiga_base.h"
@@ -412,4 +412,4 @@ int unlock_general_helpmutex(int inum)
 
 void mpi_helpmutex_dummy() { }
 
-#endif /* end of MPI2 */
+#endif

@@ -20,11 +20,11 @@ static const int ppidd_impl_ga_mpi = 1;
 static const int ppidd_impl_mpi2   = 2;
 
 #ifdef GA_MPI
-static int impl=ppidd_impl_ga_mpi;
+static int ppidd_impl=ppidd_impl_ga_mpi;
 #elif defined(MPI2)
-static int impl=ppidd_impl_mpi2;
+static int ppidd_impl=ppidd_impl_mpi2;
 #else
-static int impl=ppidd_impl_no_mpi;
+static int ppidd_impl=ppidd_impl_no_mpi;
 #endif
 
 extern "C" {
@@ -44,11 +44,11 @@ extern "C" {
 #ifdef HAVE_GA_H
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size == 1) impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
+    if (size == 1) ppidd_impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
 #endif
 #endif
 
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -69,7 +69,7 @@ extern "C" {
  *  - For \b MPI2, Initialize global data structure and set helper server.
  */
    void PPIDD_Initialize_data(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -92,7 +92,7 @@ extern "C" {
  *  - For \b GA and serial cases, should not be called.
  */
    int64_t PPIDD_Worker_comm(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -113,7 +113,7 @@ extern "C" {
  *  - For \b MPI2, tidy up some associated resources and call MPI_Finalize.
  */
    void PPIDD_Finalize(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -134,7 +134,7 @@ extern "C" {
  *  - \b MPI2 always returns <tt>.false.</tt>
  */
    int PPIDD_Uses_ma() {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -155,7 +155,7 @@ extern "C" {
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
    int PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -180,7 +180,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Wtime
  */
    void PPIDD_Wtime(double *ctime) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -201,7 +201,7 @@ extern "C" {
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
    void PPIDD_Error(char *message,int *code) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -220,7 +220,7 @@ extern "C" {
  *
  *  Set the helper_server flag: 1 (use); 0 (don't use). */
    void PPIDD_Helper_server(int *flag, int64_t *numprocs_per_server) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -242,7 +242,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Comm_size for communicator MPI_COMM_WORLD.
  */
    void PPIDD_Size_all(int64_t *np) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -264,7 +264,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Comm_size for computational communicator.
  */
    void PPIDD_Size(int64_t *np) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -286,7 +286,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Comm_rank in computational communicator.
  */
    void PPIDD_Rank(int64_t *me) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -307,7 +307,7 @@ extern "C" {
  *  - \b MPI2 does nothing
  */
    void PPIDD_Init_fence(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -328,7 +328,7 @@ extern "C" {
  *  - \b MPI2 does nothing
  */
    void PPIDD_Fence(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -349,7 +349,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
    void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -370,7 +370,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
    void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -392,7 +392,7 @@ extern "C" {
  *  - \b MPI2/GA_MPI calls MPI_Wait for all asynchronous requests.
  */
    void PPIDD_Wait(int64_t *nodesel) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -414,7 +414,7 @@ extern "C" {
  *  - \b MPI2/GA_MPI calls MPI_Iprobe
  */
    int PPIDD_Iprobe(int64_t *tag,int64_t *source) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -438,7 +438,7 @@ extern "C" {
  *  - \c dtype=0 : Fortran integer and logical types
  *  - \c dtype=1 : Fortran double precision type */
    void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -459,7 +459,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Barrier
  */
    void PPIDD_Barrier(void) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -482,7 +482,7 @@ extern "C" {
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
    void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -506,7 +506,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
    int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int dtype, int64_t *storetype, int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -533,7 +533,7 @@ extern "C" {
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
    int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -553,7 +553,7 @@ extern "C" {
  *  - \b GA analogous http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY
  */
    int PPIDD_Destroy(int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -575,7 +575,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION
  */
    int PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -603,7 +603,7 @@ extern "C" {
                        int64_t *proclist,   /*!< proc id list */
                        int64_t *np          /*!< proc number */
    ) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -621,7 +621,7 @@ extern "C" {
 /*! \brief Copies data from array section to the local array buffer according to starting and ending index.
     \details analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET */
    int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -638,7 +638,7 @@ extern "C" {
 /*! \brief Put local buffer data into a section of a global array according to starting and ending index.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT */
    int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -657,7 +657,7 @@ extern "C" {
     \details Atomic operation. global array section (ilo, ihi) += *fac * buffer.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC */
    int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -677,7 +677,7 @@ extern "C" {
     element by a given increment. This is a fetch-and-add operation.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC */
    void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -695,7 +695,7 @@ extern "C" {
 /*! \brief Set all the elements in an array patch to zero.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH */
    void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -713,7 +713,7 @@ extern "C" {
 /*! \brief Set all the elements of a global data structure to zero.
  *  \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO */
    int PPIDD_Zero(int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -730,7 +730,7 @@ extern "C" {
 /*! \brief Get the next shared counter number(helper process should be enabled).
     \details Increment a counter by 1 and returns the counter value (0, 1, ...). */
    void PPIDD_Nxtval(int64_t *numproc, int64_t *val) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -750,7 +750,7 @@ extern "C" {
     - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
     - \b MPI2 does nothing */
    void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -769,7 +769,7 @@ extern "C" {
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
     This operation is local. */
    void PPIDD_Inquire_name(int64_t *handle, char *name) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -790,7 +790,7 @@ extern "C" {
    - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
    - \c This operation is local. */
    void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -808,7 +808,7 @@ extern "C" {
 /*! \brief Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME */
    void PPIDD_Inquire_mem(int64_t *mem_used) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -837,7 +837,7 @@ extern "C" {
 
  */
    int PPIDD_Create_mutexes(int64_t *storetype,int64_t *number) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -855,7 +855,7 @@ extern "C" {
 /*! \brief Lock a mutex object identified by a given mutex number.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK */
    void PPIDD_Lock_mutex(int64_t *inum) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -873,7 +873,7 @@ extern "C" {
 /*! \brief Unlock a mutex object identified by a given mutex number.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK */
    void PPIDD_Unlock_mutex(int64_t *inum) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -892,7 +892,7 @@ extern "C" {
     \return 1 if the operation succeeded or 0 when failed.
     \details This is a collective operation. Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES */
    int PPIDD_Destroy_mutexes() {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -913,7 +913,7 @@ extern "C" {
    It is a non-collective operation.
 \* ************************************************************************ */
    int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -933,7 +933,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
    int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -954,7 +954,7 @@ extern "C" {
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
    int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -974,7 +974,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
    int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -995,7 +995,7 @@ extern "C" {
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
    int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1018,7 +1018,7 @@ extern "C" {
                           else returns error code.
 \* ************************************************************************************ */
    int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1038,7 +1038,7 @@ extern "C" {
    specified in list complete. Finally invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
    int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1062,7 +1062,7 @@ extern "C" {
    integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
 \* ************************************************************************************ */
    int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1083,7 +1083,7 @@ extern "C" {
    integer ierr    --[out] Error code. 0 if the file was closed, else returns error code.
 \* ************************************************************************************ */
    int PPIDD_Eaf_close(int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1104,7 +1104,7 @@ extern "C" {
    integer ierr         -- [out] Error code. 0 if the file was deleted, else returns error code.
 \* ********************************************************************************************* */
    int PPIDD_Eaf_delete(char *name) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1125,7 +1125,7 @@ extern "C" {
    double fsize      --[out] File length in bytes.
 \* ************************************************************************************ */
    int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1147,7 +1147,7 @@ extern "C" {
    integer ierr   --[out] Error code. 0 if the file was truncated, else returns error code.
 \* *************************************************************************************** */
    int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1169,7 +1169,7 @@ extern "C" {
         message          -- [out] character string where the corresponding message
 \* ********************************************************************************* */
    void PPIDD_Eaf_errmsg(int *code,char *message) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1190,7 +1190,7 @@ extern "C" {
    It is a collective operation.
 \* ************************************************************************ */
    int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1211,7 +1211,7 @@ extern "C" {
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
    int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1231,7 +1231,7 @@ extern "C" {
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
    int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1251,7 +1251,7 @@ extern "C" {
    Invalidates request_id.
 \* ************************************************************************************ */
    int PPIDD_Sf_wait(int64_t *request_id) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1271,7 +1271,7 @@ extern "C" {
    specified in list complete. Invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
    int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1291,7 +1291,7 @@ extern "C" {
    It is a collective operation.
 \* ************************************************ */
    int PPIDD_Sf_destroy(int64_t *handle) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -1314,7 +1314,7 @@ extern "C" {
                             is written [out]
 \* ********************************************************************************* */
    void PPIDD_Sf_errmsg(int *code,char *message) {
-    switch (impl) {
+    switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):

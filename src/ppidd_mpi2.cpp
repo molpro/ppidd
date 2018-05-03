@@ -21,7 +21,7 @@ namespace mpi2 {
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
 
-   static void do_not_call(const char* function) {
+   [[ noreturn ]] static void do_not_call(const char* function) {
     fprintf(stderr,"%s should not be called in mpi2 case\n",function);
     exit(1);
    }

@@ -71,6 +71,8 @@ AC_PROG_INSTALL()
 
 AC_PROG_CXX()
 AC_PATH_PROG(CXX,${CXX})
+m4_include([src/configure/ax_cxx_compile_stdcxx.m4])
+AX_CXX_COMPILE_STDCXX([11])
 
 if test "x${enable_nxtval}" = xno ; then
  AC_MSG_NOTICE([Helper process will not be compiled; PPIDD_Nxtval will be disabled])

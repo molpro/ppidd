@@ -7,7 +7,7 @@
 
 namespace no_mpi {
 
-   static void do_not_call(const char* function) {
+   [[ noreturn ]] static void do_not_call(const char* function) {
     fprintf(stderr,"%s should not be called in no_mpi case\n",function);
     exit(1);
    }

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <climits>
 #include <vector>
 
@@ -31,22 +32,20 @@ extern "C" {
 #include "ppidd_ga_mpi.h"
 
 static int dtype_ga(int dtype) {
- char *errmsg;
+ std::string errmsg;
  switch (dtype) {
   case PPIDD_FORTINT :
    if (sizeof(FORTINT)==sizeof(int)) return MT_C_INT;
    if (sizeof(FORTINT)==sizeof(long)) return MT_C_LONGINT;
    if (sizeof(FORTINT)==sizeof(long long)) return MT_C_LONGLONG;
-   errmsg=strdup(" dtype_ga: unable to map FORTINT ");
-   GA_Error(errmsg,dtype);
-   free(errmsg);
+   errmsg=" dtype_ga: unable to map FORTINT ";
+   GA_Error(&errmsg[0],dtype);
    break;
   case PPIDD_DOUBLE :
    return MT_C_DBL;
   default:
-   errmsg=strdup(" dtype_ga: wrong data type ");
-   GA_Error(errmsg,dtype);
-   free(errmsg);
+   errmsg=" dtype_ga: wrong data type ";
+   GA_Error(&errmsg[0],dtype);
  }
  return -1;
 }
@@ -449,7 +448,8 @@ static int n_in_msg_mpiq=0;
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
         int64_t lentot=1, storetype=1;
-        PPIDD_Create(strdup("Nxtval"),&lentot,0,&storetype,&PPIDD_Nxtval_handle);
+	std::string name="Nxtval";
+        PPIDD_Create(&name[0],&lentot,0,&storetype,&PPIDD_Nxtval_handle);
         PPIDD_Zero(&PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         *val=0;

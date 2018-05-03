@@ -12,7 +12,7 @@ namespace no_mpi {
     exit(1);
    }
 
-   void PPIDD_Initialize(int *argc, char ***argv) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
    }
 
 

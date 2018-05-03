@@ -6,12 +6,18 @@
       integer(c_int), parameter :: PPIDD_FORTINT=0
       integer(c_int), parameter :: PPIDD_DOUBLE =0
 
+      integer(c_int), parameter :: PPIDD_IMPL_DEFAULT=0
+      integer(c_int), parameter :: PPIDD_IMPL_NO_MPI =1
+      integer(c_int), parameter :: PPIDD_IMPL_GA_MPI =2
+      integer(c_int), parameter :: PPIDD_IMPL_MPI2   =3
+
       interface
-       subroutine ppidd_initialize(argc, argv)
+       subroutine ppidd_initialize(argc, argv, impl)
      >            bind(c,name="PPIDD_Initialize")
        use iso_c_binding, only: c_int, c_ptr
-       integer(c_int), intent(in) :: argc
-       type(c_ptr), intent(in)    :: argv
+       integer(c_int), intent(in)         :: argc
+       type(c_ptr), intent(in)            :: argv
+       integer(c_int), intent(in), value  :: impl
        end subroutine ppidd_initialize
       end interface
 

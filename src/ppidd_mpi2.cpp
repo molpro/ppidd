@@ -26,7 +26,7 @@ namespace mpi2 {
     exit(1);
    }
 
-   void PPIDD_Initialize(int *argc, char ***argv) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
     int mpierr=mpiga_initialize(argc,argv);
     mpi_test_status("PPIDD_Initialize:",mpierr);
    }

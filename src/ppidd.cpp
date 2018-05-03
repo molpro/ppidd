@@ -2,8 +2,8 @@
 #include "ppidd_config.h"
 #endif
 #include <stdio.h>
-#ifdef HAVE_MPI_H
 #include <stdlib.h>
+#ifdef HAVE_MPI_H
 #include <string>
 #include <mpi.h>
 #endif
@@ -15,9 +15,10 @@
 /*! \file
  * \brief This file contains the PPIDD functions */
 
-static const int ppidd_impl_no_mpi = 0;
-static const int ppidd_impl_ga_mpi = 1;
-static const int ppidd_impl_mpi2   = 2;
+static const int ppidd_impl_default= PPIDD_IMPL_DEFAULT;
+static const int ppidd_impl_no_mpi = PPIDD_IMPL_NO_MPI;
+static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
+static const int ppidd_impl_mpi2   = PPIDD_IMPL_MPI2;
 
 #ifdef GA_MPI
 static int ppidd_impl=ppidd_impl_ga_mpi;
@@ -33,7 +34,24 @@ extern "C" {
     \details
     - For \b GA, includes initialization of MPI and GA.
     - For \b MPI2, calls MPI_Init. */
-   void PPIDD_Initialize(int *argc, char ***argv) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
+    switch (impl) {
+#ifdef HAVE_MPI_H
+#ifdef HAVE_GA_H
+     case (ppidd_impl_ga_mpi):
+#endif
+     case (ppidd_impl_mpi2):
+#endif
+     case (ppidd_impl_no_mpi):
+      ppidd_impl=impl;
+      break;
+     case (ppidd_impl_default):
+      break;
+     default:
+      fprintf(stderr,"ERROR: impl '%d' either unknown or unavailable",impl);
+      exit(1);
+    }
+
 #ifdef HAVE_MPI_H
     int flag=0;
     int ret=MPI_Initialized(&flag);
@@ -52,13 +70,13 @@ extern "C" {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Initialize(argc,argv);
+      return ga_mpi::PPIDD_Initialize(argc,argv,impl);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Initialize(argc,argv);
+      return mpi2::PPIDD_Initialize(argc,argv,impl);
 #endif
      default:
-      return no_mpi::PPIDD_Initialize(argc,argv);
+      return no_mpi::PPIDD_Initialize(argc,argv,impl);
     }
    }
 

@@ -55,7 +55,7 @@ namespace ga_mpi {
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
 
-   void PPIDD_Initialize(int *argc, char ***argv) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
     GA_Initialize_args(argc,argv);            /* initialize GA */
    }
 

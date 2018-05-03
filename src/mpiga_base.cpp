@@ -25,7 +25,6 @@
 mpiglobal_array_t *mpiga_main_data_structure=NULL, *MPIGAIndex;
 mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
 int *mpigv(map)=NULL,*mpigv(proclist)=NULL;
-static int MPIGAinitialized = 0;
 static int MPIGA_Debug = 0;
 
 int SR_parallel;
@@ -46,7 +45,6 @@ int mpiga_initialize(int *argcmain, char ***argvmain)
 {
     int size_all,rank_all;
     if (MPIGA_Debug) printf("In mpiga_initilize begin.\n");
-    if(MPIGAinitialized) return 0;
 
     MPI_Comm_size(MPI_COMM_WORLD, &size_all);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank_all);
@@ -103,9 +101,6 @@ int mpiga_initialize_data(void)
 
     mpigv(map)=(int *)malloc(2*size*sizeof(int));        /* initialize list of lower and upper indices */
     mpigv(proclist)=(int *)malloc(size*sizeof(int));     /* initialize list of processors              */
-
-    MPIGAinitialized = 1;  /* initialization finished. */
-
    }
 
     if (MPIGA_Debug) printf("%5d: In mpiga_initilize_data end. rank=%5d, size=%5d\n",ProcID(),rank,size);

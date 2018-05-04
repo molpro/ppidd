@@ -632,13 +632,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Eaf_errmsg(int *code,char *message) {
-      int lxi=strlen(message);
-
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. code=%d\n",*code);
       EAF_Errmsg(*code, message);
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: middle. message=%s\n",message);
-      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. code=%d\n",*code);
    }
 
 
@@ -707,13 +701,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Sf_errmsg(int *code,char *message) {
-      int lxi=strlen(message);
-
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: begin. code=%d\n",*code);
       SF_Errmsg(*code, message);
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: middle. message=%s\n",message);
-      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: end. code=%d\n",*code);
    }
 
 }

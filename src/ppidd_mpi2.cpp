@@ -883,16 +883,13 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Eaf_errmsg(int *code,char *message) {
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
-      int lxi=strlen(message);
 
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: begin. code=%d\n",*code);
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: code=%d\n",*code);
       MPI_Error_class(*code, &eclass);
       MPI_Error_string(*code, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
-      strcpy(message,estring2);
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: middle. message=%s\n",message);
-      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: end. code=%d\n",*code);
+      strncpy(message,estring2,strlen(message));
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: message=%s\n",message);
    }
 
 
@@ -1010,16 +1007,13 @@ static int n_in_msg_mpiq=0;
    void PPIDD_Sf_errmsg(int *code,char *message) {
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
-      int lxi=strlen(message);
 
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: begin. code=%d\n",*code);
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: code=%d\n",*code);
       MPI_Error_class(*code, &eclass);
       MPI_Error_string(*code, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
-      strcpy(message,estring2);
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: middle. message=%s\n",message);
-      for(int i=strlen(message);i<lxi;i++) message[i]=' ';
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: end. code=%d\n",*code);
+      strncpy(message,estring2,strlen(message));
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: message=%s\n",message);
    }
 
 }

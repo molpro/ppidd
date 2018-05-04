@@ -469,17 +469,8 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Inquire_name(int64_t *handle, char *name) {
-      char *name2;
       int gahandle = (int) *handle;
-
-      int lxi=strlen(name);
-/*      strcpy(name2=malloc(80*sizeof(char)),GA_Inquire_name(gahandle));
-      strncpy(name,name2,strlen(name2)); */
-      name2=GA_Inquire_name(gahandle);
-      int len_actual=strlen(name2);
-      strncpy(name,name2,len_actual);
-      for(int i=len_actual;i<lxi;i++) name[i]=' ';
-      if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
+      strncpy(name,GA_Inquire_name(gahandle),strlen(name));
    }
 
 

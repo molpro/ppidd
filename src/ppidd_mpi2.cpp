@@ -585,16 +585,9 @@ static int n_in_msg_mpiq=0;
       char *name2;
       int mpihandle = (int) *handle;
 
-      int lxi=strlen(name);
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpiga_inquire_name(mpihandle, &name2);
-      else {
-         twosided_helpga_inquire_name(mpihandle, &name2);
-      }
-      int len_actual=strlen(name2);
-      strncpy(name,name2,len_actual);
-      for(int i=len_actual;i<lxi;i++) name[i]=' ';
-      if(MPIGA_Debug)printf("In PPIDD_Inquire_name: name2=%s,strlen(name2)=%d,lxi=%d\n",name2,len_actual,lxi);
+      if ( mpiga_inquire_storetype(mpihandle) == 0 ) mpiga_inquire_name(mpihandle, &name2);
+      else twosided_helpga_inquire_name(mpihandle, &name2);
+      strncpy(name,name2,strlen(name));
    }
 
 

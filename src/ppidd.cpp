@@ -36,6 +36,17 @@ extern "C" {
     - For \b MPI2, calls MPI_Init. */
    void PPIDD_Initialize(int *argc, char ***argv, int impl) {
     switch (impl) {
+     case (ppidd_impl_default):
+     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_mpi2):
+     case (ppidd_impl_no_mpi):
+      break;
+     default:
+      fprintf(stderr,"ERROR: impl '%d' is unknown\n",impl);
+      exit(1);
+    }
+
+    switch (impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
@@ -48,7 +59,7 @@ extern "C" {
      case (ppidd_impl_default):
       break;
      default:
-      fprintf(stderr,"ERROR: impl '%d' either unknown or unavailable",impl);
+      fprintf(stderr,"ERROR: impl '%d' is unavailable\n",impl);
       exit(1);
     }
 

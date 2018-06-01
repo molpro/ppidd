@@ -2,7 +2,7 @@ dnl regnerate configure with: autoconf -Wall && rm -rf autom4te.cache
 AC_INIT(PPIDD,master)
 AC_PREREQ(2.69)
 AC_LANG([C++])
-AC_CONFIG_FILES([config.mk:src/configure/config.mk.in])
+AC_CONFIG_FILES([config.mk:src/configure/config.mk.in] [src/ppidd.h] [src/ppidd_module.F])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
@@ -126,12 +126,13 @@ if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
  AC_MSG_ERROR([both --with-ga and --with-mpi2 specified])
 elif test "x${with_ga}" != xno ; then
  AC_MSG_NOTICE([PPIDD with Global Arrays])
- AC_DEFINE(GA_MPI)
+ AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_GA_MPI)
 elif test "x${with_mpi2}" != xno ; then
  AC_MSG_NOTICE([PPIDD with MPI2])
- AC_DEFINE(MPI2)
+ AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_MPI2)
 else
  AC_MSG_NOTICE([PPIDD without MPI])
+ AC_SUBST(PPIDD_IMPL_DEFAULT,[PPIDD_IMPL_NO_MPI])
 fi
 
 if test "x${with_ga}" != xno ; then
@@ -151,5 +152,4 @@ PPIDD_DEFINES_H="src/ppidd_defines.h"
 AC_SUBST_FILE(PPIDD_PROTOTYPES_H)
 PPIDD_PROTOTYPES_H="src/ppidd_prototypes.h"
 
-AC_CONFIG_FILES([src/ppidd.h])
 AC_OUTPUT()

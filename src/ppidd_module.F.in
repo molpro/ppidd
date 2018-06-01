@@ -6,10 +6,11 @@
       integer(c_int), parameter :: PPIDD_FORTINT=0
       integer(c_int), parameter :: PPIDD_DOUBLE =0
 
-      integer(c_int), parameter :: PPIDD_IMPL_DEFAULT=0
       integer(c_int), parameter :: PPIDD_IMPL_NO_MPI =1
       integer(c_int), parameter :: PPIDD_IMPL_GA_MPI =2
       integer(c_int), parameter :: PPIDD_IMPL_MPI2   =3
+      integer(c_int), parameter :: PPIDD_IMPL_DEFAULT=
+     >                             @PPIDD_IMPL_DEFAULT@
 
       interface
        subroutine ppidd_initialize(argc, argv, impl)

@@ -3,10 +3,10 @@
 
 @PPIDD_DEFINES_H@
 
-#define PPIDD_IMPL_DEFAULT 0
 #define PPIDD_IMPL_NO_MPI  1
 #define PPIDD_IMPL_GA_MPI  2
 #define PPIDD_IMPL_MPI2    3
+#define PPIDD_IMPL_DEFAULT @PPIDD_IMPL_DEFAULT@
 
 #ifdef __cplusplus
 extern "C" {

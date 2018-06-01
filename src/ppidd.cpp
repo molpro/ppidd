@@ -20,13 +20,7 @@ static const int ppidd_impl_no_mpi = PPIDD_IMPL_NO_MPI;
 static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
 static const int ppidd_impl_mpi2   = PPIDD_IMPL_MPI2;
 
-#ifdef GA_MPI
-static int ppidd_impl=ppidd_impl_ga_mpi;
-#elif defined(MPI2)
-static int ppidd_impl=ppidd_impl_mpi2;
-#else
-static int ppidd_impl=ppidd_impl_no_mpi;
-#endif
+static int ppidd_impl=ppidd_impl_default;
 
 extern "C" {
 
@@ -36,7 +30,6 @@ extern "C" {
     - For \b MPI2, calls MPI_Init. */
    void PPIDD_Initialize(int *argc, char ***argv, int impl) {
     switch (impl) {
-     case (ppidd_impl_default):
      case (ppidd_impl_ga_mpi):
      case (ppidd_impl_mpi2):
      case (ppidd_impl_no_mpi):
@@ -55,8 +48,6 @@ extern "C" {
 #endif
      case (ppidd_impl_no_mpi):
       ppidd_impl=impl;
-      break;
-     case (ppidd_impl_default):
       break;
      default:
       fprintf(stderr,"ERROR: impl '%d' is unavailable\n",impl);

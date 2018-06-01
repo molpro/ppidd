@@ -1,12 +1,8 @@
 #ifndef _PPIDD_CONFIG_H
 #define _PPIDD_CONFIG_H
 
-/* build with GA */
-#undef GA_MPI
 #undef HAVE_GA_H
 
-/* build with MPI2 */
-#undef MPI2
 #undef HAVE_MPI_H
 
 #undef NO_NXTVAL_SERVER

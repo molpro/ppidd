@@ -33,7 +33,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     char **nodename;
     int *nprocs_node;
     int length;
-    int max_length=256;
+    constexpr int max_length=256;
     int i,j,skip;
     int sym=1;
 
@@ -41,9 +41,11 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     MPI_Comm_rank(comm,&rank);
 
     nodename = (char **)malloc(nprocs * sizeof(char *));
+    nodename[0] = (char*)malloc(nprocs * max_length);
+    memset(nodename[0], 0, nprocs * max_length);
     nprocs_node = (int *)malloc(nprocs * sizeof(int));
     for(i = 0; i < nprocs; i++) {
-       nodename[i] = (char *)malloc(max_length * sizeof(char));
+       nodename[i] = nodename[0] + i * max_length;
        nprocs_node[i] = 0;
     }
 #ifdef __bg__
@@ -55,9 +57,8 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
 #endif
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank],length);
 
-    for(i = 0; i < nprocs; i++){
-       MPI_Bcast ( nodename[i], max_length, MPI_CHAR, i, comm );
-    }
+    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,
+                  nodename[0], max_length, MPI_CHAR, comm);
 
     nnodes=1;
     for(i = 0; i < nprocs; i++){
@@ -78,7 +79,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     *flag_sym=sym;
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: nnodes=%d, symmetric=%d\n",rank,nnodes,sym);
 
-    for(i = 0; i < nprocs; i++) free(nodename[i]);
+    free(nodename[0]);
     free(nodename);
     free(nprocs_node);
 

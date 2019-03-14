@@ -62,7 +62,7 @@ AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PA
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])
 
-AC_SUBST(AR,"ar")dnl
+AC_CHECK_TOOL([AR], [ar])
 AC_SUBST(ARFLAGS,"-rS")dnl
 AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()

@@ -46,9 +46,9 @@ target_compile_options(ppidd PRIVATE $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILE
 target_compile_definitions(ppidd PUBLIC FORTINT=int64_t HAVE_MPI_H HAVE_GA_H)
 target_link_libraries(ppidd PUBLIC ga MPI::MPI_CXX)
 ### For including C++ headers
-target_include_directories(ppidd INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 ### For linking Fortran library
-target_include_directories(ppidd INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 find_package(Doxygen)
 if (DOXYGEN_FOUND)

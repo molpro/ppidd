@@ -2,13 +2,14 @@
 #include "ppidd.h"
 #include <stdio.h>
 #include <inttypes.h>
+#include <iostream>
 
 int ppidd_ctest(void);
 
 int main(int argc, char **argv)
 {
     /* Initialize PPIDD */
-    PPIDD_Initialize(&argc, &argv, PPIDD_IMPL_DEFAULT);
+    PPIDD_Initialize(&argc, &argv, PPIDD_IMPL_GA_MPI);
     PPIDD_Initialize_data();
 
     ppidd_ctest();

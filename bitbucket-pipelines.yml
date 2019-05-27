@@ -13,6 +13,7 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - # zypper -n install eigen3-devel cmake gcc-fortran gcc-c++ openmpi-devel openmpi-libs blas-devel libblas3 git doxygen texlive-epstopdf ghostscript lapack
 #          - zypper -n update cmake gcc gcc-fortran gcc-c++
+          - export PATH=/usr/local/bin:$PATH
           - TOP=$PWD; BUILD=build/$(git rev-parse --abbrev-ref HEAD)/parallel ; mkdir -p $BUILD && cd $BUILD && pwd && cmake -DMPIOPTIONS="--allow-run-as-root" $TOP
           - cmake --build . -- -j 4
           - ctest -V

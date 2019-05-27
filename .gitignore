@@ -10,3 +10,7 @@ config.mk
 src/ppidd.h
 src/ppidd_config.h
 src/ppidd_module.F
+cmake-build-*/
+build*/
+.idea/workspace.xml
+__.SYMDEF SORTED

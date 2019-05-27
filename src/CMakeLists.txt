@@ -55,7 +55,7 @@ if (DOXYGEN_FOUND)
     get_property(SOURCES TARGET ppidd PROPERTY SOURCES)
     string(REPLACE ";/" " /" SOURCE1 "${SOURCES}")
     string(REPLACE ";" " ${CMAKE_CURRENT_SOURCE_DIR}/" SOURCE "${SOURCE1}")
-    configure_file(Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
             DEPENDS ${SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in

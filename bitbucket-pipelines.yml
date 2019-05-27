@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: pjknowles/opensuse:2018-11-06
+image: pjknowles/opensuse
 
 pipelines:
   default:
@@ -12,7 +12,7 @@ pipelines:
           - ppidd-cmake
         script: # Modify the commands below to build your repository.
           - # zypper -n install eigen3-devel cmake gcc-fortran gcc-c++ openmpi-devel openmpi-libs blas-devel libblas3 git doxygen texlive-epstopdf ghostscript lapack
-          - zypper -n update cmake gcc gcc-fortran gcc-c++
+#          - zypper -n update cmake gcc gcc-fortran gcc-c++
           - TOP=$PWD; BUILD=build/$(git rev-parse --abbrev-ref HEAD)/parallel ; mkdir -p $BUILD && cd $BUILD && pwd && cmake -DMPIOPTIONS="--allow-run-as-root" $TOP
           - cmake --build . -- -j 4
           - ctest -V

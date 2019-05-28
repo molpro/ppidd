@@ -12,5 +12,5 @@ src/ppidd_config.h
 src/ppidd_module.F
 cmake-build-*/
 build*/
-.idea/workspace.xml
+.idea/
 __.SYMDEF SORTED

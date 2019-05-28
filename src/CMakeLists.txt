@@ -41,7 +41,7 @@ endif ()
 
 target_compile_features(ppidd PRIVATE cxx_constexpr)
 target_compile_options(ppidd PRIVATE $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:AppleClang>>:-Wall>)
-target_compile_definitions(ppidd PUBLIC FORTINT=int64_t HAVE_MPI_H HAVE_GA_H)
+target_compile_definitions(ppidd PRIVATE FORTINT=int64_t HAVE_MPI_H HAVE_GA_H)
 target_link_libraries(ppidd PUBLIC ga::ga MPI::MPI_CXX)
 target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_BINARY_DIR}) # For Fortran modules

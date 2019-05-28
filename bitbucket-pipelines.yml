@@ -7,10 +7,9 @@ pipelines:
           - ppidd-cmake
         script:
           - cmake --version; g++ --version
-          - TOP=$PWD; BUILD=build/$(git rev-parse --abbrev-ref HEAD)/parallel ; mkdir -p $BUILD && cd $BUILD && pwd && cmake -DMPIOPTIONS="--allow-run-as-root" $TOP
-          - cmake --build . --target ppidd -- -j 4
-          - cmake --build . -- -j 1 # the targets in test/ don't play well with parallel build
-          - ctest -V
+          - TOP=$PWD
+          - cd $TOP; BUILD=build/$(git rev-parse --abbrev-ref HEAD)/ga ; mkdir -p $BUILD && cd $BUILD && pwd && cmake -DMPIOPTIONS="--allow-run-as-root" $TOP ; cmake --build . --target ppidd -- -j 4 ; cmake --build . -- -j 1 ; ctest -V
+          - cd $TOP; BUILD=build/$(git rev-parse --abbrev-ref HEAD)/mpi ; mkdir -p $BUILD && cd $BUILD && pwd && cmake -DPPIDD-GA=OFF -DMPIOPTIONS="--allow-run-as-root" $TOP ; cmake --build . --target ppidd -- -j 4 ; cmake --build . -- -j 1 ; ctest -V
 definitions:
   caches:
     ppidd-cmake: build

@@ -12,9 +12,9 @@ if (PPIDD_FORTRAN)
     enable_language(Fortran)
 endif ()
 
-
 add_subdirectory(src)
 
-enable_testing()
-add_subdirectory(test)
-
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    enable_testing()
+    add_subdirectory(test)
+endif ()

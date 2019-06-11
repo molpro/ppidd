@@ -1,0 +1,30 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+enable_fortran=@enable_fortran@
+
+usage () {
+ cat << _EOF_
+usage: ppidd-config [OPTION]
+
+options
+   --cppflags  print CPPFLAGS
+   --fcflags   print FCFLAGS
+   --ldflags   print LDFLAGS
+   --libs      print LIBS
+   --help      display this help and exit
+   --version   output version information
+_EOF_
+}
+
+case "x${1}" in
+ x--cppflags ) echo "-I@includedir@" ;;
+ x--fcflags  ) test "x${enable_fortran}" = xyes && echo "@FC_MODINC@@includedir@" ;;
+ x--ldflags  ) echo "-L@libdir@" ;;
+ x--libs     ) echo "-lppidd" ;;
+ x--help | x ) usage ;;
+ x*          ) usage; exit 1 ;;
+esac
+
+exit 0

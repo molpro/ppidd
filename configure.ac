@@ -3,6 +3,7 @@ AC_INIT(PPIDD,master)
 AC_PREREQ(2.69)
 AC_LANG([C++])
 AC_CONFIG_FILES([config.mk:src/configure/config.mk.in] [src/ppidd.h] [src/ppidd_module.F])
+AC_CONFIG_FILES([ppidd-config],[chmod +x ppidd-config])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
@@ -58,12 +59,13 @@ test "x${FC_VENDOR:+set}" = xset || AC_MSG_WARN([unable to determine FC_VENDOR])
 ])
 
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
+AC_SUBST(enable_fortran)
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])
 
 AC_CHECK_TOOL([AR], [ar])
-AC_SUBST(ARFLAGS,"-rS")dnl
+AC_SUBST(ARFLAGS,"-rS")
 AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()
 test "x${RANLIB}" = "x:" && RANLIB="true"
@@ -84,6 +86,7 @@ AC_PROG_FC()
 AC_PATH_PROG(FC,${FC})
 m4_include([src/configure/may_fc_module_filename_format.m4])
 MAY_FC_MODULE_FILENAME_FORMAT()
+AC_FC_MODULE_FLAG()
 PPIDD_FC_VENDOR()
 AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
 case "x${enable_fortran_integer}" in

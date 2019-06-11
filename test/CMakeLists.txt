@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.11)
+
+add_executable(ppidd_ctest ppidd_ctest.cpp)
+target_link_libraries(ppidd_ctest PRIVATE ppidd::ppidd)
+add_test(NAME ppidd_ctest COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ppidd_ctest)
+
+if (CMAKE_Fortran_COMPILER_ID)
+    add_executable(ppidd_test ppidd_test.F sizeofctypes.cpp sizeoffortypes.F ppidd_flush6.F)
+    target_link_libraries(ppidd_test PRIVATE ppidd::ppidd)
+    add_test(NAME ppidd_test COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ppidd_test)
+
+    add_executable(ppidd_sf_test ppidd_sf_test.F ppidd_flush6.F)
+    target_link_libraries(ppidd_sf_test PRIVATE ppidd::ppidd)
+    add_test(NAME ppidd_sf_test COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ppidd_sf_test)
+endif ()

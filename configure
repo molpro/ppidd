@@ -624,6 +624,8 @@ PPIDD_IMPL_DEFAULT
 EGREP
 GREP
 CXXCPP
+ac_empty
+FC_MODINC
 FC_MODFMT
 FC_MODEXT
 ac_ct_FC
@@ -644,6 +646,7 @@ RANLIB
 DOXYGEN
 ARFLAGS
 AR
+enable_fortran
 host_os
 host_vendor
 host_cpu
@@ -2358,6 +2361,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 ac_config_files="$ac_config_files config.mk:src/configure/config.mk.in src/ppidd.h src/ppidd_module.F"
 
+ac_config_files="$ac_config_files ppidd-config"
+
 ac_config_headers="$ac_config_headers src/ppidd_config.h:src/configure/ppidd_config.h.in"
 
 ac_aux_dir=
@@ -2472,6 +2477,7 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 if test "${enable_fortran+set}" = set; then :
   enableval=$enable_fortran;
 fi
+
 
 
 # Check whether --with-ga was given.
@@ -2590,6 +2596,7 @@ else
 fi
 
 ARFLAGS="-rS"
+
 # Extract the first word of "doxygen", so it can be a program name with args.
 set dummy doxygen; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -4517,6 +4524,78 @@ FC_MODFMT="${may_cv_fc_module_fmt}"
 test "x${FC_MODFMT}" = xunknown && FC_MODFMT=""
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Fortran 90 module inclusion flag" >&5
+$as_echo_n "checking Fortran 90 module inclusion flag... " >&6; }
+if ${ac_cv_fc_module_flag+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_fc_compiler_gnu
+
+ac_cv_fc_module_flag=unknown
+mkdir conftest.dir
+cd conftest.dir
+cat > conftest.$ac_ext <<_ACEOF
+
+      module conftest_module
+      contains
+      subroutine conftest_routine
+      write(*,'(a)') 'gotcha!'
+      end subroutine
+      end module
+_ACEOF
+if ac_fn_fc_try_compile "$LINENO"; then :
+  cd ..
+   ac_fc_module_flag_FCFLAGS_save=$FCFLAGS
+   # Flag ordering is significant for gfortran and Sun.
+   for ac_flag in -M -I '-I ' '-M ' -p '-mod ' '-module ' '-Am -I'; do
+     # Add the flag twice to prevent matching an output flag.
+     FCFLAGS="$ac_fc_module_flag_FCFLAGS_save ${ac_flag}conftest.dir ${ac_flag}conftest.dir"
+     cat > conftest.$ac_ext <<_ACEOF
+
+      program main
+      use conftest_module
+      call conftest_routine
+      end program
+_ACEOF
+if ac_fn_fc_try_compile "$LINENO"; then :
+  ac_cv_fc_module_flag="$ac_flag"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+     if test "$ac_cv_fc_module_flag" != unknown; then
+       break
+     fi
+   done
+   FCFLAGS=$ac_fc_module_flag_FCFLAGS_save
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -rf conftest.dir
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_fc_module_flag" >&5
+$as_echo "$ac_cv_fc_module_flag" >&6; }
+if test "$ac_cv_fc_module_flag" != unknown; then
+  FC_MODINC=$ac_cv_fc_module_flag
+
+else
+  FC_MODINC=
+  as_fn_error $? "unable to find compiler flag for module search path" "$LINENO" 5
+fi
+
+# Ensure trailing whitespace is preserved in a Makefile.
+ac_empty=""
+
+
+
 for i in amd intel pgi pathscale sun llvm g95 ibm gnu cray; do
  if test "x${FC_VENDOR:+set}" = xset ; then break; fi
  case "x${i}" in
@@ -5604,6 +5683,9 @@ LIBOBJS=$ac_libobjs
 LTLIBOBJS=$ac_ltlibobjs
 
 
+case $FC_MODINC in #(
+  *\ ) FC_MODINC=$FC_MODINC'${ac_empty}' ;;
+esac
 
 : "${CONFIG_STATUS=./config.status}"
 ac_write_fail=0
@@ -6188,6 +6270,7 @@ do
     "config.mk") CONFIG_FILES="$CONFIG_FILES config.mk:src/configure/config.mk.in" ;;
     "src/ppidd.h") CONFIG_FILES="$CONFIG_FILES src/ppidd.h" ;;
     "src/ppidd_module.F") CONFIG_FILES="$CONFIG_FILES src/ppidd_module.F" ;;
+    "ppidd-config") CONFIG_FILES="$CONFIG_FILES ppidd-config" ;;
     "src/ppidd_config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/ppidd_config.h:src/configure/ppidd_config.h.in" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -6778,6 +6861,11 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "ppidd-config":F) chmod +x ppidd-config ;;
+
+  esac
 done # for ac_tag
 
 

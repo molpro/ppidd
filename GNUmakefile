@@ -23,6 +23,8 @@ endif
 
 .PHONY: install
 install: default
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) ppidd-config $(DESTDIR)$(bindir)
 	$(INSTALL) -d $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) libppidd.a $(DESTDIR)$(libdir)
 	$(INSTALL) -d $(DESTDIR)$(includedir)

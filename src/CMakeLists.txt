@@ -19,10 +19,10 @@ if (PPIDD-GA)
         include(FetchContent)
         FetchContent_Declare(
                 ga
-                #        GIT_REPOSITORY https://github.com/GlobalArrays/ga
-                #        GIT_TAG v5.7
-                GIT_REPOSITORY https://github.com/pjknowles/ga
-                GIT_TAG c270f091
+                GIT_REPOSITORY https://github.com/GlobalArrays/ga
+                GIT_TAG 2518e23433385bfa3726d507b8cd0d7ed038021b
+                #                GIT_REPOSITORY https://github.com/pjknowles/ga
+                #                GIT_TAG c270f091
         )
         FetchContent_MakeAvailable(ga)
     endif (ga-config)

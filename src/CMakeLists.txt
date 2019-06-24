@@ -68,9 +68,32 @@ target_compile_features(ppidd PRIVATE cxx_constexpr)
 target_compile_options(ppidd PRIVATE $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:AppleClang>>:-Wall>)
 target_compile_definitions(ppidd PRIVATE HAVE_MPI_H)
 target_link_libraries(ppidd PUBLIC MPI::MPI_CXX)
-target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(ppidd PUBLIC ${CMAKE_CURRENT_BINARY_DIR}) # For Fortran modules
+target_include_directories(ppidd PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_Fortran_MODULE_DIRECTORY}>
+        $<INSTALL_INTERFACE:include>
+        )
 add_library(ppidd::ppidd ALIAS ppidd)
+install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ DESTINATION include)
+install(TARGETS ppidd EXPORT ppiddTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        INCLUDES DESTINATION include
+        PUBLIC_HEADER DESTINATION include
+        )
+install(EXPORT ppiddTargets
+        FILE ppiddTargets.cmake
+        NAMESPACE ppidd::
+        DESTINATION lib/cmake/ppidd)
+include(CMakePackageConfigHelpers)
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfig.cmake"
+        "include CMakeFindDependencyMacro)
+        find_dependency(MPI)
+        include(\"\${CMAKE_CURRENT_LIST_DIR}/ppiddTargets.cmake\")
+        ")
+write_basic_package_version_file("ppiddConfigVersion.cmake" VERSION 1.0 COMPATIBILITY SameMajorVersion)
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfigVersion.cmake" DESTINATION lib/cmake/ppidd)
 
 find_package(Doxygen)
 if (DOXYGEN_FOUND)

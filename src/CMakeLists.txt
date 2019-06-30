@@ -42,13 +42,13 @@ add_library(ppidd
         ppidd_prototypes.h mpi_utils.cpp mpiga_base.cpp
         mpi_nxtval.cpp mpimutex-hybrid.cpp mpi_helpmutex.cpp)
 if (PPIDD-GA)
-    target_sources(ppidd PUBLIC ppidd_ga_mpi.h ppidd_ga_mpi.cpp)
+    target_sources(ppidd PRIVATE ppidd_ga_mpi.h ppidd_ga_mpi.cpp)
     target_compile_definitions(ppidd PRIVATE HAVE_GA_H)
     target_link_libraries(ppidd PUBLIC ga::ga)
 endif ()
 if (CMAKE_Fortran_COMPILER_ID)
     configure_file(ppidd_module.F.in ${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F)
-    target_sources(ppidd PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F")
+    target_sources(ppidd PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F")
 endif ()
 
 if (INTEGER8)

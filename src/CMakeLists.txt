@@ -82,6 +82,14 @@ install(TARGETS ppidd EXPORT ppiddTargets
         INCLUDES DESTINATION include
         PUBLIC_HEADER DESTINATION include
         )
+if (PPIDD-GA)
+    install(TARGETS ga EXPORT ppiddTargets
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
+            INCLUDES DESTINATION include
+            PUBLIC_HEADER DESTINATION include
+            )
+endif ()
 install(EXPORT ppiddTargets
         FILE ppiddTargets.cmake
         NAMESPACE ppidd::

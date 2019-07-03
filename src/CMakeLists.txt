@@ -83,15 +83,17 @@ install(TARGETS ppidd EXPORT ppiddTargets
         PUBLIC_HEADER DESTINATION include
         )
 if (PPIDD-GA)
-    foreach (t ga ga_src dra eaf elio sf linalg)
-        message("Export target ${t}")
-        install(TARGETS ${t} EXPORT ppiddTargets
-                LIBRARY DESTINATION lib
-                ARCHIVE DESTINATION lib
-                INCLUDES DESTINATION include
-                PUBLIC_HEADER DESTINATION include
-                )
-    endforeach ()
+    if (NOT ga-config)
+        foreach (t ga ga_src dra eaf elio sf linalg)
+            message("Export target ${t}")
+            install(TARGETS ${t} EXPORT ppiddTargets
+                    LIBRARY DESTINATION lib
+                    ARCHIVE DESTINATION lib
+                    INCLUDES DESTINATION include
+                    PUBLIC_HEADER DESTINATION include
+                    )
+        endforeach ()
+    endif ()
 endif ()
 install(EXPORT ppiddTargets
         FILE ppiddTargets.cmake

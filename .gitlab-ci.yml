@@ -1,14 +1,11 @@
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths: # cache everything so that unnecessary recompilation is avoided
-    - lib
-    - doc
     - src
-    - testjobs
-    - utilities
+    - test
     - CMakeLists.txt
-    - tuning.com
     - build
+    - ppidd-config.in
 job:
   image: pjknowles/opensuse
   script:

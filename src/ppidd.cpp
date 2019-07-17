@@ -29,7 +29,6 @@ extern "C" {
     - For \b GA, includes initialization of MPI and GA.
     - For \b MPI2, calls MPI_Init. */
    void PPIDD_Initialize(int *argc, char ***argv, int impl) {
-     fprintf(stderr,"PPIDD_Initialize impl=%d\n",impl);
     switch (impl) {
      case (ppidd_impl_ga_mpi):
      case (ppidd_impl_mpi2):

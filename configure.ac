@@ -7,8 +7,12 @@ AC_CONFIG_FILES([ppidd-config],[chmod +x ppidd-config])
 AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
 AC_CONFIG_AUX_DIR([src/configure])
 
+AC_CONFIG_LINKS([GNUmakefile:GNUmakefile src/GNUmakefile:src/GNUmakefile])
+
 AC_CANONICAL_BUILD()
 AC_CANONICAL_HOST()
+
+AC_SUBST([ppidd_srcdir],["`cd ${srcdir}; /bin/pwd`"])
 
 dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_CXX_PP_TEST],[

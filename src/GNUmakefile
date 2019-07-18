@@ -1,6 +1,7 @@
 include ../config.mk
+VPATH=$(ppidd_srcdir)/src
 
-OBJECTS=$(addsuffix .o,$(basename $(wildcard *.cpp)))
+OBJECTS=$(notdir $(addsuffix .o,$(basename $(wildcard $(VPATH)/*.cpp))))
 ifneq ($(FC),)
 OBJECTS+=ppidd_module.o
 endif
@@ -9,7 +10,7 @@ endif
 default: $(OBJECTS)
 
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) -c $(CXXFLAGS) $<
+	$(CXX) $(CPPFLAGS) -I. -c $(CXXFLAGS) $<
 
 %.o: %.F
 	$(FC) -c $(FCFLAGS) $<

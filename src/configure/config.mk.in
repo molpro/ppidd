@@ -4,6 +4,8 @@ bindir=@bindir@
 includedir=@includedir@
 libdir=@libdir@
 
+ppidd_srcdir=@ppidd_srcdir@
+
 AR=@AR@
 ARFLAGS=@ARFLAGS@
 CXX=@CXX@

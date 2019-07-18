@@ -647,6 +647,7 @@ DOXYGEN
 ARFLAGS
 AR
 enable_fortran
+ppidd_srcdir
 host_os
 host_vendor
 host_cpu
@@ -2395,6 +2396,9 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 
+ac_config_links="$ac_config_links GNUmakefile:GNUmakefile src/GNUmakefile:src/GNUmakefile"
+
+
 # Make sure we can run config.sub.
 $SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
   as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
@@ -2465,6 +2469,9 @@ host_os=$*
 IFS=$ac_save_IFS
 case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
+
+
+ppidd_srcdir="`cd ${srcdir}; /bin/pwd`"
 
 
 
@@ -6110,6 +6117,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # Files that config.status was made for.
 config_files="$ac_config_files"
 config_headers="$ac_config_headers"
+config_links="$ac_config_links"
 
 _ACEOF
 
@@ -6138,6 +6146,9 @@ $config_files
 
 Configuration headers:
 $config_headers
+
+Configuration links:
+$config_links
 
 Report bugs to the package provider."
 
@@ -6272,6 +6283,8 @@ do
     "src/ppidd_module.F") CONFIG_FILES="$CONFIG_FILES src/ppidd_module.F" ;;
     "ppidd-config") CONFIG_FILES="$CONFIG_FILES ppidd-config" ;;
     "src/ppidd_config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/ppidd_config.h:src/configure/ppidd_config.h.in" ;;
+    "GNUmakefile") CONFIG_LINKS="$CONFIG_LINKS GNUmakefile:GNUmakefile" ;;
+    "src/GNUmakefile") CONFIG_LINKS="$CONFIG_LINKS src/GNUmakefile:src/GNUmakefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -6285,6 +6298,7 @@ done
 if $ac_need_defaults; then
   test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
   test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
+  test "${CONFIG_LINKS+set}" = set || CONFIG_LINKS=$config_links
 fi
 
 # Have a temporary directory for convenience.  Make it in the build tree
@@ -6615,7 +6629,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 fi # test -n "$CONFIG_HEADERS"
 
 
-eval set X "  :F $CONFIG_FILES  :H $CONFIG_HEADERS    "
+eval set X "  :F $CONFIG_FILES  :H $CONFIG_HEADERS  :L $CONFIG_LINKS  "
 shift
 for ac_tag
 do
@@ -6857,7 +6871,38 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
       || as_fn_error $? "could not create -" "$LINENO" 5
   fi
  ;;
+  :L)
+  #
+  # CONFIG_LINK
+  #
 
+  if test "$ac_source" = "$ac_file" && test "$srcdir" = '.'; then
+    :
+  else
+    # Prefer the file from the source tree if names are identical.
+    if test "$ac_source" = "$ac_file" || test ! -r "$ac_source"; then
+      ac_source=$srcdir/$ac_source
+    fi
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: linking $ac_source to $ac_file" >&5
+$as_echo "$as_me: linking $ac_source to $ac_file" >&6;}
+
+    if test ! -r "$ac_source"; then
+      as_fn_error $? "$ac_source: file not found" "$LINENO" 5
+    fi
+    rm -f "$ac_file"
+
+    # Try a relative symlink, then a hard link, then a copy.
+    case $ac_source in
+    [\\/$]* | ?:[\\/]* ) ac_rel_source=$ac_source ;;
+	*) ac_rel_source=$ac_top_build_prefix$ac_source ;;
+    esac
+    ln -s "$ac_rel_source" "$ac_file" 2>/dev/null ||
+      ln "$ac_source" "$ac_file" 2>/dev/null ||
+      cp -p "$ac_source" "$ac_file" ||
+      as_fn_error $? "cannot link or copy $ac_source to $ac_file" "$LINENO" 5
+  fi
+ ;;
 
   esac
 

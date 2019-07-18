@@ -155,8 +155,8 @@ if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
 fi
 
 AC_SUBST_FILE(PPIDD_DEFINES_H)
-PPIDD_DEFINES_H="src/ppidd_defines.h"
+PPIDD_DEFINES_H="${ppidd_srcdir}/src/ppidd_defines.h"
 AC_SUBST_FILE(PPIDD_PROTOTYPES_H)
-PPIDD_PROTOTYPES_H="src/ppidd_prototypes.h"
+PPIDD_PROTOTYPES_H="${ppidd_srcdir}/src/ppidd_prototypes.h"
 
 AC_OUTPUT()

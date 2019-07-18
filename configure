@@ -5577,9 +5577,9 @@ done
 fi
 
 
-PPIDD_DEFINES_H="src/ppidd_defines.h"
+PPIDD_DEFINES_H="${ppidd_srcdir}/src/ppidd_defines.h"
 
-PPIDD_PROTOTYPES_H="src/ppidd_prototypes.h"
+PPIDD_PROTOTYPES_H="${ppidd_srcdir}/src/ppidd_prototypes.h"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

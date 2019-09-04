@@ -76,9 +76,7 @@ test "x${RANLIB}" = "x:" && RANLIB="true"
 AC_PROG_INSTALL()
 
 AC_PROG_CXX()
-AC_PATH_PROG(CXX,${CXX})
-m4_include([src/configure/ax_cxx_compile_stdcxx.m4])
-PPIDD_CXX_PP_TEST([if CXX is cray],[defined(_CRAYC)],,[AX_CXX_COMPILE_STDCXX([11])])
+PPIDD_CXX_PP_TEST([if CXX is at least C++11 standard],[__cplusplus >= 201103L],,[AC_MSG_ERROR([require at least C++11 standard compiler])])
 
 if test "x${enable_nxtval}" = xno ; then
  AC_MSG_NOTICE([Helper process will not be compiled; PPIDD_Nxtval will be disabled])
@@ -87,7 +85,6 @@ fi
 
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()
-AC_PATH_PROG(FC,${FC})
 m4_include([src/configure/may_fc_module_filename_format.m4])
 MAY_FC_MODULE_FILENAME_FORMAT()
 AC_FC_MODULE_FLAG()

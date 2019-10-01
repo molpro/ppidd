@@ -2359,7 +2359,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-ac_config_files="$ac_config_files config.mk:src/configure/config.mk.in src/ppidd.h src/ppidd_module.F"
+ac_config_files="$ac_config_files config.mk:src/configure/config.mk.in src/ppidd.h src/ppidd_module.F90"
 
 ac_config_files="$ac_config_files ppidd-config"
 
@@ -5454,7 +5454,7 @@ do
   case $ac_config_target in
     "config.mk") CONFIG_FILES="$CONFIG_FILES config.mk:src/configure/config.mk.in" ;;
     "src/ppidd.h") CONFIG_FILES="$CONFIG_FILES src/ppidd.h" ;;
-    "src/ppidd_module.F") CONFIG_FILES="$CONFIG_FILES src/ppidd_module.F" ;;
+    "src/ppidd_module.F90") CONFIG_FILES="$CONFIG_FILES src/ppidd_module.F90" ;;
     "ppidd-config") CONFIG_FILES="$CONFIG_FILES ppidd-config" ;;
     "src/ppidd_config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/ppidd_config.h:src/configure/ppidd_config.h.in" ;;
     "GNUmakefile") CONFIG_LINKS="$CONFIG_LINKS GNUmakefile:GNUmakefile" ;;

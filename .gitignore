@@ -10,7 +10,7 @@ config.mk
 ppidd-config
 src/ppidd.h
 src/ppidd_config.h
-src/ppidd_module.F
+src/ppidd_module.F90
 cmake-build-*/
 build*/
 .idea/

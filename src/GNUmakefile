@@ -12,5 +12,5 @@ default: $(OBJECTS)
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS) -I. -c $(CXXFLAGS) $<
 
-%.o: %.F
+%.o: %.F90
 	$(FC) -c $(FCFLAGS) $<

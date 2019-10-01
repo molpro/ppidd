@@ -3,7 +3,7 @@ include config.mk
 .PHONY: default
 default: libppidd.a
 
-libppidd.a: $(wildcard src/*.cpp src/*.h src/*.F)
+libppidd.a: $(wildcard src/*.cpp src/*.h src/*.F90)
 	@$(MAKE) -C src
 	@rm -f $@
 	@$(AR) $(ARFLAGS) $@ src/*.o

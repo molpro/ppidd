@@ -4,7 +4,7 @@
       use iso_c_binding
 
       integer(c_int), parameter :: PPIDD_FORTINT=0
-      integer(c_int), parameter :: PPIDD_DOUBLE =0
+      integer(c_int), parameter :: PPIDD_DOUBLE =1
 
       integer(c_int), parameter :: PPIDD_IMPL_NO_MPI =1
       integer(c_int), parameter :: PPIDD_IMPL_GA_MPI =2

@@ -1,3 +1,5 @@
+image: ${CI_REGISTRY}/molpro/docker
+
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths: # cache everything so that unnecessary recompilation is avoided
@@ -7,7 +9,6 @@ cache:
     - build
     - ppidd-config.in
 job:
-  image: pjknowles/opensuse
   script:
     - procs=$(lscpu -p | egrep -v '^#' | wc -l); echo $procs processors available
     - TOP=$PWD

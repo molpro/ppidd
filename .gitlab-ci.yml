@@ -20,7 +20,7 @@ autoconf_ga:
   script:
     - ./configure --with-ga CXX=mpicxx
     - make
-    - make test
+    - make test LIBS="-lga -larmci"
     - mpiexec -np 4 --allow-run-as-root test/ppidd_ctest.exe
 
 autoconf_mpi2:

@@ -16,9 +16,16 @@ cmake_mpi2:
     - cmake --build . -- -j 1
     - ctest -V
 
+autoconf_ga:
+  script:
+    - ./configure --with-ga CXX=mpicxx
+    - make
+    - make test
+    - mpiexec -np 4 --allow-run-as-root test/ppidd_ctest.exe
+
 autoconf_mpi2:
   script:
-    - ./configure --without-ga
+    - ./configure --with-mpi2 CXX=mpicxx
     - make
     - make test
     - mpiexec -np 4 --allow-run-as-root test/ppidd_ctest.exe

@@ -755,7 +755,7 @@ int NXTVAL(int *mproc)
 */
 {
   int  type = NXTVALFLAG;
-  int  buf,val_recv;
+  FORTINT  buf,val_recv;
   int  local=0;
   MPI_Status status;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
@@ -787,7 +787,7 @@ int NXTVAL(int *mproc)
            MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
          }
        }
-       return val_recv;
+       return (int)val_recv;
     }
   }
   else {

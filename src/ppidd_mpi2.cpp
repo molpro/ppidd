@@ -271,13 +271,15 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
-      int mpicount=(int)*count;
       int mpiroot=(int)*root;
 
       MPI_Datatype mpidtype=dtype_mpi(dtype);
 
-      int mpierr=MPI_Bcast(buffer,mpicount,mpidtype,mpiroot,mpiga_compute_comm());
-      mpi_test_status("PPIDD_BCast:",mpierr);
+      char *cbuf=(char *)buffer;
+      for (int64_t remaining=*count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE) {
+       int mpierr=MPI_Bcast(&cbuf[addr*dtype_size(dtype)],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),mpidtype,mpiroot,mpiga_compute_comm());
+       mpi_test_status("PPIDD_BCast:",mpierr);
+      }
    }
 
 

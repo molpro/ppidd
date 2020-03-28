@@ -24,6 +24,9 @@ if (PPIDD-GA)
                 #                GIT_REPOSITORY https://github.com/pjknowles/ga
                 #                GIT_TAG c270f091
         )
+        if (PPIDD_FORTRAN)
+            set(ENABLE_FORTRAN ON)
+        endif ()
         FetchContent_MakeAvailable(ga)
     endif (ga-config)
 else ()
@@ -41,6 +44,7 @@ add_library(ppidd
         ppidd_no_mpi.cpp
         ppidd_prototypes.h mpi_utils.cpp mpiga_base.cpp
         mpi_nxtval.cpp mpimutex-hybrid.cpp mpi_helpmutex.cpp)
+target_compile_definitions(ppidd PRIVATE BCAST_BATCH_SIZE=134217728)
 if (PPIDD-GA)
     target_sources(ppidd PRIVATE ppidd_ga_mpi.h ppidd_ga_mpi.cpp)
     target_compile_definitions(ppidd PRIVATE HAVE_GA_H)

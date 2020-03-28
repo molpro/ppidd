@@ -9,4 +9,6 @@
 
 #undef FORTINT
 
+#define BCAST_BATCH_SIZE 134217728
+
 #endif

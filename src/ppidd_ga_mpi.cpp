@@ -267,10 +267,10 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
-      int gacount=(int)*count;
       int garoot=(int)*root;
-      int galenbuf = gacount * dtype_size(dtype);
-      GA_Brdcst(buffer, galenbuf, garoot);
+      char *cbuf=(char *)buffer;
+      for (int64_t remaining=*count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE)
+       GA_Brdcst(&cbuf[addr*dtype_size(dtype)], (int)(std::min((int64_t)BCAST_BATCH_SIZE,remaining)*dtype_size(dtype)) , garoot);
    }
 
 

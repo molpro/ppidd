@@ -49,7 +49,7 @@
     documentation precompiled. If you should choose to recompile, then
     the doxygen program is required.
 
-    make doc
+    doxygen src/Doxyfile
 
  5. Directory and file structure
 

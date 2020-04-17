@@ -36,3 +36,18 @@ autoconf_serial:
     - make
     - make test
     - ./test/ppidd_ctest.exe
+
+pages:
+  only:
+    variables:
+      - $CI_PROJECT_NAMESPACE == "molpro" && $CI_COMMIT_REF_NAME == "master"
+  script:
+    - ./configure
+    - doxygen src/Doxyfile
+    - mkdir public
+    - mv doc public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 hr
+

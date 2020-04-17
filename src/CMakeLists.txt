@@ -111,21 +111,3 @@ file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfig.cmake"
         ")
 write_basic_package_version_file("ppiddConfigVersion.cmake" VERSION 1.0 COMPATIBILITY SameMajorVersion)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfigVersion.cmake" DESTINATION lib/cmake/ppidd)
-
-find_package(Doxygen)
-if (DOXYGEN_FOUND)
-    add_custom_target(${PROJECT_NAME}-doc ALL
-            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
-            )
-    get_property(SOURCES TARGET ppidd PROPERTY SOURCES)
-    string(REPLACE ";/" " /" SOURCE1 "${SOURCES}")
-    string(REPLACE ";" " ${CMAKE_CURRENT_SOURCE_DIR}/" SOURCE "${SOURCE1}")
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-            DEPENDS ${SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating API documentation with Doxygen" VERBATIM
-            )
-endif (DOXYGEN_FOUND)
-

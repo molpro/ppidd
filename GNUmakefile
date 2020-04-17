@@ -13,14 +13,6 @@ libppidd.a: $(wildcard src/*.cpp src/*.h src/*.F90)
 test: libppidd.a
 	@$(MAKE) -C $@
 
-.PHONY: doc
-doc:
-ifdef DOXYGEN
-	@$(DOXYGEN) src/Doxyfile 1>$@.log
-else
-	@echo 'doxygen does not appear to be installed'
-endif
-
 .PHONY: install
 install: default
 	$(INSTALL) -d $(DESTDIR)$(bindir)

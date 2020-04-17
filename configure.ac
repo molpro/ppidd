@@ -70,7 +70,6 @@ AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="
 
 AC_CHECK_TOOL([AR], [ar])
 AC_SUBST(ARFLAGS,"-rS")
-AC_PATH_PROG(DOXYGEN,doxygen)
 AC_PROG_RANLIB()
 test "x${RANLIB}" = "x:" && RANLIB="true"
 AC_PROG_INSTALL()

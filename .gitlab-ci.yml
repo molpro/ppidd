@@ -38,11 +38,11 @@ autoconf_serial:
     - ./test/ppidd_ctest.exe
 
 pages:
+  image: ${CI_REGISTRY}/molpro/docker:doxygen
   only:
     variables:
       - $CI_PROJECT_NAMESPACE == "molpro" && $CI_COMMIT_REF_NAME == "master"
   script:
-    - ./configure
     - doxygen src/Doxyfile
     - mkdir public
     - mv doc public/

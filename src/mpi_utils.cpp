@@ -129,7 +129,7 @@ extern "C" size_t dtype_size(int dtype) {
   default:
    MPIGA_Error(" dtype_size: wrong data type ",dtype);
  }
- return -1;
+ return 0;
 }
 
 extern "C" MPI_Datatype dtype_mpi(int dtype) {

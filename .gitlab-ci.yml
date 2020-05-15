@@ -21,14 +21,14 @@ autoconf_ga:
     - ./configure --with-ga CXX=mpicxx
     - make
     - make test LIBS="-lga -larmci"
-    - mpiexec -np 4 --allow-run-as-root test/ppidd_ctest.exe
+    - mpiexec -np 4 --allow-run-as-root --oversubscribe test/ppidd_ctest.exe
 
 autoconf_mpi2:
   script:
     - ./configure --with-mpi2 CXX=mpicxx
     - make
     - make test
-    - mpiexec -np 4 --allow-run-as-root test/ppidd_ctest.exe
+    - mpiexec -np 4 --allow-run-as-root --oversubscribe test/ppidd_ctest.exe
 
 autoconf_serial:
   script:

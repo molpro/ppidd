@@ -26,44 +26,9 @@ $3],
 [AC_MSG_RESULT([no])
 $4])])
 
-dnl msg,test,[true],[false]
-AC_DEFUN([PPIDD_FC_PP_TEST],[
-AC_MSG_CHECKING([$1])
-AC_LANG_PUSH([Fortran])
-AC_LANG_CASE([Fortran],[ac_ext=F])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,[[#if $2
-#else
-      choke me
-#endif]])],
-[AC_MSG_RESULT([yes])
-$3],
-[AC_MSG_RESULT([no])
-$4])
-AC_LANG_POP([Fortran])
-])
-
-AC_DEFUN([PPIDD_FC_VENDOR],[
-for i in amd intel pgi pathscale sun llvm g95 ibm gnu cray; do
- if test "x${FC_VENDOR:+set}" = xset ; then break; fi
- case "x${i}" in
-  xamd       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__OPEN64__)],[FC_VENDOR="${i}"]) ;;
-  xcray      ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(_CRAYFTN)],[FC_VENDOR="${i}"]) ;;
-  xg95       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__G95__)],[FC_VENDOR="${i}"]) ;;
-  xgnu       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__GFORTRAN__)],[FC_VENDOR="${i}"]) ;;
-  xibm       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__xlc__) || defined(__xlC__)],[FC_VENDOR="${i}"]) ;;
-  xintel     ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__INTEL_COMPILER)],[FC_VENDOR="${i}"]) ;;
-  xllvm      ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__FLANG)],[FC_VENDOR="${i}"]) ;;
-  xpathscale ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PATHSCALE__)],[FC_VENDOR="${i}"]) ;;
-  xpgi       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__PGI)],[FC_VENDOR="${i}"]) ;;
-  xsun       ) PPIDD_FC_PP_TEST([if FC is ${i}],[defined(__SUNPRO_F90)],[FC_VENDOR="${i}"]) ;;
-  *          ) AC_MSG_ERROR([unknown vendor '${i}']) ;;
- esac
-done
-test "x${FC_VENDOR:+set}" = xset || AC_MSG_WARN([unable to determine FC_VENDOR])
-])
-
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
 AC_SUBST(enable_fortran)
+AC_ARG_ENABLE(fortran-int64,[AS_HELP_STRING([--enable-fortran-int64],[specify Fortran integer size as 64-bit])],[fortran_integer="8"],[fortran_integer="4"])
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])
@@ -87,39 +52,18 @@ AC_PROG_FC()
 m4_include([src/configure/may_fc_module_filename_format.m4])
 MAY_FC_MODULE_FILENAME_FORMAT()
 AC_FC_MODULE_FLAG()
-PPIDD_FC_VENDOR()
-AC_ARG_ENABLE(fortran-integer,[AS_HELP_STRING([--enable-fortran-integer=4|8],[specify Fortran integer size])],,[enable_fortran_integer="4"])
-case "x${enable_fortran_integer}" in
- x4 ) true ;;
- x8 ) case "x${FC_VENDOR}" in
-       xamd       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xcray      ) FCFLAGS="${FCFLAGS} -s integer64" ;;
-       xg95       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xgnu       ) FCFLAGS="${FCFLAGS} -fdefault-integer-8" ;;
-       xibm       ) FCFLAGS="${FCFLAGS} -qintsize=8" ;;
-       xintel     ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xllvm      ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xpathscale ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xpgi       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xsun       ) FCFLAGS="${FCFLAGS} -xtypemap=integer:64" ;;
-       x*         ) AC_MSG_WARN([unable to determine flag for 8-byte Fortran integers, check FCFLAGS set correctly]);;
-      esac ;;
- x* ) AC_MSG_ERROR([illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option]) ;;
-esac
 else
-dnl assume Fortran standard if compiling without Fortran compiler
-enable_fortran_integer="4"
 FC=""
 fi
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([long long])
 
-if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
+if test "x${ac_cv_sizeof_int}" = "x${fortran_integer}" ; then
  AC_DEFINE([FORTINT],[int])
-elif test "x${ac_cv_sizeof_long}" = "x${enable_fortran_integer}" ; then
+elif test "x${ac_cv_sizeof_long}" = "x${fortran_integer}" ; then
  AC_DEFINE([FORTINT],[long])
-elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
+elif test "x${ac_cv_sizeof_long_long}" = "x${fortran_integer}" ; then
  AC_DEFINE([FORTINT],[long long])
 else
  AC_MSG_ERROR([Problem determining FORTINT])

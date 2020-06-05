@@ -697,10 +697,10 @@ PPIDD_PROTOTYPES_H'
 ac_user_opts='
 enable_option_checking
 enable_fortran
+enable_fortran_int64
 with_ga
 enable_nxtval
 with_mpi2
-enable_fortran_integer
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1328,9 +1328,8 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-fortran        build Fortran interface
+  --enable-fortran-int64  specify Fortran integer size as 64-bit
   --disable-nxtval        disable the helper process (PPIDD_Nxtval)
-  --enable-fortran-integer=4|8
-                          specify Fortran integer size
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2474,15 +2473,18 @@ ppidd_srcdir="`cd ${srcdir}; /bin/pwd`"
 
 
 
-
-
-
-
 # Check whether --enable-fortran was given.
 if test "${enable_fortran+set}" = set; then :
   enableval=$enable_fortran;
 fi
 
+
+# Check whether --enable-fortran-int64 was given.
+if test "${enable_fortran_int64+set}" = set; then :
+  enableval=$enable_fortran_int64; fortran_integer="8"
+else
+  fortran_integer="4"
+fi
 
 
 # Check whether --with-ga was given.
@@ -3735,383 +3737,7 @@ fi
 ac_empty=""
 
 
-
-for i in amd intel pgi pathscale sun llvm g95 ibm gnu cray; do
- if test "x${FC_VENDOR:+set}" = xset ; then break; fi
- case "x${i}" in
-  xamd       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__OPEN64__)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xcray      )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(_CRAYFTN)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xg95       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__G95__)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xgnu       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__GFORTRAN__)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xibm       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__xlc__) || defined(__xlC__)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xintel     )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__INTEL_COMPILER)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xllvm      )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__FLANG)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xpathscale )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__PATHSCALE__)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xpgi       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__PGI)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  xsun       )
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if FC is ${i}" >&5
-$as_echo_n "checking if FC is ${i}... " >&6; }
-ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&5'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
-
-ac_ext=F
-cat > conftest.$ac_ext <<_ACEOF
-      program main
-#if defined(__SUNPRO_F90)
-#else
-      choke me
-#endif
-      end
-_ACEOF
-if ac_fn_fc_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-FC_VENDOR="${i}"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
- ;;
-  *          ) as_fn_error $? "unknown vendor '${i}'" "$LINENO" 5 ;;
- esac
-done
-test "x${FC_VENDOR:+set}" = xset || { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unable to determine FC_VENDOR" >&5
-$as_echo "$as_me: WARNING: unable to determine FC_VENDOR" >&2;}
-
-# Check whether --enable-fortran-integer was given.
-if test "${enable_fortran_integer+set}" = set; then :
-  enableval=$enable_fortran_integer;
-else
-  enable_fortran_integer="4"
-fi
-
-case "x${enable_fortran_integer}" in
- x4 ) true ;;
- x8 ) case "x${FC_VENDOR}" in
-       xamd       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xcray      ) FCFLAGS="${FCFLAGS} -s integer64" ;;
-       xg95       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xgnu       ) FCFLAGS="${FCFLAGS} -fdefault-integer-8" ;;
-       xibm       ) FCFLAGS="${FCFLAGS} -qintsize=8" ;;
-       xintel     ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xllvm      ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xpathscale ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xpgi       ) FCFLAGS="${FCFLAGS} -i8" ;;
-       xsun       ) FCFLAGS="${FCFLAGS} -xtypemap=integer:64" ;;
-       x*         ) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unable to determine flag for 8-byte Fortran integers, check FCFLAGS set correctly" >&5
-$as_echo "$as_me: WARNING: unable to determine flag for 8-byte Fortran integers, check FCFLAGS set correctly" >&2;};;
-      esac ;;
- x* ) as_fn_error $? "illegal value (${enable_fortran_integer}) given via --enable-fortran-integer option" "$LINENO" 5 ;;
-esac
-else
-enable_fortran_integer="4"
 FC=""
 fi
 ac_ext=cpp
@@ -4607,13 +4233,13 @@ _ACEOF
 
 
 
-if test "x${ac_cv_sizeof_int}" = "x${enable_fortran_integer}" ; then
+if test "x${ac_cv_sizeof_int}" = "x${fortran_integer}" ; then
  $as_echo "#define FORTINT int" >>confdefs.h
 
-elif test "x${ac_cv_sizeof_long}" = "x${enable_fortran_integer}" ; then
+elif test "x${ac_cv_sizeof_long}" = "x${fortran_integer}" ; then
  $as_echo "#define FORTINT long" >>confdefs.h
 
-elif test "x${ac_cv_sizeof_long_long}" = "x${enable_fortran_integer}" ; then
+elif test "x${ac_cv_sizeof_long_long}" = "x${fortran_integer}" ; then
  $as_echo "#define FORTINT long long" >>confdefs.h
 
 else

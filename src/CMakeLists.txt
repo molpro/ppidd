@@ -72,12 +72,17 @@ target_include_directories(ppidd PUBLIC
         $<INSTALL_INTERFACE:include>
         )
 add_library(ppidd::ppidd ALIAS ppidd)
-install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ DESTINATION include)
+if (CMAKE_Fortran_MODULE_DIRECTORY)
+    install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ DESTINATION include)
+endif ()
 install(TARGETS ppidd EXPORT ppiddTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         INCLUDES DESTINATION include
         PUBLIC_HEADER DESTINATION include
+        )
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/ppidd.h" ppidd_defines.h ppidd_prototypes.h
+        DESTINATION include
         )
 if (PPIDD-GA)
     if (NOT ga-config)

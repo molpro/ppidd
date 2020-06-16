@@ -5,30 +5,32 @@ endif (NOT MPI_FOUND)
 if (PPIDD-GA)
     message("Building PPIDD on Global Arrays")
     set(PPIDD_IMPL_DEFAULT 2)
-    find_program(ga-config ga-config)
-    if (ga-config)
-        foreach (f cflags cppflags ldflags libs)
-            execute_process(COMMAND ${ga-config} --${f} OUTPUT_VARIABLE ga-${f})
-            string(STRIP "${ga-${f}}" ga-${f})
-        endforeach ()
-        add_library(ga::ga INTERFACE IMPORTED GLOBAL)
-        target_link_libraries(ga::ga INTERFACE ${ga-libs})
-        target_link_options(ga::ga INTERFACE ${ga-ldflags})
-        target_compile_options(ga::ga INTERFACE ${ga-cflags} ${ga-cppflags})
-    else (ga-config)
-        include(FetchContent)
-        FetchContent_Declare(
-                ga
-                GIT_REPOSITORY https://github.com/GlobalArrays/ga
-                GIT_TAG 2518e23433385bfa3726d507b8cd0d7ed038021b
-                #                GIT_REPOSITORY https://github.com/pjknowles/ga
-                #                GIT_TAG c270f091
-        )
-        if (PPIDD_FORTRAN)
-            set(ENABLE_FORTRAN ON)
-        endif ()
-        FetchContent_MakeAvailable(ga)
-    endif (ga-config)
+    if (NOT TARGET ga::ga)
+        find_program(ga-config ga-config)
+        if (ga-config)
+            foreach (f cflags cppflags ldflags libs)
+                execute_process(COMMAND ${ga-config} --${f} OUTPUT_VARIABLE ga-${f})
+                string(STRIP "${ga-${f}}" ga-${f})
+            endforeach ()
+            add_library(ga::ga INTERFACE IMPORTED GLOBAL)
+            target_link_libraries(ga::ga INTERFACE ${ga-libs})
+            target_link_options(ga::ga INTERFACE ${ga-ldflags})
+            target_compile_options(ga::ga INTERFACE ${ga-cflags} ${ga-cppflags})
+        else (ga-config)
+            include(FetchContent)
+            FetchContent_Declare(
+                    ga
+                    GIT_REPOSITORY https://github.com/GlobalArrays/ga
+                    GIT_TAG 2518e23433385bfa3726d507b8cd0d7ed038021b
+                    #                GIT_REPOSITORY https://github.com/pjknowles/ga
+                    #                GIT_TAG c270f091
+            )
+            if (PPIDD_FORTRAN)
+                set(ENABLE_FORTRAN ON)
+            endif ()
+            FetchContent_MakeAvailable(ga)
+        endif (ga-config)
+    endif ()
 else ()
     message("Building PPIDD on pure MPI")
     set(PPIDD_IMPL_DEFAULT 3)

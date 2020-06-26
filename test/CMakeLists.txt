@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.11)
 
 add_executable(ppidd_ctest ppidd_ctest.cpp)
 target_link_libraries(ppidd_ctest PRIVATE ppidd::ppidd)
+find_library(GFORTRAN_LIBRARY NAMES gfortran)
+if (GFORTRAN_LIBRARY)
+    message(STATUS "gfortran library: ${GFORTRAN_LIBRARY}")
+    target_link_libraries(ppidd_ctest PRIVATE ${GFORTRAN_LIBRARY})
+endif ()
 add_test(NAME ppidd_ctest COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ppidd_ctest)
 
 if (CMAKE_Fortran_COMPILER_ID)

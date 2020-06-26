@@ -28,7 +28,7 @@ if (PPIDD-GA)
                     #                GIT_TAG c270f091
             )
             if (FORTRAN)
-                set(ENABLE_FORTRAN ON)
+                set(ENABLE_FORTRAN ON) # TODO wanted?
             endif ()
             FetchContent_MakeAvailable(ga)
         endif (ga-config)
@@ -112,20 +112,23 @@ target_link_libraries(ppidd PUBLIC MPI::MPI_CXX)
 if (PPIDD-GA)
     if (NOT ga-config)
         foreach (t ga ga_src dra eaf elio sf linalg)
-            message("Export target ${t}")
-            install(TARGETS ${t} EXPORT ppidd-export
+            install(TARGETS ${t} EXPORT gaTargets
                     LIBRARY DESTINATION lib
                     ARCHIVE DESTINATION lib
                     INCLUDES DESTINATION include
                     PUBLIC_HEADER DESTINATION include
                     )
         endforeach ()
+        install(EXPORT gaTargets
+                FILE gaTargets.cmake
+                NAMESPACE ga::
+                DESTINATION lib/cmake/ga)
     endif ()
 endif ()
-install(EXPORT ppidd-export
-        FILE ppiddTargets.cmake
-        NAMESPACE ppidd::
-        DESTINATION lib/cmake/ppidd)
+#install(EXPORT ppidd-export
+#        FILE ppiddTargets.cmake
+#        NAMESPACE ppidd::
+#        DESTINATION lib/cmake/ppidd)
 include(CMakePackageConfigHelpers)
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/ppiddConfig.cmake"
         "include CMakeFindDependencyMacro)

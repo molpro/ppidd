@@ -53,7 +53,7 @@ LibraryManager_Append(ppidd
         mpi_utils.cpp mpiga_base.cpp
         mpi_nxtval.cpp mpimutex-hybrid.cpp mpi_helpmutex.cpp
         PUBLIC_HEADER
-        ppidd_defines.h ppidd_prototypes.h
+        ppidd_defines.h ppidd_prototypes.h mpiga_base.h mpimutex.h
         )
 LibraryManager_AppendExternal(ppidd
         PUBLIC_HEADER

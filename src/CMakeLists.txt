@@ -38,7 +38,6 @@ else ()
     set(PPIDD_IMPL_DEFAULT 3)
 endif ()
 
-message(STATUS "test 1")
 
 set(PPIDD_DEFINES_H "#include \"ppidd_defines.h\"")
 set(PPIDD_PROTOTYPES_H "#include \"ppidd_prototypes.h\"")
@@ -54,7 +53,6 @@ LibraryManager_Append(ppidd
         PUBLIC_HEADER
         ppidd_defines.h ppidd_prototypes.h
         )
-message(STATUS "test 2")
 LibraryManager_AppendExternal(ppidd
         PUBLIC_HEADER
         "${CMAKE_CURRENT_BINARY_DIR}/ppidd.h"
@@ -67,7 +65,6 @@ if (PPIDD-GA)
     target_compile_definitions(ppidd PRIVATE HAVE_GA_H)
     target_link_libraries(ppidd PUBLIC ga::ga)
 endif ()
-message(STATUS "test 3")
 if (FORTRAN)
     configure_file(ppidd_module.F90.in ${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90)
     message(STATUS "Adding ppidd_module.F90")
@@ -79,7 +76,6 @@ if (FORTRAN)
 else ()
     message(STATUS "Not building Fortran")
 endif ()
-message(STATUS "test 4")
 
 if (FORTRAN_INTEGER8)
     target_compile_definitions(ppidd PRIVATE $<$<COMPILE_LANGUAGE:CXX>:FORTINT=int64_t>)

@@ -68,10 +68,13 @@ endif ()
 if (FORTRAN)
     configure_file(ppidd_module.F90.in ${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90)
     message(STATUS "Adding ppidd_module.F90")
-    LibraryManager_AppendExternal(ppidd
-            PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90"
-            INCLUDE_DIR
-            "${CMAKE_CURRENT_BINARY_DIR}"
+    #    LibraryManager_AppendExternal(ppidd
+    #            SOURCES "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90"
+    #            INCLUDE_DIR
+    #            "${CMAKE_CURRENT_BINARY_DIR}"
+    #            )
+    LibraryManager_Append(ppidd SOURCES
+            SOURCES "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90"
             )
 else ()
     message(STATUS "Not building Fortran")

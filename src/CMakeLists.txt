@@ -30,6 +30,8 @@ if (PPIDD-GA)
             if (FORTRAN)
                 set(ENABLE_FORTRAN ON) # TODO wanted?
             endif ()
+            set(MPI_PR ON)
+            set(MPI_TS OFF)
             FetchContent_MakeAvailable(ga)
         endif (ga-config)
     endif ()

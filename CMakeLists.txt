@@ -1,14 +1,18 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15)
 
 project(ppidd LANGUAGES CXX)
 
-option(PPIDD_FORTRAN "Whether to build Fortran binding" OFF)
-option(INTEGER8 "Whether to compile with 8-byte (rather than 4-byte) Fortran integers" ON)
-option(PPIDD-GA "Whether to build PPIDD on Global Arrays instead of pure MPI" ON)
+include(FetchContent)
+FetchContent_Declare(
+        LibraryManager
+        GIT_REPOSITORY https://gitlab+deploy-token-178345:RQZa2rmdwnV7Hdwg8XEq@gitlab.com/molpro/LibraryManager.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(LibraryManager)
 
-if (PPIDD_FORTRAN)
-    enable_language(Fortran)
-endif ()
+LibraryManager_Project(FORTRAN_OPTION MPI_OPTION)
+
+option(PPIDD-GA "Whether to build PPIDD on Global Arrays instead of pure MPI" ON)
 
 add_subdirectory(src)
 

@@ -65,7 +65,7 @@ if (PPIDD-GA)
     target_compile_definitions(ppidd PRIVATE HAVE_GA_H)
     target_link_libraries(ppidd PUBLIC ga::ga)
 endif ()
-if (CMAKE_Fortran_COMPILER_ID)
+if (FORTRAN)
     configure_file(ppidd_module.F90.in ${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90)
     LibraryManager_AppendExternal(ppidd
             PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90"

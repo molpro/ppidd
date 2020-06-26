@@ -67,11 +67,14 @@ if (PPIDD-GA)
 endif ()
 if (FORTRAN)
     configure_file(ppidd_module.F90.in ${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90)
+    message(STATUS "Adding ppidd_module.F90")
     LibraryManager_AppendExternal(ppidd
             PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/ppidd_module.F90"
             INCLUDE_DIR
             "${CMAKE_CURRENT_BINARY_DIR}"
             )
+else ()
+    message(STATUS "Not building Fortran")
 endif ()
 
 if (FORTRAN_INTEGER8)

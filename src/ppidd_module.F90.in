@@ -540,9 +540,9 @@ end interface
 interface
  function ppidd_eaf_truncate(handle,offset) bind(C,name='PPIDD_Eaf_truncate')
  use iso_c_binding, only : c_double, c_int, c_int64_t
- integer(c_int64_t), intent(in)  :: handle
- real(c_double),     intent(out) :: offset
- integer(c_int)                  :: ppidd_eaf_truncate
+ integer(c_int64_t), intent(in) :: handle
+ real(c_double), intent(in) :: offset
+ integer(c_int) :: ppidd_eaf_truncate
  end function ppidd_eaf_truncate
 end interface
 

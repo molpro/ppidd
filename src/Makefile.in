@@ -1,0 +1,29 @@
+CXX=@CXX@
+CXXFLAGS=@CXXFLAGS@
+CPPFLAGS=@DEFS@ @CPPFLAGS@
+FC=@FC@
+FCFLAGS=@FCFLAGS@
+
+VPATH = @srcdir@
+
+OBJECTS=mpi_helpmutex.o
+OBJECTS+=mpi_nxtval.o
+OBJECTS+=mpi_utils.o
+OBJECTS+=mpiga_base.o
+OBJECTS+=mpimutex-hybrid.o
+OBJECTS+=ppidd.o
+OBJECTS+=ppidd_ga_mpi.o
+OBJECTS+=ppidd_mpi2.o
+OBJECTS+=ppidd_no_mpi.o
+ifneq ($(FC),)
+OBJECTS+=ppidd_module.o
+endif
+
+.PHONY: default
+default: $(OBJECTS)
+
+%.o: %.cpp
+	$(CXX) $(CPPFLAGS) -I. -c $(CXXFLAGS) $<
+
+%.o: %.F90
+	$(FC) -c $(FCFLAGS) $<

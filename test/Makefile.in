@@ -1,4 +1,10 @@
-include ../config.mk
+CXX=@CXX@
+CXXFLAGS=@CXXFLAGS@
+CPPFLAGS=@DEFS@ @CPPFLAGS@
+FC=@FC@
+FCFLAGS=@FCFLAGS@
+
+VPATH = @srcdir@
 
 .PHONY: default
 ifeq ($(FC),)

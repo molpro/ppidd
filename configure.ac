@@ -2,17 +2,13 @@ dnl regnerate configure with: autoconf -Wall && rm -rf autom4te.cache
 AC_INIT(PPIDD,master)
 AC_PREREQ(2.69)
 AC_LANG([C++])
-AC_CONFIG_FILES([config.mk:src/configure/config.mk.in] [src/ppidd.h] [src/ppidd_module.F90])
+AC_CONFIG_FILES([Makefile] [src/Makefile] [test/Makefile] [src/ppidd.h] [src/ppidd_module.F90])
 AC_CONFIG_FILES([ppidd-config],[chmod +x ppidd-config])
-AC_CONFIG_HEADERS([src/ppidd_config.h:src/configure/ppidd_config.h.in])
+AC_CONFIG_HEADERS([src/ppidd_config.h])
 AC_CONFIG_AUX_DIR([src/configure])
-
-AC_CONFIG_LINKS([GNUmakefile:GNUmakefile src/GNUmakefile:src/GNUmakefile])
 
 AC_CANONICAL_BUILD()
 AC_CANONICAL_HOST()
-
-AC_SUBST([ppidd_srcdir],["`cd ${srcdir}; /bin/pwd`"])
 
 dnl msg,test,[true],[false]
 AC_DEFUN([PPIDD_CXX_PP_TEST],[
@@ -95,8 +91,8 @@ if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
 fi
 
 AC_SUBST_FILE(PPIDD_DEFINES_H)
-PPIDD_DEFINES_H="${ppidd_srcdir}/src/ppidd_defines.h"
+PPIDD_DEFINES_H="${srcdir}/src/ppidd_defines.h"
 AC_SUBST_FILE(PPIDD_PROTOTYPES_H)
-PPIDD_PROTOTYPES_H="${ppidd_srcdir}/src/ppidd_prototypes.h"
+PPIDD_PROTOTYPES_H="${srcdir}/src/ppidd_prototypes.h"
 
 AC_OUTPUT()

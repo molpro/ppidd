@@ -1,4 +1,18 @@
-include config.mk
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+includedir=@includedir@
+libdir=@libdir@
+srcdir=@srcdir@
+
+AR=@AR@
+ARFLAGS=@ARFLAGS@
+FC=@FC@
+FC_MODFMT=@FC_MODFMT@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+INSTALL_PROGRAM=@INSTALL_PROGRAM@
+RANLIB=@RANLIB@
 
 .PHONY: default
 default: libppidd.a
@@ -21,8 +35,8 @@ install: default
 	$(INSTALL_DATA) libppidd.a $(DESTDIR)$(libdir)
 	$(INSTALL) -d $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) src/ppidd.h $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) $(ppidd_srcdir)/src/mpimutex.h $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) $(ppidd_srcdir)/src/mpiga_base.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) $(srcdir)/src/mpimutex.h $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) $(srcdir)/src/mpiga_base.h $(DESTDIR)$(includedir)
 ifdef FC
 	$(INSTALL_DATA) src/$(subst %M,PPIDD,$(subst %m,ppidd,$(FC_MODFMT))) $(DESTDIR)$(includedir)
 endif

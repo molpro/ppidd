@@ -6,11 +6,13 @@
 doc/
 config.log
 config.status
-config.mk
 ppidd-config
 src/ppidd.h
 src/ppidd_config.h
 src/ppidd_module.F90
+Makefile
+src/Makefile
+test/Makefile
 cmake-build-*/
 build*/
 .idea/

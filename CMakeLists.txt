@@ -13,6 +13,7 @@ FetchContent_MakeAvailable(LibraryManager)
 LibraryManager_Project(FORTRAN_OPTION MPI_OPTION)
 
 option(PPIDD-GA "Whether to build PPIDD on Global Arrays instead of pure MPI" ON)
+set(GA_RUNTIME MPI_2SIDED CACHE STRING "Global Arrays MPI runtime. Must be MPI_2SIDED, MPI_PROGRESS_RANK, MPI_RMA, MPI_MULTITHREADED, MPI_PROGRESS_THREAD")
 
 add_subdirectory(src)
 

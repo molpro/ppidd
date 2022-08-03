@@ -13,7 +13,7 @@ env:
 
 jobs:
 
-  autoconf-build:
+  autoconf-build-ga:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -39,7 +39,7 @@ jobs:
 
       - name: Configure
         if: steps.check_configuration.outputs.files_exists == 'true'
-        run: ./configure CC='ccache cc' CXX='ccache c++'
+        run: ./configure CXX=mpicxx --with-ga
 
       - name: Build
         if: steps.check_configuration.outputs.files_exists == 'true'
@@ -47,7 +47,9 @@ jobs:
 
       - name: Test
         if: steps.check_configuration.outputs.files_exists == 'true'
-        run: make ${{ env.AUTOCONF_TEST_TARGET }}
+        run: |
+          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS="-lga -larmci"
+          mpiexec -np 4 --allow-run-as-root --oversubscribe test/ppidd_ctest.exe
 
   cmake-build:
     runs-on: ubuntu-latest

@@ -25,16 +25,14 @@ jobs:
       - name: Build
         run: |
           git config --global --add safe.directory ${{github.workspace}}
-          cmake --build ${{github.workspace}}/build --target DependencyManagerDocs
-          rsync -av ${{github.workspace}}/build/docs/${{ github.event.repository.name }}/html .
-          mkdir -p html/DoxygenTagFiles
-          find ${{github.workspace}}/build/docs -name '*.tag' -exec cp {} html/DoxygenTagFiles \;
-          find ${{github.workspace}}/build/docs -name 'iostream*.html' -exec cat {} \;
-          ls -ltRa html
+          cmake --build ${{github.workspace}}/build --target ppidd_doc
+          rsync -av ${{github.workspace}}/build/doc .
+          mkdir -p doc/DoxygenTagFiles
+          find ${{github.workspace}}/build/docs -name '*.tag' -exec cp {} doc/DoxygenTagFiles \;
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3.8.0
         if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./html
+          publish_dir: ./doc

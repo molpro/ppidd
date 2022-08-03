@@ -21,4 +21,10 @@ add_subdirectory(src)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     enable_testing()
     add_subdirectory(test)
+
+    find_package(Doxygen)
+    if (DOXYGEN_FOUND)
+        add_custom_target(ppidd_doc
+                COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile)
+    endif ()
 endif ()

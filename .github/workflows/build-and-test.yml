@@ -9,7 +9,7 @@ on:
 
 env:
   CMAKE_BUILD_TYPE: Release
-  AUTOCONF_TEST_TARGET:
+  AUTOCONF_TEST_TARGET: test
 
 jobs:
 
@@ -80,6 +80,9 @@ jobs:
     - name: Build
       if: steps.check_configuration.outputs.files_exists == 'true'
       run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
+
+    - name: debug
+      run : ls -lR ${{github.workspace}}/build
 
     - name: Test
       if: steps.check_configuration.outputs.files_exists == 'true'

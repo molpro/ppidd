@@ -49,7 +49,7 @@ jobs:
         if: steps.check_configuration.outputs.files_exists == 'true'
         run: |
           make ${{ env.AUTOCONF_TEST_TARGET }} LIBS="-lga -larmci"
-          mpiexec -np 4 --allow-run-as-root --oversubscribe test/ppidd_ctest.exe
+          mpiexec -np 4 test/ppidd_ctest.exe
 
   cmake-build:
     runs-on: ubuntu-latest

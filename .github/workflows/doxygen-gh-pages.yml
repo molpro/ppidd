@@ -28,7 +28,7 @@ jobs:
           cmake --build ${{github.workspace}}/build --target ppidd_doc
           rsync -av ${{github.workspace}}/build/doc .
           mkdir -p doc/DoxygenTagFiles
-          find ${{github.workspace}}/build/docs -name '*.tag' -exec cp {} doc/DoxygenTagFiles \;
+          find ${{github.workspace}}/build/doc -name '*.tag' -exec cp {} doc/DoxygenTagFiles \;
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3.8.0

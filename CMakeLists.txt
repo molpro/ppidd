@@ -25,6 +25,8 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     find_package(Doxygen)
     if (DOXYGEN_FOUND)
         add_custom_target(ppidd_doc
-                COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/src/Doxyfile)
+                COMMAND ${DOXYGEN_EXECUTABLE} src/Doxyfile
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
     endif ()
 endif ()

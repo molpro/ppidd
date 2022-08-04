@@ -1,0 +1,9 @@
+PROJECT_NAME           = PPIDD
+STRIP_FROM_PATH        = /__w/ppidd/ppidd/src/
+EXTRACT_ALL            = YES
+INPUT                  = /__w/ppidd/ppidd/src/ppidd.cpp /__w/ppidd/ppidd/src/ppidd_doxygen.h
+SOURCE_BROWSER         = YES
+STRIP_CODE_COMMENTS    = NO
+HTML_OUTPUT            = doc
+GENERATE_LATEX         = NO
+EXTRA_PACKAGES         = amsmath

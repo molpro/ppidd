@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PPIDD: Main Page</title>
+<title>PPIDD: PPIDD Reference Manual</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -60,11 +60,54 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">PPIDD Documentation</div>  </div>
+<div class="title">PPIDD Reference Manual </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p>Parallel Programming Interface for Distributed Data (PPIDD) Reference Manual. The function descriptions can be found in <a class="el" href="ppidd_8cpp.html" title="This file contains the PPIDD functions.">ppidd.cpp</a>.</p>
+<p>Directory and file structure in PPIDD: </p><pre>
+
+       .                                  PPIDD root directory
+       |-- GNUmakefile                    Makefile to build PPIDD
+       |-- README                         README for PPIDD
+       |-- ./doc                          Document directory
+       |   `-- Doxyfile                       Document configuration file
+       |-- ./lib                          Final location of PPIDD library
+       |-- ./src                          Source code directory for PPIDD library
+       |   |-- GNUmakefile                    Makefile for src directory
+       |   |-- mpi_helpmutex.cpp              Mutex source file using helper process
+       |   |-- mpi_nxtval.cpp                 NXTVAL source file
+       |   |-- mpi_nxtval.h                   NXTVAL header file
+       |   |-- mpi_utils.cpp                  MPI utility source file
+       |   |-- mpi_utils.h                    MPI utility header file
+       |   |-- mpiga_base.cpp                 Source code for distributed data structure
+       |   |-- mpiga_base.h                   Head file for distributed data structure
+       |   |-- mpimutex-hybrid.cpp            Mutex source file using distributed processes
+       |   |-- mpimutex.h                     Mutex header file using distributed processes
+       |   |-- <a class="el" href="ppidd_8cpp.html" title="This file contains the PPIDD functions.">ppidd.cpp</a>                      PPIDD interface source code
+       |   |-- ppidd.h                        C interface header file
+       |   |-- <a class="el" href="ppidd__doxygen_8h.html">ppidd_doxygen.h</a>                PPIDD document main page file
+       |   |-- ppidd_eaf.cpp                  PPIDD interface source code for EAF
+       |   |-- ppidd_sf.cpp                   PPIDD interface source code for SF
+       `-- ./test                         Test code directory for PPIDD library
+           |-- GNUmakefile                    Makefile for test directory
+           |-- ppidd_ctest.cpp                C test program
+           |-- ppidd_test.F                   Fortran test program
+           |-- sizeofctypes.cpp               Code for determining the size of C data types
+           |-- sizeoffortypes.F               Code for determining the size of Fortran data types
+           |-- ppidd_test.F                   Fortran test program
+           `-- ppidd_test.out                 Output of test example
+
+  </pre><p>Some examples of building the PPIDD library: The following examples are tested on a x86_64//Linux machine on which Intel Fortran and C compilers, MPI2-aware Intel Fortran and C compilers, and Intel MPI library are available. Please be aware the options might be different on other machines. </p><pre>
+
+     1. Build MPI-2 version of PPIDD:
+     ./configure --with-mpi2
+
+     2. Build Global Arrays version of PPIDD.
+     ./configure --with-ga=/path/to/ga-install/include
+
+  </pre> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

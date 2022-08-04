@@ -24,9 +24,12 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
     find_package(Doxygen)
     if (DOXYGEN_FOUND)
+        file(READ src/Doxyfile doxyfile)
+        string(REPLACE "src/" "${CMAKE_CURRENT_SOURCE_DIR}/src/" doxyfile "${doxyfile}")
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc")
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile" "${doxyfile}")
         add_custom_target(ppidd_doc
-                COMMAND ${DOXYGEN_EXECUTABLE} src/Doxyfile
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMAND ${DOXYGEN_EXECUTABLE} doc/Doxyfile
                 )
     endif ()
 endif ()

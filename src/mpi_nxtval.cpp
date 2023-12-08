@@ -207,7 +207,7 @@ void make_worker_comm( MPI_Comm old_comm, MPI_Comm *worker_comm )
 
 void DataHelperServer()
 {
-  FORTINT  cnt = (FORTINT)0;   /* actual counter */
+  int cnt = 0;                 /* actual counter */
   FORTINT  buf[4];             /* buffer to get values */
   FORTINT  nelem_valput;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
   void  *buf_helpga=NULL;      /* help ga which is located in help process */
@@ -293,7 +293,7 @@ void DataHelperServer()
         if (ntermin == Nprocs_server || Nprocs_server==0 ) {
           while (ntermin--) {
             nodefrom_tmp = done_list[ntermin];
-            MPI_Send(&cnt, 1, dtype_buf,  nodefrom_tmp, type_nxtval, MPI_COMM_WORLD);
+            MPI_Send(&cnt, 1, MPI_INT,  nodefrom_tmp, type_nxtval, MPI_COMM_WORLD);
           }
           /* free the dynamically allocated memory on helper servers */
           if (done_list_crt != NULL) {free (done_list_crt); done_list_crt=NULL;}
@@ -307,7 +307,7 @@ void DataHelperServer()
         }
       }
       else if (mproc > 0) {    /* fetch-and-add INCR */
-        MPI_Send(&cnt, 1, dtype_buf,  nodefrom, type_nxtval, MPI_COMM_WORLD);
+        MPI_Send(&cnt, 1, MPI_INT,  nodefrom, type_nxtval, MPI_COMM_WORLD);
         cnt += INCR;
       }
       else if (mproc < 0) {   /* release and set cnt=0 */
@@ -316,7 +316,7 @@ void DataHelperServer()
         if (ndone == totworkproc) {
           while (ndone--) {
             nodefrom_tmp = done_list[ndone];
-            MPI_Send(&cnt, 1, dtype_buf,  nodefrom_tmp, type_nxtval, MPI_COMM_WORLD);
+            MPI_Send(&cnt, 1, MPI_INT,  nodefrom_tmp, type_nxtval, MPI_COMM_WORLD);
           }
           cnt = 0;
           ndone = 0;

@@ -1439,7 +1439,7 @@ ________________________________________________________________________________
 
 
 /* many-element rma operations for helpga, MPI_Datatye can be MPI_INT --- MPI_DOUBLE */
-int twosided_helpga_extra(int mproc, int nelem, int ielem, int *handle, void *buff)
+void twosided_helpga_extra(int mproc, int nelem, int ielem, int *handle, void *buff)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -1453,7 +1453,6 @@ ________________________________________________________________________________
   int  type = RMAETRFLAG;
   FORTINT  buf[4];
   MPI_Request *requests2,*requests3;
-  int  local=0;
   int  handle_orig;
   MPI_Datatype dtype,dtype_buf;  /* MPI Datatype */
   int sizeofdtype;               /* Size of MPI Datatype */
@@ -1690,19 +1689,16 @@ ________________________________________________________________________________
     else {
       MPIGA_Error("twosided_helpga_extra: sequential version with silly mproc ", mproc);
     }
-    local = 0;
   } /* sequential case */
   len_help=NULL;
   helpga=NULL;
 
   if (DEBUG_) printf("%5d: twosided_helpga_extra: end. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,*handle);
-
-  return local;
 }
 
 /* many-element accumulation operation for helpga, MPI_Datatye can be MPI_INT --- MPI_DOUBLE */
 /* determine if fac==1/1.0d0 */
-int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void *buf, void *fac)
+void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void *buf, void *fac)
 {
     MPI_Datatype dtype;  /* MPI Datatype for helpga element */
     int i,len;
@@ -1796,8 +1792,6 @@ int twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void
     }
 
     if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: end. handle=%d\n",ProcID(),*handle);
-
-    return 0;
 }
 
 

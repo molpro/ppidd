@@ -443,7 +443,7 @@ static int n_in_msg_mpiq=0;
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_get */
             int nelem=mpiihi-mpiilo+1;
 
-            val=twosided_helpga_extra(mproc, nelem, ielem, &mpihandle,buff);
+            twosided_helpga_extra(mproc, nelem, ielem, &mpihandle,buff);
          }
          else {
             MPIGA_Error("PPIDD_Get: starting index > ending index, handle=",mpihandle);

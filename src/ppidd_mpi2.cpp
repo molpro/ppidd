@@ -434,11 +434,11 @@ static int n_in_msg_mpiq=0;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_get_inum */
             int64_t nelem_valput=1;
-            int64_t *ibuff;
+            FORTINT *ibuff;
 
             val=twosided_helpga_one(mproc, nelem_valput, ielem, &mpihandle);
-            ibuff=(int64_t *)buff;
-            *ibuff=(int64_t)val;
+            ibuff=(FORTINT *)buff;
+            *ibuff=(FORTINT)val;
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_get */
             int nelem=mpiihi-mpiilo+1;
@@ -469,7 +469,7 @@ static int n_in_msg_mpiq=0;
          int ielem=mpiilo;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_put_inum */
-            int64_t *ibuff=(int64_t *)buff;
+            FORTINT *ibuff=(FORTINT *)buff;
             int64_t valput=(int64_t)*ibuff;
             twosided_helpga_one(mproc, valput, ielem, &mpihandle);
          }

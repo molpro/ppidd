@@ -1360,7 +1360,7 @@ ________________________________________________________________________________
        dtype_buf = dtype;
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
        MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
-       local=val_recv;
+       local=(int64_t)val_recv;
      }
   }
   else {

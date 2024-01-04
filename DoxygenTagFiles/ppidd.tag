@@ -15,22 +15,22 @@
       <type>void</type>
       <name>PPIDD_Initialize_data</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ad1682b358ff2589773fe29e713768822</anchor>
-      <arglist>(void)</arglist>
+      <anchor>accd1aaec40977ac816e292441b1fdb6f</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int64_t</type>
       <name>PPIDD_Worker_comm</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>af644d3bd4bc3d2bc7c361b3344832fc2</anchor>
-      <arglist>(void)</arglist>
+      <anchor>ab8a9bad19a3488c3c2eb193068dee536</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Finalize</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a453e52422395245cfb1cf7eec07301aa</anchor>
-      <arglist>(void)</arglist>
+      <anchor>a768ee79b70214209cec6ad98fb0acdd6</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -92,15 +92,15 @@
       <type>void</type>
       <name>PPIDD_Init_fence</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ae1f0526d5d7500ffeddc057f8e177ca4</anchor>
-      <arglist>(void)</arglist>
+      <anchor>a5c67417ceed19a2f9e6bd5eb6bada439</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Fence</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a3ac818b4519f767a44ae41a59d0107c8</anchor>
-      <arglist>(void)</arglist>
+      <anchor>a2aaef4140504ad475c1621e80ec3c774</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -141,8 +141,8 @@
       <type>void</type>
       <name>PPIDD_Barrier</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2112750e15b6a91ecc71655e5496aae9</anchor>
-      <arglist>(void)</arglist>
+      <anchor>abe47ed108d82f5d212dbd60cd13966b6</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>

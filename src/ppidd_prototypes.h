@@ -1,7 +1,7 @@
  extern void PPIDD_Initialize(int *argc, char ***argv, int impl);
- extern void PPIDD_Initialize_data(void);
- extern int64_t  PPIDD_Worker_comm(void);
- extern void PPIDD_Finalize(void);
+ extern void PPIDD_Initialize_data();
+ extern int64_t  PPIDD_Worker_comm();
+ extern void PPIDD_Finalize();
  extern int  PPIDD_Uses_ma();
  extern int  PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap);
  extern void PPIDD_Wtime(double *ctime);
@@ -11,14 +11,14 @@
  extern void PPIDD_Size_all(int64_t *np);
  extern void PPIDD_Size(int64_t *np);
  extern void PPIDD_Rank(int64_t *me);
- extern void PPIDD_Init_fence(void);
- extern void PPIDD_Fence(void);
+ extern void PPIDD_Init_fence();
+ extern void PPIDD_Fence();
  extern void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync);
  extern void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync);
  extern void PPIDD_Wait(int64_t *nodesel);
  extern int  PPIDD_Iprobe(int64_t *tag,int64_t *source);
  extern void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root);
- extern void PPIDD_Barrier(void);
+ extern void PPIDD_Barrier();
  extern void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op);
  extern int  PPIDD_Create_irreg(char *name,int64_t *lenin,int64_t *nchunk,int dtype,int64_t *storetype,int64_t *handle);
  extern int  PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle);

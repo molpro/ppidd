@@ -60,7 +60,7 @@ int mpiga_initialize(int *argcmain, char ***argvmain)
     return 0;
 }
 
-int mpiga_initialize_data(void)
+int mpiga_initialize_data()
 {
     int size,rank,i;
     if (MPIGA_Debug) printf("In mpiga_initilize_data begin.\n");
@@ -108,7 +108,7 @@ int mpiga_initialize_data(void)
     return 0;
 }
 
-int mpiga_terminate(void)
+int mpiga_terminate()
 {
     int i;
     int handle;
@@ -149,7 +149,7 @@ int mpiga_terminate(void)
 }
 
 /* clean up resources on all processes, and MPI_Finalize */
-int mpiga_cleanup_finalize(void)
+int mpiga_cleanup_finalize()
 {
     MPI_Barrier(MPI_COMM_WORLD);
     if (MPIGA_Debug) printf("%5d: In mpiga_cleanup_finalize:  begin to clean up global resource on all processes.\n",ProcID());
@@ -343,7 +343,7 @@ int mpiga_free( int handle )
 
 
 /* RETURNS AMOUNT OF MEMORY on each processor IN ACTIVE MPI GLOBAL DADA STRUCTURES AND HELPGA */
-long  mpiga_localmem(void)
+long  mpiga_localmem()
 {
     int i;
     long sum_mpiga=(long)0,sum_helpga=(long)0,sum=(long)0;
@@ -1060,7 +1060,7 @@ int mpiga_unlock_mutex(int inum)
 }
 
 /* destroys the set of mutexes created with ga_create_mutexes.*/
-int mpiga_destroy_mutexes(void)
+int mpiga_destroy_mutexes()
 {
     int  i,mpierr;
 

@@ -33,7 +33,7 @@ extern  char  mpi_test_err_string[TEST_ERR_STR_LEN];
 extern "C" {
 #endif
     extern int NNodes_Total(MPI_Comm, int *);
-    extern int ProcID(void);
+    extern int ProcID();
     extern void MPIGA_Error(const char *, int);
     extern void mpi_test_status(const char *, int);
     extern MPI_Datatype dtype_mpi(int);

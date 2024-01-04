@@ -32,12 +32,12 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Initialize_data(void) {
+   void PPIDD_Initialize_data() {
       mpiga_initialize_data();
    }
 
 
-   int64_t PPIDD_Worker_comm(void) {
+   int64_t PPIDD_Worker_comm() {
       MPI_Comm mycomm=mpiga_compute_comm();
 
 /* test whether worker communicator contains all the processes, if so then return MPI_COMM_WORLD */
@@ -50,7 +50,7 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Finalize(void) {
+   void PPIDD_Finalize() {
       mpiga_terminate();
    }
 
@@ -129,11 +129,11 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Init_fence(void) {
+   void PPIDD_Init_fence() {
    }
 
 
-   void PPIDD_Fence(void) {
+   void PPIDD_Fence() {
    }
 
 
@@ -283,7 +283,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Barrier(void) {
+   void PPIDD_Barrier() {
       int mpierr=MPI_Barrier(mpiga_compute_comm());
       mpi_test_status("PPIDD_Barrier:",mpierr);
    }

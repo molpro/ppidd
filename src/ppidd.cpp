@@ -88,7 +88,7 @@ extern "C" {
  *  - For \b GA, does nothing
  *  - For \b MPI2, Initialize global data structure and set helper server.
  */
-   void PPIDD_Initialize_data(void) {
+   void PPIDD_Initialize_data() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -111,7 +111,7 @@ extern "C" {
  *  - For \b MPI2, Return communicator for worker process group.
  *  - For \b GA and serial cases, should not be called.
  */
-   int64_t PPIDD_Worker_comm(void) {
+   int64_t PPIDD_Worker_comm() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -132,7 +132,7 @@ extern "C" {
  *  - For \b GA, tidy up global arrays and MPI, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#TERMINATE
  *  - For \b MPI2, tidy up some associated resources and call MPI_Finalize.
  */
-   void PPIDD_Finalize(void) {
+   void PPIDD_Finalize() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -326,7 +326,7 @@ extern "C" {
  *  - \b GA calls GA_Init_fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INIT_FENCE
  *  - \b MPI2 does nothing
  */
-   void PPIDD_Init_fence(void) {
+   void PPIDD_Init_fence() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -347,7 +347,7 @@ extern "C" {
  *  - \b GA calls GA_Fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#FENCE
  *  - \b MPI2 does nothing
  */
-   void PPIDD_Fence(void) {
+   void PPIDD_Fence() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -478,7 +478,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#SYNC
  *  - \b MPI2 calls MPI_Barrier
  */
-   void PPIDD_Barrier(void) {
+   void PPIDD_Barrier() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

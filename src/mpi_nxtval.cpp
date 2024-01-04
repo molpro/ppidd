@@ -21,7 +21,7 @@
 #include "mpi_utils.h"
 #include "mpi_nxtval.h"
 #include <cmath>
-int mpiga_cleanup_finalize(void);
+int mpiga_cleanup_finalize();
 
 /* twosided helpga global variables */
 twosided_helpga_array_t *twosided_helpga_data_struc=NULL, *twosided_helpga_index=NULL;
@@ -768,8 +768,8 @@ int NXTVAL(int *mproc)
      buf = *mproc;
 
      if (DEBUG_) {
-       (void) printf("%5d: NXTVAL: mproc=%d\n",ProcID(), *mproc);
-       (void) fflush(stdout);
+       printf("%5d: NXTVAL: mproc=%d\n",ProcID(), *mproc);
+       fflush(stdout);
      }
 
     if (use_helper_server) {
@@ -843,8 +843,8 @@ ________________________________________________________________________________
   } /* other operations (zeroization and release) for helpga */
 
   if (DEBUG_) {
-    (void) printf("%5d: twosided_helpga_col: mid. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,handle);
-    (void) fflush(stdout);
+    printf("%5d: twosided_helpga_col: mid. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,handle);
+    fflush(stdout);
   }
 
   if (SR_parallel) {
@@ -1331,8 +1331,8 @@ ________________________________________________________________________________
   }
 
   if (DEBUG_) {
-    (void) printf("%5d: twosided_helpga_one: mid. mproc=%d, handle=%d\n",ProcID(),mproc,*handle);
-    (void) fflush(stdout);
+    printf("%5d: twosided_helpga_one: mid. mproc=%d, handle=%d\n",ProcID(),mproc,*handle);
+    fflush(stdout);
   }
 
   if (SR_parallel) {

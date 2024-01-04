@@ -16,16 +16,16 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Initialize_data(void) {
+   void PPIDD_Initialize_data() {
    }
 
 
-   int64_t PPIDD_Worker_comm(void) {
+   int64_t PPIDD_Worker_comm() {
       do_not_call("PPIDD_Worker_comm");
    }
 
 
-   void PPIDD_Finalize(void) {
+   void PPIDD_Finalize() {
    }
 
 
@@ -73,11 +73,11 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Init_fence(void) {
+   void PPIDD_Init_fence() {
    }
 
 
-   void PPIDD_Fence(void) {
+   void PPIDD_Fence() {
    }
 
 
@@ -104,7 +104,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Barrier(void) {
+   void PPIDD_Barrier() {
    }
 
 

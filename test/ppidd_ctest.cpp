@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-int ppidd_ctest(void);
+int ppidd_ctest();
 
 int main(int argc, char **argv)
 {
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-int ppidd_ctest(void)
+int ppidd_ctest()
 {
     int64_t me, nproc;
 

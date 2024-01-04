@@ -107,9 +107,9 @@ typedef struct {
     MPI NXTVAL Function Prototypes
 \* =============================== */
 
-    extern int TotalNumber_of_Servers(void);
-    extern int NProcs_Work(void);
-    extern int LastServerID(void);
+    extern int TotalNumber_of_Servers();
+    extern int NProcs_Work();
+    extern int LastServerID();
     extern int SerialNumber_of_Server(int );
     extern int RankNumber_of_Server(int );
     extern int NewRank_of_OldRank(int );
@@ -117,7 +117,7 @@ typedef struct {
     extern int Nprocs_of_Server(int );
     extern int OldRank_of_NewRank(int );
     extern void make_worker_comm( MPI_Comm , MPI_Comm * );
-    extern void DataHelperServer(void);
+    extern void DataHelperServer();
     extern int NXTVAL(int *);
     extern int twosided_helpga_col(int , int );
     extern int twosided_helpga_create_irreg(int , int *, int , int *, char *, int );
@@ -140,14 +140,14 @@ typedef struct {
     extern int alloc_twosided_helpmutex_orig(int );
     extern int free_twosided_helpmutex_orig(int );
     extern int alloc_twosided_helpmutexes(int );
-    extern int free_twosided_helpmutexes(void);
-    extern void initialize_twosided_helpmutexes(void);
-    extern void finalize_twosided_helpmutexes(void);
-    extern void initialize_twosided_helpga(void);
+    extern int free_twosided_helpmutexes();
+    extern void initialize_twosided_helpmutexes();
+    extern void finalize_twosided_helpmutexes();
+    extern void initialize_twosided_helpga();
     extern int twosided_helpga_release_orig(int );
-    extern void finalize_twosided_helpga(void);
-    extern void install_twosided_nxtval(void);
-    extern void finalize_twosided_nxtval(void);
+    extern void finalize_twosided_helpga();
+    extern void install_twosided_nxtval();
+    extern void finalize_twosided_nxtval();
 
 #endif
 /* endif of __MPI_NXTVAL_H__ */

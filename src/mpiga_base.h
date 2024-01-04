@@ -132,13 +132,13 @@ typedef struct {
 \* =========================== */
 
    int mpiga_initialize(int *, char ***);
-   int mpiga_initialize_data(void);
-   int mpiga_terminate(void);
-   int mpiga_cleanup_finalize(void);
+   int mpiga_initialize_data();
+   int mpiga_terminate();
+   int mpiga_cleanup_finalize();
    int mpiga_create_irreg(char *, int *, int , MPI_Datatype , int *);
    int mpiga_create( char *, int , MPI_Datatype , int *);
    int mpiga_free( int );
-   long mpiga_localmem(void);
+   long mpiga_localmem();
    int mpiga_handle_orig( int );
    int mpiga_inquire_name( int , char **);
    int mpiga_inquire_storetype( int );
@@ -154,28 +154,28 @@ typedef struct {
    int mpiga_create_mutexes(int);
    int mpiga_lock_mutex(int);
    int mpiga_unlock_mutex(int);
-   int mpiga_destroy_mutexes(void);
-   MPI_Comm mpiga_compute_comm(void);
+   int mpiga_destroy_mutexes();
+   MPI_Comm mpiga_compute_comm();
 
    /* MPI one-sided helpmutex Function Prototypes, from mpi_helpmutex.cpp */
-   void initialize_onesided_helpmutexes(void);
-   void finalize_onesided_helpmutexes(void);
+   void initialize_onesided_helpmutexes();
+   void finalize_onesided_helpmutexes();
    int alloc_onesided_helpmutex_orig(int);
    int free_onesided_helpmutex_orig(int);
    int alloc_onesided_helpmutexes(int);
-   int free_onesided_helpmutexes(void);
+   int free_onesided_helpmutexes();
    int lock_onesided_helpmutex_orig(int);
    int unlock_onesided_helpmutex_orig(int);
    int lock_onesided_helpmutex(int);
    int unlock_onesided_helpmutex(int);
 
    /* MPI general helpmutex Function Prototypes, from mpi_helpmutex.cpp */
-   void initialize_general_helpmutexes(void);
-   void finalize_general_helpmutexes(void);
+   void initialize_general_helpmutexes();
+   void finalize_general_helpmutexes();
    int alloc_general_helpmutex_orig(int);
    int free_general_helpmutex_orig(int);
    int alloc_general_helpmutexes(int);
-   int free_general_helpmutexes(void);
+   int free_general_helpmutexes();
    int lock_general_helpmutex_orig(int);
    int unlock_general_helpmutex_orig(int);
    int lock_general_helpmutex(int);

@@ -57,8 +57,8 @@
       <type>void</type>
       <name>PPIDD_Error</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2093851a8ee5ea0afef05751c8882a4f</anchor>
-      <arglist>(char *message, int *code)</arglist>
+      <anchor>a16e1aebb607213730b037da415349eba</anchor>
+      <arglist>(char *message, int code)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

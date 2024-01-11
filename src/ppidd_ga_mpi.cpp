@@ -97,8 +97,8 @@ namespace ga_mpi {
    }
 
 
-   void PPIDD_Error(char *message,int *code) {
-      GA_Error(message,*code);
+   void PPIDD_Error(char *message, int code) {
+      GA_Error(message,code);
    }
 
 

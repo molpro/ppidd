@@ -64,7 +64,7 @@ interface
  subroutine ppidd_error(message,code) bind(C,name='PPIDD_Error')
  use iso_c_binding, only : c_int, c_char
  character(c_char), intent(in) :: message ! must to terminated by c_null_char
- integer(c_int),    intent(in) :: code
+ integer(c_int), intent(in), value :: code
  end subroutine ppidd_error
 end interface
 

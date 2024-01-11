@@ -58,7 +58,7 @@ extern "C" {
     int flag=0;
     int ret=MPI_Initialized(&flag);
     if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Initialized failed (%d)",ret); exit(1);}
-    if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(&msg[0],&flag);}
+    if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(&msg[0],flag);}
     ret=MPI_Init(argc, argv);
     if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Init failed (%d)",ret); exit(1);}
 #ifdef HAVE_GA_H
@@ -220,7 +220,7 @@ extern "C" {
  *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
  *  - For \b MPI2, prints error, and then calls MPI_Abort.
  */
-   void PPIDD_Error(char *message,int *code) {
+   void PPIDD_Error(char *message, int code) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

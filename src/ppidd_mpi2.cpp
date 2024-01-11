@@ -70,8 +70,8 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Error(char *message,int *code) {
-      MPIGA_Error(message,*code);
+   void PPIDD_Error(char *message, int code) {
+      MPIGA_Error(message,code);
    }
 
 

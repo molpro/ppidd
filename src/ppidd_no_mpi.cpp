@@ -44,10 +44,10 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Error(char *message,int *code) {
-      fprintf(stdout," %s %d (%#x).\n", message,*code,*code);
+   void PPIDD_Error(char *message, int code) {
+      fprintf(stdout," %s %d (%#x).\n", message,code,code);
       fflush(stdout);
-      fprintf(stderr," %s %d (%#x).\n", message,*code,*code);
+      fprintf(stderr," %s %d (%#x).\n", message,code,code);
 
       printf(" PPIDD_Error: now exiting...\n");
       exit(1);

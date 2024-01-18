@@ -84,7 +84,7 @@ c
       chunk = (size+nproc-1)/nproc
       start = me*chunk+1
       end = min((start+chunk-1),size)
-      call ppidd_wtime(tt0)
+      tt0 = ppidd_wtime()
 c
       write(iout,*) 'me=',me,'writing:', start, end
 c     everybody writes chunk of data
@@ -112,7 +112,7 @@ c
       if(rc.ne.0)call ppidd_error('waitall failed'//c_null_char,rc)
       curid = 0
 
-      call ppidd_wtime(tt1)
+      tt1 = ppidd_wtime()
       ttw = tt1 -tt0
 c
       call ppidd_gsum(1_c_int,c_loc(ttw),1,'max'//c_null_char)
@@ -124,7 +124,7 @@ c     everybody reads different chunk of data
       start = (nproc-me-1)*chunk+1
       end = min((start+chunk-1),size)
       write(iout,*) 'me=',me,'reading:', start, end
-      call ppidd_wtime(tt0)
+      tt0 = ppidd_wtime()
       do i = start,end,dimnsn
 
 c           read and test data chunk by chunk
@@ -149,7 +149,7 @@ c
                endif
             enddo
       enddo
-      call ppidd_wtime(tt1)
+      tt1 = ppidd_wtime()
       ttr = tt1 -tt0
 c
       call ppidd_gsum(1_c_int,c_loc(ttr),1,'max'//c_null_char)

@@ -366,7 +366,7 @@ c ppidd_put latency trial test, in order to eliminate unstable behavior
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -375,7 +375,7 @@ c ppidd_put latency trial test, in order to eliminate unstable behavior
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -389,7 +389,7 @@ c ppidd_put latency standard test
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -398,7 +398,7 @@ c ppidd_put latency standard test
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -508,7 +508,7 @@ c ppidd_get latency trial test, in order to eliminate unstable behavior
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -517,7 +517,7 @@ c ppidd_get latency trial test, in order to eliminate unstable behavior
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -529,7 +529,7 @@ c ppidd_get latency standard test
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -538,7 +538,7 @@ c ppidd_get latency standard test
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -600,7 +600,7 @@ c ppidd_acc latency trial test, in order to eliminate unstable behavior
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -610,7 +610,7 @@ c ppidd_acc latency trial test, in order to eliminate unstable behavior
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -622,7 +622,7 @@ c ppidd_acc latency standard test
       wtimes=0.0
       do ipr=0,maxprc-1
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             do inum=1,nprocs
@@ -632,7 +632,7 @@ c ppidd_acc latency standard test
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -720,7 +720,7 @@ c ppidd_send/recv latency trial test, in order to eliminate unstable behavior
       do ipr=0,proc_ltop-1
         ipr_pair=maxprc-1-ipr
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             call ppidd_send(c_loc(buff(iprocs)),n,dtype,dest_src,sync)
@@ -733,7 +733,7 @@ c ppidd_send/recv latency trial test, in order to eliminate unstable behavior
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -747,7 +747,7 @@ c ppidd_send/recv latency standard test
       do ipr=0,proc_ltop-1
         ipr_pair=maxprc-1-ipr
         call ppidd_barrier()
-        call ppidd_wtime(wtime1)
+        wtime1=ppidd_wtime()
         if(iprocs.eq.ipr) then
           do irep=1,nrep
             call ppidd_send(c_loc(buff(iprocs)),n,dtype,dest_src,sync)
@@ -760,7 +760,7 @@ c ppidd_send/recv latency standard test
           end do
         end if
         call ppidd_barrier()
-        call ppidd_wtime(wtime2)
+        wtime2=ppidd_wtime()
         wtimes=wtimes+wtime2-wtime1
       end do
       call ppidd_barrier()
@@ -839,14 +839,14 @@ c ppidd_bcast latency trial test, in order to eliminate unstable behavior
       call ppidd_barrier()
       wtimes=0.0
       call ppidd_barrier()
-      call ppidd_wtime(wtime1)
+      wtime1=ppidd_wtime()
       do irep=1,nrep
         do ipr=0,nprocs-1
           call ppidd_bcast(c_loc(buff),n,1_c_int,ipr)
         end do
       end do
       call ppidd_barrier()
-      call ppidd_wtime(wtime2)
+      wtime2=ppidd_wtime()
       wtimes=wtime2-wtime1
       wlat=wtimes/dble(nrep*nprocs)
       if(iprocs.eq.0) write(iout,49) 'PPIDD_BRDCST=',wtimes,wlat*1.0d6
@@ -855,14 +855,14 @@ c ppidd_bcast latency standard test
       call ppidd_barrier()
       wtimes=0.0
       call ppidd_barrier()
-      call ppidd_wtime(wtime1)
+      wtime1=ppidd_wtime()
       do irep=1,nrep
         do ipr=0,nprocs-1
           call ppidd_bcast(c_loc(buff),n,1_c_int,ipr)
         end do
       end do
       call ppidd_barrier()
-      call ppidd_wtime(wtime2)
+      wtime2=ppidd_wtime()
       wtimes=wtime2-wtime1
       wlat=wtimes/dble(nrep*nprocs)
       if(iprocs.eq.0) write(iout,50) 'PPIDD_BRDCST=',wtimes,wlat*1.0d6
@@ -925,12 +925,12 @@ c ppidd_gsum latency trial test, in order to eliminate unstable behavior
       call ppidd_barrier()
       wtimes=0.0
       call ppidd_barrier()
-      call ppidd_wtime(wtime1)
+      wtime1=ppidd_wtime()
       do irep=1,nrep
         call ppidd_gsum(1_c_int,c_loc(buff),n,'+'//c_null_char)
       end do
       call ppidd_barrier()
-      call ppidd_wtime(wtime2)
+      wtime2=ppidd_wtime()
       wtimes=wtime2-wtime1
       wlat=wtimes/dble(nrep)
       if(iprocs.eq.0) write(iout,49) 'PPIDD_GSUM=',wtimes,wlat*1.0d6
@@ -939,12 +939,12 @@ c ppidd_gsum latency standard test
       call ppidd_barrier()
       wtimes=0.0
       call ppidd_barrier()
-      call ppidd_wtime(wtime1)
+      wtime1=ppidd_wtime()
       do irep=1,nrep
         call ppidd_gsum(1_c_int,c_loc(buff),n,'+'//c_null_char)
       end do
       call ppidd_barrier()
-      call ppidd_wtime(wtime2)
+      wtime2=ppidd_wtime()
       wtimes=wtime2-wtime1
       wlat=wtimes/dble(nrep)
       if(iprocs.eq.0) write(iout,50) 'PPIDD_GSUM=',wtimes,wlat*1.0d6
@@ -991,7 +991,7 @@ c... get current CPU time from Fortran intrinsic function and wall time from MPI
       double precision cpu,wtime
 
       cpu=dble(second())
-      call ppidd_wtime(wtime)
+      wtime=ppidd_wtime()
 
       return
       end
@@ -1078,16 +1078,16 @@ c... initialise the NXTVAL Server
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
       call ppidd_nxtval(nprocs,nval)
-      call ppidd_wtime(wtimea)
+      wtimea=ppidd_wtime()
       do while (nval.lt.num_tasks)
         call compute_task(npart,nscale_task,sumtemp)
         sum_array(iprocs+1)=sum_array(iprocs+1)+sumtemp
         task_array(iprocs+1)=task_array(iprocs+1)+1
-        call ppidd_wtime(wtimeb)
+        wtimeb=ppidd_wtime()
 c... time spent on computation and other overhead
         twt_array2(iprocs+1) =twt_array2(iprocs+1)+wtimeb-wtimea
         call ppidd_nxtval(nprocs,nval)
-        call ppidd_wtime(wtimea)
+        wtimea=ppidd_wtime()
       enddo
       call get_current_times(cpu2,wtime2)
 c... task time
@@ -1394,11 +1394,11 @@ c... convert time to nanosecond
 
 c... calculate the average time per ppidd_wtime calling
       call ppidd_barrier()
-      call ppidd_wtime(wtime1)
+      wtime1=ppidd_wtime()
       do i=1,ntimes
-        call ppidd_wtime(wtime0)
+        wtime0=ppidd_wtime()
       end do
-      call ppidd_wtime(wtime2)
+      wtime2=ppidd_wtime()
       wt_tot=wtime2-wtime1
 
       if(iprocs.eq.0) then

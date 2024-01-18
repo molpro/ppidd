@@ -199,18 +199,18 @@ extern "C" {
  *  - \b GA calls GA_Wtime, which is available only in release 4.1 or greater, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#WTIME
  *  - \b MPI2 calls MPI_Wtime
  */
-   void PPIDD_Wtime(double *ctime) {
+   double PPIDD_Wtime() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Wtime(ctime);
+      return ga_mpi::PPIDD_Wtime();
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Wtime(ctime);
+      return mpi2::PPIDD_Wtime();
 #endif
      default:
-      return no_mpi::PPIDD_Wtime(ctime);
+      return no_mpi::PPIDD_Wtime();
     }
   }
 

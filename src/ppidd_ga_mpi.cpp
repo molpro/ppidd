@@ -92,8 +92,8 @@ namespace ga_mpi {
    }
 
 
-   void PPIDD_Wtime(double *ctime) {
-      *ctime = GA_Wtime();
+   double PPIDD_Wtime() {
+      return GA_Wtime();
    }
 
 

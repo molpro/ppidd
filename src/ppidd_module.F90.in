@@ -54,10 +54,10 @@ interface
 end interface
 
 interface
- subroutine ppidd_wtime(ctime) bind(C,name='PPIDD_Wtime')
+ function ppidd_wtime() bind(C,name='PPIDD_Wtime')
  use iso_c_binding, only : c_double
- real(c_double), intent(out) :: ctime
- end subroutine ppidd_wtime
+ real(c_double) :: ppidd_wtime
+ end function ppidd_wtime
 end interface
 
 interface

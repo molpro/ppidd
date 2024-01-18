@@ -4,7 +4,7 @@
  extern void PPIDD_Finalize();
  extern int  PPIDD_Uses_ma();
  extern int  PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap);
- extern void PPIDD_Wtime(double *ctime);
+ extern double PPIDD_Wtime();
  extern void PPIDD_Error(char *message, int code);
  extern void PPIDD_Helper_server(int *flag, int64_t *num_per_server);
  extern void PPIDD_Nxtval(int64_t *numproc, int64_t *val);

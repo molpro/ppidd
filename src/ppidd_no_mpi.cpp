@@ -39,8 +39,8 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Wtime(double *ctime) {
-      *ctime = (double)0;
+   double PPIDD_Wtime() {
+      return (double)0;
    }
 
 

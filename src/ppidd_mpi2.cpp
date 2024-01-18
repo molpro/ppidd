@@ -65,8 +65,8 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Wtime(double *ctime) {
-      *ctime = MPI_Wtime();
+   double PPIDD_Wtime() {
+      return MPI_Wtime();
    }
 
 

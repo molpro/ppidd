@@ -47,11 +47,11 @@
       <arglist>(int dtype, int64_t *stack, int64_t *heap)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>double</type>
       <name>PPIDD_Wtime</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a5435ed4bb5938a418455f516363c13cb</anchor>
-      <arglist>(double *ctime)</arglist>
+      <anchor>a8737999edc5cb2e59357e005a7d52c88</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>

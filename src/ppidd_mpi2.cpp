@@ -75,8 +75,8 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Helper_server(int *flag, int64_t *numprocs_per_server) {
-      if ((int)*flag) {                              /* mutilple helper servers, node helper server, and single helper server */
+   void PPIDD_Helper_server(int flag, int64_t *numprocs_per_server) {
+      if (flag) {                                    /* mutilple helper servers, node helper server, and single helper server */
          use_helper_server=1;
          if ( (int)*numprocs_per_server > 1 ) {      /* reasonable mutilple helper servers, and single helper server */
             NPROCS_PER_HELPER=(int)*numprocs_per_server;

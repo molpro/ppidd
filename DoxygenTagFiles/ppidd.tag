@@ -64,8 +64,8 @@
       <type>void</type>
       <name>PPIDD_Helper_server</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a8cc347f18daa3ad75fa75da80252ada7</anchor>
-      <arglist>(int *flag, int64_t *numprocs_per_server)</arglist>
+      <anchor>afb8ee257625e38c67161287c34d5a028</anchor>
+      <arglist>(int flag, int numprocs_per_server)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

@@ -239,7 +239,7 @@ extern "C" {
 /*! Set the flag for data helper server and set the number of how many processes own one helper server
  *
  *  Set the helper_server flag: 1 (use); 0 (don't use). */
-   void PPIDD_Helper_server(int flag, int64_t *numprocs_per_server) {
+   void PPIDD_Helper_server(int flag, int numprocs_per_server) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

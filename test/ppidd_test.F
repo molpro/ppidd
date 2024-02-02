@@ -4,7 +4,7 @@
       use ppidd
       implicit none
       integer(c_int)     :: helper_server_flag
-      integer(c_int64_t) :: num_per_helper
+      integer(c_int)     :: num_per_helper
       integer(c_int64_t) :: iprocs
       integer(c_int)     :: argc=0_c_int
       type(c_ptr), target, dimension(1) :: argv
@@ -27,8 +27,8 @@
       num_per_helper=-1_c_int
 #else
 ! one helper server on every node */
-      helper_server_flag=1_c_int64_t
-      num_per_helper=0_c_int64_t
+      helper_server_flag=1_c_int
+      num_per_helper=0_c_int
 #endif
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
@@ -73,7 +73,7 @@ c... idtype=1: fortran double precision type
 #endif
 
 ! Call ppiddtest
-      call ppiddtest(helper_server_flag.eq.1)
+      call ppiddtest(helper_server_flag.eq.1_c_int)
 
 ! Terminate and Tidy up PPIDD
       call ppidd_finalize()

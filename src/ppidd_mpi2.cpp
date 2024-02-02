@@ -75,13 +75,13 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Helper_server(int flag, int64_t *numprocs_per_server) {
+   void PPIDD_Helper_server(int flag, int numprocs_per_server) {
       if (flag) {                                    /* mutilple helper servers, node helper server, and single helper server */
          use_helper_server=1;
-         if ( (int)*numprocs_per_server > 1 ) {      /* reasonable mutilple helper servers, and single helper server */
-            NPROCS_PER_HELPER=(int)*numprocs_per_server;
+         if ( numprocs_per_server > 1 ) {            /* reasonable mutilple helper servers, and single helper server */
+            NPROCS_PER_HELPER=numprocs_per_server;
          }
-         else if ( (int)*numprocs_per_server == 0 ) {/* node helper server: one helper server on every node */
+         else if ( numprocs_per_server == 0 ) {      /* node helper server: one helper server on every node */
            int mpinp;
            MPI_Comm_size(MPI_COMM_WORLD, &mpinp);
            if (NNODES_SYMMETRY) {
@@ -97,7 +97,7 @@ namespace mpi2 {
            }
          }
          else {                                      /* unreasonable mutilple helper servers, then only use single helper server */
-            fprintf(stderr,"%5d: WARNING: nprocs_per_server=%d is unreasonable. Will use only single helper server for all processes!\n", ProcID(),(int)*numprocs_per_server);
+            fprintf(stderr,"%5d: WARNING: nprocs_per_server=%d is unreasonable. Will use only single helper server for all processes!\n", ProcID(),numprocs_per_server);
             NPROCS_PER_HELPER=99999999;
          }
       }

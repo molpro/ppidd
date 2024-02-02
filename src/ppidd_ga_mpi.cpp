@@ -102,7 +102,7 @@ namespace ga_mpi {
    }
 
 
-   void PPIDD_Helper_server(int flag, int64_t *numprocs_per_server) {
+   void PPIDD_Helper_server(int flag, int numprocs_per_server) {
    }
 
 

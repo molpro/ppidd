@@ -441,8 +441,8 @@ static int n_in_msg_mpiq=0;
 
    static int PPIDD_Nxtval_initialised=0;
    static int64_t PPIDD_Nxtval_handle;
-   void PPIDD_Nxtval(int64_t *numproc, int64_t *val) {
-      if (*numproc < 0) {
+   void PPIDD_Nxtval(int numproc, int64_t *val) {
+      if (numproc < 0) {
         /* reset - collective */
         if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=0;

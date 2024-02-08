@@ -167,7 +167,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Nxtval(int64_t *numproc, int64_t *val) {
+   void PPIDD_Nxtval(int numproc, int64_t *val) {
       do_not_call("PPIDD_Nxtval");
    }
 

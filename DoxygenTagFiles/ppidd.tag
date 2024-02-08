@@ -232,8 +232,8 @@
       <type>void</type>
       <name>PPIDD_Nxtval</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>abac93e3f700e309c489497483b1bd30e</anchor>
-      <arglist>(int64_t *numproc, int64_t *val)</arglist>
+      <anchor>a7f68db9670b16b6aa6bc2450f980a8ac</anchor>
+      <arglist>(int numproc, int64_t *val)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

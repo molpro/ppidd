@@ -1074,10 +1074,10 @@ c...(1)  shared counter test with computing tasks
       if(verbose) write(iout,30)
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
 c... initialise the NXTVAL Server
-      call ppidd_nxtval(-nprocs,junk)
+      call ppidd_nxtval(int(-nprocs,c_int),junk)
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
-      call ppidd_nxtval(nprocs,nval)
+      call ppidd_nxtval(int(nprocs,c_int),nval)
       wtimea=ppidd_wtime()
       do while (nval.lt.num_tasks)
         call compute_task(npart,nscale_task,sumtemp)
@@ -1086,7 +1086,7 @@ c... initialise the NXTVAL Server
         wtimeb=ppidd_wtime()
 c... time spent on computation and other overhead
         twt_array2(iprocs+1) =twt_array2(iprocs+1)+wtimeb-wtimea
-        call ppidd_nxtval(nprocs,nval)
+        call ppidd_nxtval(int(nprocs,c_int),nval)
         wtimea=ppidd_wtime()
       enddo
       call get_current_times(cpu2,wtime2)
@@ -1097,7 +1097,7 @@ c... task time
 
 
 c... release the shared counter number in NXTVAL Server and set it to zero
-      call ppidd_nxtval(-nprocs,junk)
+      call ppidd_nxtval(int(-nprocs,c_int),junk)
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
@@ -1249,10 +1249,10 @@ c    2^31=2,147,483,648
      >            'Nprocs=',nprocs,'  Total tasks=', num_tasks
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
-      call ppidd_nxtval(nprocs,nval)
+      call ppidd_nxtval(int(nprocs,c_int),nval)
       do while (nval.lt.num_tasks)
         task_array(iprocs+1)=task_array(iprocs+1)+1
-        call ppidd_nxtval(nprocs,nval)
+        call ppidd_nxtval(int(nprocs,c_int),nval)
       enddo
       call get_current_times(cpu2,wtime2)
       tcpu_array1(iprocs+1)=cpu2-cpu1
@@ -1260,7 +1260,7 @@ c    2^31=2,147,483,648
       call ppidd_barrier()
 
 c... release the shared counter number in NXTVAL Server and set it to zero
-      call ppidd_nxtval(-nprocs,junk)
+      call ppidd_nxtval(int(-nprocs,c_int),junk)
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs

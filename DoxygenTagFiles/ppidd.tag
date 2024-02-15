@@ -68,11 +68,11 @@
       <arglist>(int flag, int numprocs_per_server)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int</type>
       <name>PPIDD_Size_all</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a958346f542ebc12e3e4e62e2bd1e9eaa</anchor>
-      <arglist>(int64_t *np)</arglist>
+      <anchor>ac1f35e2a2c40396f0de4be4c9894327f</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>

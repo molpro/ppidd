@@ -82,13 +82,13 @@ c... idtype=1: fortran double precision type
       subroutine ppiddtest(helper_server_flag)
       use ppidd
       implicit double precision (a-h,o-z)
-      integer(c_int64_t) :: iprocs, nproc, nproc_total
+      integer(c_int64_t) :: iprocs, nproc
       logical helper_server_flag
 
 c...  Get the processes number and process id
       call ppidd_size(nproc)
       call ppidd_rank(iprocs)
-      call ppidd_size_all(nproc_total)
+      nproc_total = ppidd_size_all()
 c
       iout=6
 c

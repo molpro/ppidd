@@ -108,10 +108,10 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Size_all(int64_t *np) {
+   int PPIDD_Size_all() {
       int mpinp;
       MPI_Comm_size(MPI_COMM_WORLD,&mpinp);
-      *np = (int64_t) mpinp;
+      return mpinp;
    }
 
 

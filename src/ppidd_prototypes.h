@@ -8,7 +8,7 @@
  extern void PPIDD_Error(char *message, int code);
  extern void PPIDD_Helper_server(int flag, int num_per_server);
  extern void PPIDD_Nxtval(int numproc, int64_t *val);
- extern void PPIDD_Size_all(int64_t *np);
+ extern int  PPIDD_Size_all();
  extern void PPIDD_Size(int64_t *np);
  extern void PPIDD_Rank(int64_t *me);
  extern void PPIDD_Init_fence();

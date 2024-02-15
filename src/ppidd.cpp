@@ -261,18 +261,18 @@ extern "C" {
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
  *  - \b MPI2 calls MPI_Comm_size for communicator MPI_COMM_WORLD.
  */
-   void PPIDD_Size_all(int64_t *np) {
+   int PPIDD_Size_all() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Size_all(np);
+      return ga_mpi::PPIDD_Size_all();
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Size_all(np);
+      return mpi2::PPIDD_Size_all();
 #endif
      default:
-      return no_mpi::PPIDD_Size_all(np);
+      return no_mpi::PPIDD_Size_all();
     }
    }
 

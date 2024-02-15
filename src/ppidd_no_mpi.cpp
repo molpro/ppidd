@@ -58,8 +58,8 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Size_all(int64_t *np) {
-      *np = (int64_t)1;
+   int PPIDD_Size_all() {
+      return 1;
    }
 
 

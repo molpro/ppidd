@@ -76,10 +76,10 @@ interface
 end interface
 
 interface
- subroutine ppidd_size_all(np) bind(C,name='PPIDD_Size_all')
- use iso_c_binding, only : c_int64_t
- integer(c_int64_t), intent(out) :: np
- end subroutine ppidd_size_all
+ function ppidd_size_all() bind(C,name='PPIDD_Size_all')
+ use iso_c_binding, only : c_int
+ integer(c_int) :: ppidd_size_all
+ end function ppidd_size_all
 end interface
 
 interface

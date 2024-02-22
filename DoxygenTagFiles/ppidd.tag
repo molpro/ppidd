@@ -75,11 +75,11 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int</type>
       <name>PPIDD_Size</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a0b870a6be1fb1793bd22512d9d2e19f8</anchor>
-      <arglist>(int64_t *np)</arglist>
+      <anchor>abe8f2ab3c7967ce078813ad0821e156f</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>

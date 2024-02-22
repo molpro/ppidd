@@ -20,14 +20,14 @@ int main(int argc, char **argv)
 
 int ppidd_ctest()
 {
-    int64_t me, nproc;
+    int64_t me;
 
-    PPIDD_Size(&nproc);
+    int nproc = PPIDD_Size();
     PPIDD_Rank(&me);
 
     if(me==0) {
        printf(" PPIDD initialized\n");
-       printf(" Nprocs= %" PRIu64 "    My proc= %" PRIu64 "\n",nproc,me);
+       printf(" Nprocs= %d    My proc= %" PRIu64 "\n",nproc,me);
        printf(" Performing PPIDD C tests:\n");
        fflush(stdout);
     }

@@ -82,11 +82,12 @@ c... idtype=1: fortran double precision type
       subroutine ppiddtest(helper_server_flag)
       use ppidd
       implicit double precision (a-h,o-z)
-      integer(c_int64_t) :: iprocs, nproc
+      integer(c_int64_t) :: iprocs
+      integer(c_int) nproc
       logical helper_server_flag
 
 c...  Get the processes number and process id
-      call ppidd_size(nproc)
+      nproc = ppidd_size()
       call ppidd_rank(iprocs)
       nproc_total = ppidd_size_all()
 c
@@ -229,10 +230,10 @@ c
       double precision cpu1,cpu2,cpu,speed
       integer lentot,lenbuf,len,ioff,ilo,ihi
       integer lenseg,lenlat
-      integer(c_int64_t) :: nprocs, iprocs
+      integer(c_int64_t) :: iprocs
       integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot,dest_src,sync,lenre,srcre
-      integer(c_int) dtype
+      integer(c_int) dtype, nprocs
       integer storetype
       integer ihandle,ihandlat
       character(len=80) :: name
@@ -264,7 +265,7 @@ c
         nrep_gsum =200000
       end if
 
-      call ppidd_size(nprocs)
+      nprocs = ppidd_size()
       call ppidd_rank(iprocs)
       if(maxprc.eq.0) maxprc=nprocs
       maxprc=min(maxprc,nprocs)
@@ -1009,7 +1010,8 @@ c... get current CPU time from Fortran intrinsic function and wall time from MPI
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer(c_int64_t) :: nprocs,iprocs
+      integer(c_int) nprocs
+      integer(c_int64_t) iprocs
       integer iout,i
       integer num_tasks,nscale_task,npart
       integer nval,junk
@@ -1030,7 +1032,7 @@ c    2^31=2,147,483,648
       sumtemp=0.0d0
       diffm=0.0d0
 
-      call ppidd_size(nprocs)
+      nprocs = ppidd_size()
       call ppidd_rank(iprocs)
 ! ARCCA Test Flag
       arcca_test_flag=.false.
@@ -1328,7 +1330,8 @@ c... release the memory in buffer space
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer(c_int64_t) :: nprocs,iprocs
+      integer(c_int)  nprocs
+      integer(c_int64_t) iprocs
       integer iout,i
       integer num_tasks,nscale_task,npart
       integer(c_int64_t) :: storetype
@@ -1351,7 +1354,7 @@ c    2^31=2,147,483,648
       sumtemp=0.0d0
       diffm=0.0d0
 
-      call ppidd_size(nprocs)
+      nprocs = ppidd_size()
       call ppidd_rank(iprocs)
 ! ARCCA Test Flag
       arcca_test_flag=.false.

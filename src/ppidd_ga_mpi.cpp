@@ -113,8 +113,8 @@ namespace ga_mpi {
    }
 
 
-   void PPIDD_Size(int64_t *np) {
-      *np = (int64_t)GA_Nnodes();
+   int PPIDD_Size() {
+      return GA_Nnodes();
    }
 
 

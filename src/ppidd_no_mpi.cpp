@@ -68,8 +68,8 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Rank(int64_t *me) {
-      *me = (int64_t)0;
+   int PPIDD_Rank() {
+      return 0;
    }
 
 

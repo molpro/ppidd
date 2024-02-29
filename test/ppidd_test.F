@@ -5,7 +5,7 @@
       implicit none
       integer(c_int)     :: helper_server_flag
       integer(c_int)     :: num_per_helper
-      integer(c_int64_t) :: iprocs
+      integer(c_int)     :: iprocs
       integer(c_int)     :: argc=0_c_int
       type(c_ptr), target, dimension(1) :: argv
       integer iout
@@ -33,7 +33,7 @@
       call ppidd_helper_server(helper_server_flag,num_per_helper)
       call ppidd_initialize_data()
 c
-      call ppidd_rank(iprocs)
+      iprocs = ppidd_rank()
       iout=6
       if(iprocs.eq.0)then
          write(iout,*)
@@ -82,13 +82,12 @@ c... idtype=1: fortran double precision type
       subroutine ppiddtest(helper_server_flag)
       use ppidd
       implicit double precision (a-h,o-z)
-      integer(c_int64_t) :: iprocs
-      integer(c_int) nproc
+      integer(c_int) nproc, iprocs
       logical helper_server_flag
 
 c...  Get the processes number and process id
       nproc = ppidd_size()
-      call ppidd_rank(iprocs)
+      iprocs = ppidd_rank()
       nproc_total = ppidd_size_all()
 c
       iout=6
@@ -230,10 +229,9 @@ c
       double precision cpu1,cpu2,cpu,speed
       integer lentot,lenbuf,len,ioff,ilo,ihi
       integer lenseg,lenlat
-      integer(c_int64_t) :: iprocs
       integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot,dest_src,sync,lenre,srcre
-      integer(c_int) dtype, nprocs
+      integer(c_int) dtype, nprocs, iprocs
       integer storetype
       integer ihandle,ihandlat
       character(len=80) :: name
@@ -266,7 +264,7 @@ c
       end if
 
       nprocs = ppidd_size()
-      call ppidd_rank(iprocs)
+      iprocs = ppidd_rank()
       if(maxprc.eq.0) maxprc=nprocs
       maxprc=min(maxprc,nprocs)
       if(nloop.eq.0) nloop=1
@@ -1010,8 +1008,7 @@ c... get current CPU time from Fortran intrinsic function and wall time from MPI
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer(c_int) nprocs
-      integer(c_int64_t) iprocs
+      integer(c_int) nprocs, iprocs
       integer iout,i
       integer num_tasks,nscale_task,npart
       integer nval,junk
@@ -1033,7 +1030,7 @@ c    2^31=2,147,483,648
       diffm=0.0d0
 
       nprocs = ppidd_size()
-      call ppidd_rank(iprocs)
+      iprocs = ppidd_rank()
 ! ARCCA Test Flag
       arcca_test_flag=.false.
 !      arcca_test_flag=.true.
@@ -1330,8 +1327,7 @@ c... release the memory in buffer space
       double precision cpu1,cpu2
       double precision wtime1,wtime2
       double precision sumtemp,diffm
-      integer(c_int)  nprocs
-      integer(c_int64_t) iprocs
+      integer(c_int) nprocs, iprocs
       integer iout,i
       integer num_tasks,nscale_task,npart
       integer(c_int64_t) :: storetype
@@ -1355,7 +1351,7 @@ c    2^31=2,147,483,648
       diffm=0.0d0
 
       nprocs = ppidd_size()
-      call ppidd_rank(iprocs)
+      iprocs = ppidd_rank()
 ! ARCCA Test Flag
       arcca_test_flag=.false.
 !      arcca_test_flag=.true.

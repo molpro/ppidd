@@ -305,18 +305,18 @@ extern "C" {
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID
  *  - \b MPI2 calls MPI_Comm_rank in computational communicator.
  */
-   void PPIDD_Rank(int64_t *me) {
+   int PPIDD_Rank() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Rank(me);
+      return ga_mpi::PPIDD_Rank();
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Rank(me);
+      return mpi2::PPIDD_Rank();
 #endif
      default:
-      return no_mpi::PPIDD_Rank(me);
+      return no_mpi::PPIDD_Rank();
     }
    }
 

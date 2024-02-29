@@ -10,7 +10,7 @@
  extern void PPIDD_Nxtval(int numproc, int64_t *val);
  extern int  PPIDD_Size_all();
  extern int  PPIDD_Size();
- extern void PPIDD_Rank(int64_t *me);
+ extern int  PPIDD_Rank();
  extern void PPIDD_Init_fence();
  extern void PPIDD_Fence();
  extern void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync);

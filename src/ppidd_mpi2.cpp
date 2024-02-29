@@ -122,10 +122,10 @@ namespace mpi2 {
    }
 
 
-   void PPIDD_Rank(int64_t *me) {
+   int PPIDD_Rank() {
       int mpime;
       MPI_Comm_rank(mpiga_compute_comm(),&mpime);
-      *me = (int64_t) mpime;
+      return mpime;
    }
 
 

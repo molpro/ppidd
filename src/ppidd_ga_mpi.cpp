@@ -118,8 +118,8 @@ namespace ga_mpi {
    }
 
 
-   void PPIDD_Rank(int64_t *me) {
-      *me = (int64_t)GA_Nodeid();
+   int PPIDD_Rank() {
+      return GA_Nodeid();
    }
 
 

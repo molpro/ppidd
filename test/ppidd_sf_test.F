@@ -52,12 +52,11 @@ c     integer stack, heap
 c
       integer nodeid, nnodes
       integer handle,i,start,end,j, chunk
-      integer(c_int64_t) me
-      integer(c_int) nproc, rc
+      integer(c_int) me, nproc, rc
 
 c...  Get the processes number and process id
       nproc = ppidd_size()
-      call ppidd_rank(me)
+      me = ppidd_rank()
       iout=6
       if(me.eq.0) write(iout,*) 'PPIDD initialized '
       if(me.eq.0)then

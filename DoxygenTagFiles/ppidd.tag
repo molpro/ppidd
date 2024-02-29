@@ -82,11 +82,11 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int</type>
       <name>PPIDD_Rank</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ac713dfcfe82baefb567e15663332c98d</anchor>
-      <arglist>(int64_t *me)</arglist>
+      <anchor>a26d9775043f3893d1ae8cb33f56912c7</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>

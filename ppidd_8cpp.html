@@ -124,10 +124,10 @@ Functions</h2></td></tr>
 <tr class="separator:a5c67417ceed19a2f9e6bd5eb6bada439"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2aaef4140504ad475c1621e80ec3c774"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a2aaef4140504ad475c1621e80ec3c774">PPIDD_Fence</a> ()</td></tr>
 <tr class="separator:a2aaef4140504ad475c1621e80ec3c774"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae15c21543c2b984588c32d32aff92f8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#ae15c21543c2b984588c32d32aff92f8b">PPIDD_Send</a> (void *buf, int64_t *count, int dtype, int64_t *dest, int64_t *sync)</td></tr>
-<tr class="separator:ae15c21543c2b984588c32d32aff92f8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30bb9805580edd9284e29313377b6bac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a30bb9805580edd9284e29313377b6bac">PPIDD_Recv</a> (void *buf, int64_t *count, int dtype, int64_t *source, int64_t *lenreal, int64_t *sourcereal, int64_t *sync)</td></tr>
-<tr class="separator:a30bb9805580edd9284e29313377b6bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a101dd0f37c640c19825ee5652aa228ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a101dd0f37c640c19825ee5652aa228ff">PPIDD_Send</a> (void *buf, int64_t *count, int dtype, int64_t *dest, int sync)</td></tr>
+<tr class="separator:a101dd0f37c640c19825ee5652aa228ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6525c180400b9dcbf4b6592739c74e91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a6525c180400b9dcbf4b6592739c74e91">PPIDD_Recv</a> (void *buf, int64_t *count, int dtype, int64_t *source, int64_t *lenreal, int64_t *sourcereal, int sync)</td></tr>
+<tr class="separator:a6525c180400b9dcbf4b6592739c74e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aa4dbb6fc408c0206af8a693dea1a20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a6aa4dbb6fc408c0206af8a693dea1a20">PPIDD_Wait</a> (int64_t *nodesel)</td></tr>
 <tr class="separator:a6aa4dbb6fc408c0206af8a693dea1a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ab04d1b60d69a251463b12bfd7bde41"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a8ab04d1b60d69a251463b12bfd7bde41">PPIDD_Iprobe</a> (int64_t *tag, int64_t *source)</td></tr>
@@ -1785,8 +1785,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a30bb9805580edd9284e29313377b6bac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30bb9805580edd9284e29313377b6bac">&#9670;&nbsp;</a></span>PPIDD_Recv()</h2>
+<a id="a6525c180400b9dcbf4b6592739c74e91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6525c180400b9dcbf4b6592739c74e91">&#9670;&nbsp;</a></span>PPIDD_Recv()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1830,7 +1830,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>sync</em>&#160;</td>
         </tr>
         <tr>
@@ -1850,8 +1850,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae15c21543c2b984588c32d32aff92f8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae15c21543c2b984588c32d32aff92f8b">&#9670;&nbsp;</a></span>PPIDD_Send()</h2>
+<a id="a101dd0f37c640c19825ee5652aa228ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a101dd0f37c640c19825ee5652aa228ff">&#9670;&nbsp;</a></span>PPIDD_Send()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1883,7 +1883,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>sync</em>&#160;</td>
         </tr>
         <tr>

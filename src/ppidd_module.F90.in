@@ -113,7 +113,7 @@ interface
  integer(c_int64_t), intent(in)        :: count
  integer(c_int),     intent(in), value :: dtype
  integer(c_int64_t), intent(in)        :: dest
- integer(c_int64_t), intent(in)        :: sync
+ integer(c_int), intent(in), value     :: sync
  end subroutine ppidd_send
 end interface
 
@@ -126,7 +126,7 @@ interface
  integer(c_int64_t), intent(in)         :: source
  integer(c_int64_t), intent(out)        :: lenreal
  integer(c_int64_t), intent(out)        :: sourcereal
- integer(c_int64_t), intent(in)         :: sync
+ integer(c_int), intent(in), value      :: sync
  end subroutine ppidd_recv
 end interface
 

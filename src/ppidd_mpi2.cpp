@@ -155,23 +155,22 @@ static int n_in_msg_mpiq=0;
 /* =================================================================== */
 
 
-   void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync) {
+   void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
       int mpicount=(int)*count;
       int mpidest=(int)*dest;
       int mpitag=dtype;
-      int mpisync=(int)*sync;
       int mpierr;
 
       int mpilenbuf = mpicount * dtype_size(dtype);
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
-                 ProcID(), mpidest, mpilenbuf, mpitag, mpisync);
+                 ProcID(), mpidest, mpilenbuf, mpitag, sync);
          fflush(stdout);
       }
 
-      if (mpisync) {
+      if (sync) {
          mpierr=MPI_Send(buf,mpilenbuf,MPI_CHAR,mpidest,mpitag,mpicomm);
          mpi_test_status("PPIDD_SEND: SEND:",mpierr);
       }
@@ -191,12 +190,11 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync) {
+   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
       int mpicount=(int)*count;
       int mpitag=dtype;
       int mpisource=(int)*source;
-      int mpisync=(int)*sync;
       int mpinode,mpierr;
       MPI_Status status;
       MPI_Request request;
@@ -210,11 +208,11 @@ static int n_in_msg_mpiq=0;
 
       if (MPIGA_Debug) {
          printf("PPIDD_Recv: node %d receving from %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
-                 ProcID(), mpisource, mpilenbuf, mpitag, mpisync);
+                 ProcID(), mpisource, mpilenbuf, mpitag, sync);
          fflush(stdout);
       }
 
-      if(mpisync==0){
+      if(sync==0){
          if (n_in_msg_mpiq >= MAX_MPIQ_LEN) {
             MPIGA_Error("PPIDD_Recv: nonblocking RECV: overflowing async Queue limit", n_in_msg_mpiq);
          }

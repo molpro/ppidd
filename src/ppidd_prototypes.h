@@ -13,8 +13,8 @@
  extern int  PPIDD_Rank();
  extern void PPIDD_Init_fence();
  extern void PPIDD_Fence();
- extern void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int64_t *sync);
- extern void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int64_t *sync);
+ extern void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int sync);
+ extern void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int sync);
  extern void PPIDD_Wait(int64_t *nodesel);
  extern int  PPIDD_Iprobe(int64_t *tag,int64_t *source);
  extern void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root);

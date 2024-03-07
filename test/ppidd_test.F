@@ -230,8 +230,8 @@ c
       integer lentot,lenbuf,len,ioff,ilo,ihi
       integer lenseg,lenlat
       integer maxprc,nloop,iout,i,ipr
-      integer proc_ltop,proc_rbot,dest_src,sync,lenre,srcre
-      integer(c_int) dtype, nprocs, iprocs
+      integer proc_ltop,proc_rbot,dest_src,lenre,srcre
+      integer(c_int) dtype, nprocs, iprocs, sync
       integer storetype
       integer ihandle,ihandlat
       character(len=80) :: name
@@ -707,7 +707,7 @@ c... ppidd_send and ppidd_recv
       dest_src=maxprc-1-iprocs
 c     data type: double precision; sync: synchronous
       dtype=1_c_int
-      sync=1
+      sync=1_c_int
 
 c.... measure latency
       n=1

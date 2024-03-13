@@ -120,8 +120,8 @@
       <type>void</type>
       <name>PPIDD_Wait</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a6aa4dbb6fc408c0206af8a693dea1a20</anchor>
-      <arglist>(int64_t *nodesel)</arglist>
+      <anchor>a7d72d5ccab8bc41ee2e530a56a54fee3</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -91,7 +91,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Wait(int64_t *nodesel) {
+   void PPIDD_Wait() {
    }
 
 

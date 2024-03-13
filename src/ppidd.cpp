@@ -407,22 +407,20 @@ extern "C" {
 
 /*! Wait for completion of all asynchronous send/receive.
  *
- * ignores nodesel !! */
-/*!
  *  - \b MPI2/GA_MPI calls MPI_Wait for all asynchronous requests.
  */
-   void PPIDD_Wait(int64_t *nodesel) {
+   void PPIDD_Wait() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Wait(nodesel);
+      return ga_mpi::PPIDD_Wait();
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Wait(nodesel);
+      return mpi2::PPIDD_Wait();
 #endif
      default:
-      return no_mpi::PPIDD_Wait(nodesel);
+      return no_mpi::PPIDD_Wait();
     }
    }
 

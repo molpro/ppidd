@@ -235,7 +235,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Wait(int64_t *nodesel) {
+   void PPIDD_Wait() {
       MPI_Status status;
 
       for (int i=0; i<n_in_msg_mpiq; i++){

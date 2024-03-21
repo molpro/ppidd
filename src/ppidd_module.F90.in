@@ -139,7 +139,7 @@ interface
  function ppidd_iprobe(tag,source) bind(C,name='PPIDD_Iprobe')
  use iso_c_binding, only : c_int, c_int64_t
  integer(c_int)                  :: ppidd_iprobe
- integer(c_int64_t), intent(in)  :: tag
+ integer(c_int), intent(in), value :: tag
  integer(c_int64_t), intent(in)  :: source
  end function ppidd_iprobe
 end interface

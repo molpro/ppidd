@@ -95,7 +95,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Iprobe(int64_t *tag,int64_t *source) {
+   int PPIDD_Iprobe(int tag,int64_t *source) {
     return 0 ;
    }
 

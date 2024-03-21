@@ -431,7 +431,7 @@ extern "C" {
  *
  *  - \b MPI2/GA_MPI calls MPI_Iprobe
  */
-   int PPIDD_Iprobe(int64_t *tag,int64_t *source) {
+   int PPIDD_Iprobe(int tag,int64_t *source) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -254,14 +254,13 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Iprobe(int64_t *tag,int64_t *source) {
+   int PPIDD_Iprobe(int tag,int64_t *source) {
       MPI_Comm mpicomm=mpiga_compute_comm();
-      int mpitag=(int)*tag;
       int flag;
       MPI_Status status;
 
       int mpisource = (*source < 0) ? MPI_ANY_SOURCE  : (int) *source;
-      int mpierr = MPI_Iprobe(mpisource, mpitag, mpicomm, &flag, &status);
+      int mpierr = MPI_Iprobe(mpisource, tag, mpicomm, &flag, &status);
       mpi_test_status("PPIDD_Iprobe:",mpierr);
       if(flag) return 1 ;
       else return 0 ;

@@ -42,7 +42,7 @@ c
 #else
          write(iout,*) 'PPIDD initialized (GA version of PPIDD).'
 #endif
-         call ppidd_flush6
+         flush(6)
       endif
       call ppidd_barrier()
 
@@ -104,7 +104,7 @@ c
 29       format(1x,'SUCCESSFUL TEST SHOULD END WITH ',
      >      ''' All PPIDD tests successful.''')
          write(iout,*)
-         call ppidd_flush6
+         flush(6)
       endif
 
 ! Synchronize processes (a barrier) before specific tests
@@ -333,7 +333,7 @@ c... ppidd_create
 10    format(1x,a,t20,'cpu=',f9.4,' sec,',
      >       '  wall time=',f9.4,' sec',:,
      >       ',  speed=', f12.2,' MB/sec')
-      call ppidd_flush6
+      flush(6)
 cc    create global data struct for testing latency, lenseg elements per proc evenly
       lenseg=1
       lenlat=nprocs*lenseg
@@ -350,7 +350,7 @@ c... ppidd_zero
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
       if(iprocs.eq.0) write(iout,10) 'ppidd_zero:',cpu,wtime
-      call ppidd_flush6
+      flush(6)
       ok=ppidd_zero(ihandlat)
 c
 c... ppidd_put
@@ -440,7 +440,7 @@ c ppidd_put bandwidth trial test, in order to eliminate unstable behavior
       if(wtimes.gt.0d0) speed=dble(maxprc*nloop)*totsize/wtimes
       if(iprocs.eq.0)
      >   write(iout,10) 'ppidd_put(trial):',cpus,wtimes,speed
-      call ppidd_flush6
+      flush(6)
       call ppidd_barrier()
       nloop=nloop_save
 
@@ -478,7 +478,7 @@ c... measure the bandwidth
 22        format(1x,a,t15,'  iprocs=',i3,'  cpu=',f9.4,' sec,',
      >         '  wall time=',f9.4,' sec,  speed=',
      >         f8.2,' MB/sec')
-          call ppidd_flush6
+          flush(6)
         end if
       end do
       speed=0.0d0
@@ -497,7 +497,7 @@ c... measure the bandwidth
 60    format(1x,a,t20,'cpu=',f9.4,' sec,',
      >       '  wall time=',f9.4,' sec',:,
      >     ',  latency=',f10.2,' microsec, bandwidth=', f12.2,' MB/sec')
-      call ppidd_flush6
+      flush(6)
 
 c
 c... ppidd_get
@@ -574,7 +574,7 @@ c... measure the bandwidth
           speed=0.0d0
           if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
           write(iout,22) 'ppidd_get:',ipr,cpu,wtime,speed
-          call ppidd_flush6
+          flush(6)
         end if
       end do
       speed=0.0d0
@@ -588,7 +588,7 @@ c... measure the bandwidth
         write(iout,10) 'ppidd_get:',cpus,wtimes,speed
         write(iout,60) 'ppidd_get:',cpus,wtimes,wlat*1.0d6,bdw
       end if
-      call ppidd_flush6
+      flush(6)
 c
 c... ppidd_acc
 c... measure the latency
@@ -668,7 +668,7 @@ c... measure the bandwidth
           speed=0.0d0
           if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
           write(iout,22) 'ppidd_acc:',ipr,cpu,wtime,speed
-          call ppidd_flush6
+          flush(6)
         end if
       end do
       speed=0.0
@@ -682,7 +682,7 @@ c... measure the bandwidth
         write(iout,10) 'ppidd_acc:',cpus,wtimes,speed
         write(iout,60) 'ppidd_acc:',cpus,wtimes,wlat*1.0d6,bdw
       end if
-      call ppidd_flush6
+      flush(6)
 c
 c... ppidd_destroy
       call ppidd_barrier()
@@ -692,7 +692,7 @@ c... ppidd_destroy
       cpu=cpu2-cpu1
       wtime=wtime2-wtime1
       if(iprocs.eq.0) write(iout,10) 'ppidd_destroy:',cpu,wtime
-      call ppidd_flush6
+      flush(6)
 
       ok=ppidd_destroy(ihandlat)
 
@@ -810,7 +810,7 @@ c.... measure bandwidth
           speed=0.0d0
           if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
           write(iout,22) 'ppidd_send/recv:',ipr,cpu,wtime,speed
-          call ppidd_flush6
+          flush(6)
         end if
       end do
       speed=0.0
@@ -827,7 +827,7 @@ c.... measure bandwidth
      >  cpus,wtimes,speed
       if(iprocs.eq.0) write(iout,60) 'ppidd_send/recv:',
      >  cpus,wtimes,wlat*1.0d6,bdw
-      call ppidd_flush6
+      flush(6)
 !      nloop=nloop_save
 c
 c... ppidd_brdcst
@@ -896,7 +896,7 @@ c ppidd_bcast bandwidth test
           speed=0.0d0
           if(wtime.gt.0d0) speed=totsize*dble(nloop)/wtime
           write(iout,22) 'ppidd_brdcst:',ipr,cpu,wtime,speed
-          call ppidd_flush6
+          flush(6)
         end if
       end do
       speed=0.0
@@ -912,7 +912,7 @@ c ppidd_bcast bandwidth test
         write(iout,10) 'ppidd_brdcst:',cpus,wtimes,speed
         write(iout,60) 'ppidd_brdcst:',cpus,wtimes,wlat*1.0d6,bdw
       end if
-      call ppidd_flush6
+      flush(6)
       totsize=totsize_save
       lentot=lentot_save
 c
@@ -975,7 +975,7 @@ c ppidd_gsum bandwidth standard test
       if(iprocs.eq.0)write(iout,10) 'ppidd_gsum:',cpus,wtimes,speed
       if(iprocs.eq.0) write(iout,60) 'ppidd_gsum:',
      >  cpus,wtimes,wlat*1.0d6,bdw
-      call ppidd_flush6
+      flush(6)
 c
 c... release the memory in buffer space
       IF( ALLOCATED(buff) ) DEALLOCATE( buff )
@@ -1042,7 +1042,7 @@ c    2^31=2,147,483,648
 
       if(iprocs.eq.0) write(iout,*)
       if(iprocs.eq.0) write(iout,*) 'PPIDD shared counter tests:'
-      call ppidd_flush6
+      flush(6)
 
 #if defined(GA_MPI)
 
@@ -1364,7 +1364,7 @@ c    2^31=2,147,483,648
 
       if(iprocs.eq.0) write(iout,*)
       if(iprocs.eq.0) write(iout,*) 'PPIDD mutex tests:'
-      call ppidd_flush6
+      flush(6)
 
 c... calculate the average time per get_current_times calling
       ntimes=1000000

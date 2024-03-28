@@ -134,8 +134,8 @@
       <type>void</type>
       <name>PPIDD_BCast</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aef73e1faec9468f940eb3980753c9e76</anchor>
-      <arglist>(void *buffer, int64_t *count, int dtype, int64_t *root)</arglist>
+      <anchor>a7d4c00847d5aa4054cba535fcead6f0d</anchor>
+      <arglist>(void *buffer, int64_t *count, int dtype, int root)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

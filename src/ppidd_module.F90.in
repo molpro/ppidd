@@ -150,7 +150,7 @@ interface
  type(c_ptr),        intent(in), value :: buffer ! call ppidd_bcast(c_loc(f_buffer),...)
  integer(c_int64_t), intent(in)        :: count
  integer(c_int),     intent(in), value :: dtype
- integer(c_int64_t), intent(in)        :: root
+ integer(c_int), intent(in), value     :: root
  end subroutine ppidd_bcast
 end interface
 

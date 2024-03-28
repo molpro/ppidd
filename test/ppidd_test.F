@@ -841,7 +841,7 @@ c ppidd_bcast latency trial test, in order to eliminate unstable behavior
       wtime1=ppidd_wtime()
       do irep=1,nrep
         do ipr=0,nprocs-1
-          call ppidd_bcast(c_loc(buff),n,1_c_int,ipr)
+          call ppidd_bcast(c_loc(buff),n,1_c_int,int(ipr,c_int))
         end do
       end do
       call ppidd_barrier()
@@ -857,7 +857,7 @@ c ppidd_bcast latency standard test
       wtime1=ppidd_wtime()
       do irep=1,nrep
         do ipr=0,nprocs-1
-          call ppidd_bcast(c_loc(buff),n,1_c_int,ipr)
+          call ppidd_bcast(c_loc(buff),n,1_c_int,int(ipr,c_int))
         end do
       end do
       call ppidd_barrier()
@@ -881,7 +881,7 @@ c ppidd_bcast bandwidth test
         nrest=lentot
         do ioff=0,lentot-1,lenbuf
           len=min(lenbuf,nrest)
-          call ppidd_bcast(c_loc(buff),len,1_c_int,ipr)
+          call ppidd_bcast(c_loc(buff),len,1_c_int,int(ipr,c_int))
           nopr=nopr+1
           nrest=nrest-len
         end do
@@ -1100,11 +1100,11 @@ c... release the shared counter number in NXTVAL Server and set it to zero
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array2(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array2(i)), 1,1_c_int,int(i-1,c_int))
       end do
 
 c... check whether right numbers are obtained
@@ -1185,10 +1185,10 @@ c...(2)  distribute tasks evenly to every process without shared counter
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
       end do
 
 c... check whether right numbers are obtained
@@ -1263,9 +1263,9 @@ c... release the shared counter number in NXTVAL Server and set it to zero
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
       end do
       call ppidd_barrier()
 
@@ -1487,10 +1487,10 @@ c... task time
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
       end do
 
 c... check whether right numbers are obtained
@@ -1565,10 +1565,10 @@ c...(2)  distribute tasks evenly to every process without mutex (lock and unlock
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(sum_array(i)), 1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
       end do
 
 c... check whether right numbers are obtained
@@ -1644,9 +1644,9 @@ c    2^31=2,147,483,648
 
 c... broadcast the completed tasks on current process
       do i=1,nprocs
-        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,i-1)
-        call ppidd_bcast(c_loc(tcpu_array1(i)), 1,1_c_int,i-1)
-        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,i-1)
+        call ppidd_bcast(c_loc(task_array(i)),1,0_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(tcpu_array1(i)),1,1_c_int,int(i-1,c_int))
+        call ppidd_bcast(c_loc(twt_array1(i)), 1,1_c_int,int(i-1,c_int))
       end do
       call ppidd_barrier()
 

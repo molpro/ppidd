@@ -455,7 +455,7 @@ extern "C" {
  *
  *  - \c dtype=0 : Fortran integer and logical types
  *  - \c dtype=1 : Fortran double precision type */
-   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
+   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

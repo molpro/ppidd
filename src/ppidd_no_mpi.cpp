@@ -100,7 +100,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root) {
+   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root) {
    }
 
 

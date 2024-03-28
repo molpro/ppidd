@@ -17,7 +17,7 @@
  extern void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int sync);
  extern void PPIDD_Wait();
  extern int  PPIDD_Iprobe(int tag,int64_t *source);
- extern void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int64_t *root);
+ extern void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root);
  extern void PPIDD_Barrier();
  extern void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op);
  extern int  PPIDD_Create_irreg(char *name,int64_t *lenin,int64_t *nchunk,int dtype,int64_t *storetype,int64_t *handle);

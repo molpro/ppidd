@@ -148,8 +148,8 @@
       <type>void</type>
       <name>PPIDD_Gsum</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>afea7848ae19f1a7942001f44fdc426f0</anchor>
-      <arglist>(int dtype, void *buffer, int64_t *len, char *op)</arglist>
+      <anchor>aa72378b9de01b4cae8ee2713549f1833</anchor>
+      <arglist>(int dtype, void *buffer, int len, char *op)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

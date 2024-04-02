@@ -114,7 +114,7 @@ c
       tt1 = ppidd_wtime()
       ttw = tt1 -tt0
 c
-      call ppidd_gsum(1_c_int,c_loc(ttw),1,'max'//c_null_char)
+      call ppidd_gsum(1_c_int,c_loc(ttw),1_c_int,'max'//c_null_char)
       call ppidd_barrier()
       flush(6)
 c
@@ -151,7 +151,7 @@ c
       tt1 = ppidd_wtime()
       ttr = tt1 -tt0
 c
-      call ppidd_gsum(1_c_int,c_loc(ttr),1,'max'//c_null_char)
+      call ppidd_gsum(1_c_int,c_loc(ttr),1_c_int,'max'//c_null_char)
       call ppidd_barrier()
 c
       flush(6)

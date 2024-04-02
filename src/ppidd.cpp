@@ -499,7 +499,7 @@ extern "C" {
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
-   void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
+   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -164,7 +164,7 @@ interface
  use iso_c_binding, only : c_int, c_int64_t, c_char, c_ptr
  integer(c_int),     intent(in), value :: dtype
  type(c_ptr),        intent(in), value :: buffer ! call ppidd_gsum(c_loc(f_buffer),...)
- integer(c_int64_t), intent(in)        :: len
+ integer(c_int),     intent(in), value :: len
  character(c_char),  intent(in)        :: op ! must to terminated by c_null_char
  end subroutine ppidd_gsum
 end interface

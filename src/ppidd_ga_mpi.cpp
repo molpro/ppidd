@@ -275,10 +275,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
-      int buflen=(int)*len;
+   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
       int gadtype=dtype_ga(dtype);
-      GA_Gop(gadtype, buffer, buflen, op);
+      GA_Gop(gadtype, buffer, len, op);
    }
 
 

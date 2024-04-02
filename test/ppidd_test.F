@@ -926,7 +926,8 @@ c ppidd_gsum latency trial test, in order to eliminate unstable behavior
       call ppidd_barrier()
       wtime1=ppidd_wtime()
       do irep=1,nrep
-        call ppidd_gsum(1_c_int,c_loc(buff),n,'+'//c_null_char)
+        call ppidd_gsum(1_c_int,c_loc(buff),int(n,c_int),
+     & '+'//c_null_char)
       end do
       call ppidd_barrier()
       wtime2=ppidd_wtime()
@@ -940,7 +941,8 @@ c ppidd_gsum latency standard test
       call ppidd_barrier()
       wtime1=ppidd_wtime()
       do irep=1,nrep
-        call ppidd_gsum(1_c_int,c_loc(buff),n,'+'//c_null_char)
+        call ppidd_gsum(1_c_int,c_loc(buff),int(n,c_int),
+     & '+'//c_null_char)
       end do
       call ppidd_barrier()
       wtime2=ppidd_wtime()
@@ -956,7 +958,8 @@ c ppidd_gsum bandwidth standard test
       nrest=lentot
       do ioff=0,lentot-1,lenbuf
         len=min(lenbuf,nrest)
-        call ppidd_gsum(1_c_int,c_loc(buff),len,'+'//c_null_char)
+        call ppidd_gsum(1_c_int,c_loc(buff),int(len,c_int),
+     & '+'//c_null_char)
         nopr=nopr+1
         nrest=nrest-len
       end do

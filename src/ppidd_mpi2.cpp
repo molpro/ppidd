@@ -285,10 +285,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
-      int mpilen=(int)*len;
+   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
       MPI_Datatype mpidtype=dtype_mpi(dtype);
-      MPI_GSum(mpidtype,buffer,mpilen, op);
+      MPI_GSum(mpidtype, buffer, len, op);
    }
 
 

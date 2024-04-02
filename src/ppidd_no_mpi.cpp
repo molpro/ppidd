@@ -108,7 +108,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int64_t *len, char *op) {
+   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
    }
 
 

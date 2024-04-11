@@ -155,8 +155,8 @@
       <type>int</type>
       <name>PPIDD_Create_irreg</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a1958bbfc0da771fbdca401e5edf69aab</anchor>
-      <arglist>(char *name, int64_t *lenin, int64_t *nchunk, int dtype, int64_t *storetype, int64_t *handle)</arglist>
+      <anchor>a3e94a4c73e72d2ae6c4e80d0de14c5d6</anchor>
+      <arglist>(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

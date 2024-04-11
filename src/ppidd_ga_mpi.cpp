@@ -281,9 +281,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int dtype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
       int ndim=1;
-      ga_int nblock=(ga_int)*nchunk;
+      ga_int nblock=(ga_int)nchunk;
       int np;
       int i;
       ga_int iad;

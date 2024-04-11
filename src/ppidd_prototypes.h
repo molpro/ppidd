@@ -20,7 +20,7 @@
  extern void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root);
  extern void PPIDD_Barrier();
  extern void PPIDD_Gsum(int dtype,void *buffer,int len, char *op);
- extern int  PPIDD_Create_irreg(char *name,int64_t *lenin,int64_t *nchunk,int dtype,int64_t *storetype,int64_t *handle);
+ extern int  PPIDD_Create_irreg(char *name,int64_t *lenin,int64_t nchunk,int dtype,int storetype,int64_t *handle);
  extern int  PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle);
  extern int  PPIDD_Destroy(int64_t *handle);
  extern int  PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi);

@@ -291,10 +291,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t *nchunk, int dtype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
       int mpierr;
-      int mpinchunk=(int)*nchunk;
-      int stype=(int)*storetype;
+      int mpinchunk=(int)nchunk;
       int mpihandle;
 
       std::vector<int> mpilenin(mpinchunk);
@@ -304,7 +303,7 @@ static int n_in_msg_mpiq=0;
         mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
       }
       else {
-        if (stype==0)
+        if (storetype==0)
           mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
         else {
           int mproc=0;

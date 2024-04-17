@@ -162,8 +162,8 @@
       <type>int</type>
       <name>PPIDD_Create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a42cbb824c3414ff606cb6f49e4bad003</anchor>
-      <arglist>(char *name, int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle)</arglist>
+      <anchor>aae0063e4048b471f3b7acbfafad0cc11</anchor>
+      <arglist>(char *name, int64_t lentot, int dtype, int storetype, int64_t *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

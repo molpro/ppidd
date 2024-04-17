@@ -117,7 +117,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
       do_not_call("PPIDD_Create");
    }
 

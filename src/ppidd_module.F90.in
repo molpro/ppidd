@@ -187,9 +187,9 @@ interface
  use iso_c_binding, only : c_int, c_int64_t, c_char
  integer(c_int)                        :: ppidd_create
  character(c_char),  intent(in)        :: name ! must to terminated by c_null_char
- integer(c_int64_t), intent(in)        :: lentot
+ integer(c_int64_t), intent(in), value :: lentot
  integer(c_int),     intent(in), value :: dtype
- integer(c_int64_t), intent(in)        :: storetype
+ integer(c_int),     intent(in), value :: storetype
  integer(c_int64_t), intent(out)       :: handle
  end function ppidd_create
 end interface

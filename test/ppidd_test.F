@@ -231,8 +231,7 @@ c
       integer lenseg,lenlat
       integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot,dest_src,lenre,srcre
-      integer(c_int) dtype, nprocs, iprocs, sync
-      integer storetype
+      integer(c_int) dtype, nprocs, iprocs, sync, storetype
       integer ihandle,ihandlat
       character(len=80) :: name
       integer(c_int) :: ok
@@ -300,19 +299,19 @@ c     dtype=1_c_int: double precision
 101     format(/,a,'Array data are stored across distributed compute'
      >  ,' processes:')
         dtype=1_c_int
-        storetype=0
+        storetype=0_c_int
       else
 c... case (1)
         if (loop_array.eq.1) then
           if(iprocs.eq.0) write(iout,101) ' (1) '
           dtype=1_c_int
-          storetype=0
+          storetype=0_c_int
 c... case (2)
         else
           if(iprocs.eq.0) write(iout,102)
 102       format(/' (2) Array data are stored on helper processes:')
           dtype=1_c_int
-          storetype=1
+          storetype=1_c_int
         end if
       end if
 !      if (loop_array.eq.1 .and. nloop_array.eq.2) cycle  !skip case (1) for MPI2

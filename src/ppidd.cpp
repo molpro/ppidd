@@ -550,7 +550,7 @@ extern "C" {
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

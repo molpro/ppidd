@@ -310,8 +310,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
-      ga_int galentot=(ga_int)*lentot;
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
+      ga_int galentot=(ga_int)lentot;
       int gahandle;
       int gadtype=dtype_ga(dtype);
 
@@ -444,9 +444,8 @@ static int n_in_msg_mpiq=0;
         //      }
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
-        int64_t lentot=1, storetype=1;
 	std::string name="Nxtval";
-        PPIDD_Create(&name[0],&lentot,0,&storetype,&PPIDD_Nxtval_handle);
+        PPIDD_Create(&name[0],1,0,1,&PPIDD_Nxtval_handle);
         PPIDD_Zero(&PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         *val=0;

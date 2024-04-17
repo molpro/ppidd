@@ -316,30 +316,29 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create(char *name,int64_t *lentot, int dtype, int64_t *storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
       int mpierr;
       int mpilentot;
-      int stype=(int)*storetype;
       int mpihandle;
 
-      if (*lentot > INT_MAX) {
+      if (lentot > INT_MAX) {
        printf(" ERROR: PPIDD_Create: lentot too large for MPI\n");
        exit(1);
       }
-      else mpilentot=(int)*lentot;
+      else mpilentot=(int)lentot;
       MPI_Datatype mpidtype=dtype_mpi(dtype);
       if (use_helper_server==0) {
         mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
       }
       else {
-        if (stype==0)
+        if (storetype==0)
          mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
         else {
          int mproc=0;
          mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, dtype);
         }
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,stype,dtype);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,storetype,dtype);
 
       *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;

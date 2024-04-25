@@ -362,18 +362,17 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
       int mpihandle=(int)*handle;
-      int mpirank=(int)*rank;
       int mpiilo;
       int mpiihi;
       int mpierr;
 
       if ( mpiga_inquire_storetype(mpihandle) == 0 ) {
-         mpierr=mpiga_distribution( mpihandle, mpirank, &mpiilo, &mpiihi);
+         mpierr=mpiga_distribution( mpihandle, rank, &mpiilo, &mpiihi);
       }
       else {
-         mpierr=twosided_helpga_distrib( mpihandle, mpirank, &mpiilo, &mpiihi);
+         mpierr=twosided_helpga_distrib( mpihandle, rank, &mpiilo, &mpiihi);
       }
 
       *ilo = (int64_t) mpiilo;

@@ -592,7 +592,7 @@ extern "C" {
  *  If no array elements are owned by the process, the range is returned as [0,-1].
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION
  */
-   int PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

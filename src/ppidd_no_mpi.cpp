@@ -127,7 +127,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
       do_not_call("PPIDD_Distrib");
    }
 

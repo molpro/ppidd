@@ -333,13 +333,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int64_t *rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
       int gahandle=(int)*handle;
-      int garank=(int)*rank;
       ga_int gailo[1];
       ga_int gaihi[1];
 
-      NGA_DISTRIBUTION(gahandle, garank, gailo, gaihi);
+      NGA_DISTRIBUTION(gahandle, rank, gailo, gaihi);
 /* If no array elements are owned by process iproc, the range is returned as lo[ ]=0 and hi[ ]= -1 for all dimensions. */
       if (gailo[0]<=gaihi[0]) {
          *ilo = (int64_t) (gailo[0] + 1);

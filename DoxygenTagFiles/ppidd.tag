@@ -176,8 +176,8 @@
       <type>int</type>
       <name>PPIDD_Distrib</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a7b7cc054cc05957ef9a02ffa3910e6e8</anchor>
-      <arglist>(int64_t *handle, int64_t *rank, int64_t *ilo, int64_t *ihi)</arglist>
+      <anchor>afbb7e3fd3482b9dbcf4ea9811da92c60</anchor>
+      <arglist>(int64_t *handle, int rank, int64_t *ilo, int64_t *ihi)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -382,11 +382,11 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int64_t *np) {
+   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       int mpihandle=(int)*handle;
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
-      int mpisize,mpinp;
+      int mpisize;
       int mpierr;
 
       MPI_Comm_size(mpiga_compute_comm(), &mpisize);
@@ -394,18 +394,17 @@ static int n_in_msg_mpiq=0;
       std::vector<int> mpiproclist(mpisize);
 
       if ( mpiga_inquire_storetype(mpihandle) == 0 ) {
-         mpierr=mpiga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], &mpinp);
+         mpierr=mpiga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
       }
       else {
-         mpierr=twosided_helpga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], &mpinp);
+         mpierr=twosided_helpga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
       }
 
-      for (int i=0;i<mpinp;i++) {
+      for (int i=0;i<*np;i++) {
          map[2*i]=(int64_t)mpimap[2*i];
          map[2*i+1]=(int64_t)mpimap[2*i+1];
          proclist[i]=(int64_t)mpiproclist[i];
       }
-      *np = (int64_t) mpinp;
       if(mpierr==0) return 1 ;
       else return 0 ;
    }

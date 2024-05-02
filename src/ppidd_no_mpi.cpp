@@ -132,7 +132,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int64_t *np) {
+   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       do_not_call("PPIDD_Location");
    }
 

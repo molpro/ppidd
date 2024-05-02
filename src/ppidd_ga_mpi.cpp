@@ -352,7 +352,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int64_t *np) {
+   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       int mpihandle=(int)*handle;
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
@@ -361,14 +361,13 @@ static int n_in_msg_mpiq=0;
       std::vector<ga_int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
 
-      int mpinp=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
+      *np=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
 
-      for (int i=0;i<mpinp;i++) {
+      for (int i=0;i<*np;i++) {
          map[2*i]=(int64_t)(mpimap[2*i]+1);
          map[2*i+1]=(int64_t)(mpimap[2*i+1]+1);
          proclist[i]=(int64_t)mpiproclist[i];
       }
-      *np = (int64_t) mpinp;
       return 1 ;
    }
 

@@ -222,7 +222,7 @@ interface
  integer(c_int64_t), intent(in)  :: ihi
  type(c_ptr), intent(in), value  :: map      ! call ppidd_location(...,c_loc(f_map),...)
  type(c_ptr), intent(in), value  :: proclist ! call ppidd_location(...,c_loc(f_proclist),...)
- integer(c_int64_t), intent(out) :: np
+ integer(c_int), intent(out) :: np
  end function ppidd_location
 end interface
 

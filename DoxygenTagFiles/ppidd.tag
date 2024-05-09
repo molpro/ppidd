@@ -250,11 +250,11 @@
       <arglist>(int64_t *handle, char *name)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int</type>
       <name>PPIDD_Inquire_stype</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>abbf907f0689650965e18e1c731bd06c6</anchor>
-      <arglist>(int64_t *handle, int64_t *storetype)</arglist>
+      <anchor>a475d0cf4a393a545adbf5149615d28d1</anchor>
+      <arglist>(int64_t *handle)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

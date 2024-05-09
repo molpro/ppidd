@@ -37,7 +37,7 @@ var searchData=
   ['ppidd_5finitialize_5fdata_34',['PPIDD_Initialize_data',['../ppidd_8cpp.html#accd1aaec40977ac816e292441b1fdb6f',1,'ppidd.cpp']]],
   ['ppidd_5finquire_5fmem_35',['PPIDD_Inquire_mem',['../ppidd_8cpp.html#a6a56a2ff876976509db45c72aef808b1',1,'ppidd.cpp']]],
   ['ppidd_5finquire_5fname_36',['PPIDD_Inquire_name',['../ppidd_8cpp.html#a797999e233bfa7facd26309045be55d5',1,'ppidd.cpp']]],
-  ['ppidd_5finquire_5fstype_37',['PPIDD_Inquire_stype',['../ppidd_8cpp.html#abbf907f0689650965e18e1c731bd06c6',1,'ppidd.cpp']]],
+  ['ppidd_5finquire_5fstype_37',['PPIDD_Inquire_stype',['../ppidd_8cpp.html#a475d0cf4a393a545adbf5149615d28d1',1,'ppidd.cpp']]],
   ['ppidd_5fiprobe_38',['PPIDD_Iprobe',['../ppidd_8cpp.html#a31736f2ab77ea6beedc6dc7013a6a9c9',1,'ppidd.cpp']]],
   ['ppidd_5flocation_39',['PPIDD_Location',['../ppidd_8cpp.html#a5e42d860066f762d0e6b995cbc5ebead',1,'ppidd.cpp']]],
   ['ppidd_5flock_5fmutex_40',['PPIDD_Lock_mutex',['../ppidd_8cpp.html#a2b1aced8474d99c72ac36b5a818e9f7a',1,'ppidd.cpp']]],

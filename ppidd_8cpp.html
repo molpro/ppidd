@@ -175,8 +175,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a797999e233bfa7facd26309045be55d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a797999e233bfa7facd26309045be55d5">PPIDD_Inquire_name</a> (int64_t *handle, char *name)</td></tr>
 <tr class="memdesc:a797999e233bfa7facd26309045be55d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of a global array represented by the handle.  <a href="ppidd_8cpp.html#a797999e233bfa7facd26309045be55d5">More...</a><br /></td></tr>
 <tr class="separator:a797999e233bfa7facd26309045be55d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbf907f0689650965e18e1c731bd06c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#abbf907f0689650965e18e1c731bd06c6">PPIDD_Inquire_stype</a> (int64_t *handle, int64_t *storetype)</td></tr>
-<tr class="separator:abbf907f0689650965e18e1c731bd06c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a475d0cf4a393a545adbf5149615d28d1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a475d0cf4a393a545adbf5149615d28d1">PPIDD_Inquire_stype</a> (int64_t *handle)</td></tr>
+<tr class="separator:a475d0cf4a393a545adbf5149615d28d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a56a2ff876976509db45c72aef808b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a6a56a2ff876976509db45c72aef808b1">PPIDD_Inquire_mem</a> (int64_t *mem_used)</td></tr>
 <tr class="memdesc:a6a56a2ff876976509db45c72aef808b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.  <a href="ppidd_8cpp.html#a6a56a2ff876976509db45c72aef808b1">More...</a><br /></td></tr>
 <tr class="separator:a6a56a2ff876976509db45c72aef808b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1445,28 +1445,18 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abbf907f0689650965e18e1c731bd06c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbf907f0689650965e18e1c731bd06c6">&#9670;&nbsp;</a></span>PPIDD_Inquire_stype()</h2>
+<a id="a475d0cf4a393a545adbf5149615d28d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a475d0cf4a393a545adbf5149615d28d1">&#9670;&nbsp;</a></span>PPIDD_Inquire_stype()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void PPIDD_Inquire_stype </td>
+          <td class="memname">int PPIDD_Inquire_stype </td>
           <td>(</td>
           <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>handle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>storetype</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

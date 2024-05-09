@@ -807,18 +807,18 @@ extern "C" {
    - \c storetype=0 : Normal distributed array stored across the distributed processes
    - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
    - \c This operation is local. */
-   void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
+   int PPIDD_Inquire_stype(int64_t *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Inquire_stype(handle,storetype);
+      return ga_mpi::PPIDD_Inquire_stype(handle);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Inquire_stype(handle,storetype);
+      return mpi2::PPIDD_Inquire_stype(handle);
 #endif
      default:
-      return no_mpi::PPIDD_Inquire_stype(handle,storetype);
+      return no_mpi::PPIDD_Inquire_stype(handle);
     }
    }
 

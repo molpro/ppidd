@@ -182,7 +182,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
+   int PPIDD_Inquire_stype(int64_t *handle) {
       do_not_call("PPIDD_Inquire_stype");
    }
 

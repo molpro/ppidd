@@ -313,11 +313,11 @@ interface
 end interface
 
 interface
- subroutine ppidd_inquire_stype(handle,storetype) bind(C,name='PPIDD_Inquire_stype')
- use iso_c_binding, only : c_int64_t
+ function ppidd_inquire_stype(handle) bind(C,name='PPIDD_Inquire_stype')
+ use iso_c_binding, only : c_int, c_int64_t
+ integer(c_int) ppidd_inquire_stype
  integer(c_int64_t), intent(in)  :: handle
- integer(c_int64_t), intent(out) :: storetype
- end subroutine ppidd_inquire_stype
+ end function ppidd_inquire_stype
 end interface
 
 interface

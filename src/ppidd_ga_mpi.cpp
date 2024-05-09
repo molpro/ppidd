@@ -468,8 +468,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
-      *storetype=(int64_t)0;
+   int PPIDD_Inquire_stype(int64_t *handle) {
+      return 0;
    }
 
 

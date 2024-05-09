@@ -584,9 +584,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Inquire_stype(int64_t *handle, int64_t *storetype) {
+   int PPIDD_Inquire_stype(int64_t *handle) {
       int mpihandle = (int) *handle;
-      *storetype=(int64_t)mpiga_inquire_storetype(mpihandle);
+      return mpiga_inquire_storetype(mpihandle);
    }
 
 

@@ -267,8 +267,8 @@
       <type>int</type>
       <name>PPIDD_Create_mutexes</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a3fd148b9a02822e27567d2d5aa69e954</anchor>
-      <arglist>(int64_t *storetype, int64_t *number)</arglist>
+      <anchor>a6c14480c1fe6301e5b53568cc82ccf75</anchor>
+      <arglist>(int storetype, int number)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

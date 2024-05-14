@@ -192,7 +192,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Create_mutexes(int64_t *storetype,int64_t *number) {
+   int PPIDD_Create_mutexes(int storetype,int number) {
       return 1 ;
    }
 

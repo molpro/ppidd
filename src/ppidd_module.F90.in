@@ -329,10 +329,9 @@ end interface
 
 interface
  function ppidd_create_mutexes(storetype,number) bind(C,name='PPIDD_Create_mutexes')
- use iso_c_binding, only : c_int, c_int64_t
- integer(c_int)                 :: ppidd_create_mutexes
- integer(c_int64_t), intent(in) :: storetype
- integer(c_int64_t), intent(in) :: number
+ use iso_c_binding, only : c_int
+ integer(c_int)  ppidd_create_mutexes
+ integer(c_int), intent(in), value :: storetype, number
  end function ppidd_create_mutexes
 end interface
 

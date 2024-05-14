@@ -478,10 +478,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_mutexes(int64_t *storetype,int64_t *number) {
-      int mpinumber = (int) *number;
-      int mpierr;
-      mpierr=GA_Create_mutexes(mpinumber);
+   int PPIDD_Create_mutexes(int storetype,int number) {
+      int mpierr = GA_Create_mutexes(number);
 /* This is one of exceptions in GA (see global/src/capi.c) : Returns [1] if the operation succeeded or [0] when failed */
       if(MPIGA_Debug)printf("In PPIDD_Create_Mutexes: mpierr=%d.\n",mpierr);
       if(mpierr==1) return 1 ;

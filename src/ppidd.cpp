@@ -854,7 +854,7 @@ extern "C" {
  *   When helper process is disabled, \c storetype doesn't take effect, and mutex data are always stored across the distributed processes.
 
  */
-   int PPIDD_Create_mutexes(int64_t *storetype,int64_t *number) {
+   int PPIDD_Create_mutexes(int storetype,int number) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

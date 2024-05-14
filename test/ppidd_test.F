@@ -1332,9 +1332,7 @@ c... release the memory in buffer space
       integer(c_int) nprocs, iprocs
       integer iout,i
       integer num_tasks,nscale_task,npart
-      integer(c_int64_t) :: storetype
-      integer(c_int64_t) :: number
-      integer(c_int)     :: ok
+      integer(c_int) storetype, ok
       logical verbose
       logical arcca_test_flag
 c
@@ -1422,7 +1420,6 @@ c... initialise the buffer space
 
 
 c... create mutexes
-      number=1
 #ifdef MPI2
       if (helper_server_flag) then
         nloop_array=2
@@ -1437,22 +1434,22 @@ c... create mutexes
         if(iprocs.eq.0) write(iout,101) ' '
 101     format(/,a,'Mutex data are stored on compute process, and'
      >  ,' mutex is implemented through RMA operations:')
-        storetype=0_c_int64_t
+        storetype=0_c_int
       else
 c... case 1
         if (loop_array.eq.1) then
           if(iprocs.eq.0) write(iout,101) ' 1. '
-          storetype=0_c_int64_t
+          storetype=0_c_int
 c... case 2
         else
           if(iprocs.eq.0) write(iout,102)
 102       format(/' 2. Mutex data are stored on helper process, and'
      >  ,' mutex is implemented on top of two-sided operations:')
-          storetype=1_c_int64_t
+          storetype=1_c_int
         end if
       end if
 
-      ok=ppidd_create_mutexes(storetype,number)
+      ok=ppidd_create_mutexes(storetype,1_c_int)
 
       do i=1,nprocs
         task_array(i)=0

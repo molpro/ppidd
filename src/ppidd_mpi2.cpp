@@ -595,19 +595,17 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_mutexes(int64_t *storetype,int64_t *number) {
-      int stype     = (int) *storetype;
-      int mpinumber = (int) *number;
+   int PPIDD_Create_mutexes(int storetype,int number) {
       int mpierr;
 
       if (use_helper_server==0) {
-        mpierr=mpiga_create_mutexes(mpinumber);      /* mutexes data store by a global array across the distributed processes */
+        mpierr=mpiga_create_mutexes(number);      /* mutexes data store by a global array across the distributed processes */
       }
       else {
-        if (stype==0)
-         mpierr=mpiga_create_mutexes(mpinumber);      /* mutexes data store by a global array across the distributed processes */
+        if (storetype==0)
+         mpierr=mpiga_create_mutexes(number);      /* mutexes data store by a global array across the distributed processes */
         else
-         mpierr=alloc_general_helpmutexes(mpinumber);  /* mutexes data on helper process */
+         mpierr=alloc_general_helpmutexes(number);  /* mutexes data on helper process */
       }
 
       if(mpierr==0) return 1 ;

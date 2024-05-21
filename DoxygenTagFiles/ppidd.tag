@@ -274,8 +274,8 @@
       <type>void</type>
       <name>PPIDD_Lock_mutex</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2b1aced8474d99c72ac36b5a818e9f7a</anchor>
-      <arglist>(int64_t *inum)</arglist>
+      <anchor>a36fddef2d864ffe78258c7ed40c2bf0f</anchor>
+      <arglist>(int inum)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

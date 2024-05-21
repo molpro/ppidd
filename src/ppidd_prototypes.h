@@ -36,7 +36,7 @@
  extern int  PPIDD_Inquire_stype(int64_t *handle);
  extern void PPIDD_Inquire_mem(int64_t *mem_used);
  extern int  PPIDD_Create_mutexes(int storetype,int number);
- extern void PPIDD_Lock_mutex(int64_t *inum);
+ extern void PPIDD_Lock_mutex(int inum);
  extern void PPIDD_Unlock_mutex(int64_t *inum);
  extern int  PPIDD_Destroy_mutexes();
 

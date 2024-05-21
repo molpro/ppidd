@@ -613,13 +613,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Lock_mutex(int64_t *inum) {
-      int mpiinum = (int) *inum;
+   void PPIDD_Lock_mutex(int inum) {
       int mpierr;
       if ( mpigv(nmutex) > 0 )
-         mpierr=mpiga_lock_mutex(mpiinum);   /* mutexes data store by a global array across the distributed processes */
+         mpierr=mpiga_lock_mutex(inum);   /* mutexes data store by a global array across the distributed processes */
       else
-         mpierr=lock_general_helpmutex(mpiinum); /* mutexes data on helper process */
+         mpierr=lock_general_helpmutex(inum); /* mutexes data on helper process */
       if(mpierr!=0) MPI_Abort(mpiga_compute_comm(),911);
    }
 

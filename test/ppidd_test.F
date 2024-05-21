@@ -1468,7 +1468,7 @@ c...(1)  mutex test with computing tasks
       call get_current_times(cpu1,wtime1)
 
       do i=iprocs+1,num_tasks,nprocs
-        call ppidd_lock_mutex(0_c_int64_t)
+        call ppidd_lock_mutex(0_c_int)
 c... critical section
         call compute_task(npart,nscale_task,sumtemp)
         sum_array(iprocs+1)=sum_array(iprocs+1)+sumtemp
@@ -1630,7 +1630,7 @@ c    2^31=2,147,483,648
       call ppidd_barrier()
       call get_current_times(cpu1,wtime1)
       do i=1,num_tasks3
-        call ppidd_lock_mutex(0_c_int64_t)
+        call ppidd_lock_mutex(0_c_int)
         call ppidd_unlock_mutex(0_c_int64_t)
       enddo
       call get_current_times(cpu2,wtime2)

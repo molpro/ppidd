@@ -872,7 +872,7 @@ extern "C" {
 
 /*! \brief Lock a mutex object identified by a given mutex number.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK */
-   void PPIDD_Lock_mutex(int64_t *inum) {
+   void PPIDD_Lock_mutex(int inum) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

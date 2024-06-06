@@ -281,8 +281,8 @@
       <type>void</type>
       <name>PPIDD_Unlock_mutex</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a278aad6be9ad4e26bd741cf6ce43e0da</anchor>
-      <arglist>(int64_t *inum)</arglist>
+      <anchor>a8c1b2bcce35bb241c10f6d9f470bdb7c</anchor>
+      <arglist>(int inum)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

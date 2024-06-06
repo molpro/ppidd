@@ -201,7 +201,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Unlock_mutex(int64_t *inum) {
+   void PPIDD_Unlock_mutex(int inum) {
    }
 
 

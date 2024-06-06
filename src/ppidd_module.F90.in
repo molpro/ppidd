@@ -344,8 +344,8 @@ end interface
 
 interface
  subroutine ppidd_unlock_mutex(inum) bind(C,name='PPIDD_Unlock_mutex')
- use iso_c_binding, only : c_int64_t
- integer(c_int64_t), intent(in) :: inum
+ use iso_c_binding, only : c_int
+ integer(c_int), intent(in), value :: inum
  end subroutine ppidd_unlock_mutex
 end interface
 

@@ -1473,7 +1473,7 @@ c... critical section
         call compute_task(npart,nscale_task,sumtemp)
         sum_array(iprocs+1)=sum_array(iprocs+1)+sumtemp
         task_array(iprocs+1)=task_array(iprocs+1)+1
-        call ppidd_unlock_mutex(0_c_int64_t)
+        call ppidd_unlock_mutex(0_c_int)
         call ppidd_barrier()
       enddo
 
@@ -1631,7 +1631,7 @@ c    2^31=2,147,483,648
       call get_current_times(cpu1,wtime1)
       do i=1,num_tasks3
         call ppidd_lock_mutex(0_c_int)
-        call ppidd_unlock_mutex(0_c_int64_t)
+        call ppidd_unlock_mutex(0_c_int)
       enddo
       call get_current_times(cpu2,wtime2)
       call ppidd_barrier()

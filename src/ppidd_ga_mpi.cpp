@@ -492,9 +492,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Unlock_mutex(int64_t *inum) {
-      int mpiinum = (int) *inum;
-      GA_Unlock(mpiinum);
+   void PPIDD_Unlock_mutex(int inum) {
+      GA_Unlock(inum);
    }
 
 

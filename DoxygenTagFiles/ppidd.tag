@@ -295,8 +295,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_open</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a1af52964bf4d63d1a1a99469784e9a23</anchor>
-      <arglist>(char *name, int64_t *type, int64_t *handle)</arglist>
+      <anchor>aa5c5ed54281b22cfae364a43df912022</anchor>
+      <arglist>(char *name, int type, int64_t *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

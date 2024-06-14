@@ -210,7 +210,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
       do_not_call("PPIDD_Eaf_open");
    }
 

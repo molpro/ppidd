@@ -40,7 +40,7 @@
  extern void PPIDD_Unlock_mutex(int inum);
  extern int  PPIDD_Destroy_mutexes();
 
- extern int  PPIDD_Eaf_open(char *name, int64_t *type, int64_t *handle);
+ extern int  PPIDD_Eaf_open(char *name, int type, int64_t *handle);
  extern int  PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length);
  extern int  PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id);
  extern int  PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length);

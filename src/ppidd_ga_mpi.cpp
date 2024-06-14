@@ -506,12 +506,11 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
       int gahandle;
-      int modetype=(int)*type;
 
       if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
-      int ierr=EAF_Open(name, modetype, &gahandle);
+      int ierr=EAF_Open(name, type, &gahandle);
       *handle=(int64_t)gahandle;
       if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
       return ierr;

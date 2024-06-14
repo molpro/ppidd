@@ -930,7 +930,7 @@ extern "C" {
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

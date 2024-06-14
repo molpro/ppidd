@@ -644,15 +644,14 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int64_t *type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       int amode=0;
-      int modetype=(int)*type;
 
       if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
-      switch(modetype){
+      switch(type){
         case MPI_EAF_RW: amode = MPI_MODE_RDWR|MPI_MODE_CREATE ;
                          break;
         case MPI_EAF_W:  amode = MPI_MODE_WRONLY|MPI_MODE_CREATE ;

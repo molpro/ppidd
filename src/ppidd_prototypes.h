@@ -46,7 +46,7 @@
  extern int  PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length);
  extern int  PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id);
  extern int  PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id);
- extern int  PPIDD_Eaf_waitall(int64_t *list, int64_t *num);
+ extern int  PPIDD_Eaf_waitall(int64_t *list, int num);
  extern int  PPIDD_Eaf_probe(int64_t *request_id,int64_t *status);
  extern int  PPIDD_Eaf_close(int64_t *handle);
  extern int  PPIDD_Eaf_delete(char *name);

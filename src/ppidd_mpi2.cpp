@@ -777,25 +777,24 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
-      int count=(int)(*num);
+   int PPIDD_Eaf_waitall(int64_t *list, int num) {
       MPI_Status *array_of_statuses;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request *array_of_requests;
-      array_of_requests=(MPI_Request*)malloc(count*sizeof(MPI_Request));
+      array_of_requests=(MPI_Request*)malloc(num*sizeof(MPI_Request));
 #else
       MPIO_Request *array_of_requests;
-      array_of_requests=(MPIO_Request*)malloc(count*sizeof(MPIO_Request));
+      array_of_requests=(MPIO_Request*)malloc(num*sizeof(MPIO_Request));
 #endif
 
-      array_of_statuses=(MPI_Status*)malloc(count*sizeof(MPI_Status));
-      for(int i=0;i<count;i++) array_of_requests[i]=(MPI_Request)list[i];
+      array_of_statuses=(MPI_Status*)malloc(num*sizeof(MPI_Status));
+      for(int i=0;i<num;i++) array_of_requests[i]=(MPI_Request)list[i];
 
 #ifdef MPIO_USES_MPI_REQUEST
-      int ierr=MPI_Waitall(count,array_of_requests,array_of_statuses);
+      int ierr=MPI_Waitall(num,array_of_requests,array_of_statuses);
 #else
       int ierr=0;
-      for(int i=0;i<count;i++) ierr+=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
+      for(int i=0;i<num;i++) ierr+=MPIO_Wait(&array_of_requests[i], &array_of_statuses[i]);
 #endif
       return ierr;
    }

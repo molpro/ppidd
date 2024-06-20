@@ -240,7 +240,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+   int PPIDD_Eaf_waitall(int64_t *list, int num) {
       do_not_call("PPIDD_Eaf_waitall");
    }
 

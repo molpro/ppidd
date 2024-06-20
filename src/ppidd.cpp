@@ -1055,7 +1055,7 @@ extern "C" {
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Finally invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+   int PPIDD_Eaf_waitall(int64_t *list, int num) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

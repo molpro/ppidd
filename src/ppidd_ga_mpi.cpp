@@ -570,7 +570,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int64_t *num) {
+   int PPIDD_Eaf_waitall(int64_t *list, int num) {
       return 0;
    }
 

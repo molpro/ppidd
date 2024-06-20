@@ -493,7 +493,7 @@ end interface
 interface
  function ppidd_eaf_waitall(list,num) bind(C,name='PPIDD_Eaf_waitall')
  use iso_c_binding, only : c_int, c_int64_t
- integer(c_int64_t), intent(in)  :: num
+ integer(c_int), intent(in), value :: num
  integer(c_int64_t), intent(in)  :: list(num)
  integer(c_int)                  :: ppidd_eaf_waitall
  end function ppidd_eaf_waitall

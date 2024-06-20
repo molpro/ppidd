@@ -337,8 +337,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a20ca98f4fc97804ed43deebc2cc9b1bd</anchor>
-      <arglist>(int64_t *list, int64_t *num)</arglist>
+      <anchor>aa006cca817f50c51c195285642e89ff9</anchor>
+      <arglist>(int64_t *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

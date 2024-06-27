@@ -344,8 +344,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_probe</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aaccfa81c2ef7578941bcd838bfff84be</anchor>
-      <arglist>(int64_t *request_id, int64_t *status)</arglist>
+      <anchor>af5f94372c339f1e4077ba41b517cf42d</anchor>
+      <arglist>(int64_t *request_id, int *status)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

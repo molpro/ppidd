@@ -1079,7 +1079,7 @@ extern "C" {
                           If the asynchronous request is complete, id is invalidated.
    integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+   int PPIDD_Eaf_probe(int64_t *request_id,int *status) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

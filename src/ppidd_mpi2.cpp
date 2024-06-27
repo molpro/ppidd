@@ -800,7 +800,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+   int PPIDD_Eaf_probe(int64_t *request_id,int *status) {
       int flag;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request=(MPI_Request)(*request_id);
@@ -815,8 +815,8 @@ static int n_in_msg_mpiq=0;
 #else
       int ierr=MPIO_Test(&request, &flag, &mpistatus);
 #endif
-      if(flag) *status=(int64_t)0;
-      else *status=(int64_t)1;
+      if(flag) *status=(int)0;
+      else *status=(int)1;
 
       if(MPI_Debug)printf("In PPIDD_Eaf_probe  : end. ierr=%d\n",ierr);
       return ierr;

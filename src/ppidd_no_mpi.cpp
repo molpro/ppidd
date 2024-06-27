@@ -245,7 +245,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_probe(int64_t *request_id,int64_t *status) {
+   int PPIDD_Eaf_probe(int64_t *request_id,int* status) {
       do_not_call("PPIDD_Eaf_probe");
    }
 

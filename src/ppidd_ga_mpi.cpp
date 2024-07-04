@@ -665,16 +665,15 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
-      int inum=(int)*num;
+   int PPIDD_Sf_waitall(int64_t *list, int num) {
       int *ilist;
 
-      ilist=(int *)malloc(inum * sizeof(int));
-      for (int i=0; i<inum; ++i) ilist[i] = (int) list[i];
+      ilist=(int *)malloc(num * sizeof(int));
+      for (int i=0; i<num; ++i) ilist[i] = (int) list[i];
 
-      int ierr=SF_Waitall(ilist, inum);
+      int ierr=SF_Waitall(ilist, num);
 
-      for (int i=0; i<inum; ++i) list[i] = (int64_t) ilist[i];
+      for (int i=0; i<num; ++i) list[i] = (int64_t) ilist[i];
       free(ilist);
       return ierr;
    }

@@ -295,7 +295,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_waitall(int64_t *list, int64_t *num) {
+   int PPIDD_Sf_waitall(int64_t *list, int num) {
       do_not_call("PPIDD_Sf_waitall");
    }
 

@@ -39,20 +39,19 @@ c
 c
       integer size
       integer dimnsn
-      integer maxid
-      parameter(maxid=5)           ! max number of outstanding I/O requests
+      integer(c_int), parameter :: maxid=5 ! max number of outstanding I/O requests
       parameter(dimnsn=8192)
       double precision, target :: buffer(dimnsn,maxid)  ! need buffering for all maxid requests
       double precision tt0,tt1,tcgtime
       double precision, target :: ttw, ttr
 c     integer stack, heap
-      integer idlist(maxid), curid
+      integer idlist(maxid)
       character(len=80) errmsg
       integer lerrmsg
 c
       integer nodeid, nnodes
       integer handle,i,start,end,j, chunk
-      integer(c_int) me, nproc, rc
+      integer(c_int) me, nproc, rc, curid
 
 c...  Get the processes number and process id
       nproc = ppidd_size()

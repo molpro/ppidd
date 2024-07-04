@@ -414,8 +414,8 @@
       <type>int</type>
       <name>PPIDD_Sf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>acb8ad3ce211ac24b6abe1fa7e959098d</anchor>
-      <arglist>(int64_t *list, int64_t *num)</arglist>
+      <anchor>a17eaf202e52cc22757c6d11725b506ac</anchor>
+      <arglist>(int64_t *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

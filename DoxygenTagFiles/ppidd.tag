@@ -379,8 +379,8 @@
       <type>void</type>
       <name>PPIDD_Eaf_errmsg</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a58357b141947198c07d8133a46f19201</anchor>
-      <arglist>(int *code, char *message)</arglist>
+      <anchor>adf61b9e586d04071e76898a34f4cfca5</anchor>
+      <arglist>(int code, char *message)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -428,8 +428,8 @@
       <type>void</type>
       <name>PPIDD_Sf_errmsg</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ac288246d854eba6ded231d42528a6aa4</anchor>
-      <arglist>(int *code, char *message)</arglist>
+      <anchor>a9dd05422e0e5ad25f0b535e30616742b</anchor>
+      <arglist>(int code, char *message)</arglist>
     </member>
   </compound>
   <compound kind="file">

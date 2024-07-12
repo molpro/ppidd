@@ -867,13 +867,13 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Eaf_errmsg(int *code,char *message) {
+   void PPIDD_Eaf_errmsg(int code,char *message) {
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
 
-      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: code=%d\n",*code);
-      MPI_Error_class(*code, &eclass);
-      MPI_Error_string(*code, estring, &len);
+      if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: code=%d\n",code);
+      MPI_Error_class(code, &eclass);
+      MPI_Error_string(code, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
       strncpy(message,estring2,strlen(message));
       if(MPI_Debug)printf("In PPIDD_Eaf_errmsg: message=%s\n",message);
@@ -990,13 +990,13 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Sf_errmsg(int *code,char *message) {
+   void PPIDD_Sf_errmsg(int code,char *message) {
       int eclass, len;
       char estring[MPI_MAX_ERROR_STRING],estring2[MPI_MAX_ERROR_STRING];
 
-      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: code=%d\n",*code);
-      MPI_Error_class(*code, &eclass);
-      MPI_Error_string(*code, estring, &len);
+      if(MPI_Debug)printf("In PPIDD_Sf_errmsg: code=%d\n",code);
+      MPI_Error_class(code, &eclass);
+      MPI_Error_string(code, estring, &len);
       sprintf(estring2," Error %d: %s", eclass, estring);
       strncpy(message,estring2,strlen(message));
       if(MPI_Debug)printf("In PPIDD_Sf_errmsg: message=%s\n",message);

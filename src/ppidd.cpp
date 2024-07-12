@@ -1186,7 +1186,7 @@ extern "C" {
         code             -- [in]  error code returned by a previous call to EAF
         message          -- [out] character string where the corresponding message
 \* ********************************************************************************* */
-   void PPIDD_Eaf_errmsg(int *code,char *message) {
+   void PPIDD_Eaf_errmsg(int code,char *message) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1331,7 +1331,7 @@ extern "C" {
         message          -- character string where the corresponding message
                             is written [out]
 \* ********************************************************************************* */
-   void PPIDD_Sf_errmsg(int *code,char *message) {
+   void PPIDD_Sf_errmsg(int code,char *message) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

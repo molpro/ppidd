@@ -618,8 +618,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Eaf_errmsg(int *code,char *message) {
-      EAF_Errmsg(*code, message);
+   void PPIDD_Eaf_errmsg(int code,char *message) {
+      EAF_Errmsg(code, message);
    }
 
 
@@ -686,8 +686,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Sf_errmsg(int *code,char *message) {
-      SF_Errmsg(*code, message);
+   void PPIDD_Sf_errmsg(int code,char *message) {
+      SF_Errmsg(code, message);
    }
 
 }

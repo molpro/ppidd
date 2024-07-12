@@ -270,7 +270,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Eaf_errmsg(int *code,char *message) {
+   void PPIDD_Eaf_errmsg(int code,char *message) {
       do_not_call("PPIDD_Eaf_errmsg");
    }
 
@@ -305,7 +305,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Sf_errmsg(int *code,char *message) {
+   void PPIDD_Sf_errmsg(int code,char *message) {
       do_not_call("PPIDD_Sf_errmsg");
    }
 

@@ -420,7 +420,7 @@ end interface
 interface
  subroutine ppidd_sf_errmsg(code,message) bind(C,name='PPIDD_Sf_errmsg')
  use iso_c_binding, only : c_int, c_char
- integer(c_int),    intent(in)  :: code
+ integer(c_int), intent(in), value  :: code
  character(c_char), intent(out) :: message ! must to terminated by c_null_char
  end subroutine ppidd_sf_errmsg
 end interface
@@ -545,7 +545,7 @@ end interface
 interface
  subroutine ppidd_eaf_errmsg(code,message) bind(C,name='PPIDD_Eaf_errmsg')
  use iso_c_binding, only : c_int, c_char
- integer(c_int),    intent(in)  :: code
+ integer(c_int), intent(in), value  :: code
  character(c_char), intent(out) :: message ! must to terminated by c_null_char
  end subroutine ppidd_eaf_errmsg
 end interface

@@ -386,22 +386,22 @@
       <type>int</type>
       <name>PPIDD_Sf_create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>af35b2fa76ca10f0bfebaa096540a9b56</anchor>
-      <arglist>(char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle)</arglist>
+      <anchor>abab338409a5d06eb900839c32e9b95c5</anchor>
+      <arglist>(char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Sf_write</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a3923188d3ab54e46d1eed4801b6f2135</anchor>
-      <arglist>(int64_t *handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id)</arglist>
+      <anchor>a1fcbeb72272d71b057c0722cb6254480</anchor>
+      <arglist>(int handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Sf_read</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a0ad5690a0214a5e22fa7211f17a46a43</anchor>
-      <arglist>(int64_t *handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id)</arglist>
+      <anchor>a2d44d4cff701de076146e18072b172c8</anchor>
+      <arglist>(int handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -421,8 +421,8 @@
       <type>int</type>
       <name>PPIDD_Sf_destroy</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa144a963d82f67586269a22ffd6432df</anchor>
-      <arglist>(int64_t *handle)</arglist>
+      <anchor>ae2d5c28fddfa367c29ef79b4c9f3426f</anchor>
+      <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

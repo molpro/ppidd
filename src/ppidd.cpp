@@ -1207,7 +1207,7 @@ extern "C" {
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.
 \* ************************************************************************ */
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1228,7 +1228,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1248,7 +1248,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_read(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1308,7 +1308,7 @@ extern "C" {
    Destroys the shared file associated with handle.
    It is a collective operation.
 \* ************************************************ */
-   int PPIDD_Sf_destroy(int64_t *handle) {
+   int PPIDD_Sf_destroy(int handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

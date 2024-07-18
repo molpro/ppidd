@@ -275,17 +275,17 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
       do_not_call("PPIDD_Sf_create");
    }
 
 
-   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
       do_not_call("PPIDD_Sf_write");
    }
 
 
-   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_read(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
       do_not_call("PPIDD_Sf_read");
    }
 
@@ -300,7 +300,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_destroy(int64_t *handle) {
+   int PPIDD_Sf_destroy(int handle) {
       do_not_call("PPIDD_Sf_destroy");
    }
 

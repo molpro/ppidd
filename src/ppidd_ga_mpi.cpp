@@ -623,35 +623,31 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
-      int i;
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
-      int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, &i);
-      *handle=(int64_t)i;
+      int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, handle);
 
-      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;
    }
 
 
-   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
       char *buffer=(char *)buff;
 
-      int ihandle=(int)*handle;
       int irequest_id;
-      int ierr=SF_Write(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
+      int ierr=SF_Write(handle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(int64_t)irequest_id;
       return ierr;
    }
 
 
-   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_read(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
       char *buffer=(char *)buff;
 
-      int ihandle=(int)*handle;
       int irequest_id;
-      int ierr=SF_Read(ihandle, *byte_offset, *byte_length, buffer, &irequest_id);
+      int ierr=SF_Read(handle, *byte_offset, *byte_length, buffer, &irequest_id);
       *request_id=(int64_t)irequest_id;
       return ierr;
    }
@@ -679,10 +675,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_destroy(int64_t *handle) {
-      int ihandle=(int)*handle;
-      int ierr=SF_Destroy(ihandle);
-      return ierr;
+   int PPIDD_Sf_destroy(int handle) {
+      return SF_Destroy(handle);
    }
 
 

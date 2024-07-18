@@ -50,8 +50,8 @@ c     integer stack, heap
       integer lerrmsg
 c
       integer nodeid, nnodes
-      integer handle,i,start,end,j, chunk
-      integer(c_int) me, nproc, rc, curid
+      integer i,start,end,j, chunk
+      integer(c_int) me, nproc, rc, curid, handle
 
 c...  Get the processes number and process id
       nproc = ppidd_size()

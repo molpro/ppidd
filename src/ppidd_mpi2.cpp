@@ -880,22 +880,22 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int64_t *handle) {
+   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       MPI_File mpi_fh;
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
       int ierr=MPI_File_open(mpicomm,name,MPI_MODE_RDWR|MPI_MODE_CREATE|MPI_MODE_DELETE_ON_CLOSE|MPI_MODE_UNIQUE_OPEN,MPI_INFO_NULL,&mpi_fh);
       MPI_Fint mpifhandle = MPI_File_c2f( mpi_fh );
-      *handle=(int64_t)mpifhandle;
+      *handle=(int)mpifhandle;
 
-      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;
    }
 
 
-   int PPIDD_Sf_write(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -916,8 +916,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_read(int64_t *handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Sf_read(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -979,8 +979,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_destroy(int64_t *handle) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Sf_destroy(int handle) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       if(MPI_Debug)printf("In PPIDD_Sf_destroy: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);

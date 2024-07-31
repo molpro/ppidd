@@ -930,7 +930,7 @@ extern "C" {
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -950,7 +950,7 @@ extern "C" {
    Synchronously write to the file specified by the file handle.
    Writes number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -971,7 +971,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -991,7 +991,7 @@ extern "C" {
    Synchronously read from the file specified by the file handle.
    Reads number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1012,7 +1012,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1035,7 +1035,7 @@ extern "C" {
    integer ierr         --[out] Error code. 0 if it is able to wait for completion,
                           else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
+   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1100,7 +1100,7 @@ extern "C" {
    integer handle  --[in]  File Handle.
    integer ierr    --[out] Error code. 0 if the file was closed, else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_close(int64_t *handle) {
+   int PPIDD_Eaf_close(int handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1142,7 +1142,7 @@ extern "C" {
    integer handle    --[in]  File Handle.
    double fsize      --[out] File length in bytes.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
+   int PPIDD_Eaf_length(int handle,double *fsize) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1164,7 +1164,7 @@ extern "C" {
    double offset  --[in]  Offset in bytes.
    integer ierr   --[out] Error code. 0 if the file was truncated, else returns error code.
 \* *************************************************************************************** */
-   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
+   int PPIDD_Eaf_truncate(int handle,double *offset) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

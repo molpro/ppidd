@@ -210,32 +210,32 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int *handle) {
       do_not_call("PPIDD_Eaf_open");
    }
 
 
-   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
       do_not_call("PPIDD_Eaf_write");
    }
 
 
-   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
       do_not_call("PPIDD_Eaf_awrite");
    }
 
 
-   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
       do_not_call("PPIDD_Eaf_read");
    }
 
 
-   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
       do_not_call("PPIDD_Eaf_aread");
    }
 
 
-   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
+   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
       do_not_call("PPIDD_Eaf_wait");
    }
 
@@ -250,7 +250,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_close(int64_t *handle) {
+   int PPIDD_Eaf_close(int handle) {
       do_not_call("PPIDD_Eaf_close");
    }
 
@@ -260,12 +260,12 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
+   int PPIDD_Eaf_length(int handle,double *fsize) {
       do_not_call("PPIDD_Eaf_length");
    }
 
 
-   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
+   int PPIDD_Eaf_truncate(int handle,double *offset) {
       do_not_call("PPIDD_Eaf_truncate");
    }
 

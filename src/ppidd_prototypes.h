@@ -40,18 +40,18 @@
  extern void PPIDD_Unlock_mutex (int inum);
  extern int  PPIDD_Destroy_mutexes ();
 
- extern int  PPIDD_Eaf_open (char *name, int type, int64_t *handle);
- extern int  PPIDD_Eaf_write (int64_t *handle, double *byte_offset, void *buff, int64_t *byte_length);
- extern int  PPIDD_Eaf_awrite (int64_t *handle, double *byte_offset, void *buff, int64_t *byte_length, int64_t *request_id);
- extern int  PPIDD_Eaf_read (int64_t *handle, double *byte_offset, void *buff, int64_t *byte_length);
- extern int  PPIDD_Eaf_aread (int64_t *handle, double *byte_offset, void *buff, int64_t *byte_length, int64_t *request_id);
- extern int  PPIDD_Eaf_wait (int64_t *handle, int64_t *request_id);
+ extern int  PPIDD_Eaf_open (char *name, int type, int *handle);
+ extern int  PPIDD_Eaf_write (int handle, double *byte_offset, void *buff, int64_t *byte_length);
+ extern int  PPIDD_Eaf_awrite (int handle, double *byte_offset, void *buff, int64_t *byte_length, int64_t *request_id);
+ extern int  PPIDD_Eaf_read (int handle, double *byte_offset, void *buff, int64_t *byte_length);
+ extern int  PPIDD_Eaf_aread (int handle, double *byte_offset, void *buff, int64_t *byte_length, int64_t *request_id);
+ extern int  PPIDD_Eaf_wait (int handle, int64_t *request_id);
  extern int  PPIDD_Eaf_waitall (int64_t *list, int num);
  extern int  PPIDD_Eaf_probe (int64_t *request_id, int *status);
- extern int  PPIDD_Eaf_close (int64_t *handle);
+ extern int  PPIDD_Eaf_close (int handle);
  extern int  PPIDD_Eaf_delete (char *name);
- extern int  PPIDD_Eaf_length (int64_t *handle, double *fsize);
- extern int  PPIDD_Eaf_truncate (int64_t *handle, double *offset);
+ extern int  PPIDD_Eaf_length (int handle, double *fsize);
+ extern int  PPIDD_Eaf_truncate (int handle, double *offset);
  extern void PPIDD_Eaf_errmsg (int code, char *message);
 
  extern int  PPIDD_Sf_create (char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle);

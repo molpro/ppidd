@@ -644,7 +644,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
+   int PPIDD_Eaf_open(char *name,int type, int *handle) {
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
@@ -665,14 +665,14 @@ static int n_in_msg_mpiq=0;
 
       int ierr=MPI_File_open(MPI_COMM_SELF,name,amode,MPI_INFO_NULL,&mpi_fh);
       mpifhandle = MPI_File_c2f( mpi_fh );
-      *handle=(int64_t)mpifhandle;
-      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      *handle=(int)mpifhandle;
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;
    }
 
 
-   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -690,8 +690,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_awrite(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -714,8 +714,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -733,8 +733,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
       int count;
@@ -757,8 +757,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
 #ifdef MPIO_USES_MPI_REQUEST
       MPI_Request request=(MPI_Request)(*request_id);
 #else
@@ -823,8 +823,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_close(int64_t *handle) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_close(int handle) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       if(MPI_Debug)printf("In PPIDD_Eaf_close: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);
@@ -842,8 +842,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_length(int handle,double *fsize) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset size;
       if(MPI_Debug)printf("In PPIDD_Eaf_length: begin. handle=%d\n",(int)mpifhandle);
@@ -855,8 +855,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
-      MPI_Fint mpifhandle=(MPI_Fint)*handle;
+   int PPIDD_Eaf_truncate(int handle,double *offset) {
+      MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset size=(MPI_Offset)(*offset);
       if(MPI_Debug)printf("In PPIDD_Eaf_truncate: begin. handle=%d\n",(int)mpifhandle);

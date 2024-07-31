@@ -506,67 +506,56 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int64_t *handle) {
-      int gahandle;
-
+   int PPIDD_Eaf_open(char *name,int type, int *handle) {
       if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
-      int ierr=EAF_Open(name, type, &gahandle);
-      *handle=(int64_t)gahandle;
-      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",(int)*handle,ierr);
+      int ierr=EAF_Open(name, type, handle);
+      if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;
    }
 
 
-   int PPIDD_Eaf_write(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
 
-      int ierr=EAF_Write(gahandle,offset,buff,bytes);
-      return ierr;
+      return EAF_Write(handle,offset,buff,bytes);
    }
 
 
-   int PPIDD_Eaf_awrite(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_awrite(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
       int request;
 
-      int ierr=EAF_Awrite(gahandle,offset,buff,bytes,&request);
+      int ierr=EAF_Awrite(handle,offset,buff,bytes,&request);
       *request_id=(int64_t)request;
       return ierr;
    }
 
 
-   int PPIDD_Eaf_read(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
 
-      int ierr=EAF_Read(gahandle,offset,buff,bytes);
-      return ierr;
+      return EAF_Read(handle,offset,buff,bytes);
    }
 
 
-   int PPIDD_Eaf_aread(int64_t *handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
       eaf_off_t offset=(eaf_off_t)*byte_offset;
       size_t bytes=(size_t)*byte_length;
       int request;
 
-      int ierr=EAF_Aread(gahandle,offset,buff,bytes,&request);
+      int ierr=EAF_Aread(handle,offset,buff,bytes,&request);
       *request_id=(int64_t)request;
       return ierr;
    }
 
 
-   int PPIDD_Eaf_wait(int64_t *handle,int64_t *request_id) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
       int request=(int)*request_id;
 
-      int ierr=EAF_Wait(gahandle,request);
-      return ierr;
+      return EAF_Wait(handle,request);
    }
 
 
@@ -578,16 +567,12 @@ static int n_in_msg_mpiq=0;
    int PPIDD_Eaf_probe(int64_t *request_id,int *status) {
       int garequest=(int)*request_id;
 
-      int ierr=EAF_Probe(garequest, status);
-      return ierr;
+      return EAF_Probe(garequest, status);
    }
 
 
-   int PPIDD_Eaf_close(int64_t *handle) {
-      int gahandle=(int)*handle;
-
-      int ierr=EAF_Close(gahandle);
-      return ierr;
+   int PPIDD_Eaf_close(int handle) {
+      return EAF_Close(handle);
    }
 
 
@@ -599,22 +584,19 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_length(int64_t *handle,double *fsize) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_length(int handle,double *fsize) {
       eaf_off_t length;
 
-      int ierr=EAF_Length(gahandle,&length);
+      int ierr=EAF_Length(handle,&length);
       *fsize=(double)length;
       return ierr;
    }
 
 
-   int PPIDD_Eaf_truncate(int64_t *handle,double *offset) {
-      int gahandle=(int)*handle;
+   int PPIDD_Eaf_truncate(int handle,double *offset) {
       eaf_off_t length=(eaf_off_t)*offset;
 
-      int ierr=EAF_Truncate(gahandle,length);
-      return ierr;
+      return EAF_Truncate(handle,length);
    }
 
 

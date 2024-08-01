@@ -556,11 +556,6 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
-      do_not_call("PPIDD_Duplicate");
-   }
-
-
    void PPIDD_Inquire_name(int handle, char *name) {
       char *name2;
 

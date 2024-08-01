@@ -172,11 +172,6 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
-      do_not_call("PPIDD_Duplicate");
-   }
-
-
    void PPIDD_Inquire_name(int handle, char *name) {
       do_not_call("PPIDD_Inquire_name");
    }

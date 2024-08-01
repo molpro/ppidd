@@ -442,11 +442,6 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
-      *handlej = GA_Duplicate(handlei, name);
-   }
-
-
    void PPIDD_Inquire_name(int handle, char *name) {
       strncpy(name,GA_Inquire_name(handle),strlen(name));
    }

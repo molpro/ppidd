@@ -296,15 +296,6 @@ interface
 end interface
 
 interface
- subroutine ppidd_duplicate(handlei,handlej,name) bind(C,name='PPIDD_Duplicate')
- use iso_c_binding, only : c_int, c_int64_t, c_char
- integer(c_int), intent(in), value  :: handlei
- integer(c_int), intent(out) :: handlej
- character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
- end subroutine ppidd_duplicate
-end interface
-
-interface
  subroutine ppidd_inquire_name(handle,name) bind(C,name='PPIDD_Inquire_name')
  use iso_c_binding, only : c_int, c_char
  integer(c_int), intent(in), value  :: handle

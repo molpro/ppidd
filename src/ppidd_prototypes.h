@@ -31,7 +31,6 @@
  extern void PPIDD_Read_inc (int handle, int64_t *inum, int64_t *incr, int64_t *returnval);
  extern void PPIDD_Zero_patch (int handle, int64_t *ilo, int64_t *ihi);
  extern int  PPIDD_Zero (int handle);
- extern void PPIDD_Duplicate (int handlei, int *handlej, char *name);
  extern void PPIDD_Inquire_name (int handle, char *name);
  extern int  PPIDD_Inquire_stype (int handle);
  extern void PPIDD_Inquire_mem (int64_t *mem_used);

@@ -763,26 +763,6 @@ extern "C" {
    }
 
 
-/*! \brief Create a new global array by applying all the properties of another existing global.
-    \details
-    - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
-    - \b MPI2 does nothing */
-   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
-    switch (ppidd_impl) {
-#ifdef HAVE_MPI_H
-#ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Duplicate(handlei,handlej,name);
-#endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Duplicate(handlei,handlej,name);
-#endif
-     default:
-      return no_mpi::PPIDD_Duplicate(handlei,handlej,name);
-    }
-   }
-
-
 /*! \brief Returns the name of a global array represented by the handle.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
     This operation is local. */

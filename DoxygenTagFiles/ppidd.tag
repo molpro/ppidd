@@ -237,13 +237,6 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>PPIDD_Duplicate</name>
-      <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ae90d39099b735b9e2f01776d4b043425</anchor>
-      <arglist>(int handlei, int *handlej, char *name)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
       <name>PPIDD_Inquire_name</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
       <anchor>a704b674ff7f5dcc6b88c666c3308adef</anchor>

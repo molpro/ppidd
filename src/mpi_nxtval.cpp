@@ -1289,7 +1289,7 @@ int twosided_helpga_location( int handle, int ilo, int ihigh, int *map, int *pro
 
 /* one-element rma operations for helpga */
 /* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, and MPI_LONG_LONG, but not MPI_FLOAT and MPI_DOUBLE) */
-int64_t twosided_helpga_one(int mproc, int64_t nelem_valput, int ielem, int *handle)
+int64_t twosided_helpga_one(int mproc, int64_t nelem_valput, int ielem, int handle)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -1312,9 +1312,9 @@ ________________________________________________________________________________
   int  *len_help=NULL;
   MPIHELPGA helpga=NULL;
 
-  if (DEBUG_) printf("%5d: twosided_helpga_one: begin. type=%d, mproc=%d, handle=%d, ielem=%d\n",ProcID(),type,mproc,*handle,ielem);
+  if (DEBUG_) printf("%5d: twosided_helpga_one: begin. type=%d, mproc=%d, handle=%d, ielem=%d\n",ProcID(),type,mproc,handle,ielem);
 
-  handle_orig=twosided_helpga_handle_orig(*handle);
+  handle_orig=twosided_helpga_handle_orig(handle);
   helpga=twosided_helpga_index[handle_orig].ptr;
 
   dtype=helpga->dtype;
@@ -1322,7 +1322,7 @@ ________________________________________________________________________________
   len_help=helpga->len_help;
 
   if (dtype==MPI_INT || dtype==MPI_LONG || dtype==MPI_LONG_LONG ) {
-    if (DEBUG_) printf("%5d: twosided_helpga_one: array with handle=%d  is an integer MPIGA.\n",ProcID(),*handle);
+    if (DEBUG_) printf("%5d: twosided_helpga_one: array with handle=%d  is an integer MPIGA.\n",ProcID(),handle);
   }
   else  MPIGA_Error(" twosided_helpga_one: wrong MPI_Datatype ",0);
   if ( ielem < 1 || ielem > lentot) {
@@ -1331,7 +1331,7 @@ ________________________________________________________________________________
   }
 
   if (DEBUG_) {
-    printf("%5d: twosided_helpga_one: mid. mproc=%d, handle=%d\n",ProcID(),mproc,*handle);
+    printf("%5d: twosided_helpga_one: mid. mproc=%d, handle=%d\n",ProcID(),mproc,handle);
     fflush(stdout);
   }
 
@@ -1339,7 +1339,7 @@ ________________________________________________________________________________
      buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0) */
      buf[1] = (FORTINT)nelem_valput; /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
      buf[2] = (FORTINT)ielem;        /* COLLECFLAG: MPI_Datatype; RMAONEFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (FORTINT)*handle;      /* sequence number of helpga */
+     buf[3] = (FORTINT)handle;      /* sequence number of helpga */
 
 /* find out in which helper process the element is located */
      size=NUMBER_OF_SERVER;
@@ -1352,7 +1352,7 @@ ________________________________________________________________________________
      buf[2] = (FORTINT)(ielem-lenleft); /* RMAONEFLAG: sequence number of element (1,2,...,len_help[i]) in len_help */
 
      if ( buf[2] >  (FORTINT) len_help[iserver] || buf[2] <= (FORTINT)0 ) {
-       printf("%5d: twosided_helpga_one: ERROR mproc=%d, handle=%d,ielem_inhelp=%ld,len_help[i]=%d\n",ProcID(),mproc,*handle,(long)buf[2],len_help[iserver]);
+       printf("%5d: twosided_helpga_one: ERROR mproc=%d, handle=%d,ielem_inhelp=%ld,len_help[i]=%d\n",ProcID(),mproc,handle,(long)buf[2],len_help[iserver]);
        MPIGA_Error(" twosided_helpga_one: overange ",0);
      }
 
@@ -1432,14 +1432,14 @@ ________________________________________________________________________________
   len_help=NULL;
   helpga=NULL;
 
-  if (DEBUG_) printf("%5d: twosided_helpga_one: end. type=%d, mproc=%d, handle=%d, ielem=%d\n",ProcID(),type,mproc,*handle,ielem);
+  if (DEBUG_) printf("%5d: twosided_helpga_one: end. type=%d, mproc=%d, handle=%d, ielem=%d\n",ProcID(),type,mproc,handle,ielem);
 
   return local;
 }
 
 
 /* many-element rma operations for helpga, MPI_Datatye can be MPI_INT --- MPI_DOUBLE */
-void twosided_helpga_extra(int mproc, int nelem, int ielem, int *handle, void *buff)
+void twosided_helpga_extra(int mproc, int nelem, int ielem, int handle, void *buff)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -1462,9 +1462,9 @@ ________________________________________________________________________________
   int  *len_help=NULL;
   MPIHELPGA helpga=NULL;
 
-  if (DEBUG_) printf("%5d: twosided_helpga_extra: begin. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,*handle);
+  if (DEBUG_) printf("%5d: twosided_helpga_extra: begin. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,handle);
 
-  handle_orig=twosided_helpga_handle_orig(*handle);
+  handle_orig=twosided_helpga_handle_orig(handle);
   helpga=twosided_helpga_index[handle_orig].ptr;
 
   dtype=helpga->dtype;
@@ -1478,11 +1478,11 @@ ________________________________________________________________________________
      buf[0] = (FORTINT)mproc; /* COLLECFLAG: create(=0), zeroize(>0), destroy(<0); RMAONEFLAG: get(=0), fetch-and-add(>0), put(<0); RMAETRFLAG: get n elements(=0), put n elements(<0) */
      buf[1] = (FORTINT)nelem; /* RMAETRFLAG: number of elements to be gotten/put/accumulated */
      buf[2] = (FORTINT)ielem; /* RMAETRFLAG: sequence number of element (1,2,...,n) */
-     buf[3] = (FORTINT)*handle;     /* sequence number of helpga */
+     buf[3] = (FORTINT)handle;     /* sequence number of helpga */
 
      ilo=ielem;
      ihigh=ielem+nelem-1;
-     twosided_helpga_locate_server(*handle, ilo, ihigh, twosided_helpga_map, twosided_helpga_proclist, &np_help);
+     twosided_helpga_locate_server(handle, ilo, ihigh, twosided_helpga_map, twosided_helpga_proclist, &np_help);
 /* iserver_first: serial number of server for lowest element [ilo]; lenleft: number of elements stored in helper servers < iserver_first */
      iserver_first=SerialNumber_of_Server(twosided_helpga_proclist[0]);
      for (lenleft=0,i=0;i<iserver_first;i++) lenleft=lenleft + len_help[i];
@@ -1693,12 +1693,12 @@ ________________________________________________________________________________
   len_help=NULL;
   helpga=NULL;
 
-  if (DEBUG_) printf("%5d: twosided_helpga_extra: end. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,*handle);
+  if (DEBUG_) printf("%5d: twosided_helpga_extra: end. type=%d, mproc=%d, handle=%d\n",ProcID(),type,mproc,handle);
 }
 
 /* many-element accumulation operation for helpga, MPI_Datatye can be MPI_INT --- MPI_DOUBLE */
 /* determine if fac==1/1.0d0 */
-void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, void *buf, void *fac)
+void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void *buf, void *fac)
 {
     MPI_Datatype dtype;  /* MPI Datatype for helpga element */
     int i,len;
@@ -1710,8 +1710,8 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, voi
     float   *falphabuf=NULL,*ftempbuf=NULL,*ffac=NULL;
     double  *dalphabuf=NULL,*dtempbuf=NULL,*dfac=NULL;
 
-    if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: begin. handle=%d\n",ProcID(),*handle);
-    dtype=twosided_helpga_inquire_dtype(*handle);
+    if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: begin. handle=%d\n",ProcID(),handle);
+    dtype=twosided_helpga_inquire_dtype(handle);
     len=nelem;
     isint=0;
     islong=0;
@@ -1791,7 +1791,7 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int *handle, voi
        else {free(dalphabuf);dalphabuf=NULL;}
     }
 
-    if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: end. handle=%d\n",ProcID(),*handle);
+    if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: end. handle=%d\n",ProcID(),handle);
 }
 
 

@@ -232,7 +232,7 @@ c
       integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot,dest_src,lenre,srcre
       integer(c_int) dtype, nprocs, iprocs, sync, storetype
-      integer ihandle,ihandlat
+      integer(c_int) ihandle,ihandlat
       character(len=80) :: name
       integer(c_int) :: ok
       logical verbose

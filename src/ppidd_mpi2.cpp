@@ -291,35 +291,32 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       int mpierr;
       int mpinchunk=(int)nchunk;
-      int mpihandle;
 
       std::vector<int> mpilenin(mpinchunk);
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
       MPI_Datatype mpidtype=dtype_mpi(dtype);
       if (use_helper_server==0) {
-        mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
+        mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, handle);
       }
       else {
         if (storetype==0)
-          mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, &mpihandle);
+          mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, handle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, &mpihandle, name, dtype);
+          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, handle, name, dtype);
         }
       }
-      *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       int mpierr;
       int mpilentot;
-      int mpihandle;
 
       if (lentot > INT_MAX) {
        printf(" ERROR: PPIDD_Create: lentot too large for MPI\n");
@@ -328,51 +325,48 @@ static int n_in_msg_mpiq=0;
       else mpilentot=(int)lentot;
       MPI_Datatype mpidtype=dtype_mpi(dtype);
       if (use_helper_server==0) {
-        mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
+        mpierr=mpiga_create( name, mpilentot, mpidtype, handle );
       }
       else {
         if (storetype==0)
-         mpierr=mpiga_create( name, mpilentot, mpidtype, &mpihandle );
+         mpierr=mpiga_create( name, mpilentot, mpidtype, handle );
         else {
          int mproc=0;
-         mpierr=twosided_helpga_create(mproc, mpilentot, &mpihandle, name, dtype);
+         mpierr=twosided_helpga_create(mproc, mpilentot, handle, name, dtype);
         }
       }
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,storetype,dtype);
 
-      *handle=(int64_t)mpihandle;
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   int PPIDD_Destroy(int64_t *handle) {
-      int mpihandle = (int) *handle;
+   int PPIDD_Destroy(int handle) {
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_free(mpihandle);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_free(handle);
       else {
          int mproc=-NProcs_Work();
-         mpierr=twosided_helpga_col(mproc, mpihandle);
+         mpierr=twosided_helpga_col(mproc, handle);
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Destroy: array %d destroyed!\n",ProcID(),mpihandle);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Destroy: array %d destroyed!\n",ProcID(),handle);
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Distrib(int handle,int rank,int64_t *ilo,int64_t *ihi) {
       int mpiilo;
       int mpiihi;
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 ) {
-         mpierr=mpiga_distribution( mpihandle, rank, &mpiilo, &mpiihi);
+      if ( mpiga_inquire_storetype(handle) == 0 ) {
+         mpierr=mpiga_distribution(handle, rank, &mpiilo, &mpiihi);
       }
       else {
-         mpierr=twosided_helpga_distrib( mpihandle, rank, &mpiilo, &mpiihi);
+         mpierr=twosided_helpga_distrib(handle, rank, &mpiilo, &mpiihi);
       }
 
       *ilo = (int64_t) mpiilo;
@@ -382,8 +376,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpisize;
@@ -393,11 +386,11 @@ static int n_in_msg_mpiq=0;
       std::vector<int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 ) {
-         mpierr=mpiga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
+      if ( mpiga_inquire_storetype(handle) == 0 ) {
+         mpierr=mpiga_location(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
       }
       else {
-         mpierr=twosided_helpga_location( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
+         mpierr=twosided_helpga_location(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
       }
 
       for (int i=0;i<*np;i++) {
@@ -410,148 +403,142 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Get(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_get(mpihandle, mpiilo, mpiihi, buff);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_get(handle, mpiilo, mpiihi, buff);
       else {
          int mproc=0;
          int ielem=mpiilo;
          int64_t val;
-         MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
+         MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_get_inum */
             int64_t nelem_valput=1;
             FORTINT *ibuff;
 
-            val=twosided_helpga_one(mproc, nelem_valput, ielem, &mpihandle);
+            val=twosided_helpga_one(mproc, nelem_valput, ielem, handle);
             ibuff=(FORTINT *)buff;
             *ibuff=(FORTINT)val;
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_get */
             int nelem=mpiihi-mpiilo+1;
 
-            twosided_helpga_extra(mproc, nelem, ielem, &mpihandle,buff);
+            twosided_helpga_extra(mproc, nelem, ielem, handle,buff);
          }
          else {
-            MPIGA_Error("PPIDD_Get: starting index > ending index, handle=",mpihandle);
+            MPIGA_Error("PPIDD_Get: starting index > ending index, handle=",handle);
          }
          mpierr=0;
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Get: Get value from array handle= %d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Get: Get value from array handle= %d [%d--%d].\n",ProcID(),handle,mpiilo,mpiihi);
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Put(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_put(mpihandle, mpiilo, mpiihi, buff);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_put(handle, mpiilo, mpiihi, buff);
       else {
          int mproc=-NProcs_Work();
          int ielem=mpiilo;
-         MPI_Datatype dtype=twosided_helpga_inquire_dtype(mpihandle);
+         MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT||dtype==MPI_LONG||dtype==MPI_LONG_LONG) ) { /* PPIDD_helpga_put_inum */
             FORTINT *ibuff=(FORTINT *)buff;
             int64_t valput=(int64_t)*ibuff;
-            twosided_helpga_one(mproc, valput, ielem, &mpihandle);
+            twosided_helpga_one(mproc, valput, ielem, handle);
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_put */
             int nelem=mpiihi-mpiilo+1;
 
-            twosided_helpga_extra(mproc, nelem, ielem, &mpihandle,buff);
+            twosided_helpga_extra(mproc, nelem, ielem, handle,buff);
          }
          else {
-            MPIGA_Error("PPIDD_Put: starting index > ending index, handle=",mpihandle);
+            MPIGA_Error("PPIDD_Put: starting index > ending index, handle=",handle);
          }
          mpierr=0;
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Put: Put buff numbers to array handle=%d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Put: Put buff numbers to array handle=%d [%d--%d].\n",ProcID(),handle,mpiilo,mpiihi);
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_acc(mpihandle, mpiilo, mpiihi, buff, fac);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_acc(handle, mpiilo, mpiihi, buff, fac);
       else {
          if (mpiilo <= mpiihi) { /* PPIDD_helpga_acc */
             int mproc=NProcs_Work();
             int ielem=mpiilo;
             int nelem=mpiihi-mpiilo+1;
 
-            twosided_helpga_extra_acc(mproc, nelem, ielem, &mpihandle, buff, fac);
+            twosided_helpga_extra_acc(mproc, nelem, ielem, handle, buff, fac);
          }
          else {
-            MPIGA_Error("PPIDD_Put: starting index > ending index, handle=",mpihandle);
+            MPIGA_Error("PPIDD_Acc: starting index > ending index, handle=",handle);
          }
          mpierr=0;
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Acc: Accumulate buff numbers to array handle=%d [%d--%d].\n",ProcID(),mpihandle,mpiilo,mpiihi);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Acc: Accumulate buff numbers to array handle=%d [%d--%d].\n",ProcID(),handle,mpiilo,mpiihi);
       if(mpierr==0) return 1 ;
       else return 0 ;
    }
 
 
-   void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
-      int mpihandle = (int) *handle;
+   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
       int mpiinum = (int) *inum;
       int mpiincr = (int) *incr;
       int64_t mpivalue;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpivalue=(int64_t)mpiga_read_inc(mpihandle,mpiinum,mpiincr);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpivalue=(int64_t)mpiga_read_inc(handle,mpiinum,mpiincr);
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 
          int64_t vincr=(int64_t)*incr;
-         mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, &mpihandle);
+         mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, handle);
       }
       *returnval=(int64_t)mpivalue;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
-                            ProcID(),mpiinum,mpihandle,mpiincr);
+                            ProcID(),mpiinum,handle,mpiincr);
    }
 
 
-   void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
-      int mpihandle = (int) *handle;
+   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
       int mpiilo = (int) *ilo;
       int mpiihi = (int) *ihi;
       int mpierr=0;
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_zero_patch(mpihandle,mpiilo,mpiihi);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_zero_patch(handle,mpiilo,mpiihi);
       else
-         MPIGA_Error("PPIDD_Zero_patch: invalid storetype, should be 0. handle=",mpihandle);
+         MPIGA_Error("PPIDD_Zero_patch: invalid storetype, should be 0. handle=",handle);
 
       if(mpierr!=0) MPI_Abort(mpiga_compute_comm(),911);
    }
 
 
-   int PPIDD_Zero(int64_t *handle) {
-      int mpihandle = (int) *handle;
+   int PPIDD_Zero(int handle) {
       int mpierr;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 )
-         mpierr=mpiga_zero(mpihandle);
+      if ( mpiga_inquire_storetype(handle) == 0 )
+         mpierr=mpiga_zero(handle);
       else {
          int mproc=NProcs_Work();
-         mpierr=twosided_helpga_col(mproc, mpihandle);
+         mpierr=twosided_helpga_col(mproc, handle);
       }
-      if(MPIGA_Debug)printf("%5d: In PPIDD_Zero: array %d has been set to zero.\n",ProcID(),mpihandle);
+      if(MPIGA_Debug)printf("%5d: In PPIDD_Zero: array %d has been set to zero.\n",ProcID(),handle);
       if (mpierr==0) return 1 ;
       else return 0 ;
    }
@@ -569,24 +556,22 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
+   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
       do_not_call("PPIDD_Duplicate");
    }
 
 
-   void PPIDD_Inquire_name(int64_t *handle, char *name) {
+   void PPIDD_Inquire_name(int handle, char *name) {
       char *name2;
-      int mpihandle = (int) *handle;
 
-      if ( mpiga_inquire_storetype(mpihandle) == 0 ) mpiga_inquire_name(mpihandle, &name2);
-      else twosided_helpga_inquire_name(mpihandle, &name2);
+      if ( mpiga_inquire_storetype(handle) == 0 ) mpiga_inquire_name(handle, &name2);
+      else twosided_helpga_inquire_name(handle, &name2);
       strncpy(name,name2,strlen(name));
    }
 
 
-   int PPIDD_Inquire_stype(int64_t *handle) {
-      int mpihandle = (int) *handle;
-      return mpiga_inquire_storetype(mpihandle);
+   int PPIDD_Inquire_stype(int handle) {
+      return mpiga_inquire_storetype(handle);
    }
 
 

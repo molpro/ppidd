@@ -178,7 +178,7 @@ interface
  integer(c_int64_t), intent(in)        :: lenin(nchunk)
  integer(c_int),     intent(in), value :: dtype
  integer(c_int),     intent(in), value :: storetype
- integer(c_int64_t), intent(out)       :: handle
+ integer(c_int),     intent(out)       :: handle
  end function ppidd_create_irreg
 end interface
 
@@ -190,15 +190,15 @@ interface
  integer(c_int64_t), intent(in), value :: lentot
  integer(c_int),     intent(in), value :: dtype
  integer(c_int),     intent(in), value :: storetype
- integer(c_int64_t), intent(out)       :: handle
+ integer(c_int),     intent(out)       :: handle
  end function ppidd_create
 end interface
 
 interface
  function ppidd_destroy(handle) bind(C,name='PPIDD_Destroy')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int)                 :: ppidd_destroy
- integer(c_int64_t), intent(in) :: handle
+ integer(c_int), intent(in), value :: handle
  end function ppidd_destroy
 end interface
 
@@ -206,7 +206,7 @@ interface
  function ppidd_distrib(handle,rank,ilo,ihi) bind(C,name='PPIDD_Distrib')
  use iso_c_binding, only : c_int, c_int64_t
  integer(c_int)                  :: ppidd_distrib
- integer(c_int64_t), intent(in)  :: handle
+ integer(c_int), intent(in), value :: handle
  integer(c_int), intent(in), value :: rank
  integer(c_int64_t), intent(out) :: ilo
  integer(c_int64_t), intent(out) :: ihi
@@ -217,7 +217,7 @@ interface
  function ppidd_location(handle,ilo,ihi,map,proclist,np) bind(C,name='PPIDD_Location')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  integer(c_int)                  :: ppidd_location
- integer(c_int64_t), intent(in)  :: handle
+ integer(c_int), intent(in), value  :: handle
  integer(c_int64_t), intent(in)  :: ilo
  integer(c_int64_t), intent(in)  :: ihi
  type(c_ptr), intent(in), value  :: map      ! call ppidd_location(...,c_loc(f_map),...)
@@ -230,7 +230,7 @@ interface
  function ppidd_get(handle,ilo,ihi,buff) bind(C,name='PPIDD_Get')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  integer(c_int)                 :: ppidd_get
- integer(c_int64_t), intent(in) :: handle
+ integer(c_int), intent(in), value :: handle
  integer(c_int64_t), intent(in) :: ilo
  integer(c_int64_t), intent(in) :: ihi
  type(c_ptr), intent(in), value :: buff ! call ppidd_get(...,c_loc(f_buff),...)
@@ -241,7 +241,7 @@ interface
  function ppidd_put(handle,ilo,ihi,buff) bind(C,name='PPIDD_Put')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  integer(c_int)                 :: ppidd_put
- integer(c_int64_t), intent(in) :: handle
+ integer(c_int), intent(in), value :: handle
  integer(c_int64_t), intent(in) :: ilo
  integer(c_int64_t), intent(in) :: ihi
  type(c_ptr), intent(in), value :: buff ! call ppidd_put(...,c_loc(f_buff),...)
@@ -252,7 +252,7 @@ interface
  function ppidd_acc(handle,ilo,ihi,buff,fac) bind(C,name='PPIDD_Acc')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  integer(c_int)                 :: ppidd_acc
- integer(c_int64_t), intent(in) :: handle
+ integer(c_int), intent(in), value :: handle
  integer(c_int64_t), intent(in) :: ilo
  integer(c_int64_t), intent(in) :: ihi
  type(c_ptr), intent(in), value :: buff ! call ppidd_acc(...,c_loc(f_buff),...)
@@ -262,8 +262,8 @@ end interface
 
 interface
  subroutine ppidd_read_inc(handle,inum,incr,returnval) bind(C,name='PPIDD_Read_inc')
- use iso_c_binding, only : c_int64_t
- integer(c_int64_t), intent(in)  :: handle
+ use iso_c_binding, only : c_int, c_int64_t
+ integer(c_int), intent(in), value  :: handle
  integer(c_int64_t), intent(in)  :: inum
  integer(c_int64_t), intent(in)  :: incr
  integer(c_int64_t), intent(out) :: returnval
@@ -272,8 +272,8 @@ end interface
 
 interface
  subroutine ppidd_zero_patch(handle,ilo,ihi) bind(C,name='PPIDD_Zero_patch')
- use iso_c_binding, only : c_int64_t
- integer(c_int64_t), intent(in)  :: handle
+ use iso_c_binding, only : c_int, c_int64_t
+ integer(c_int), intent(in), value  :: handle
  integer(c_int64_t), intent(in)  :: ilo
  integer(c_int64_t), intent(in)  :: ihi
  end subroutine ppidd_zero_patch
@@ -281,9 +281,9 @@ end interface
 
 interface
  function ppidd_zero(handle) bind(C,name='PPIDD_Zero')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int)                 :: ppidd_zero
- integer(c_int64_t), intent(in) :: handle
+ integer(c_int), intent(in), value :: handle
  end function ppidd_zero
 end interface
 
@@ -297,26 +297,26 @@ end interface
 
 interface
  subroutine ppidd_duplicate(handlei,handlej,name) bind(C,name='PPIDD_Duplicate')
- use iso_c_binding, only : c_int64_t, c_char
- integer(c_int64_t), intent(in)  :: handlei
- integer(c_int64_t), intent(out) :: handlej
+ use iso_c_binding, only : c_int, c_int64_t, c_char
+ integer(c_int), intent(in), value  :: handlei
+ integer(c_int), intent(out) :: handlej
  character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
  end subroutine ppidd_duplicate
 end interface
 
 interface
  subroutine ppidd_inquire_name(handle,name) bind(C,name='PPIDD_Inquire_name')
- use iso_c_binding, only : c_int64_t, c_char
- integer(c_int64_t), intent(in)  :: handle
+ use iso_c_binding, only : c_int, c_char
+ integer(c_int), intent(in), value  :: handle
  character(c_char),  intent(out) :: name ! must to terminated by c_null_char
  end subroutine ppidd_inquire_name
 end interface
 
 interface
  function ppidd_inquire_stype(handle) bind(C,name='PPIDD_Inquire_stype')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int) ppidd_inquire_stype
- integer(c_int64_t), intent(in)  :: handle
+ integer(c_int), intent(in), value :: handle
  end function ppidd_inquire_stype
 end interface
 

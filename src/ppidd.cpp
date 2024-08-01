@@ -523,7 +523,7 @@ extern "C" {
 
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -550,7 +550,7 @@ extern "C" {
  *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -570,7 +570,7 @@ extern "C" {
  *
  *  - \b GA analogous http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY
  */
-   int PPIDD_Destroy(int64_t *handle) {
+   int PPIDD_Destroy(int handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -592,7 +592,7 @@ extern "C" {
  *  If no array elements are owned by the process, the range is returned as [0,-1].
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION
  */
-   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int handle,int rank,int64_t *ilo,int64_t *ihi) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -614,7 +614,7 @@ extern "C" {
  *  np is the number of processes hold tha data (return 0  if ilo/ihi are out of bounds "0").
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCATE_REGION
  */
-   int PPIDD_Location(int64_t *handle,     /*!< array handle */
+   int PPIDD_Location(int handle,          /*!< array handle */
                       int64_t *ilo,        /*!< lower element subscript, 1 (not 0) for first element */
                       int64_t *ihi,        /*!< higher element subscript */
                       int64_t *map,        /*!< return start/end index for <tt>proclist</tt> */
@@ -638,7 +638,7 @@ extern "C" {
 
 /*! \brief Copies data from array section to the local array buffer according to starting and ending index.
     \details analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET */
-   int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Get(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -655,7 +655,7 @@ extern "C" {
 
 /*! \brief Put local buffer data into a section of a global array according to starting and ending index.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT */
-   int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Put(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -674,7 +674,7 @@ extern "C" {
 /*! \brief Accumulate data into a section of a global array.
     \details Atomic operation. global array section (ilo, ihi) += *fac * buffer.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC */
-   int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
+   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -694,7 +694,7 @@ extern "C" {
     \details Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum)
     element by a given increment. This is a fetch-and-add operation.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC */
-   void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -712,7 +712,7 @@ extern "C" {
 
 /*! \brief Set all the elements in an array patch to zero.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH */
-   void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
+   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -730,7 +730,7 @@ extern "C" {
 
 /*! \brief Set all the elements of a global data structure to zero.
  *  \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO */
-   int PPIDD_Zero(int64_t *handle) {
+   int PPIDD_Zero(int handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -767,7 +767,7 @@ extern "C" {
     \details
     - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DUPLICATE
     - \b MPI2 does nothing */
-   void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
+   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -786,7 +786,7 @@ extern "C" {
 /*! \brief Returns the name of a global array represented by the handle.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
     This operation is local. */
-   void PPIDD_Inquire_name(int64_t *handle, char *name) {
+   void PPIDD_Inquire_name(int handle, char *name) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -807,7 +807,7 @@ extern "C" {
    - \c storetype=0 : Normal distributed array stored across the distributed processes
    - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled).
    - \c This operation is local. */
-   int PPIDD_Inquire_stype(int64_t *handle) {
+   int PPIDD_Inquire_stype(int handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

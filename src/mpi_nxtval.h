@@ -125,9 +125,9 @@ typedef struct {
     extern int twosided_helpga_locate_server(int , int , int , int *, int *, int *);
     extern int twosided_helpga_distrib( int , int , int *, int *);
     extern int twosided_helpga_location( int , int , int , int *, int *, int *);
-    extern int64_t twosided_helpga_one(int , int64_t , int , int *);
-    extern void twosided_helpga_extra(int , int , int , int *, void *);
-    extern void twosided_helpga_extra_acc(int , int , int , int *, void *, void *);
+    extern int64_t twosided_helpga_one(int , int64_t , int , int);
+    extern void twosided_helpga_extra(int , int , int , int , void *);
+    extern void twosided_helpga_extra_acc(int , int , int , int , void *, void *);
     extern int twosided_helpga_handle_orig( int );
     extern MPI_Datatype twosided_helpga_inquire_dtype( int );
     extern int twosided_helpga_inquire_name(int , char **);

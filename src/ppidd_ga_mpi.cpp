@@ -281,13 +281,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       int ndim=1;
       ga_int nblock=(ga_int)nchunk;
       int np;
       int i;
       ga_int iad;
-      int gahandle;
       int gadtype=dtype_ga(dtype);
 
       ga_int block[1]={nblock};
@@ -303,42 +302,37 @@ static int n_in_msg_mpiq=0;
       ga_int dims[1]={iad};
 
 /*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name,dims[1],ndim); */
-      gahandle=NGA_CREATE_IRREG(gadtype, ndim, dims, name, block, &map[0]);
+      *handle=NGA_CREATE_IRREG(gadtype, ndim, dims, name, block, &map[0]);
 
-      *handle=(int64_t)gahandle;
       return 1 ;
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       ga_int galentot=(ga_int)lentot;
-      int gahandle;
       int gadtype=dtype_ga(dtype);
 
       ga_int dims[1]={galentot};
       ga_int block[1]={-1};
 
 /*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name,*dims,ndim); */
-      gahandle=NGA_CREATE(gadtype, 1, dims, name, block);
+      *handle=NGA_CREATE(gadtype, 1, dims, name, block);
 
-      *handle=(int64_t)gahandle;
       return 1 ;
    }
 
 
-   int PPIDD_Destroy(int64_t *handle) {
-      int ihandle = (int) *handle;
-      GA_Destroy(ihandle);
+   int PPIDD_Destroy(int handle) {
+      GA_Destroy(handle);
       return 1 ;
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
-      int gahandle=(int)*handle;
+   int PPIDD_Distrib(int handle,int rank,int64_t *ilo,int64_t *ihi) {
       ga_int gailo[1];
       ga_int gaihi[1];
 
-      NGA_DISTRIBUTION(gahandle, rank, gailo, gaihi);
+      NGA_DISTRIBUTION(handle, rank, gailo, gaihi);
 /* If no array elements are owned by process iproc, the range is returned as lo[ ]=0 and hi[ ]= -1 for all dimensions. */
       if (gailo[0]<=gaihi[0]) {
          *ilo = (int64_t) (gailo[0] + 1);
@@ -352,8 +346,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
@@ -361,7 +354,7 @@ static int n_in_msg_mpiq=0;
       std::vector<ga_int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
 
-      *np=NGA_LOCATE_REGION( mpihandle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
+      *np=NGA_LOCATE_REGION(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
 
       for (int i=0;i<*np;i++) {
          map[2*i]=(int64_t)(mpimap[2*i]+1);
@@ -372,103 +365,94 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Get(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       ga_int ld[1]={1};
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      NGA_GET(mpihandle, mpiilo, mpiihi, buff, ld);
+      NGA_GET(handle, mpiilo, mpiihi, buff, ld);
       return 1 ;
    }
 
 
-   int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Put(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       ga_int ld[1]={1};
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      NGA_PUT(mpihandle, mpiilo, mpiihi, buff, ld);
+      NGA_PUT(handle, mpiilo, mpiihi, buff, ld);
       return 1 ;
    }
 
 
-   int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
-      int mpihandle=(int)*handle;
+   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
       ga_int ld[1]={1};
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      NGA_ACC(mpihandle, mpiilo, mpiihi, buff, ld, fac);
+      NGA_ACC(handle, mpiilo, mpiihi, buff, ld, fac);
       return 1 ;
    }
 
 
-   void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
-      int ihandle = (int) *handle;
+   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
       ga_int mpiinum[1];
       long gaincr = (long) *incr;
 
       mpiinum[0] = (ga_int) *inum-1;
-      long gavalue=NGA_READ_INC(ihandle,mpiinum, gaincr);
+      long gavalue=NGA_READ_INC(handle,mpiinum, gaincr);
       *returnval=(int64_t)gavalue;
    }
 
 
-   void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
-      int ihandle = (int) *handle;
+   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
       ga_int mpiilo[1]={(ga_int)*ilo-1};
       ga_int mpiihi[1]={(ga_int)*ihi-1};
 
-      NGA_ZERO_PATCH(ihandle, mpiilo, mpiihi);
+      NGA_ZERO_PATCH(handle, mpiilo, mpiihi);
    }
 
 
-   int PPIDD_Zero(int64_t *handle) {
-      int ihandle = (int) *handle;
-      GA_Zero(ihandle);
+   int PPIDD_Zero(int handle) {
+      GA_Zero(handle);
       return 1 ;
    }
 
 
    static int PPIDD_Nxtval_initialised=0;
-   static int64_t PPIDD_Nxtval_handle;
+   static int PPIDD_Nxtval_handle;
    void PPIDD_Nxtval(int numproc, int64_t *val) {
       if (numproc < 0) {
         /* reset - collective */
-        if (PPIDD_Nxtval_initialised) PPIDD_Destroy(&PPIDD_Nxtval_handle);
+        if (PPIDD_Nxtval_initialised) PPIDD_Destroy(PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=0;
         //      }
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
 	std::string name="Nxtval";
         PPIDD_Create(&name[0],1,0,1,&PPIDD_Nxtval_handle);
-        PPIDD_Zero(&PPIDD_Nxtval_handle);
+        PPIDD_Zero(PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         *val=0;
       }
       else {
         int64_t inum=1,incr=1;
-        PPIDD_Read_inc(&PPIDD_Nxtval_handle,&inum,&incr,val);
+        PPIDD_Read_inc(PPIDD_Nxtval_handle,&inum,&incr,val);
       }
    }
 
 
-   void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
-      int ga_a=(int)*handlei;
-      int ga_b = GA_Duplicate(ga_a, name);
-      *handlej=(int64_t)ga_b;
+   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
+      *handlej = GA_Duplicate(handlei, name);
    }
 
 
-   void PPIDD_Inquire_name(int64_t *handle, char *name) {
-      int gahandle = (int) *handle;
-      strncpy(name,GA_Inquire_name(gahandle),strlen(name));
+   void PPIDD_Inquire_name(int handle, char *name) {
+      strncpy(name,GA_Inquire_name(handle),strlen(name));
    }
 
 
-   int PPIDD_Inquire_stype(int64_t *handle) {
+   int PPIDD_Inquire_stype(int handle) {
       return 0;
    }
 

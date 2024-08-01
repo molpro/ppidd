@@ -112,57 +112,57 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       do_not_call("PPIDD_Create_irreg");
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int64_t *handle) {
+   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       do_not_call("PPIDD_Create");
    }
 
 
-   int PPIDD_Destroy(int64_t *handle) {
+   int PPIDD_Destroy(int handle) {
       do_not_call("PPIDD_Destroy");
    }
 
 
-   int PPIDD_Distrib(int64_t *handle,int rank,int64_t *ilo,int64_t *ihi) {
+   int PPIDD_Distrib(int handle,int rank,int64_t *ilo,int64_t *ihi) {
       do_not_call("PPIDD_Distrib");
    }
 
 
-   int PPIDD_Location(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
+   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
       do_not_call("PPIDD_Location");
    }
 
 
-   int PPIDD_Get(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Get(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       do_not_call("PPIDD_Get");
    }
 
 
-   int PPIDD_Put(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Put(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
       do_not_call("PPIDD_Put");
    }
 
 
-   int PPIDD_Acc(int64_t *handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
+   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
       do_not_call("PPIDD_Acc");
    }
 
 
-   void PPIDD_Read_inc(int64_t *handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
       do_not_call("PPIDD_Read_inc");
    }
 
 
-   void PPIDD_Zero_patch(int64_t *handle,int64_t *ilo,int64_t *ihi) {
+   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
       do_not_call("PPIDD_Zero_patch");
    }
 
 
-   int PPIDD_Zero(int64_t *handle) {
+   int PPIDD_Zero(int handle) {
       do_not_call("PPIDD_Zero");
    }
 
@@ -172,17 +172,17 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Duplicate(int64_t *handlei, int64_t *handlej, char *name) {
+   void PPIDD_Duplicate(int handlei, int *handlej, char *name) {
       do_not_call("PPIDD_Duplicate");
    }
 
 
-   void PPIDD_Inquire_name(int64_t *handle, char *name) {
+   void PPIDD_Inquire_name(int handle, char *name) {
       do_not_call("PPIDD_Inquire_name");
    }
 
 
-   int PPIDD_Inquire_stype(int64_t *handle) {
+   int PPIDD_Inquire_stype(int handle) {
       do_not_call("PPIDD_Inquire_stype");
    }
 

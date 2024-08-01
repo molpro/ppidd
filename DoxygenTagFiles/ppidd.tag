@@ -155,78 +155,78 @@
       <type>int</type>
       <name>PPIDD_Create_irreg</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a3e94a4c73e72d2ae6c4e80d0de14c5d6</anchor>
-      <arglist>(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int64_t *handle)</arglist>
+      <anchor>aabaa345ef135d2d65f32cb2de7461faa</anchor>
+      <arglist>(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aae0063e4048b471f3b7acbfafad0cc11</anchor>
-      <arglist>(char *name, int64_t lentot, int dtype, int storetype, int64_t *handle)</arglist>
+      <anchor>a0cf53817e9e57b8b3f807c2ca9ff613e</anchor>
+      <arglist>(char *name, int64_t lentot, int dtype, int storetype, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Destroy</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>af8a751d551ce0e3913d2fe180170611e</anchor>
-      <arglist>(int64_t *handle)</arglist>
+      <anchor>af6eb8590dea63b899c9bca929848de80</anchor>
+      <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Distrib</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>afbb7e3fd3482b9dbcf4ea9811da92c60</anchor>
-      <arglist>(int64_t *handle, int rank, int64_t *ilo, int64_t *ihi)</arglist>
+      <anchor>ad4f931760b39afbc5412f793bd337b28</anchor>
+      <arglist>(int handle, int rank, int64_t *ilo, int64_t *ihi)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Location</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a5e42d860066f762d0e6b995cbc5ebead</anchor>
-      <arglist>(int64_t *handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np)</arglist>
+      <anchor>afdcaa0a58adfdf57f71887d94704a756</anchor>
+      <arglist>(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Get</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a3dc9a44d21d9cf560d19084919961eb1</anchor>
-      <arglist>(int64_t *handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
+      <anchor>a130e24887f4d0b506e7a5eda48d94ecd</anchor>
+      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Put</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a0bcb9506432439ab6bd8b5aebb272f1e</anchor>
-      <arglist>(int64_t *handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
+      <anchor>a9577128a5615c4776c76641a03293b74</anchor>
+      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Acc</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aecaa019f7ed23c05a03c8b66a60fb473</anchor>
-      <arglist>(int64_t *handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac)</arglist>
+      <anchor>ac9efbd27a6608ae9df73f643f0400654</anchor>
+      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Read_inc</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a86cdc1a370b6ebd3b97fea4aac89f0cb</anchor>
-      <arglist>(int64_t *handle, int64_t *inum, int64_t *incr, int64_t *returnval)</arglist>
+      <anchor>a558df0187697961d06ace8dc3d80f97c</anchor>
+      <arglist>(int handle, int64_t *inum, int64_t *incr, int64_t *returnval)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Zero_patch</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a8f8345ae541d1fdcec2d1976cbf38267</anchor>
-      <arglist>(int64_t *handle, int64_t *ilo, int64_t *ihi)</arglist>
+      <anchor>a2047505e782d5a51ae0bcad193e17b46</anchor>
+      <arglist>(int handle, int64_t *ilo, int64_t *ihi)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Zero</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa71e4ea4a5318c48f037ed20097953b3</anchor>
-      <arglist>(int64_t *handle)</arglist>
+      <anchor>a394fbda72a12f97a2cbeff94b79f484e</anchor>
+      <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -239,22 +239,22 @@
       <type>void</type>
       <name>PPIDD_Duplicate</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a8fb85806da2adf2a61f57057fb4782f9</anchor>
-      <arglist>(int64_t *handlei, int64_t *handlej, char *name)</arglist>
+      <anchor>ae90d39099b735b9e2f01776d4b043425</anchor>
+      <arglist>(int handlei, int *handlej, char *name)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Inquire_name</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a797999e233bfa7facd26309045be55d5</anchor>
-      <arglist>(int64_t *handle, char *name)</arglist>
+      <anchor>a704b674ff7f5dcc6b88c666c3308adef</anchor>
+      <arglist>(int handle, char *name)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Inquire_stype</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a475d0cf4a393a545adbf5149615d28d1</anchor>
-      <arglist>(int64_t *handle)</arglist>
+      <anchor>a4e90163f6ad9674cd2086bd6c76e550e</anchor>
+      <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

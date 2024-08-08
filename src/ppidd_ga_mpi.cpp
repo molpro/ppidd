@@ -83,9 +83,9 @@ namespace ga_mpi {
    }
 
 
-   int PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap) {
-      Integer istack=(Integer)*stack;
-      Integer iheap=(Integer)*heap;
+   int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
+      Integer istack=(Integer)stack;
+      Integer iheap=(Integer)heap;
       Integer gadtype=(Integer)dtype_ga(dtype);
       if( MA_init(gadtype, istack, iheap)) return 1;
       else return 0;

@@ -60,7 +60,7 @@ namespace mpi2 {
    }
 
 
-   int PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap) {
+   int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
       return 1;
    }
 

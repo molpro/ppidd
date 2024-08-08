@@ -174,7 +174,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/ma/MAapi.html
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
-   int PPIDD_MA_init(int dtype, int64_t *stack, int64_t *heap) {
+   int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

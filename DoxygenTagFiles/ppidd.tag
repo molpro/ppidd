@@ -43,8 +43,8 @@
       <type>int</type>
       <name>PPIDD_MA_init</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa5d2b27d9321575f1f6bce589aa0b2f9</anchor>
-      <arglist>(int dtype, int64_t *stack, int64_t *heap)</arglist>
+      <anchor>a8a29bf48a081ca9d09da5cd415eda21f</anchor>
+      <arglist>(int dtype, int64_t stack, int64_t heap)</arglist>
     </member>
     <member kind="function">
       <type>double</type>

@@ -111,8 +111,7 @@ interface
  type(c_ptr), intent(in), value :: buf ! call ppidd_send(c_loc(f_buffer),...)
  integer(c_int64_t), intent(in)        :: count
  integer(c_int),     intent(in), value :: dtype
- integer(c_int64_t), intent(in)        :: dest
- integer(c_int), intent(in), value     :: sync
+ integer(c_int), intent(in), value :: dest, sync
  end subroutine ppidd_send
 end interface
 
@@ -121,8 +120,7 @@ interface
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  type(c_ptr), intent(in), value         :: buf ! call ppidd_recv(c_loc(f_buffer),...)
  integer(c_int64_t), intent(in)         :: count
- integer(c_int),     intent(in), value  :: dtype
- integer(c_int64_t), intent(in)         :: source
+ integer(c_int), intent(in), value  :: dtype, source
  integer(c_int64_t), intent(out)        :: lenreal
  integer(c_int64_t), intent(out)        :: sourcereal
  integer(c_int), intent(in), value      :: sync

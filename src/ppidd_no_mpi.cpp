@@ -81,12 +81,12 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int sync) {
+   void PPIDD_Send(void *buf,int64_t *count,int dtype,int dest,int sync) {
       do_not_call("PPIDD_Send");
    }
 
 
-   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
       do_not_call("PPIDD_Recv");
    }
 

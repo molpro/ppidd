@@ -155,10 +155,9 @@ static int n_in_msg_mpiq=0;
 /* =================================================================== */
 
 
-   void PPIDD_Send(void *buf,int64_t *count,int dtype,int64_t *dest,int sync) {
+   void PPIDD_Send(void *buf,int64_t *count,int dtype,int dest,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
       int mpicount=(int)*count;
-      int mpidest=(int)*dest;
       int mpitag=dtype;
       int mpierr;
 
@@ -166,23 +165,23 @@ static int n_in_msg_mpiq=0;
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
-                 ProcID(), mpidest, mpilenbuf, mpitag, sync);
+                 ProcID(), dest, mpilenbuf, mpitag, sync);
          fflush(stdout);
       }
 
       if (sync) {
-         mpierr=MPI_Send(buf,mpilenbuf,MPI_CHAR,mpidest,mpitag,mpicomm);
+         mpierr=MPI_Send(buf,mpilenbuf,MPI_CHAR,dest,mpitag,mpicomm);
          mpi_test_status("PPIDD_SEND: SEND:",mpierr);
       }
       else {
          if (n_in_msg_mpiq >= MAX_MPIQ_LEN) {
             MPIGA_Error("PPIDD_SEND: nonblocking SEND: overflowing async Queue limit",n_in_msg_mpiq);
          }
-         mpierr = MPI_Isend(buf, mpilenbuf, MPI_CHAR,mpidest, mpitag,mpicomm,
+         mpierr = MPI_Isend(buf, mpilenbuf, MPI_CHAR,dest, mpitag,mpicomm,
                      &msg_mpiq[n_in_msg_mpiq].request);
          mpi_test_status("PPIDD_SEND: nonblocking SEND:",mpierr);
 
-         msg_mpiq[n_in_msg_mpiq].node   =(long) mpidest;
+         msg_mpiq[n_in_msg_mpiq].node   =(long) dest;
          msg_mpiq[n_in_msg_mpiq].type   =(long) dtype;
          msg_mpiq[n_in_msg_mpiq].lenbuf =(long) mpilenbuf;
          msg_mpiq[n_in_msg_mpiq].snd = (long)1;
@@ -190,25 +189,24 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int64_t *source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
       int mpicount=(int)*count;
       int mpitag=dtype;
-      int mpisource=(int)*source;
       int mpinode,mpierr;
       MPI_Status status;
       MPI_Request request;
 
       int mpilenbuf = mpicount * dtype_size(dtype);
 
-      if (mpisource == -1)
+      if (source == -1)
          mpinode = MPI_ANY_SOURCE;
       else
-         mpinode = mpisource;
+         mpinode = source;
 
       if (MPIGA_Debug) {
          printf("PPIDD_Recv: node %d receving from %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
-                 ProcID(), mpisource, mpilenbuf, mpitag, sync);
+                 ProcID(), source, mpilenbuf, mpitag, sync);
          fflush(stdout);
       }
 
@@ -222,7 +220,7 @@ static int n_in_msg_mpiq=0;
          *sourcereal = (int64_t) mpinode;          /* Get source node  */
          *lenreal = (int64_t) (-1);
          msg_mpiq[n_in_msg_mpiq].request = request;
-         msg_mpiq[n_in_msg_mpiq].node   = (long)*source;
+         msg_mpiq[n_in_msg_mpiq].node   = (long)source;
          msg_mpiq[n_in_msg_mpiq].type   = (long)dtype;
          msg_mpiq[n_in_msg_mpiq].lenbuf = (long)mpilenbuf;
          msg_mpiq[n_in_msg_mpiq].snd = (long)0;

@@ -155,13 +155,12 @@ static int n_in_msg_mpiq=0;
 /* =================================================================== */
 
 
-   void PPIDD_Send(void *buf,int64_t *count,int dtype,int dest,int sync) {
+   void PPIDD_Send(void *buf,int count,int dtype,int dest,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
-      int mpicount=(int)*count;
       int mpitag=dtype;
       int mpierr;
 
-      int mpilenbuf = mpicount * dtype_size(dtype);
+      int mpilenbuf = count * dtype_size(dtype);
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
@@ -189,15 +188,14 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
-      int mpicount=(int)*count;
       int mpitag=dtype;
       int mpinode,mpierr;
       MPI_Status status;
       MPI_Request request;
 
-      int mpilenbuf = mpicount * dtype_size(dtype);
+      int mpilenbuf = count * dtype_size(dtype);
 
       if (source == -1)
          mpinode = MPI_ANY_SOURCE;
@@ -265,12 +263,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root) {
+   void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
 
       MPI_Datatype mpidtype=dtype_mpi(dtype);
 
       char *cbuf=(char *)buffer;
-      for (int64_t remaining=*count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE) {
+      for (int64_t remaining=count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE) {
        int mpierr=MPI_Bcast(&cbuf[addr*dtype_size(dtype)],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),mpidtype,root,mpiga_compute_comm());
        mpi_test_status("PPIDD_BCast:",mpierr);
       }

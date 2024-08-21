@@ -368,7 +368,7 @@ extern "C" {
  *  - \b GA calls SND_.
  *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
-   void PPIDD_Send(void *buf,int64_t *count,int dtype,int dest,int sync) {
+   void PPIDD_Send(void *buf,int count,int dtype,int dest,int sync) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -389,7 +389,7 @@ extern "C" {
  *  - \b GA calls RCV_.
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
-   void PPIDD_Recv(void *buf,int64_t *count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -455,7 +455,7 @@ extern "C" {
  *
  *  - \c dtype=0 : Fortran integer and logical types
  *  - \c dtype=1 : Fortran double precision type */
-   void PPIDD_BCast(void *buffer,int64_t *count,int dtype,int root) {
+   void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -107,11 +107,9 @@ end interface
 
 interface
  subroutine ppidd_send(buf,count,dtype,dest,sync) bind(C,name='PPIDD_Send')
- use iso_c_binding, only : c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_int, c_ptr
  type(c_ptr), intent(in), value :: buf ! call ppidd_send(c_loc(f_buffer),...)
- integer(c_int64_t), intent(in)        :: count
- integer(c_int),     intent(in), value :: dtype
- integer(c_int), intent(in), value :: dest, sync
+ integer(c_int), intent(in), value :: count, dtype, dest, sync
  end subroutine ppidd_send
 end interface
 
@@ -119,8 +117,7 @@ interface
  subroutine ppidd_recv(buf,count,dtype,source,lenreal,sourcereal,sync) bind(C,name='PPIDD_Recv')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
  type(c_ptr), intent(in), value         :: buf ! call ppidd_recv(c_loc(f_buffer),...)
- integer(c_int64_t), intent(in)         :: count
- integer(c_int), intent(in), value  :: dtype, source
+ integer(c_int), intent(in), value  :: count, dtype, source
  integer(c_int64_t), intent(out)        :: lenreal
  integer(c_int64_t), intent(out)        :: sourcereal
  integer(c_int), intent(in), value      :: sync
@@ -144,10 +141,8 @@ end interface
 interface
  subroutine ppidd_bcast(buffer,count,dtype,root) bind(C,name='PPIDD_BCast')
  use iso_c_binding, only : c_int, c_int64_t, c_ptr
- type(c_ptr),        intent(in), value :: buffer ! call ppidd_bcast(c_loc(f_buffer),...)
- integer(c_int64_t), intent(in)        :: count
- integer(c_int),     intent(in), value :: dtype
- integer(c_int), intent(in), value     :: root
+ type(c_ptr), intent(in), value :: buffer ! call ppidd_bcast(c_loc(f_buffer),...)
+ integer(c_int), intent(in), value :: count, dtype, root
  end subroutine ppidd_bcast
 end interface
 

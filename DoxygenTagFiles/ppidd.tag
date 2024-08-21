@@ -106,15 +106,15 @@
       <type>void</type>
       <name>PPIDD_Send</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>afb6c070aa39e09e6d57596cbb437c9f9</anchor>
-      <arglist>(void *buf, int64_t *count, int dtype, int dest, int sync)</arglist>
+      <anchor>a32bf1e3984512dab4f53532232779675</anchor>
+      <arglist>(void *buf, int count, int dtype, int dest, int sync)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>PPIDD_Recv</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a27918550f1643ec5dc4244881fe06567</anchor>
-      <arglist>(void *buf, int64_t *count, int dtype, int source, int64_t *lenreal, int64_t *sourcereal, int sync)</arglist>
+      <anchor>ae070a87257dfcf92320bea61fe50f0dd</anchor>
+      <arglist>(void *buf, int count, int dtype, int source, int64_t *lenreal, int64_t *sourcereal, int sync)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -134,8 +134,8 @@
       <type>void</type>
       <name>PPIDD_BCast</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a7d4c00847d5aa4054cba535fcead6f0d</anchor>
-      <arglist>(void *buffer, int64_t *count, int dtype, int root)</arglist>
+      <anchor>a33e604b3772bc88bb0c41b8cd971142c</anchor>
+      <arglist>(void *buffer, int count, int dtype, int root)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

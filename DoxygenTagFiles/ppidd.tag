@@ -127,8 +127,8 @@
       <type>int</type>
       <name>PPIDD_Iprobe</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a31736f2ab77ea6beedc6dc7013a6a9c9</anchor>
-      <arglist>(int tag, int64_t *source)</arglist>
+      <anchor>abb13c8254fc47245acd9cdc8bedf08d2</anchor>
+      <arglist>(int tag, int source)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

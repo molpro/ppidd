@@ -55,16 +55,23 @@ extern "C" {
     }
 
 #ifdef HAVE_MPI_H
-    int flag=0;
-    int ret=MPI_Initialized(&flag);
-    if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Initialized failed (%d)",ret); exit(1);}
-    if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(&msg[0],flag);}
-    ret=MPI_Init(argc, argv);
-    if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Init failed (%d)",ret); exit(1);}
+    switch (impl) {
+     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_mpi2):
+      int flag=0;
+      int ret=MPI_Initialized(&flag);
+      if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Initialized failed (%d)",ret); exit(1);}
+      if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(&msg[0],flag);}
+      ret=MPI_Init(argc, argv);
+      if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Init failed (%d)",ret); exit(1);}
+    }
 #ifdef HAVE_GA_H
-    int size;
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size == 1) ppidd_impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
+    switch (impl) {
+     case (ppidd_impl_ga_mpi):
+      int size;
+      MPI_Comm_size(MPI_COMM_WORLD, &size);
+      if (size == 1) ppidd_impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
+    }
 #endif
 #endif
 

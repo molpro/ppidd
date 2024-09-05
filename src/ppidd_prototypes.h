@@ -28,7 +28,7 @@
  extern int  PPIDD_Get (int handle, int64_t *ilo, int64_t *ihi, void *buff);
  extern int  PPIDD_Put (int handle, int64_t *ilo, int64_t *ihi, void *buff);
  extern int  PPIDD_Acc (int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac);
- extern void PPIDD_Read_inc (int handle, int64_t *inum, int64_t *incr, int64_t *returnval);
+ extern int64_t PPIDD_Read_inc (int handle, int64_t inum, int64_t incr);
  extern void PPIDD_Zero_patch (int handle, int64_t *ilo, int64_t *ihi);
  extern int  PPIDD_Zero (int handle);
  extern void PPIDD_Inquire_name (int handle, char *name);

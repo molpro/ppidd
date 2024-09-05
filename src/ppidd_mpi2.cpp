@@ -492,9 +492,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
-      int mpiinum = (int) *inum;
-      int mpiincr = (int) *incr;
+   int64_t PPIDD_Read_inc(int handle,int64_t inum,int64_t incr) {
+      int mpiinum = (int)inum;
+      int mpiincr = (int)incr;
       int64_t mpivalue;
 
       if ( mpiga_inquire_storetype(handle) == 0 )
@@ -502,12 +502,12 @@ static int n_in_msg_mpiq=0;
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
 
-         int64_t vincr=(int64_t)*incr;
+         int64_t vincr=(int64_t)incr;
          mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, handle);
       }
-      *returnval=(int64_t)mpivalue;
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
                             ProcID(),mpiinum,handle,mpiincr);
+      return (int64_t)mpivalue;
    }
 
 

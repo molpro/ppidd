@@ -152,7 +152,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   int64_t PPIDD_Read_inc(int handle,int64_t inum,int64_t incr) {
       do_not_call("PPIDD_Read_inc");
    }
 

@@ -390,13 +390,11 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   int64_t PPIDD_Read_inc(int handle,int64_t inum,int64_t incr) {
       ga_int mpiinum[1];
-      long gaincr = (long) *incr;
 
-      mpiinum[0] = (ga_int) *inum-1;
-      long gavalue=NGA_READ_INC(handle,mpiinum, gaincr);
-      *returnval=(int64_t)gavalue;
+      mpiinum[0] = (ga_int) inum-1;
+      return (int64_t) NGA_READ_INC(handle,mpiinum, (long)incr);
    }
 
 
@@ -431,8 +429,7 @@ static int n_in_msg_mpiq=0;
         *val=0;
       }
       else {
-        int64_t inum=1,incr=1;
-        PPIDD_Read_inc(PPIDD_Nxtval_handle,&inum,&incr,val);
+        *val = PPIDD_Read_inc(PPIDD_Nxtval_handle,1,1);
       }
    }
 

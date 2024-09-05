@@ -701,18 +701,18 @@ extern "C" {
     \details Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum)
     element by a given increment. This is a fetch-and-add operation.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC */
-   void PPIDD_Read_inc(int handle,int64_t *inum,int64_t *incr,int64_t *returnval) {
+   int64_t PPIDD_Read_inc(int handle,int64_t inum,int64_t incr) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Read_inc(handle,inum,incr,returnval);
+      return ga_mpi::PPIDD_Read_inc(handle,inum,incr);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Read_inc(handle,inum,incr,returnval);
+      return mpi2::PPIDD_Read_inc(handle,inum,incr);
 #endif
      default:
-      return no_mpi::PPIDD_Read_inc(handle,inum,incr,returnval);
+      return no_mpi::PPIDD_Read_inc(handle,inum,incr);
     }
    }
 

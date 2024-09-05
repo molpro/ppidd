@@ -252,13 +252,12 @@ interface
 end interface
 
 interface
- subroutine ppidd_read_inc(handle,inum,incr,returnval) bind(C,name='PPIDD_Read_inc')
+ function ppidd_read_inc(handle,inum,incr) bind(C,name='PPIDD_Read_inc')
  use iso_c_binding, only : c_int, c_int64_t
+ integer(c_int64_t) ppidd_read_inc
  integer(c_int), intent(in), value  :: handle
- integer(c_int64_t), intent(in)  :: inum
- integer(c_int64_t), intent(in)  :: incr
- integer(c_int64_t), intent(out) :: returnval
- end subroutine ppidd_read_inc
+ integer(c_int64_t), intent(in), value  :: inum, incr
+ end function ppidd_read_inc
 end interface
 
 interface

@@ -208,11 +208,11 @@
       <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int64_t</type>
       <name>PPIDD_Read_inc</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a558df0187697961d06ace8dc3d80f97c</anchor>
-      <arglist>(int handle, int64_t *inum, int64_t *incr, int64_t *returnval)</arglist>
+      <anchor>a704ef6d0582d73b819007418973dea96</anchor>
+      <arglist>(int handle, int64_t inum, int64_t incr)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

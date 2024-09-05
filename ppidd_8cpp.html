@@ -157,9 +157,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ac9efbd27a6608ae9df73f643f0400654"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#ac9efbd27a6608ae9df73f643f0400654">PPIDD_Acc</a> (int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac)</td></tr>
 <tr class="memdesc:ac9efbd27a6608ae9df73f643f0400654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accumulate data into a section of a global array.  <a href="ppidd_8cpp.html#ac9efbd27a6608ae9df73f643f0400654">More...</a><br /></td></tr>
 <tr class="separator:ac9efbd27a6608ae9df73f643f0400654"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a558df0187697961d06ace8dc3d80f97c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a558df0187697961d06ace8dc3d80f97c">PPIDD_Read_inc</a> (int handle, int64_t *inum, int64_t *incr, int64_t *returnval)</td></tr>
-<tr class="memdesc:a558df0187697961d06ace8dc3d80f97c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Atomically read and increment an element in an integer array.  <a href="ppidd_8cpp.html#a558df0187697961d06ace8dc3d80f97c">More...</a><br /></td></tr>
-<tr class="separator:a558df0187697961d06ace8dc3d80f97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a704ef6d0582d73b819007418973dea96"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a704ef6d0582d73b819007418973dea96">PPIDD_Read_inc</a> (int handle, int64_t inum, int64_t incr)</td></tr>
+<tr class="memdesc:a704ef6d0582d73b819007418973dea96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Atomically read and increment an element in an integer array.  <a href="ppidd_8cpp.html#a704ef6d0582d73b819007418973dea96">More...</a><br /></td></tr>
+<tr class="separator:a704ef6d0582d73b819007418973dea96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2047505e782d5a51ae0bcad193e17b46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a2047505e782d5a51ae0bcad193e17b46">PPIDD_Zero_patch</a> (int handle, int64_t *ilo, int64_t *ihi)</td></tr>
 <tr class="memdesc:a2047505e782d5a51ae0bcad193e17b46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all the elements in an array patch to zero.  <a href="ppidd_8cpp.html#a2047505e782d5a51ae0bcad193e17b46">More...</a><br /></td></tr>
 <tr class="separator:a2047505e782d5a51ae0bcad193e17b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1685,14 +1685,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a558df0187697961d06ace8dc3d80f97c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a558df0187697961d06ace8dc3d80f97c">&#9670;&nbsp;</a></span>PPIDD_Read_inc()</h2>
+<a id="a704ef6d0582d73b819007418973dea96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a704ef6d0582d73b819007418973dea96">&#9670;&nbsp;</a></span>PPIDD_Read_inc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void PPIDD_Read_inc </td>
+          <td class="memname">int64_t PPIDD_Read_inc </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>handle</em>, </td>
@@ -1700,20 +1700,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramtype">int64_t&#160;</td>
           <td class="paramname"><em>inum</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>incr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>returnval</em>&#160;</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>incr</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

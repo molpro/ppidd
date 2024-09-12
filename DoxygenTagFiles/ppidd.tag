@@ -218,8 +218,8 @@
       <type>void</type>
       <name>PPIDD_Zero_patch</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2047505e782d5a51ae0bcad193e17b46</anchor>
-      <arglist>(int handle, int64_t *ilo, int64_t *ihi)</arglist>
+      <anchor>ab846031b89644e69555da8965f355f3f</anchor>
+      <arglist>(int handle, int64_t ilo, int64_t ihi)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

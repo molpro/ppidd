@@ -511,9 +511,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
-      int mpiilo = (int) *ilo;
-      int mpiihi = (int) *ihi;
+   void PPIDD_Zero_patch(int handle,int64_t ilo,int64_t ihi) {
+      int mpiilo = (int) ilo;
+      int mpiihi = (int) ihi;
       int mpierr=0;
       if ( mpiga_inquire_storetype(handle) == 0 )
          mpierr=mpiga_zero_patch(handle,mpiilo,mpiihi);

@@ -157,7 +157,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
+   void PPIDD_Zero_patch(int handle,int64_t ilo,int64_t ihi) {
       do_not_call("PPIDD_Zero_patch");
    }
 

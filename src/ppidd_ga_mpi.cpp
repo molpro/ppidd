@@ -398,9 +398,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
-      ga_int mpiilo[1]={(ga_int)*ilo-1};
-      ga_int mpiihi[1]={(ga_int)*ihi-1};
+   void PPIDD_Zero_patch(int handle,int64_t ilo,int64_t ihi) {
+      ga_int mpiilo[1]={(ga_int)ilo-1};
+      ga_int mpiihi[1]={(ga_int)ihi-1};
 
       NGA_ZERO_PATCH(handle, mpiilo, mpiihi);
    }

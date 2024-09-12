@@ -719,7 +719,7 @@ extern "C" {
 
 /*! \brief Set all the elements in an array patch to zero.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH */
-   void PPIDD_Zero_patch(int handle,int64_t *ilo,int64_t *ihi) {
+   void PPIDD_Zero_patch(int handle,int64_t ilo,int64_t ihi) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

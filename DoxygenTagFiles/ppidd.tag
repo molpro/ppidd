@@ -379,8 +379,8 @@
       <type>int</type>
       <name>PPIDD_Sf_create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>abab338409a5d06eb900839c32e9b95c5</anchor>
-      <arglist>(char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle)</arglist>
+      <anchor>aa20fccc5bd21559a1423ca90d099f1f2</anchor>
+      <arglist>(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

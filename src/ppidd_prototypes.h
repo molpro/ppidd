@@ -53,7 +53,7 @@
  extern int  PPIDD_Eaf_truncate (int handle, double *offset);
  extern void PPIDD_Eaf_errmsg (int code, char *message);
 
- extern int  PPIDD_Sf_create (char *name, double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle);
+ extern int  PPIDD_Sf_create (char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);
  extern int  PPIDD_Sf_write (int handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id);
  extern int  PPIDD_Sf_read (int handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id);
  extern int  PPIDD_Sf_wait (int64_t *request_id);

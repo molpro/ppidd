@@ -1194,7 +1194,7 @@ extern "C" {
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.
 \* ************************************************************************ */
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
+   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

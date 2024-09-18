@@ -270,7 +270,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
+   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
       do_not_call("PPIDD_Sf_create");
    }
 

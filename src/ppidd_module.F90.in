@@ -341,9 +341,7 @@ interface
  use iso_c_binding, only : c_double, c_int, c_char
  integer(c_int)                  :: ppidd_sf_create
  character(c_char),  intent(in)  :: name ! must to terminated by c_null_char
- real(c_double),     intent(in)  :: size_hard_limit
- real(c_double),     intent(in)  :: size_soft_limit
- real(c_double),     intent(in)  :: req_size
+ real(c_double), intent(in), value  :: size_hard_limit, size_soft_limit, req_size
  integer(c_int), intent(out) :: handle
  end function ppidd_sf_create
 end interface

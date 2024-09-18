@@ -855,7 +855,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
+   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       MPI_File mpi_fh;
 

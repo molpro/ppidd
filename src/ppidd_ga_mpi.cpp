@@ -576,10 +576,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name ,double *size_hard_limit, double *size_soft_limit, double *req_size, int *handle) {
+   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
-      int ierr=SF_Create(name, *size_hard_limit, *size_soft_limit, *req_size, handle);
+      int ierr=SF_Create(name, size_hard_limit, size_soft_limit, req_size, handle);
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;

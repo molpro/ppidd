@@ -275,7 +275,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
       do_not_call("PPIDD_Sf_write");
    }
 

@@ -586,11 +586,11 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
       char *buffer=(char *)buff;
 
       int irequest_id;
-      int ierr=SF_Write(handle, *byte_offset, *byte_length, buffer, &irequest_id);
+      int ierr=SF_Write(handle, byte_offset, byte_length, buffer, &irequest_id);
       *request_id=(int64_t)irequest_id;
       return ierr;
    }

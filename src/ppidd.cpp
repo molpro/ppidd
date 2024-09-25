@@ -1215,7 +1215,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

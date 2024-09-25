@@ -869,7 +869,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_write(int handle,double *byte_offset,double *byte_length, double *buff,int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -879,10 +879,10 @@ static int n_in_msg_mpiq=0;
 #else
       MPIO_Request request;
 #endif
-      if(MPI_Debug)printf("In PPIDD_Sf_write : begin. handle=%d,byte_offset=%f,byte_length=%f\n",(int)mpifhandle,*byte_offset,*byte_length);
+      if(MPI_Debug)printf("In PPIDD_Sf_write : begin. handle=%d,byte_offset=%f,byte_length=%f\n",(int)mpifhandle,byte_offset,byte_length);
       mpi_fh = MPI_File_f2c(mpifhandle);
-      offset=(MPI_Offset)(*byte_offset);
-      count=(int)((*byte_length)/sizeof(double));
+      offset=(MPI_Offset)(byte_offset);
+      count=(int)((byte_length)/sizeof(double));
       if(MPI_Debug)printf("In PPIDD_Sf_write : before MPI_File_iwrite_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
       int ierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,MPI_DOUBLE,&request);
       *request_id=(int64_t)request;

@@ -393,8 +393,8 @@
       <type>int</type>
       <name>PPIDD_Sf_read</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2d44d4cff701de076146e18072b172c8</anchor>
-      <arglist>(int handle, double *byte_offset, double *byte_length, double *buff, int64_t *request_id)</arglist>
+      <anchor>a504ffa4bc617ba8c3c58e037fd7fbc82</anchor>
+      <arglist>(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

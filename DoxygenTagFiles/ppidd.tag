@@ -400,8 +400,8 @@
       <type>int</type>
       <name>PPIDD_Sf_wait</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aca8c042520146598aaccc5b2a47a5dd8</anchor>
-      <arglist>(int64_t *request_id)</arglist>
+      <anchor>a94a234cd54f9d3575408f74fd6671d17</anchor>
+      <arglist>(int64_t request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

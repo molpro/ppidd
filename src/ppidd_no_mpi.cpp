@@ -285,7 +285,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_wait(int64_t *request_id) {
+   int PPIDD_Sf_wait(int64_t request_id) {
       do_not_call("PPIDD_Sf_wait");
    }
 

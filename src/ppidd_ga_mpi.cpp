@@ -606,11 +606,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_wait(int64_t *request_id) {
-      int irequest_id=(int)*request_id;
-      int ierr=SF_Wait(&irequest_id);
-      *request_id=(int64_t)irequest_id;
-      return ierr;
+   int PPIDD_Sf_wait(int64_t request_id) {
+      int irequest_id=(int)request_id;
+      return SF_Wait(&irequest_id);
    }
 
 

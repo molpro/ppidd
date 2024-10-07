@@ -1255,7 +1255,7 @@ extern "C" {
    Blocks the calling process until I/O operation associated with request_id completes.
    Invalidates request_id.
 \* ************************************************************************************ */
-   int PPIDD_Sf_wait(int64_t *request_id) {
+   int PPIDD_Sf_wait(int64_t request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

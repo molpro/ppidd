@@ -56,7 +56,7 @@
  extern int  PPIDD_Sf_create (char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);
  extern int  PPIDD_Sf_write (int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id);
  extern int  PPIDD_Sf_read (int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id);
- extern int  PPIDD_Sf_wait (int64_t *request_id);
+ extern int  PPIDD_Sf_wait (int64_t request_id);
  extern int  PPIDD_Sf_waitall (int64_t *list, int num);
  extern int  PPIDD_Sf_destroy (int handle);
  extern void PPIDD_Sf_errmsg (int code, char *message);

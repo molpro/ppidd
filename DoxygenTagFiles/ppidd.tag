@@ -295,8 +295,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_write</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ac778d6d42d0a1a06f92385eecbe6b8c0</anchor>
-      <arglist>(int handle, double *byte_offset, void *buff, int64_t *byte_length)</arglist>
+      <anchor>a45fbfc47d5d7db81e9531a2acd3ee126</anchor>
+      <arglist>(int handle, double byte_offset, void *buff, int64_t byte_length)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -937,7 +937,7 @@ extern "C" {
    Synchronously write to the file specified by the file handle.
    Writes number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

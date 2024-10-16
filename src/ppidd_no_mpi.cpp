@@ -210,7 +210,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
       do_not_call("PPIDD_Eaf_write");
    }
 

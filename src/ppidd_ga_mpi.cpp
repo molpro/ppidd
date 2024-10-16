@@ -485,11 +485,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_write(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
-      eaf_off_t offset=(eaf_off_t)*byte_offset;
-      size_t bytes=(size_t)*byte_length;
-
-      return EAF_Write(handle,offset,buff,bytes);
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
+      return EAF_Write(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length);
    }
 
 

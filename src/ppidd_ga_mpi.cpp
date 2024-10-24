@@ -490,12 +490,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
-      eaf_off_t offset=(eaf_off_t)*byte_offset;
-      size_t bytes=(size_t)*byte_length;
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
       int request;
-
-      int ierr=EAF_Awrite(handle,offset,buff,bytes,&request);
+      int ierr=EAF_Awrite(handle,(eaf_off_t)byte_offset, buff, (size_t)byte_length, &request);
       *request_id=(int64_t)request;
       return ierr;
    }

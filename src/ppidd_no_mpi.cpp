@@ -220,7 +220,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,int64_t byte_length) {
       do_not_call("PPIDD_Eaf_read");
    }
 

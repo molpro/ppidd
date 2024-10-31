@@ -978,7 +978,7 @@ extern "C" {
    Synchronously read from the file specified by the file handle.
    Reads number of bytes to the file identified by handle at location offset.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_read(int handle,double *byte_offset,void *buff,int64_t *byte_length) {
+   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,int64_t byte_length) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

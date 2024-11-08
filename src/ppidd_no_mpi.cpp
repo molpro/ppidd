@@ -225,7 +225,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
       do_not_call("PPIDD_Eaf_aread");
    }
 

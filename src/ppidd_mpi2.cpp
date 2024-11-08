@@ -708,7 +708,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -719,10 +719,10 @@ static int n_in_msg_mpiq=0;
 #else
       MPIO_Request request;
 #endif
-      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,*byte_offset,(long)*byte_length);
+      if(MPI_Debug)printf("In PPIDD_Eaf_aread  : begin. handle=%d,byte_offset=%f,byte_length=%ld\n",(int)mpifhandle,byte_offset,(long)byte_length);
       mpi_fh = MPI_File_f2c(mpifhandle);
-      offset=(MPI_Offset)(*byte_offset);
-      count=(int)(*byte_length/8);
+      offset=(MPI_Offset)(byte_offset);
+      count=(int)(byte_length/8);
       datatype=MPI_DOUBLE;
       if(MPI_Debug)printf("In PPIDD_Eaf_aread  : before MPI_File_iread_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
       int ierr=MPI_File_iread_at(mpi_fh,offset,buff,count,datatype,&request);

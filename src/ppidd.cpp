@@ -999,7 +999,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_aread(int handle,double *byte_offset,void *buff,int64_t *byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

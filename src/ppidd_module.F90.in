@@ -449,9 +449,9 @@ interface
  function ppidd_eaf_aread(handle,byte_offset,buff,byte_length,request_id) bind(C,name='PPIDD_Eaf_aread')
  use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
  integer(c_int), intent(in), value  :: handle
- real(c_double),     intent(in)  :: byte_offset
+ real(c_double), intent(in), value  :: byte_offset
  type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_aread(c_loc(f_buff),...)
- integer(c_int64_t), intent(in)  :: byte_length
+ integer(c_int64_t), intent(in), value :: byte_length
  integer(c_int64_t), intent(out) :: request_id
  integer(c_int)                  :: ppidd_eaf_aread
  end function ppidd_eaf_aread

@@ -1022,7 +1022,7 @@ extern "C" {
    integer ierr         --[out] Error code. 0 if it is able to wait for completion,
                           else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
+   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -511,10 +511,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
-      int request=(int)*request_id;
-
-      return EAF_Wait(handle,request);
+   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
+      return EAF_Wait(handle,(int)request_id);
    }
 
 

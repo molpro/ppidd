@@ -230,7 +230,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
+   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
       do_not_call("PPIDD_Eaf_wait");
    }
 

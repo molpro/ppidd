@@ -732,15 +732,15 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_wait(int handle,int64_t *request_id) {
+   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
 #ifdef MPIO_USES_MPI_REQUEST
-      MPI_Request request=(MPI_Request)(*request_id);
+      MPI_Request request=(MPI_Request)(request_id);
 #else
-      MPIO_Request request=(MPIO_Request)(*request_id);
+      MPIO_Request request=(MPIO_Request)(request_id);
 #endif
       MPI_Status status;
-      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : begin. handle=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)*request_id,(long)request);
+      if(MPI_Debug)printf("In PPIDD_Eaf_wait  : begin. handle=%d,request_id=%d,request=%ld\n",(int)mpifhandle,(int)request_id,(long)request);
 
 #ifdef MPIO_USES_MPI_REQUEST
       int ierr=MPI_Wait( &request, &status );

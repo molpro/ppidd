@@ -323,8 +323,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_wait</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a00e96f4c49ccd6ff69fa996cd26f8147</anchor>
-      <arglist>(int handle, int64_t *request_id)</arglist>
+      <anchor>a0741b16ba4397e09bd8462134c56a8fc</anchor>
+      <arglist>(int handle, int64_t request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

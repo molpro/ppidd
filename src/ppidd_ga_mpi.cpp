@@ -521,10 +521,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_probe(int64_t *request_id,int *status) {
-      int garequest=(int)*request_id;
-
-      return EAF_Probe(garequest, status);
+   int PPIDD_Eaf_probe(int64_t request_id,int *status) {
+      return EAF_Probe((int)request_id, status);
    }
 
 

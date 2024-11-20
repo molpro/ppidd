@@ -775,15 +775,15 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_probe(int64_t *request_id,int *status) {
+   int PPIDD_Eaf_probe(int64_t request_id,int *status) {
       int flag;
 #ifdef MPIO_USES_MPI_REQUEST
-      MPI_Request request=(MPI_Request)(*request_id);
+      MPI_Request request=(MPI_Request)(request_id);
 #else
-      MPIO_Request request=(MPIO_Request)(*request_id);
+      MPIO_Request request=(MPIO_Request)(request_id);
 #endif
       MPI_Status mpistatus;
-      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : begin. request_id=%d,request=%ld\n",(int)*request_id,(long)request);
+      if(MPI_Debug)printf("In PPIDD_Eaf_probe  : begin. request_id=%d,request=%ld\n",(int)request_id,(long)request);
 
 #ifdef MPIO_USES_MPI_REQUEST
       int ierr=MPI_Test(&request, &flag, &mpistatus);

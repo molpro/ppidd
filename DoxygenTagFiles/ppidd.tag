@@ -365,8 +365,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_truncate</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>af132f8e9bc8bcd4aebad805a38477d35</anchor>
-      <arglist>(int handle, double *offset)</arglist>
+      <anchor>a4cbca9e0cdfe8f8f8c2bd1539bafe5e2</anchor>
+      <arglist>(int handle, double offset)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

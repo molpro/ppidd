@@ -1151,7 +1151,7 @@ extern "C" {
    double offset  --[in]  Offset in bytes.
    integer ierr   --[out] Error code. 0 if the file was truncated, else returns error code.
 \* *************************************************************************************** */
-   int PPIDD_Eaf_truncate(int handle,double *offset) {
+   int PPIDD_Eaf_truncate(int handle,double offset) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

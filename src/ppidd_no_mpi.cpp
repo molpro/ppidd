@@ -260,7 +260,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_truncate(int handle,double *offset) {
+   int PPIDD_Eaf_truncate(int handle,double offset) {
       do_not_call("PPIDD_Eaf_truncate");
    }
 

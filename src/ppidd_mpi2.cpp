@@ -830,10 +830,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_truncate(int handle,double *offset) {
+   int PPIDD_Eaf_truncate(int handle,double offset) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
-      MPI_Offset size=(MPI_Offset)(*offset);
+      MPI_Offset size=(MPI_Offset)(offset);
       if(MPI_Debug)printf("In PPIDD_Eaf_truncate: begin. handle=%d\n",(int)mpifhandle);
       mpi_fh = MPI_File_f2c(mpifhandle);
       int ierr=MPI_File_set_size(mpi_fh,size);

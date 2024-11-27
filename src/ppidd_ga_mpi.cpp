@@ -548,10 +548,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_truncate(int handle,double *offset) {
-      eaf_off_t length=(eaf_off_t)*offset;
-
-      return EAF_Truncate(handle,length);
+   int PPIDD_Eaf_truncate(int handle,double offset) {
+      return EAF_Truncate(handle,(eaf_off_t)offset);
    }
 
 

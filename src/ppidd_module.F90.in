@@ -513,7 +513,7 @@ interface
  function ppidd_eaf_truncate(handle,offset) bind(C,name='PPIDD_Eaf_truncate')
  use iso_c_binding, only : c_double, c_int
  integer(c_int), intent(in), value :: handle
- real(c_double), intent(in) :: offset
+ real(c_double), intent(in), value :: offset
  integer(c_int) :: ppidd_eaf_truncate
  end function ppidd_eaf_truncate
 end interface

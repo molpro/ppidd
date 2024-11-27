@@ -50,7 +50,7 @@
  extern int  PPIDD_Eaf_close (int handle);
  extern int  PPIDD_Eaf_delete (char *name);
  extern int  PPIDD_Eaf_length (int handle, double *fsize);
- extern int  PPIDD_Eaf_truncate (int handle, double *offset);
+ extern int  PPIDD_Eaf_truncate (int handle, double offset);
  extern void PPIDD_Eaf_errmsg (int code, char *message);
 
  extern int  PPIDD_Sf_create (char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);

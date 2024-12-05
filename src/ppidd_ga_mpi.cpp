@@ -490,11 +490,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
-      int request;
-      int ierr=EAF_Awrite(handle,(eaf_off_t)byte_offset, buff, (size_t)byte_length, &request);
-      *request_id=(int64_t)request;
-      return ierr;
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+      return EAF_Awrite(handle,(eaf_off_t)byte_offset, buff, (size_t)byte_length, request_id);
    }
 
 
@@ -503,15 +500,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
-      int request;
-      int ierr=EAF_Aread(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length, &request);
-      *request_id=(int64_t)request;
-      return ierr;
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+      return EAF_Aread(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length, request_id);
    }
 
 
-   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
+   int PPIDD_Eaf_wait(int handle,int request_id) {
       return EAF_Wait(handle,(int)request_id);
    }
 
@@ -521,8 +515,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_probe(int64_t request_id,int *status) {
-      return EAF_Probe((int)request_id, status);
+   int PPIDD_Eaf_probe(int request_id, int *status) {
+      return EAF_Probe(request_id, status);
    }
 
 

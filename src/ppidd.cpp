@@ -958,7 +958,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -999,7 +999,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when eaf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1022,7 +1022,7 @@ extern "C" {
    integer ierr         --[out] Error code. 0 if it is able to wait for completion,
                           else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
+   int PPIDD_Eaf_wait(int handle,int request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1066,7 +1066,7 @@ extern "C" {
                           If the asynchronous request is complete, id is invalidated.
    integer ierr         --[out] Error code. 0 if probe succeeded, else returns error code.
 \* ************************************************************************************ */
-   int PPIDD_Eaf_probe(int64_t request_id,int *status) {
+   int PPIDD_Eaf_probe(int request_id,int *status) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

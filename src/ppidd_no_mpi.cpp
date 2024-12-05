@@ -215,7 +215,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
       do_not_call("PPIDD_Eaf_awrite");
    }
 
@@ -225,12 +225,12 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int64_t *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
       do_not_call("PPIDD_Eaf_aread");
    }
 
 
-   int PPIDD_Eaf_wait(int handle,int64_t request_id) {
+   int PPIDD_Eaf_wait(int handle,int request_id) {
       do_not_call("PPIDD_Eaf_wait");
    }
 
@@ -240,7 +240,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_probe(int64_t request_id,int* status) {
+   int PPIDD_Eaf_probe(int request_id,int* status) {
       do_not_call("PPIDD_Eaf_probe");
    }
 

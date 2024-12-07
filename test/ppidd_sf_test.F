@@ -45,7 +45,7 @@ c
       double precision tt0,tt1,tcgtime
       double precision, target :: ttw, ttr
 c     integer stack, heap
-      integer idlist(maxid)
+      integer(c_int) idlist(maxid)
       character(len=80) errmsg
       integer lerrmsg
 c

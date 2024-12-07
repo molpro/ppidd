@@ -45,7 +45,7 @@
  extern int  PPIDD_Eaf_read (int handle, double byte_offset, void *buff, int64_t byte_length);
  extern int  PPIDD_Eaf_aread (int handle, double byte_offset, void *buff, int64_t byte_length, int *request_id);
  extern int  PPIDD_Eaf_wait (int handle, int request_id);
- extern int  PPIDD_Eaf_waitall (int64_t *list, int num);
+ extern int  PPIDD_Eaf_waitall (int *list, int num);
  extern int  PPIDD_Eaf_probe (int request_id, int *status);
  extern int  PPIDD_Eaf_close (int handle);
  extern int  PPIDD_Eaf_delete (char *name);
@@ -54,9 +54,9 @@
  extern void PPIDD_Eaf_errmsg (int code, char *message);
 
  extern int  PPIDD_Sf_create (char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);
- extern int  PPIDD_Sf_write (int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id);
- extern int  PPIDD_Sf_read (int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id);
- extern int  PPIDD_Sf_wait (int64_t request_id);
- extern int  PPIDD_Sf_waitall (int64_t *list, int num);
+ extern int  PPIDD_Sf_write (int handle, double byte_offset, double byte_length, double *buff, int *request_id);
+ extern int  PPIDD_Sf_read (int handle, double byte_offset, double byte_length, double *buff, int *request_id);
+ extern int  PPIDD_Sf_wait (int request_id);
+ extern int  PPIDD_Sf_waitall (int *list, int num);
  extern int  PPIDD_Sf_destroy (int handle);
  extern void PPIDD_Sf_errmsg (int code, char *message);

@@ -735,10 +735,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int num) {
+   int PPIDD_Eaf_waitall(int *list, int num) {
       MPI_Request *array_of_requests=(MPI_Request*)malloc(num*sizeof(MPI_Request));
       MPI_Status *array_of_statuses=(MPI_Status*)malloc(num*sizeof(MPI_Status));
-      for(int i=0;i<num;i++) array_of_requests[i]= MPI_Request_f2c(list[i]);
+      for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);
       return MPI_Waitall(num,array_of_requests,array_of_statuses);
    }
 
@@ -829,7 +829,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -841,13 +841,13 @@ static int n_in_msg_mpiq=0;
       count=(int)((byte_length)/sizeof(double));
       if(MPI_Debug)printf("In PPIDD_Sf_write : before MPI_File_iwrite_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
       int ierr=MPI_File_iwrite_at(mpi_fh,offset,buff,count,MPI_DOUBLE,&request);
-      *request_id=(int64_t)request;
-      if(MPI_Debug)printf("In PPIDD_Sf_write : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      *request_id = MPI_Request_c2f(request);
+      if(MPI_Debug)printf("In PPIDD_Sf_write : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,*request_id,(long)request);
       return ierr;
    }
 
 
-   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -859,26 +859,26 @@ static int n_in_msg_mpiq=0;
       count=(int)((byte_length)/sizeof(double));
       if(MPI_Debug)printf("In PPIDD_Sf_read  : before MPI_File_iread_at. handle=%d,offset=%ld,count=%d\n",(int)mpifhandle,(long)offset,count);
       int ierr=MPI_File_iread_at(mpi_fh,offset,buff,count,MPI_DOUBLE,&request);
-      *request_id=(int64_t)request;
-      if(MPI_Debug)printf("In PPIDD_Sf_read  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,(int)*request_id,(long)request);
+      *request_id = MPI_Request_c2f(request);
+      if(MPI_Debug)printf("In PPIDD_Sf_read  : end. handle=%d,ierr=%d,request_id=%d,request=%ld\n",(int)mpifhandle,ierr,*request_id,(long)request);
       return ierr;
    }
 
 
-   int PPIDD_Sf_wait(int64_t request_id) {
-      MPI_Request request=(MPI_Request)(request_id);
+   int PPIDD_Sf_wait(int request_id) {
+      MPI_Request request = MPI_Request_f2c(request_id);
       MPI_Status status;
-      if(MPI_Debug)printf("In PPIDD_Sf_wait  : begin. request_id=%d,request=%ld\n",(int)request_id,(long)request);
+      if(MPI_Debug)printf("In PPIDD_Sf_wait  : begin. request_id=%d,request=%ld\n",request_id,(long)request);
       int ierr=MPI_Wait( &request, &status );
       if(MPI_Debug)printf("In PPIDD_Sf_wait  : end. ierr=%d\n",ierr);
       return ierr;
    }
 
 
-   int PPIDD_Sf_waitall(int64_t *list, int num) {
+   int PPIDD_Sf_waitall(int *list, int num) {
       MPI_Request *array_of_requests=(MPI_Request*)malloc(num*sizeof(MPI_Request));
       MPI_Status *array_of_statuses=(MPI_Status*)malloc(num*sizeof(MPI_Status));
-      for(int i=0;i<num;i++) array_of_requests[i]=(MPI_Request)list[i];
+      for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);
       return MPI_Waitall(num,array_of_requests,array_of_statuses);
    }
 

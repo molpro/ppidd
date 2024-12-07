@@ -348,40 +348,40 @@ end interface
 
 interface
  function ppidd_sf_write(handle,byte_offset,byte_length,buff,request_id) bind(C,name='PPIDD_Sf_write')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_ptr
  integer(c_int)                  :: ppidd_sf_write
  integer(c_int), intent(in), value :: handle
  real(c_double), intent(in), value :: byte_offset, byte_length
  type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_write(c_loc(f_buff),...)
- integer(c_int64_t), intent(out) :: request_id
+ integer(c_int), intent(out) :: request_id
  end function ppidd_sf_write
 end interface
 
 interface
  function ppidd_sf_read(handle,byte_offset,byte_length,buff,request_id) bind(C,name='PPIDD_Sf_read')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_ptr
  integer(c_int)                  :: ppidd_sf_read
  integer(c_int), intent(in), value :: handle
  real(c_double), intent(in), value :: byte_offset, byte_length
  type(c_ptr), intent(in), value  :: buff ! call ppidd_sf_read(c_loc(f_buff),...)
- integer(c_int64_t), intent(out) :: request_id
+ integer(c_int), intent(out) :: request_id
  end function ppidd_sf_read
 end interface
 
 interface
  function ppidd_sf_wait(request_id) bind(C,name='PPIDD_Sf_wait')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int)                 :: ppidd_sf_wait
- integer(c_int64_t), intent(in), value :: request_id
+ integer(c_int), intent(in), value :: request_id
  end function ppidd_sf_wait
 end interface
 
 interface
  function ppidd_sf_waitall(list,num) bind(C,name='PPIDD_Sf_waitall')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int)                 :: ppidd_sf_waitall
  integer(c_int), intent(in), value :: num
- integer(c_int64_t), intent(in) :: list(num)
+ integer(c_int), intent(in) :: list(num)
  end function ppidd_sf_waitall
 end interface
 
@@ -467,9 +467,9 @@ end interface
 
 interface
  function ppidd_eaf_waitall(list,num) bind(C,name='PPIDD_Eaf_waitall')
- use iso_c_binding, only : c_int, c_int64_t
+ use iso_c_binding, only : c_int
  integer(c_int), intent(in), value :: num
- integer(c_int64_t), intent(in)  :: list(num)
+ integer(c_int), intent(in)  :: list(num)
  integer(c_int)                  :: ppidd_eaf_waitall
  end function ppidd_eaf_waitall
 end interface

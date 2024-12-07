@@ -510,7 +510,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int num) {
+   int PPIDD_Eaf_waitall(int *list, int num) {
       return 0;
    }
 
@@ -562,43 +562,26 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       char *buffer=(char *)buff;
-
-      int irequest_id;
-      int ierr=SF_Write(handle, byte_offset, byte_length, buffer, &irequest_id);
-      *request_id=(int64_t)irequest_id;
-      return ierr;
+      return SF_Write(handle, byte_offset, byte_length, buffer, request_id);
    }
 
 
-   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       char *buffer=(char *)buff;
-
-      int irequest_id;
-      int ierr=SF_Read(handle, byte_offset, byte_length, buffer, &irequest_id);
-      *request_id=(int64_t)irequest_id;
-      return ierr;
+      return SF_Read(handle, byte_offset, byte_length, buffer, request_id);
    }
 
 
-   int PPIDD_Sf_wait(int64_t request_id) {
-      int irequest_id=(int)request_id;
+   int PPIDD_Sf_wait(int request_id) {
+      int irequest_id = request_id;
       return SF_Wait(&irequest_id);
    }
 
 
-   int PPIDD_Sf_waitall(int64_t *list, int num) {
-      int *ilist;
-
-      ilist=(int *)malloc(num * sizeof(int));
-      for (int i=0; i<num; ++i) ilist[i] = (int) list[i];
-
-      int ierr=SF_Waitall(ilist, num);
-
-      for (int i=0; i<num; ++i) list[i] = (int64_t) ilist[i];
-      free(ilist);
-      return ierr;
+   int PPIDD_Sf_waitall(int *list, int num) {
+      return SF_Waitall(list, num);
    }
 
 

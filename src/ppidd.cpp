@@ -1042,7 +1042,7 @@ extern "C" {
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Finally invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   int PPIDD_Eaf_waitall(int64_t *list, int num) {
+   int PPIDD_Eaf_waitall(int *list, int num) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1215,7 +1215,7 @@ extern "C" {
    Writes number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1235,7 +1235,7 @@ extern "C" {
    Reads number of bytes to the file identified by handle at location offset.
    Operation is guaranteed to be complete when sf_wait called with request_id argument returns.
 \* ******************************************************************************************** */
-   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1255,7 +1255,7 @@ extern "C" {
    Blocks the calling process until I/O operation associated with request_id completes.
    Invalidates request_id.
 \* ************************************************************************************ */
-   int PPIDD_Sf_wait(int64_t request_id) {
+   int PPIDD_Sf_wait(int request_id) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1275,7 +1275,7 @@ extern "C" {
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   int PPIDD_Sf_waitall(int64_t *list, int num) {
+   int PPIDD_Sf_waitall(int *list, int num) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

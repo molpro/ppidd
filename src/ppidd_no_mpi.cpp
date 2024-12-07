@@ -235,7 +235,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_waitall(int64_t *list, int num) {
+   int PPIDD_Eaf_waitall(int *list, int num) {
       do_not_call("PPIDD_Eaf_waitall");
    }
 
@@ -275,22 +275,22 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_write(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       do_not_call("PPIDD_Sf_write");
    }
 
 
-   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id) {
+   int PPIDD_Sf_read(int handle, double byte_offset, double byte_length, double *buff, int *request_id) {
       do_not_call("PPIDD_Sf_read");
    }
 
 
-   int PPIDD_Sf_wait(int64_t request_id) {
+   int PPIDD_Sf_wait(int request_id) {
       do_not_call("PPIDD_Sf_wait");
    }
 
 
-   int PPIDD_Sf_waitall(int64_t *list, int num) {
+   int PPIDD_Sf_waitall(int *list, int num) {
       do_not_call("PPIDD_Sf_waitall");
    }
 

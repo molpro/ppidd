@@ -330,8 +330,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa006cca817f50c51c195285642e89ff9</anchor>
-      <arglist>(int64_t *list, int num)</arglist>
+      <anchor>a05962762b793f7bd27fcbd231176ba3f</anchor>
+      <arglist>(int *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -386,29 +386,29 @@
       <type>int</type>
       <name>PPIDD_Sf_write</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a01f04a1cb007eefeebc7a709b5e2c9dd</anchor>
-      <arglist>(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id)</arglist>
+      <anchor>aa3e101737f6035ab414c297b827a43ad</anchor>
+      <arglist>(int handle, double byte_offset, double byte_length, double *buff, int *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Sf_read</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a504ffa4bc617ba8c3c58e037fd7fbc82</anchor>
-      <arglist>(int handle, double byte_offset, double byte_length, double *buff, int64_t *request_id)</arglist>
+      <anchor>a6a488f46133dc289d7e5ab18dac284a6</anchor>
+      <arglist>(int handle, double byte_offset, double byte_length, double *buff, int *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Sf_wait</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a94a234cd54f9d3575408f74fd6671d17</anchor>
-      <arglist>(int64_t request_id)</arglist>
+      <anchor>a9b09c9f781f75ea473fdad3fc9d66165</anchor>
+      <arglist>(int request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Sf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a17eaf202e52cc22757c6d11725b506ac</anchor>
-      <arglist>(int64_t *list, int num)</arglist>
+      <anchor>a372e273c9c2f5cc8741b85c8b680b8b2</anchor>
+      <arglist>(int *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -19,10 +19,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>int64_t</type>
+      <type>int</type>
       <name>PPIDD_Worker_comm</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ab8a9bad19a3488c3c2eb193068dee536</anchor>
+      <anchor>a41e3df44f9a21d62a4839c0ef6de77cd</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">

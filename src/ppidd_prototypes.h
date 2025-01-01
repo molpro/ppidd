@@ -1,6 +1,6 @@
  extern void PPIDD_Initialize (int *argc, char ***argv, int impl);
  extern void PPIDD_Initialize_data ();
- extern int64_t  PPIDD_Worker_comm ();
+ extern int  PPIDD_Worker_comm ();
  extern void PPIDD_Finalize ();
  extern int  PPIDD_Uses_ma ();
  extern int  PPIDD_MA_init (int dtype, int64_t stack, int64_t heap);

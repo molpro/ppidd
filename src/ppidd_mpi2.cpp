@@ -36,7 +36,7 @@ namespace mpi2 {
    }
 
 
-   int64_t PPIDD_Worker_comm() {
+   int PPIDD_Worker_comm() {
       MPI_Comm mycomm=mpiga_compute_comm();
 
 /* test whether worker communicator contains all the processes, if so then return MPI_COMM_WORLD */
@@ -44,8 +44,7 @@ namespace mpi2 {
       MPI_Comm_size(MPI_COMM_WORLD, &np_all);
       if(np_all==np_worker) mycomm=MPI_COMM_WORLD;
 
-      MPI_Fint fcomm=MPI_Comm_c2f(mycomm);
-      return (int64_t)fcomm;
+      return MPI_Comm_c2f(mycomm);
    }
 
 

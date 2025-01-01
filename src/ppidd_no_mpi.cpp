@@ -20,7 +20,7 @@ namespace no_mpi {
    }
 
 
-   int64_t PPIDD_Worker_comm() {
+   int PPIDD_Worker_comm() {
       do_not_call("PPIDD_Worker_comm");
    }
 

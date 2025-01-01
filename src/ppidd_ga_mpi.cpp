@@ -64,10 +64,9 @@ namespace ga_mpi {
    }
 
 
-   int64_t PPIDD_Worker_comm() {
+   int PPIDD_Worker_comm() {
       MPI_Comm mpicomm = GA_MPI_Comm();
-      MPI_Fint fcomm=MPI_Comm_c2f(mpicomm);
-      return (int64_t)fcomm;
+      return MPI_Comm_c2f(mpicomm);
    }
 
 

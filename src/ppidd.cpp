@@ -118,7 +118,7 @@ extern "C" {
  *  - For \b MPI2, Return communicator for worker process group.
  *  - For \b GA and serial cases, should not be called.
  */
-   int64_t PPIDD_Worker_comm() {
+   int PPIDD_Worker_comm() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -26,8 +26,8 @@ end interface
 
 interface
  function ppidd_worker_comm() bind(C,name='PPIDD_Worker_comm')
- use iso_c_binding, only : c_int64_t
- integer(c_int64_t) :: ppidd_worker_comm
+ use iso_c_binding, only : c_int
+ integer(c_int) ppidd_worker_comm
  end function ppidd_worker_comm
 end interface
 

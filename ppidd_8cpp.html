@@ -166,9 +166,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a394fbda72a12f97a2cbeff94b79f484e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a394fbda72a12f97a2cbeff94b79f484e">PPIDD_Zero</a> (int handle)</td></tr>
 <tr class="memdesc:a394fbda72a12f97a2cbeff94b79f484e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all the elements of a global data structure to zero.  <a href="ppidd_8cpp.html#a394fbda72a12f97a2cbeff94b79f484e">More...</a><br /></td></tr>
 <tr class="separator:a394fbda72a12f97a2cbeff94b79f484e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f68db9670b16b6aa6bc2450f980a8ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a7f68db9670b16b6aa6bc2450f980a8ac">PPIDD_Nxtval</a> (int numproc, int64_t *val)</td></tr>
-<tr class="memdesc:a7f68db9670b16b6aa6bc2450f980a8ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next shared counter number(helper process should be enabled).  <a href="ppidd_8cpp.html#a7f68db9670b16b6aa6bc2450f980a8ac">More...</a><br /></td></tr>
-<tr class="separator:a7f68db9670b16b6aa6bc2450f980a8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5efa1f153c18eb44469a1ff0c2c22c9c"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a5efa1f153c18eb44469a1ff0c2c22c9c">PPIDD_Nxtval</a> (int numproc)</td></tr>
+<tr class="memdesc:a5efa1f153c18eb44469a1ff0c2c22c9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next shared counter number(helper process should be enabled).  <a href="ppidd_8cpp.html#a5efa1f153c18eb44469a1ff0c2c22c9c">More...</a><br /></td></tr>
+<tr class="separator:a5efa1f153c18eb44469a1ff0c2c22c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a704b674ff7f5dcc6b88c666c3308adef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ppidd_8cpp.html#a704b674ff7f5dcc6b88c666c3308adef">PPIDD_Inquire_name</a> (int handle, char *name)</td></tr>
 <tr class="memdesc:a704b674ff7f5dcc6b88c666c3308adef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of a global array represented by the handle.  <a href="ppidd_8cpp.html#a704b674ff7f5dcc6b88c666c3308adef">More...</a><br /></td></tr>
 <tr class="separator:a704b674ff7f5dcc6b88c666c3308adef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1583,28 +1583,18 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7f68db9670b16b6aa6bc2450f980a8ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f68db9670b16b6aa6bc2450f980a8ac">&#9670;&nbsp;</a></span>PPIDD_Nxtval()</h2>
+<a id="a5efa1f153c18eb44469a1ff0c2c22c9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5efa1f153c18eb44469a1ff0c2c22c9c">&#9670;&nbsp;</a></span>PPIDD_Nxtval()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void PPIDD_Nxtval </td>
+          <td class="memname">int64_t PPIDD_Nxtval </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>numproc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>numproc</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

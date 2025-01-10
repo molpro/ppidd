@@ -229,11 +229,11 @@
       <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int64_t</type>
       <name>PPIDD_Nxtval</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a7f68db9670b16b6aa6bc2450f980a8ac</anchor>
-      <arglist>(int numproc, int64_t *val)</arglist>
+      <anchor>a5efa1f153c18eb44469a1ff0c2c22c9c</anchor>
+      <arglist>(int numproc)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

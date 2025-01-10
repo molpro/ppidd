@@ -7,7 +7,7 @@
  extern double PPIDD_Wtime ();
  extern void PPIDD_Error (char *message, int code);
  extern void PPIDD_Helper_server (int flag, int num_per_server);
- extern void PPIDD_Nxtval (int numproc, int64_t *val);
+ extern int64_t PPIDD_Nxtval (int numproc);
  extern int  PPIDD_Size_all ();
  extern int  PPIDD_Size ();
  extern int  PPIDD_Rank ();

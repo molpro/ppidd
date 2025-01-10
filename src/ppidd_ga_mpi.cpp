@@ -413,7 +413,7 @@ static int n_in_msg_mpiq=0;
 
    static int PPIDD_Nxtval_initialised=0;
    static int PPIDD_Nxtval_handle;
-   void PPIDD_Nxtval(int numproc, int64_t *val) {
+   int64_t PPIDD_Nxtval(int numproc) {
       if (numproc < 0) {
         /* reset - collective */
         if (PPIDD_Nxtval_initialised) PPIDD_Destroy(PPIDD_Nxtval_handle);
@@ -425,10 +425,10 @@ static int n_in_msg_mpiq=0;
         PPIDD_Create(&name[0],1,0,1,&PPIDD_Nxtval_handle);
         PPIDD_Zero(PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
-        *val=0;
+        return 0;
       }
       else {
-        *val = PPIDD_Read_inc(PPIDD_Nxtval_handle,1,1);
+        return PPIDD_Read_inc(PPIDD_Nxtval_handle,1,1);
       }
    }
 

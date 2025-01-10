@@ -537,14 +537,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Nxtval(int numproc, int64_t *val) {
+   int64_t PPIDD_Nxtval(int numproc) {
       if (use_helper_server==0) {
         fprintf(stderr,"%5d: ERROR: Attemp to call NXTVAL routine without helper process!\n", ProcID());
         MPI_Abort(mpiga_compute_comm(),911);
       }
-      else {
-        *val= (int64_t) NXTVAL(numproc);
-      }
+      return (int64_t) NXTVAL(numproc);
    }
 
 

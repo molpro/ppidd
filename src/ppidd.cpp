@@ -754,18 +754,18 @@ extern "C" {
 
 /*! \brief Get the next shared counter number(helper process should be enabled).
     \details Increment a counter by 1 and returns the counter value (0, 1, ...). */
-   void PPIDD_Nxtval(int numproc, int64_t *val) {
+   int64_t PPIDD_Nxtval(int numproc) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Nxtval(numproc,val);
+      return ga_mpi::PPIDD_Nxtval(numproc);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Nxtval(numproc,val);
+      return mpi2::PPIDD_Nxtval(numproc);
 #endif
      default:
-      return no_mpi::PPIDD_Nxtval(numproc,val);
+      return no_mpi::PPIDD_Nxtval(numproc);
     }
    }
 

@@ -135,9 +135,8 @@ int mpiga_terminate()
 
     if (MPIGA_WORK_COMM != MPI_COMM_NULL) {
       if (use_helper_server) {
-        int zero=0;
-        if( SR_parallel )  NXTVAL(&zero);
-        if (MPIGA_Debug) printf("%5d: In mpiga_terminate:  after NXTVAL(&zero).\n",ProcID());
+        if( SR_parallel )  NXTVAL(0);
+        if (MPIGA_Debug) printf("%5d: In mpiga_terminate:  after NXTVAL(0).\n",ProcID());
       }
     }
 

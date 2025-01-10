@@ -743,7 +743,7 @@ void DataHelperServer()
 }
 
 
-int NXTVAL(int *mproc)
+int NXTVAL(int mproc)
 /*
   Get next value of shared counter.
 
@@ -765,22 +765,22 @@ int NXTVAL(int *mproc)
 
   if (SR_parallel) {
 
-     buf = *mproc;
+     buf = mproc;
 
      if (DEBUG_) {
-       printf("%5d: NXTVAL: mproc=%d\n",ProcID(), *mproc);
+       printf("%5d: NXTVAL: mproc=%d\n",ProcID(), mproc);
        fflush(stdout);
      }
 
     if (use_helper_server) {
        MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-       if (*mproc == 0) server=Server_of_Rank(myid); /* terminate all helper servers */
+       if (mproc == 0) server=Server_of_Rank(myid); /* terminate all helper servers */
        else server = LastServerID();                 /* last server process */
 
        dtype_buf=dtype_mpi(PPIDD_FORTINT);
        MPI_Send(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD);
        MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
-       if (*mproc == 0 && myid == 0 ) { /* rank(0) sends signal to terminate last server process if the last server process doesn't serve any compute process */
+       if (mproc == 0 && myid == 0 ) { /* rank(0) sends signal to terminate last server process if the last server process doesn't serve any compute process */
          if ( Nprocs_of_Server(LastServerID()) == 0 ) {
            server = LastServerID();                 /* last server process */
            MPI_Send(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD);
@@ -793,14 +793,14 @@ int NXTVAL(int *mproc)
   else {
      /* Not running in parallel ... just do a simulation */
      static int count = 0;
-     if (*mproc == 1)
+     if (mproc == 1)
        local = count++;
-     else if (*mproc == -1) {
+     else if (mproc == -1) {
        count = 0;
        local = 0;
     }
     else
-      MPIGA_Error("NXTVAL: sequential version with silly mproc ", *mproc);
+      MPIGA_Error("NXTVAL: sequential version with silly mproc ", mproc);
   }
 
   return local;

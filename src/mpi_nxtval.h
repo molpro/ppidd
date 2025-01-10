@@ -118,7 +118,7 @@ typedef struct {
     extern int OldRank_of_NewRank(int );
     extern void make_worker_comm( MPI_Comm , MPI_Comm * );
     extern void DataHelperServer();
-    extern int NXTVAL(int *);
+    extern int NXTVAL(int );
     extern int twosided_helpga_col(int , int );
     extern int twosided_helpga_create_irreg(int , int *, int , int *, char *, int );
     extern int twosided_helpga_create(int , int , int *, char *, int );

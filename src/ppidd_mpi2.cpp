@@ -543,8 +543,7 @@ static int n_in_msg_mpiq=0;
         MPI_Abort(mpiga_compute_comm(),911);
       }
       else {
-        int mproc = numproc;
-        *val= (int64_t) NXTVAL(&mproc);
+        *val= (int64_t) NXTVAL(numproc);
       }
    }
 

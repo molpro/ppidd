@@ -396,7 +396,7 @@ extern "C" {
  *  - \b GA calls RCV_.
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
-   void PPIDD_Recv(void *buf,int count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int count,int dtype,int source,int *lenreal,int *sourcereal,int sync) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -186,7 +186,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Recv(void *buf,int count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int count,int dtype,int source,int *lenreal,int *sourcereal,int sync) {
       MPI_Comm mpicomm=mpiga_compute_comm();
       int mpitag=dtype;
       int mpinode,mpierr;
@@ -213,8 +213,8 @@ static int n_in_msg_mpiq=0;
          mpierr = MPI_Irecv(buf,mpilenbuf,MPI_CHAR,mpinode,mpitag,mpicomm,&request);
          mpi_test_status("PPIDD_Recv: nonblocking RECV:",mpierr);
 
-         *sourcereal = (int64_t) mpinode;          /* Get source node  */
-         *lenreal = (int64_t) (-1);
+         *sourcereal = mpinode;          /* Get source node  */
+         *lenreal = -1;
          msg_mpiq[n_in_msg_mpiq].request = request;
          msg_mpiq[n_in_msg_mpiq].node   = (long)source;
          msg_mpiq[n_in_msg_mpiq].type   = (long)dtype;
@@ -227,8 +227,8 @@ static int n_in_msg_mpiq=0;
          mpi_test_status("PPIDD_RECV: RECV:",mpierr);
          mpierr = MPI_Get_count(&status, MPI_CHAR, &mpilenbuf);
          mpi_test_status("PPIDD_RECV: Get_count:",mpierr);
-         *sourcereal = (int64_t)status.MPI_SOURCE;
-         *lenreal    = (int64_t)mpilenbuf;
+         *sourcereal = status.MPI_SOURCE;
+         *lenreal    = mpilenbuf;
       }
    }
 

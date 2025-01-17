@@ -86,7 +86,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Recv(void *buf,int count,int dtype,int source,int64_t *lenreal,int64_t *sourcereal,int sync) {
+   void PPIDD_Recv(void *buf,int count,int dtype,int source,int *lenreal,int *sourcereal,int sync) {
       do_not_call("PPIDD_Recv");
    }
 

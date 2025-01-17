@@ -230,7 +230,8 @@ c
       integer lentot,lenbuf,ioff,ilo,ihi
       integer lenseg,lenlat
       integer maxprc,nloop,iout,i,ipr
-      integer proc_ltop,proc_rbot,lenre,srcre
+      integer proc_ltop,proc_rbot
+      integer(c_int) lenre, srcre
       integer(c_int) dtype, nprocs, iprocs, sync, storetype
       integer(c_int) ihandle,ihandlat, dest_src, n, len
       character(len=80) :: name

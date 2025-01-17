@@ -14,7 +14,7 @@
  extern void PPIDD_Init_fence ();
  extern void PPIDD_Fence ();
  extern void PPIDD_Send (void *buf, int count, int dtype, int dest, int sync);
- extern void PPIDD_Recv (void *buf, int count, int dtype, int source, int64_t *lenreal, int64_t *sourcereal, int sync);
+ extern void PPIDD_Recv (void *buf, int count, int dtype, int source, int *lenreal, int *sourcereal, int sync);
  extern void PPIDD_Wait ();
  extern int  PPIDD_Iprobe (int tag, int source);
  extern void PPIDD_BCast (void *buffer, int count, int dtype, int root);

@@ -113,8 +113,8 @@
       <type>void</type>
       <name>PPIDD_Recv</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ae070a87257dfcf92320bea61fe50f0dd</anchor>
-      <arglist>(void *buf, int count, int dtype, int source, int64_t *lenreal, int64_t *sourcereal, int sync)</arglist>
+      <anchor>af282179cbefc2685d5ba0a288605f3d3</anchor>
+      <arglist>(void *buf, int count, int dtype, int source, int *lenreal, int *sourcereal, int sync)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

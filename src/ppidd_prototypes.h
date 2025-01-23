@@ -40,10 +40,10 @@
  extern int  PPIDD_Destroy_mutexes ();
 
  extern int  PPIDD_Eaf_open (char *name, int type, int *handle);
- extern int  PPIDD_Eaf_write (int handle, double byte_offset, void *buff, int64_t byte_length);
- extern int  PPIDD_Eaf_awrite (int handle, double byte_offset, void *buff, int64_t byte_length, int *request_id);
- extern int  PPIDD_Eaf_read (int handle, double byte_offset, void *buff, int64_t byte_length);
- extern int  PPIDD_Eaf_aread (int handle, double byte_offset, void *buff, int64_t byte_length, int *request_id);
+ extern int  PPIDD_Eaf_write (int handle, double byte_offset, void *buff, size_t byte_length);
+ extern int  PPIDD_Eaf_awrite (int handle, double byte_offset, void *buff, size_t byte_length, int *request_id);
+ extern int  PPIDD_Eaf_read (int handle, double byte_offset, void *buff, size_t byte_length);
+ extern int  PPIDD_Eaf_aread (int handle, double byte_offset, void *buff, size_t byte_length, int *request_id);
  extern int  PPIDD_Eaf_wait (int handle, int request_id);
  extern int  PPIDD_Eaf_waitall (int *list, int num);
  extern int  PPIDD_Eaf_probe (int request_id, int *status);

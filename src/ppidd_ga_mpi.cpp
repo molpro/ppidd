@@ -484,28 +484,28 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
-      return EAF_Write(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length);
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,size_t byte_length) {
+      return EAF_Write(handle, (eaf_off_t)byte_offset, buff, byte_length);
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
-      return EAF_Awrite(handle,(eaf_off_t)byte_offset, buff, (size_t)byte_length, request_id);
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
+      return EAF_Awrite(handle,(eaf_off_t)byte_offset, buff, byte_length, request_id);
    }
 
 
-   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,int64_t byte_length) {
-      return EAF_Read(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length);
+   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,size_t byte_length) {
+      return EAF_Read(handle, (eaf_off_t)byte_offset, buff, byte_length);
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
-      return EAF_Aread(handle, (eaf_off_t)byte_offset, buff, (size_t)byte_length, request_id);
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
+      return EAF_Aread(handle, (eaf_off_t)byte_offset, buff, byte_length, request_id);
    }
 
 
    int PPIDD_Eaf_wait(int handle,int request_id) {
-      return EAF_Wait(handle,(int)request_id);
+      return EAF_Wait(handle, request_id);
    }
 
 

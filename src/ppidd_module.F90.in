@@ -412,22 +412,22 @@ end interface
 
 interface
  function ppidd_eaf_write(handle,byte_offset,buff,byte_length) bind(C,name='PPIDD_Eaf_write')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_size_t, c_ptr
  integer(c_int), intent(in), value  :: handle
  real(c_double), intent(in), value  :: byte_offset
  type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_write(c_loc(f_buff),...)
- integer(c_int64_t), intent(in), value :: byte_length
+ integer(c_size_t), intent(in), value :: byte_length
  integer(c_int)                  :: ppidd_eaf_write
  end function ppidd_eaf_write
 end interface
 
 interface
  function ppidd_eaf_awrite(handle,byte_offset,buff,byte_length,request_id) bind(C,name='PPIDD_Eaf_awrite')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_size_t, c_ptr
  integer(c_int), intent(in), value  :: handle
  real(c_double), intent(in), value  :: byte_offset
  type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_awrite(c_loc(f_buff),...)
- integer(c_int64_t), intent(in), value :: byte_length
+ integer(c_size_t), intent(in), value :: byte_length
  integer(c_int), intent(out) :: request_id
  integer(c_int)                  :: ppidd_eaf_awrite
  end function ppidd_eaf_awrite
@@ -435,22 +435,22 @@ end interface
 
 interface
  function ppidd_eaf_read(handle,byte_offset,buff,byte_length) bind(C,name='PPIDD_Eaf_read')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_size_t, c_ptr
  integer(c_int), intent(in), value  :: handle
  real(c_double), intent(in), value :: byte_offset
  type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_read(c_loc(f_buff),...)
- integer(c_int64_t), intent(in), value :: byte_length
+ integer(c_size_t), intent(in), value :: byte_length
  integer(c_int)                  :: ppidd_eaf_read
  end function ppidd_eaf_read
 end interface
 
 interface
  function ppidd_eaf_aread(handle,byte_offset,buff,byte_length,request_id) bind(C,name='PPIDD_Eaf_aread')
- use iso_c_binding, only : c_double, c_int, c_int64_t, c_ptr
+ use iso_c_binding, only : c_double, c_int, c_size_t, c_ptr
  integer(c_int), intent(in), value  :: handle
  real(c_double), intent(in), value  :: byte_offset
  type(c_ptr), intent(in), value  :: buff ! call ppidd_eaf_aread(c_loc(f_buff),...)
- integer(c_int64_t), intent(in), value :: byte_length
+ integer(c_size_t), intent(in), value :: byte_length
  integer(c_int), intent(out) :: request_id
  integer(c_int)                  :: ppidd_eaf_aread
  end function ppidd_eaf_aread

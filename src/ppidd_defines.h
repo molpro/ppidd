@@ -1,5 +1,6 @@
 #ifndef __PPIDD_DEFINES__
 #define __PPIDD_DEFINES__
+#include <stddef.h>
 #include <stdint.h>
 
 #define PPIDD_FORTINT 0

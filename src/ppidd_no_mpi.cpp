@@ -210,22 +210,22 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,size_t byte_length) {
       do_not_call("PPIDD_Eaf_write");
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
       do_not_call("PPIDD_Eaf_awrite");
    }
 
 
-   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,int64_t byte_length) {
+   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,size_t byte_length) {
       do_not_call("PPIDD_Eaf_read");
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
       do_not_call("PPIDD_Eaf_aread");
    }
 

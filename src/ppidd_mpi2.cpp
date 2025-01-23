@@ -641,7 +641,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,int64_t byte_length) {
+   int PPIDD_Eaf_write(int handle,double byte_offset,void *buff,size_t byte_length) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -660,7 +660,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+   int PPIDD_Eaf_awrite(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -680,7 +680,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,int64_t byte_length) {
+   int PPIDD_Eaf_read(int handle,double byte_offset,void *buff,size_t byte_length) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;
@@ -699,7 +699,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,int64_t byte_length,int *request_id) {
+   int PPIDD_Eaf_aread(int handle,double byte_offset,void *buff,size_t byte_length,int *request_id) {
       MPI_Fint mpifhandle=(MPI_Fint)handle;
       MPI_File mpi_fh;
       MPI_Offset offset;

@@ -295,29 +295,29 @@
       <type>int</type>
       <name>PPIDD_Eaf_write</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a45fbfc47d5d7db81e9531a2acd3ee126</anchor>
-      <arglist>(int handle, double byte_offset, void *buff, int64_t byte_length)</arglist>
+      <anchor>ab54fd87fa6fdfeb5384f81924b200b24</anchor>
+      <arglist>(int handle, double byte_offset, void *buff, size_t byte_length)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Eaf_awrite</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a7d68533378258298cc7285b51d1afd1c</anchor>
-      <arglist>(int handle, double byte_offset, void *buff, int64_t byte_length, int *request_id)</arglist>
+      <anchor>a36c013b7fbeb7d39c9d39e82c6d90f08</anchor>
+      <arglist>(int handle, double byte_offset, void *buff, size_t byte_length, int *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Eaf_read</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a596a5ddfe2f9fb8f3bc00930f48db2b1</anchor>
-      <arglist>(int handle, double byte_offset, void *buff, int64_t byte_length)</arglist>
+      <anchor>a644984629d7e19366ddc1496756d0655</anchor>
+      <arglist>(int handle, double byte_offset, void *buff, size_t byte_length)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Eaf_aread</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a834bad0db64bf11f793ba00b300fc99c</anchor>
-      <arglist>(int handle, double byte_offset, void *buff, int64_t byte_length, int *request_id)</arglist>
+      <anchor>a9ef5ae8a54ff54bd27be2bcd9bb9e10b</anchor>
+      <arglist>(int handle, double byte_offset, void *buff, size_t byte_length, int *request_id)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

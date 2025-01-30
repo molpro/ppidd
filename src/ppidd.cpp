@@ -812,18 +812,18 @@ extern "C" {
 
 /*! \brief Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME */
-   void PPIDD_Inquire_mem(int64_t *mem_used) {
+   size_t PPIDD_Inquire_mem() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Inquire_mem(mem_used);
+      return ga_mpi::PPIDD_Inquire_mem();
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Inquire_mem(mem_used);
+      return mpi2::PPIDD_Inquire_mem();
 #endif
      default:
-      return no_mpi::PPIDD_Inquire_mem(mem_used);
+      return no_mpi::PPIDD_Inquire_mem();
     }
    }
 

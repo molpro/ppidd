@@ -182,8 +182,8 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Inquire_mem(int64_t *mem_used) {
-      *mem_used=(int64_t)0;
+   size_t PPIDD_Inquire_mem() {
+      return (size_t)0;
    }
 
 

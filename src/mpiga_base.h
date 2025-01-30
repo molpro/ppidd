@@ -20,6 +20,7 @@
  #include "mpimutex.h"  /* mpi.h is already included here */
  #include <stdio.h>
  #include <stdlib.h>
+ #include <stddef.h>
  #include <string.h>
  #include <strings.h>
  #include <unistd.h>
@@ -138,7 +139,7 @@ typedef struct {
    int mpiga_create_irreg(char *, int *, int , MPI_Datatype , int *);
    int mpiga_create( char *, int , MPI_Datatype , int *);
    int mpiga_free( int );
-   long mpiga_localmem();
+   size_t mpiga_localmem();
    int mpiga_handle_orig( int );
    int mpiga_inquire_name( int , char **);
    int mpiga_inquire_storetype( int );

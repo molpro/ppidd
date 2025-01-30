@@ -443,8 +443,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Inquire_mem(int64_t *mem_used) {
-      *mem_used=(int64_t)GA_Inquire_memory();
+   size_t PPIDD_Inquire_mem() {
+      return GA_Inquire_memory();
    }
 
 

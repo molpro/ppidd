@@ -33,7 +33,7 @@
  extern int  PPIDD_Zero (int handle);
  extern void PPIDD_Inquire_name (int handle, char *name);
  extern int  PPIDD_Inquire_stype (int handle);
- extern void PPIDD_Inquire_mem (int64_t *mem_used);
+ extern size_t PPIDD_Inquire_mem ();
  extern int  PPIDD_Create_mutexes (int storetype, int number);
  extern void PPIDD_Lock_mutex (int inum);
  extern void PPIDD_Unlock_mutex (int inum);

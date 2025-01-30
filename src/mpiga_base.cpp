@@ -342,17 +342,17 @@ int mpiga_free( int handle )
 
 
 /* RETURNS AMOUNT OF MEMORY on each processor IN ACTIVE MPI GLOBAL DADA STRUCTURES AND HELPGA */
-long  mpiga_localmem()
+size_t mpiga_localmem()
 {
     int i;
-    long sum_mpiga=(long)0,sum_helpga=(long)0,sum=(long)0;
+    size_t sum_mpiga=(size_t)0,sum_helpga=(size_t)0,sum=(size_t)0;
     if ( mpigv(nga) > 0 ) {
       for(i=0; i<MAX_MPI_ARRAYS; i++)
-        if(MPIGAIndex[i].actv) sum_mpiga += (long)MPIGAIndex[i].size;
+        if(MPIGAIndex[i].actv) sum_mpiga += (size_t)MPIGAIndex[i].size;
     }
     if ( twosided_helpga_num > 0 ) {
       for(i=0;i<MAX_TWOSIDED_HELPGA_ARRAYS; i++) {
-        if(twosided_helpga_index[i].actv) sum_helpga += (long)twosided_helpga_index[i].size;
+        if(twosided_helpga_index[i].actv) sum_helpga += (size_t)twosided_helpga_index[i].size;
       }
     }
     sum=sum_mpiga+sum_helpga;

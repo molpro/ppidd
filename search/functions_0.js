@@ -31,7 +31,7 @@ var searchData=
   ['ppidd_5finit_5ffence_93',['PPIDD_Init_fence',['../ppidd_8cpp.html#a5c67417ceed19a2f9e6bd5eb6bada439',1,'ppidd.cpp']]],
   ['ppidd_5finitialize_94',['PPIDD_Initialize',['../ppidd_8cpp.html#ad0bac13ed66299b75b584da2c0963ee0',1,'ppidd.cpp']]],
   ['ppidd_5finitialize_5fdata_95',['PPIDD_Initialize_data',['../ppidd_8cpp.html#accd1aaec40977ac816e292441b1fdb6f',1,'ppidd.cpp']]],
-  ['ppidd_5finquire_5fmem_96',['PPIDD_Inquire_mem',['../ppidd_8cpp.html#a6a56a2ff876976509db45c72aef808b1',1,'ppidd.cpp']]],
+  ['ppidd_5finquire_5fmem_96',['PPIDD_Inquire_mem',['../ppidd_8cpp.html#aff96c9769975a1fc3983d673d180c63c',1,'ppidd.cpp']]],
   ['ppidd_5finquire_5fname_97',['PPIDD_Inquire_name',['../ppidd_8cpp.html#a704b674ff7f5dcc6b88c666c3308adef',1,'ppidd.cpp']]],
   ['ppidd_5finquire_5fstype_98',['PPIDD_Inquire_stype',['../ppidd_8cpp.html#a4e90163f6ad9674cd2086bd6c76e550e',1,'ppidd.cpp']]],
   ['ppidd_5fiprobe_99',['PPIDD_Iprobe',['../ppidd_8cpp.html#abb13c8254fc47245acd9cdc8bedf08d2',1,'ppidd.cpp']]],

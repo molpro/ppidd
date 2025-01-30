@@ -250,11 +250,11 @@
       <arglist>(int handle)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>size_t</type>
       <name>PPIDD_Inquire_mem</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a6a56a2ff876976509db45c72aef808b1</anchor>
-      <arglist>(int64_t *mem_used)</arglist>
+      <anchor>aff96c9769975a1fc3983d673d180c63c</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -24,7 +24,7 @@
  extern int  PPIDD_Create (char *name, int64_t lentot, int dtype, int storetype, int *handle);
  extern int  PPIDD_Destroy (int handle);
  extern int  PPIDD_Distrib (int handle, int rank, int64_t *ilo, int64_t *ihi);
- extern int  PPIDD_Location (int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np);
+ extern int  PPIDD_Location (int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int *proclist, int *np);
  extern int  PPIDD_Get (int handle, int64_t *ilo, int64_t *ihi, void *buff);
  extern int  PPIDD_Put (int handle, int64_t *ilo, int64_t *ihi, void *buff);
  extern int  PPIDD_Acc (int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac);

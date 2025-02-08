@@ -625,7 +625,7 @@ extern "C" {
                       int64_t *ilo,        /*!< lower element subscript, 1 (not 0) for first element */
                       int64_t *ihi,        /*!< higher element subscript */
                       int64_t *map,        /*!< return start/end index for <tt>proclist</tt> */
-                      int64_t *proclist,   /*!< proc id list */
+                      int *proclist,       /*!< proc id list */
                       int *np              /*!< proc number */
    ) {
     switch (ppidd_impl) {

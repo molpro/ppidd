@@ -369,7 +369,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int64_t *proclist, int *np) {
+   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int *proclist, int *np) {
       int mpiilo=(int)*ilo;
       int mpiihi=(int)*ihi;
       int mpisize;
@@ -389,7 +389,7 @@ static int n_in_msg_mpiq=0;
       for (int i=0;i<*np;i++) {
          map[2*i]=(int64_t)mpimap[2*i];
          map[2*i+1]=(int64_t)mpimap[2*i+1];
-         proclist[i]=(int64_t)mpiproclist[i];
+         proclist[i]=mpiproclist[i];
       }
       if(mpierr==0) return 1 ;
       else return 0 ;

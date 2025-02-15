@@ -645,7 +645,7 @@ extern "C" {
 
 /*! \brief Copies data from array section to the local array buffer according to starting and ending index.
     \details analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET */
-   int PPIDD_Get(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Get(int handle,int64_t ilo,int64_t ihi,void *buff) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

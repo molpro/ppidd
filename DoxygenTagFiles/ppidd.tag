@@ -190,8 +190,8 @@
       <type>int</type>
       <name>PPIDD_Get</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a130e24887f4d0b506e7a5eda48d94ecd</anchor>
-      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
+      <anchor>af81d1be082947ea512567300f8c298b3</anchor>
+      <arglist>(int handle, int64_t ilo, int64_t ihi, void *buff)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

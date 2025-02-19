@@ -183,8 +183,8 @@
       <type>int</type>
       <name>PPIDD_Location</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a2be2ff0f8028e3acf093d9a38509682b</anchor>
-      <arglist>(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int *proclist, int *np)</arglist>
+      <anchor>a338e486744f4a841813028349d1c4509</anchor>
+      <arglist>(int handle, int64_t ilo, int64_t ihi, int64_t *map, int *proclist, int *np)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

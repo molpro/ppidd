@@ -369,9 +369,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int *proclist, int *np) {
-      int mpiilo=(int)*ilo;
-      int mpiihi=(int)*ihi;
+   int PPIDD_Location(int handle, int64_t ilo, int64_t ihi, int64_t *map, int *proclist, int *np) {
+      int mpiilo=(int)ilo;
+      int mpiihi=(int)ihi;
       int mpisize;
       int mpierr;
 

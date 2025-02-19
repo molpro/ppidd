@@ -340,9 +340,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Location(int handle, int64_t *ilo, int64_t *ihi, int64_t *map, int *proclist, int *np) {
-      ga_int mpiilo[1]={(ga_int)*ilo-1};
-      ga_int mpiihi[1]={(ga_int)*ihi-1};
+   int PPIDD_Location(int handle, int64_t ilo, int64_t ihi, int64_t *map, int *proclist, int *np) {
+      ga_int mpiilo[1]={(ga_int)ilo-1};
+      ga_int mpiihi[1]={(ga_int)ihi-1};
 
       int mpisize = GA_Nnodes();
       std::vector<ga_int> mpimap(2*mpisize);

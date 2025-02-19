@@ -622,8 +622,8 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCATE_REGION
  */
    int PPIDD_Location(int handle,          /*!< array handle */
-                      int64_t *ilo,        /*!< lower element subscript, 1 (not 0) for first element */
-                      int64_t *ihi,        /*!< higher element subscript */
+                      int64_t ilo,        /*!< lower element subscript, 1 (not 0) for first element */
+                      int64_t ihi,        /*!< higher element subscript */
                       int64_t *map,        /*!< return start/end index for <tt>proclist</tt> */
                       int *proclist,       /*!< proc id list */
                       int *np              /*!< proc number */

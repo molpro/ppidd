@@ -662,7 +662,7 @@ extern "C" {
 
 /*! \brief Put local buffer data into a section of a global array according to starting and ending index.
     \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT */
-   int PPIDD_Put(int handle,int64_t *ilo,int64_t *ihi,void *buff) {
+   int PPIDD_Put(int handle,int64_t ilo,int64_t ihi,void *buff) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

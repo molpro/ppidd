@@ -197,8 +197,8 @@
       <type>int</type>
       <name>PPIDD_Put</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a9577128a5615c4776c76641a03293b74</anchor>
-      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff)</arglist>
+      <anchor>ad9576546fa7ea542c1a31c18ea0540c7</anchor>
+      <arglist>(int handle, int64_t ilo, int64_t ihi, void *buff)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

@@ -204,8 +204,8 @@
       <type>int</type>
       <name>PPIDD_Acc</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ac9efbd27a6608ae9df73f643f0400654</anchor>
-      <arglist>(int handle, int64_t *ilo, int64_t *ihi, void *buff, void *fac)</arglist>
+      <anchor>a36af516b7d766a0ff23cc984d976604e</anchor>
+      <arglist>(int handle, int64_t ilo, int64_t ihi, void *buff, void *fac)</arglist>
     </member>
     <member kind="function">
       <type>int64_t</type>

@@ -147,7 +147,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
+   int PPIDD_Acc(int handle,int64_t ilo,int64_t ihi,void *buff,void *fac) {
       do_not_call("PPIDD_Acc");
    }
 

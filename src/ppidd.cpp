@@ -681,7 +681,7 @@ extern "C" {
 /*! \brief Accumulate data into a section of a global array.
     \details Atomic operation. global array section (ilo, ihi) += *fac * buffer.
     Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC */
-   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
+   int PPIDD_Acc(int handle,int64_t ilo,int64_t ihi,void *buff,void *fac) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

@@ -379,10 +379,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
+   int PPIDD_Acc(int handle,int64_t ilo,int64_t ihi,void *buff,void *fac) {
       ga_int ld[1]={1};
-      ga_int mpiilo[1]={(ga_int)*ilo-1};
-      ga_int mpiihi[1]={(ga_int)*ihi-1};
+      ga_int mpiilo[1]={(ga_int)ilo-1};
+      ga_int mpiihi[1]={(ga_int)ihi-1};
 
       NGA_ACC(handle, mpiilo, mpiihi, buff, ld, fac);
       return 1 ;

@@ -464,9 +464,9 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Acc(int handle,int64_t *ilo,int64_t *ihi,void *buff,void *fac) {
-      int mpiilo=(int)*ilo;
-      int mpiihi=(int)*ihi;
+   int PPIDD_Acc(int handle,int64_t ilo,int64_t ihi,void *buff,void *fac) {
+      int mpiilo=(int)ilo;
+      int mpiihi=(int)ihi;
       int mpierr;
 
       if ( mpiga_inquire_storetype(handle) == 0 )

@@ -216,7 +216,6 @@ void DataHelperServer()
   int *ibuf=NULL,*ibuf_helpga=NULL;
   long *lbuf=NULL,*lbuf_helpga=NULL;
   long long *llbuf=NULL,*llbuf_helpga=NULL;
-  float  *fbuf=NULL,*fbuf_helpga=NULL;
   double *dbuf=NULL,*dbuf_helpga=NULL;
   int  totworkproc;            /* total number of work processes */
   int  Nprocs_server;          /* number of work processes served by current helper server */
@@ -404,11 +403,6 @@ void DataHelperServer()
                for (i=0;i<nelem_helpga;i++) llbuf[i]=(long long)0;
                llbuf=NULL;
             }
-            else if (dtype==MPI_FLOAT) {
-               fbuf=(float *)helpga->ptr_buf;
-               for (i=0;i<nelem_helpga;i++) fbuf[i]=0.0;
-               fbuf=NULL;
-            }
             else if (dtype==MPI_DOUBLE) {
                dbuf=(double *)helpga->ptr_buf;
                for (i=0;i<nelem_helpga;i++) dbuf[i]=0.0e0;
@@ -572,13 +566,6 @@ void DataHelperServer()
            llbuf=NULL;
            llbuf_helpga=NULL;
         }
-        else if (dtype==MPI_FLOAT) {
-           fbuf=(float *)buf_temp;
-           fbuf_helpga=(float *)helpga->ptr_buf;
-           for (i=0;i<nelem_helpga;i++) fbuf_helpga[ielem-1+i]=fbuf[i];
-           fbuf=NULL;
-           fbuf_helpga=NULL;
-        }
         else if (dtype==MPI_DOUBLE) {
            dbuf=(double *)buf_temp;
            dbuf_helpga=(double *)helpga->ptr_buf;
@@ -622,13 +609,6 @@ void DataHelperServer()
            for (i=0;i<nelem_helpga;i++) llbuf_helpga[ielem-1+i]+=llbuf[i];
            llbuf=NULL;
            llbuf_helpga=NULL;
-        }
-        else if (dtype==MPI_FLOAT) {
-           fbuf=(float *)buf_temp;
-           fbuf_helpga=(float *)helpga->ptr_buf;
-           for (i=0;i<nelem_helpga;i++) fbuf_helpga[ielem-1+i]+=fbuf[i];
-           fbuf=NULL;
-           fbuf_helpga=NULL;
         }
         else if (dtype==MPI_DOUBLE) {
            dbuf=(double *)buf_temp;
@@ -867,7 +847,6 @@ ________________________________________________________________________________
     int *ibuf;
     long *lbuf;
     long long *llbuf;
-    float  *fbuf;
     double *dbuf;
     int j;
     int nelem_localga=0;
@@ -888,11 +867,6 @@ ________________________________________________________________________________
          llbuf=(long long *)helpga->ptr_buf;
          for (j=0;j<nelem_localga;j++) llbuf[j]=(long long)0;
          llbuf=NULL;
-      }
-      else if (dtype==MPI_FLOAT) {
-         fbuf=(float *)helpga->ptr_buf;
-         for (j=0;j<nelem_localga;j++) fbuf[j]=0.0;
-         fbuf=NULL;
       }
       else if (dtype==MPI_DOUBLE) {
          dbuf=(double *)helpga->ptr_buf;
@@ -1288,7 +1262,7 @@ int twosided_helpga_location( int handle, int ilo, int ihigh, int *map, int *pro
 }
 
 /* one-element rma operations for helpga */
-/* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, and MPI_LONG_LONG, but not MPI_FLOAT and MPI_DOUBLE) */
+/* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, and MPI_LONG_LONG, but not MPI_DOUBLE) */
 int64_t twosided_helpga_one(int mproc, int64_t nelem_valput, int ielem, int handle)
 /*
   Operations for helpga:
@@ -1564,7 +1538,6 @@ ________________________________________________________________________________
     int *ibuf=NULL,*ibuf_helpga=NULL;
     long *lbuf=NULL,*lbuf_helpga=NULL;
     long long *llbuf=NULL,*llbuf_helpga=NULL;
-    float  *fbuf=NULL,*fbuf_helpga=NULL;
     double *dbuf=NULL,*dbuf_helpga=NULL;
     if (mproc == 0) {                 /* get a set of values from local helpga      */
       if (dtype==MPI_INT) {
@@ -1587,13 +1560,6 @@ ________________________________________________________________________________
          for (i=0;i<nelem;i++) llbuf[i]=llbuf_helpga[ielem-1+i];
          llbuf=NULL;
          llbuf_helpga=NULL;
-      }
-      else if (dtype==MPI_FLOAT) {
-         fbuf=(float *)buff;
-         fbuf_helpga=(float *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) fbuf[i]=fbuf_helpga[ielem-1+i];
-         fbuf=NULL;
-         fbuf_helpga=NULL;
       }
       else if (dtype==MPI_DOUBLE) {
          dbuf=(double *)buff;
@@ -1628,13 +1594,6 @@ ________________________________________________________________________________
          llbuf=NULL;
          llbuf_helpga=NULL;
       }
-      else if (dtype==MPI_FLOAT) {
-         fbuf=(float *)buff;
-         fbuf_helpga=(float *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) fbuf_helpga[ielem-1+i]=fbuf[i];
-         fbuf=NULL;
-         fbuf_helpga=NULL;
-      }
       else if (dtype==MPI_DOUBLE) {
          dbuf=(double *)buff;
          dbuf_helpga=(double *)helpga->ptr_buf;
@@ -1668,13 +1627,6 @@ ________________________________________________________________________________
          llbuf=NULL;
          llbuf_helpga=NULL;
       }
-      else if (dtype==MPI_FLOAT) {
-         fbuf=(float *)buff;
-         fbuf_helpga=(float *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) fbuf_helpga[ielem-1+i]+=fbuf[i];
-         fbuf=NULL;
-         fbuf_helpga=NULL;
-      }
       else if (dtype==MPI_DOUBLE) {
          dbuf=(double *)buff;
          dbuf_helpga=(double *)helpga->ptr_buf;
@@ -1702,12 +1654,11 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
 {
     MPI_Datatype dtype;  /* MPI Datatype for helpga element */
     int i,len;
-    int isint,islong,isllong,isfloat,isone;
+    int isint,islong,isllong,isone;
     void *alphabuf=NULL;
     int *ialphabuf=NULL,*itempbuf=NULL,*ifac=NULL;
     long *lalphabuf=NULL,*ltempbuf=NULL,*lfac=NULL;
     long long *llalphabuf=NULL,*lltempbuf=NULL,*llfac=NULL;
-    float   *falphabuf=NULL,*ftempbuf=NULL,*ffac=NULL;
     double  *dalphabuf=NULL,*dtempbuf=NULL,*dfac=NULL;
 
     if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: begin. handle=%d\n",ProcID(),handle);
@@ -1716,7 +1667,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
     isint=0;
     islong=0;
     isllong=0;
-    isfloat=0;
     isone=1;
     if (dtype==MPI_INT) {
        isint=1;
@@ -1754,18 +1704,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
           alphabuf=(void *)llalphabuf;
        }
     }
-    else if (dtype==MPI_FLOAT) {
-       isfloat=1;
-       ffac=(float *)fac;
-       if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
-       else {
-          isone=0;
-          ftempbuf=(float *)buf;
-          falphabuf=(float *)malloc(len*sizeof(float));
-          for(i=0;i<len;i++) falphabuf[i]=(*ffac)*ftempbuf[i];
-          alphabuf=(void *)falphabuf;
-       }
-    }
     else if (dtype==MPI_DOUBLE) {
        dfac=(double *)fac;
        if (std::abs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
@@ -1787,7 +1725,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
        if(isint){ free(ialphabuf);ialphabuf=NULL;}
        else if(islong){free(lalphabuf);lalphabuf=NULL;}
        else if(isllong){free(llalphabuf);llalphabuf=NULL;}
-       else if(isfloat){free(falphabuf);falphabuf=NULL;}
        else {free(dalphabuf);dalphabuf=NULL;}
     }
 

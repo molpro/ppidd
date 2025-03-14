@@ -629,12 +629,11 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     mpimutex_t mutex=NULL;
     int handle_orig;
     int len,ilen;
-    int isint,islong,isllong,isfloat,isone;
+    int isint,islong,isllong,isone;
     void *alphabuf=NULL;
     int *ialphabuf=NULL,*itempbuf,*ifac;
     long *lalphabuf=NULL,*ltempbuf,*lfac;
     long long *llalphabuf=NULL,*lltempbuf,*llfac;
-    float   *falphabuf=NULL,*ftempbuf,*ffac;
     double  *dalphabuf=NULL,*dtempbuf,*dfac;
     MPIGA ga;
 
@@ -650,7 +649,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     isint=0;
     islong=0;
     isllong=0;
-    isfloat=0;
     isone=1;
     if (ga->dtype==MPI_INT) {
        isint=1;
@@ -686,18 +684,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
           llalphabuf=(long long *)malloc(len*sizeof(long long));
           for(i=0;i<len;i++)llalphabuf[i]=(*llfac)*lltempbuf[i];
           alphabuf=(void *)llalphabuf;
-       }
-    }
-    else if (ga->dtype==MPI_FLOAT) {
-       isfloat=1;
-       ffac=(float *)fac;
-       if (std::abs((*ffac)-1.0e0)<1.0e-6) alphabuf=buf;
-       else {
-          isone=0;
-          ftempbuf=(float *)buf;
-          falphabuf=(float *)malloc(len*sizeof(float));
-          for(i=0;i<len;i++) falphabuf[i]=(*ffac)*ftempbuf[i];
-          alphabuf=(void *)falphabuf;
        }
     }
     else if (ga->dtype==MPI_DOUBLE) {
@@ -764,7 +750,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        if(isint)free(ialphabuf);
        else if(islong)free(lalphabuf);
        else if(isllong)free(llalphabuf);
-       else if(isfloat)free(falphabuf);
        else free(dalphabuf);
     }
     if (MPIGA_Debug) printf("%5d: In mpiga_acc end. handle=%d, ga_win=%12ld\n",ProcID(),handle,(long)ga->ga_win);
@@ -880,7 +865,6 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
     int  *ibuf;
     long  *lbuf;
     long long *llbuf;
-    float   *fbuf;
     double  *dbuf;
 
     if (MPIGA_Debug)  printf("%5d: In mpiga_zero_patch: begin. handle=%d\n",ProcID(),handle);
@@ -914,10 +898,6 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
          else if (ga->dtype==MPI_LONG_LONG) {
             llbuf=(long long *)ga->win_ptr;
             for (j=disp;j<disp+ilen;j++) llbuf[j]=(long long)0;
-         }
-         else if (ga->dtype==MPI_FLOAT) {
-            fbuf=(float *)ga->win_ptr;
-            for (j=disp;j<disp+ilen;j++) fbuf[j]=0.0;
          }
          else if (ga->dtype==MPI_DOUBLE) {
             dbuf=(double *)ga->win_ptr;

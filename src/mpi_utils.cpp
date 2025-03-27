@@ -136,13 +136,9 @@ extern "C" MPI_Datatype dtype_mpi(int dtype) {
  MPI_Datatype mpi_dtype=MPI_CHAR;
  switch (dtype) {
   case PPIDD_FORTINT :
-#if FORTINT == int32_t
-   mpi_dtype = MPI_INT32_T;
-#elif FORTINT == int64_t
-   mpi_dtype = MPI_INT64_T;
-#else
-#error "unknown FORTINT case"
-#endif
+        if (sizeof(FORTINT)==sizeof(int32_t)) mpi_dtype=MPI_INT32_T;
+   else if (sizeof(FORTINT)==sizeof(int64_t)) mpi_dtype=MPI_INT64_T;
+   else MPIGA_Error(" dtype_mpi: unable to map FORTINT ",dtype);
    break;
   case PPIDD_DOUBLE :
    mpi_dtype=MPI_DOUBLE;

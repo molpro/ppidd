@@ -215,7 +215,6 @@ void DataHelperServer()
   void  *buf_temp=NULL;        /* temporary buffer which are used to store data for accumulation */
   int *ibuf=NULL,*ibuf_helpga=NULL;
   long *lbuf=NULL,*lbuf_helpga=NULL;
-  long long *llbuf=NULL,*llbuf_helpga=NULL;
   int32_t *i32buf=NULL,*i32buf_helpga=NULL;
   int64_t *i64buf=NULL,*i64buf_helpga=NULL;
   double *dbuf=NULL,*dbuf_helpga=NULL;
@@ -400,11 +399,6 @@ void DataHelperServer()
                for (i=0;i<nelem_helpga;i++) lbuf[i]=(long)0;
                lbuf=NULL;
             }
-            else if (dtype==MPI_LONG_LONG) {
-               llbuf=(long long *)helpga->ptr_buf;
-               for (i=0;i<nelem_helpga;i++) llbuf[i]=(long long)0;
-               llbuf=NULL;
-            }
             else if (dtype==MPI_INT32_T) {
                i32buf=(int32_t *)helpga->ptr_buf;
                for (i=0;i<nelem_helpga;i++) i32buf[i]=(int32_t)0;
@@ -463,11 +457,6 @@ void DataHelperServer()
            returnval = (FORTINT)lbuf[ielem-1];
            lbuf=NULL;
         }
-        else if (dtype==MPI_LONG_LONG) {
-           llbuf=(long long *)helpga->ptr_buf;
-           returnval = (FORTINT)llbuf[ielem-1];
-           llbuf=NULL;
-        }
         else if (dtype==MPI_INT32_T) {
            i32buf=(int32_t *)helpga->ptr_buf;
            returnval = (FORTINT)i32buf[ielem-1];
@@ -493,12 +482,6 @@ void DataHelperServer()
            returnval = (FORTINT)lbuf[ielem-1];
            lbuf[ielem-1]+=(long)nelem_valput;
            lbuf=NULL;
-        }
-        else if (dtype==MPI_LONG_LONG) {
-           llbuf=(long long *)helpga->ptr_buf;
-           returnval = (FORTINT)llbuf[ielem-1];
-           llbuf[ielem-1]+=(long long)nelem_valput;
-           llbuf=NULL;
         }
         else if (dtype==MPI_INT32_T) {
            i32buf=(int32_t *)helpga->ptr_buf;
@@ -528,12 +511,6 @@ void DataHelperServer()
            returnval = (FORTINT)lbuf[ielem-1];
            lbuf[ielem-1]=(long)nelem_valput;
            lbuf=NULL;
-        }
-        else if (dtype==MPI_LONG_LONG) {
-           llbuf=(long long *)helpga->ptr_buf;
-           returnval = (FORTINT)llbuf[ielem-1];
-           llbuf[ielem-1]=(long long)nelem_valput;
-           llbuf=NULL;
         }
         else if (dtype==MPI_INT32_T) {
            i32buf=(int32_t *)helpga->ptr_buf;
@@ -605,13 +582,6 @@ void DataHelperServer()
            lbuf=NULL;
            lbuf_helpga=NULL;
         }
-        else if (dtype==MPI_LONG_LONG) {
-           llbuf=(long long *)buf_temp;
-           llbuf_helpga=(long long *)helpga->ptr_buf;
-           for (i=0;i<nelem_helpga;i++) llbuf_helpga[ielem-1+i]=llbuf[i];
-           llbuf=NULL;
-           llbuf_helpga=NULL;
-        }
         else if (dtype==MPI_DOUBLE) {
            dbuf=(double *)buf_temp;
            dbuf_helpga=(double *)helpga->ptr_buf;
@@ -648,13 +618,6 @@ void DataHelperServer()
            for (i=0;i<nelem_helpga;i++) lbuf_helpga[ielem-1+i]+=lbuf[i];
            lbuf=NULL;
            lbuf_helpga=NULL;
-        }
-        else if (dtype==MPI_LONG_LONG) {
-           llbuf=(long long *)buf_temp;
-           llbuf_helpga=(long long *)helpga->ptr_buf;
-           for (i=0;i<nelem_helpga;i++) llbuf_helpga[ielem-1+i]+=llbuf[i];
-           llbuf=NULL;
-           llbuf_helpga=NULL;
         }
         else if (dtype==MPI_INT32_T) {
            i32buf=(int32_t *)buf_temp;
@@ -906,7 +869,6 @@ ________________________________________________________________________________
      /* sequential case: Not running in parallel ... just do a simulation */
     int *ibuf;
     long *lbuf;
-    long long *llbuf;
     int32_t *i32buf;
     int64_t *i64buf;
     double *dbuf;
@@ -924,11 +886,6 @@ ________________________________________________________________________________
          lbuf=(long *)helpga->ptr_buf;
          for (j=0;j<nelem_localga;j++) lbuf[j]=(long)0;
          lbuf=NULL;
-      }
-      else if (dtype==MPI_LONG_LONG) {
-         llbuf=(long long *)helpga->ptr_buf;
-         for (j=0;j<nelem_localga;j++) llbuf[j]=(long long)0;
-         llbuf=NULL;
       }
       else if (dtype==MPI_INT32_T) {
          i32buf=(int32_t *)helpga->ptr_buf;
@@ -1334,7 +1291,7 @@ int twosided_helpga_location( int handle, int ilo, int ihigh, int *map, int *pro
 }
 
 /* one-element rma operations for helpga */
-/* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, MPI_LONG_LONG, MPI_INT32_T and MPI_INT64_T but not MPI_DOUBLE) */
+/* MPI_Datatye can only be integer type (MPI_INT, MPI_LONG, MPI_INT32_T and MPI_INT64_T but not MPI_DOUBLE) */
 int64_t twosided_helpga_one(int mproc, int64_t nelem_valput, int ielem, int handle)
 /*
   Operations for helpga:
@@ -1367,7 +1324,7 @@ ________________________________________________________________________________
   lentot=helpga->nele;
   len_help=helpga->len_help;
 
-  if (dtype==MPI_INT || dtype==MPI_LONG || dtype==MPI_LONG_LONG || dtype==MPI_INT32_T || dtype==MPI_INT64_T) {
+  if (dtype==MPI_INT || dtype==MPI_LONG || dtype==MPI_INT32_T || dtype==MPI_INT64_T) {
     if (DEBUG_) printf("%5d: twosided_helpga_one: array with handle=%d  is an integer MPIGA.\n",ProcID(),handle);
   }
   else  MPIGA_Error(" twosided_helpga_one: wrong MPI_Datatype ",0);
@@ -1413,7 +1370,8 @@ ________________________________________________________________________________
      /* Not running in parallel ... just do a simulation */
     int *ibuf=NULL;
     long *lbuf=NULL;
-    long long *llbuf=NULL;
+    int32_t *i32buf=NULL;
+    int64_t *i64buf=NULL;
     if (mproc == 0) {                 /* get a value from local helpga      */
       if (dtype==MPI_INT) {
          ibuf=(int *)helpga->ptr_buf;
@@ -1425,10 +1383,15 @@ ________________________________________________________________________________
          local = (int64_t)lbuf[ielem-1];
          lbuf=NULL;
       }
-      else {
-         llbuf=(long long *)helpga->ptr_buf;
-         local = (int64_t)llbuf[ielem-1];
-         llbuf=NULL;
+      else if (dtype==MPI_INT32_T) {
+         i32buf=(int32_t *)helpga->ptr_buf;
+         local = (int64_t)i32buf[ielem-1];
+         i32buf=NULL;
+      }
+      else if (dtype==MPI_INT64_T) {
+         i64buf=(int64_t *)helpga->ptr_buf;
+         local = (int64_t)i64buf[ielem-1];
+         i64buf=NULL;
       }
     }
     else if (mproc == 1) {            /* fetch-and-add INCR to local helpga */
@@ -1444,11 +1407,17 @@ ________________________________________________________________________________
          lbuf[ielem-1]+=(long)nelem_valput;
          lbuf=NULL;
       }
-      else {
-         llbuf=(long long *)helpga->ptr_buf;
-         local = (int64_t)llbuf[ielem-1];
-         llbuf[ielem-1]+=(long long)nelem_valput;
-         llbuf=NULL;
+      else if (dtype==MPI_INT32_T) {
+         i32buf=(int32_t *)helpga->ptr_buf;
+         local = (int64_t)i32buf[ielem-1];
+         i32buf[ielem-1]+=(int32_t)nelem_valput;
+         i32buf=NULL;
+      }
+      else if (dtype==MPI_INT64_T) {
+         i64buf=(int64_t *)helpga->ptr_buf;
+         local = (int64_t)i64buf[ielem-1];
+         i64buf[ielem-1]+=(int64_t)nelem_valput;
+         i64buf=NULL;
       }
     }
     else if (mproc == -1) {           /* put a value  to local helpga       */
@@ -1464,11 +1433,17 @@ ________________________________________________________________________________
          lbuf[ielem-1]=(long)nelem_valput;
          lbuf=NULL;
       }
-      else {
-         llbuf=(long long *)helpga->ptr_buf;
-         local = (int64_t)llbuf[ielem-1];
-         llbuf[ielem-1]=(long long)nelem_valput;
-         llbuf=NULL;
+      else if (dtype==MPI_INT32_T) {
+         i32buf=(int32_t *)helpga->ptr_buf;
+         local = (int64_t)i32buf[ielem-1];
+         i32buf[ielem-1]=(int32_t)nelem_valput;
+         i32buf=NULL;
+      }
+      else if (dtype==MPI_INT64_T) {
+         i64buf=(int64_t *)helpga->ptr_buf;
+         local = (int64_t)i64buf[ielem-1];
+         i64buf[ielem-1]=(int64_t)nelem_valput;
+         i64buf=NULL;
       }
     }
     else  {
@@ -1609,7 +1584,6 @@ ________________________________________________________________________________
      /* Not running in parallel ... just do a simulation */
     int *ibuf=NULL,*ibuf_helpga=NULL;
     long *lbuf=NULL,*lbuf_helpga=NULL;
-    long long *llbuf=NULL,*llbuf_helpga=NULL;
     int32_t *i32buf=NULL,*i32buf_helpga=NULL;
     int64_t *i64buf=NULL,*i64buf_helpga=NULL;
     double *dbuf=NULL,*dbuf_helpga=NULL;
@@ -1627,13 +1601,6 @@ ________________________________________________________________________________
          for (i=0;i<nelem;i++) lbuf[i]=lbuf_helpga[ielem-1+i];
          lbuf=NULL;
          lbuf_helpga=NULL;
-      }
-      else if (dtype==MPI_LONG_LONG) {
-         llbuf=(long long *)buff;
-         llbuf_helpga=(long long *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) llbuf[i]=llbuf_helpga[ielem-1+i];
-         llbuf=NULL;
-         llbuf_helpga=NULL;
       }
       else if (dtype==MPI_INT32_T) {
          i32buf=(int32_t *)buff;
@@ -1675,13 +1642,6 @@ ________________________________________________________________________________
          lbuf=NULL;
          lbuf_helpga=NULL;
       }
-      else if (dtype==MPI_LONG_LONG) {
-         llbuf=(long long *)buff;
-         llbuf_helpga=(long long *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) llbuf_helpga[ielem-1+i]=llbuf[i];
-         llbuf=NULL;
-         llbuf_helpga=NULL;
-      }
       else if (dtype==MPI_INT32_T) {
          i32buf=(int32_t *)buff;
          i32buf_helpga=(int32_t *)helpga->ptr_buf;
@@ -1721,13 +1681,6 @@ ________________________________________________________________________________
          for (i=0;i<nelem;i++) lbuf_helpga[ielem-1+i]+=lbuf[i];
          lbuf=NULL;
          lbuf_helpga=NULL;
-      }
-      else if (dtype==MPI_LONG_LONG) {
-         llbuf=(long long *)buff;
-         llbuf_helpga=(long long *)helpga->ptr_buf;
-         for (i=0;i<nelem;i++) llbuf_helpga[ielem-1+i]+=llbuf[i];
-         llbuf=NULL;
-         llbuf_helpga=NULL;
       }
       else if (dtype==MPI_INT32_T) {
          i32buf=(int32_t *)buff;
@@ -1770,11 +1723,10 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
 {
     MPI_Datatype dtype;  /* MPI Datatype for helpga element */
     int i,len;
-    int isint,islong,isllong,is32int,is64int,isone;
+    int isint,islong,is32int,is64int,isone;
     void *alphabuf=NULL;
     int *ialphabuf=NULL,*itempbuf=NULL,*ifac=NULL;
     long *lalphabuf=NULL,*ltempbuf=NULL,*lfac=NULL;
-    long long *llalphabuf=NULL,*lltempbuf=NULL,*llfac=NULL;
     int32_t *i32alphabuf=NULL,*i32tempbuf=NULL,*i32fac=NULL;
     int64_t *i64alphabuf=NULL,*i64tempbuf=NULL,*i64fac=NULL;
     double  *dalphabuf=NULL,*dtempbuf=NULL,*dfac=NULL;
@@ -1784,7 +1736,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
     len=nelem;
     isint=0;
     islong=0;
-    isllong=0;
     is32int=0;
     is64int=0;
     isone=1;
@@ -1810,18 +1761,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
           lalphabuf=(long *)malloc(len*sizeof(long));
           for(i=0;i<len;i++)lalphabuf[i]=(*lfac)*ltempbuf[i];
           alphabuf=(void *)lalphabuf;
-       }
-    }
-    else if (dtype==MPI_LONG_LONG) {
-       isllong=1;
-       llfac=(long long *)fac;
-       if ((*llfac)==(long long)1) alphabuf=buf;
-       else {
-          isone=0;
-          lltempbuf=(long long *)buf;
-          llalphabuf=(long long *)malloc(len*sizeof(long long));
-          for(i=0;i<len;i++)llalphabuf[i]=(*llfac)*lltempbuf[i];
-          alphabuf=(void *)llalphabuf;
        }
     }
     else if (dtype==MPI_INT32_T) {
@@ -1868,7 +1807,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
     if(!isone) {
        if(isint){ free(ialphabuf);ialphabuf=NULL;}
        else if(islong){free(lalphabuf);lalphabuf=NULL;}
-       else if(isllong){free(llalphabuf);llalphabuf=NULL;}
        else if(is32int){free(i32alphabuf);i32alphabuf=NULL;}
        else if(is64int){free(i64alphabuf);i64alphabuf=NULL;}
        else {free(dalphabuf);dalphabuf=NULL;}

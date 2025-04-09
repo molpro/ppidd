@@ -629,10 +629,9 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     mpimutex_t mutex=NULL;
     int handle_orig;
     int len,ilen;
-    int isint,islong,is32int,is64int,isone;
+    int isint,is32int,is64int,isone;
     void *alphabuf=NULL;
     int *ialphabuf=NULL,*itempbuf,*ifac;
-    long *lalphabuf=NULL,*ltempbuf,*lfac;
     int32_t *i32alphabuf=NULL,*i32tempbuf,*i32fac;
     int64_t *i64alphabuf=NULL,*i64tempbuf,*i64fac;
     double  *dalphabuf=NULL,*dtempbuf,*dfac;
@@ -648,7 +647,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 
     len=ihigh-ilo+1;
     isint=0;
-    islong=0;
     is32int=0;
     is64int=0;
     isone=1;
@@ -662,18 +660,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
           ialphabuf=(int *)malloc(len*sizeof(int));
           for(i=0;i<len;i++)ialphabuf[i]=(*ifac)*itempbuf[i];
           alphabuf=(void *)ialphabuf;
-       }
-    }
-    else if (ga->dtype==MPI_LONG) {
-       islong=1;
-       lfac=(long *)fac;
-       if ((*lfac)==(long)1) alphabuf=buf;
-       else {
-          isone=0;
-          ltempbuf=(long *)buf;
-          lalphabuf=(long *)malloc(len*sizeof(long));
-          for(i=0;i<len;i++)lalphabuf[i]=(*lfac)*ltempbuf[i];
-          alphabuf=(void *)lalphabuf;
        }
     }
     else if (ga->dtype==MPI_INT32_T) {
@@ -762,7 +748,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 
     if(!isone) {
        if(isint)free(ialphabuf);
-       else if(islong)free(lalphabuf);
        else if(is32int)free(i32alphabuf);
        else if(is64int)free(i64alphabuf);
        else free(dalphabuf);
@@ -777,10 +762,9 @@ int mpiga_read_inc( int handle, int inum, int inc )
     void  *buf=NULL, *incval=NULL;
     int returnval;
     int ibuf, iincval=(int)inc;
-    long lbuf, lincval=(long)inc;
     int32_t i32buf, i32incval=(int32_t)inc;
     int64_t i64buf, i64incval=(int64_t)inc;
-    int isint=0, islong=0, is32int=0, is64int=0;
+    int isint=0, is32int=0, is64int=0;
     int rank;
     MPI_Aint disp;
     int np,lenleft;
@@ -802,12 +786,6 @@ int mpiga_read_inc( int handle, int inum, int inc )
        buf=&ibuf;
        isint=1;
        if (MPIGA_Debug) printf("%5d: In mpiga_read_inc: it is an int MPIGA.\n",ProcID());
-    }
-    else if (ga->dtype==MPI_LONG) {
-       incval=&lincval;
-       buf=&lbuf;
-       islong=1;
-       if (MPIGA_Debug) printf("%5d: In mpiga_read_inc: it is a long int MPIGA.\n",ProcID());
     }
     else if (ga->dtype==MPI_INT32_T) {
        incval=&i32incval;
@@ -867,7 +845,6 @@ int mpiga_read_inc( int handle, int inum, int inc )
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc after mutex. rank=%d,ga_win=%ld,disp=%d\n",ProcID(),rank,(long)ga->ga_win,(int)disp);
 
     if(isint) returnval=ibuf;
-    else if(islong) returnval=lbuf;
     else if(is32int) returnval=i32buf;
     else if(is64int) returnval=i64buf;
 
@@ -887,7 +864,6 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
     MPIGA ga;
     int ilen;
     int  *ibuf;
-    long  *lbuf;
     int32_t *i32buf;
     int64_t *i64buf;
     double  *dbuf;
@@ -915,10 +891,6 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
          if (ga->dtype==MPI_INT) {
             ibuf=(int *)ga->win_ptr;
             for (j=disp;j<disp+ilen;j++) ibuf[j]=(int)0;
-         }
-         else if (ga->dtype==MPI_LONG) {
-            lbuf=(long *)ga->win_ptr;
-            for (j=disp;j<disp+ilen;j++) lbuf[j]=(long)0;
          }
          else if (ga->dtype==MPI_INT32_T) {
             i32buf=(int32_t *)ga->win_ptr;

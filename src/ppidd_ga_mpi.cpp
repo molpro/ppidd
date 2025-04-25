@@ -43,6 +43,8 @@ static int dtype_ga(int dtype) {
    break;
   case PPIDD_DOUBLE :
    return MT_C_DBL;
+  case PPIDD_INT :
+   return MT_C_INT;
   default:
    errmsg=" dtype_ga: wrong data type ";
    GA_Error(&errmsg[0],dtype);
@@ -422,7 +424,7 @@ static int n_in_msg_mpiq=0;
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
 	std::string name="Nxtval";
-        PPIDD_Create(&name[0],1,PPIDD_FORTINT,1,&PPIDD_Nxtval_handle);
+        PPIDD_Create(&name[0],1,PPIDD_INT,1,&PPIDD_Nxtval_handle);
         PPIDD_Zero(PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         return 0;

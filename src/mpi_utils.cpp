@@ -126,6 +126,8 @@ extern "C" size_t dtype_size(int dtype) {
    return sizeof(FORTINT);
   case PPIDD_DOUBLE :
    return sizeof(double);
+  case PPIDD_INT :
+   return sizeof(int);
   default:
    MPIGA_Error(" dtype_size: wrong data type ",dtype);
  }
@@ -142,6 +144,9 @@ extern "C" MPI_Datatype dtype_mpi(int dtype) {
    break;
   case PPIDD_DOUBLE :
    mpi_dtype=MPI_DOUBLE;
+   break;
+  case PPIDD_INT :
+   mpi_dtype=MPI_INT;
    break;
   default:
    MPIGA_Error(" dtype_mpi: wrong data type ",dtype);

@@ -209,7 +209,6 @@ void DataHelperServer()
 {
   int cnt = 0;                 /* actual counter */
   FORTINT  buf[4];             /* buffer to get values */
-  FORTINT  nelem_valput;       /* COLLECFLAG and mproc=0: number of elements; RMAONEFLAG: value to be put(mproc<0), increment value(mproc>0); others: no use */
   void  *buf_helpga=NULL;      /* help ga which is located in help process */
   void  *buf_ielem =NULL;      /* pointer to helpga[ielem-1]               */
   void  *buf_temp=NULL;        /* temporary buffer which are used to store data for accumulation */
@@ -239,7 +238,6 @@ void DataHelperServer()
   int  ielem_cdtype,ielem,handle,handle_orig;
   int  nelem=0;
   int  nelem_helpga=0;
-  FORTINT  returnval=(FORTINT)0;  /* returned value for helpha RMA opreations  */
   MPI_Request request,reqs[2];
   MPI_Status status,stats[2];
   MPI_Datatype dtype,dtype_buf;   /* MPI Datatype */
@@ -323,14 +321,13 @@ void DataHelperServer()
     } /* End of NXTVAL */
     else if ( opertype == COLLECFLAG ) {
        /* HELPGA collective operations: create (mproc=0) , zeroize(mproc>0), destroy (mproc<0) */
-      nelem_valput=(FORTINT)buf[1]; /* mproc=0: number of elements; mproc>0, <0: no use */
       ielem_cdtype=(int)buf[2];     /* COLLECFLAG and mproc=0: C Datatype for the helpga buffer; COLLECFLAG and mproc=others: no use */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
 
       if (mproc == 0) { /* create a help GA */
 
-        /* All work processes tell server to create an array with nelem_valput elements.
+        /* All work processes tell server to create an array with buf[1] elements.
          * Servers wait until it has received all requests from all work processes.
          * After received all requests, helpga is created in server, and server send
          * a SUCESS flag to all work processes.
@@ -341,7 +338,7 @@ void DataHelperServer()
         /* Wait until signals from compute processes, which are served by current server, have finished before creating it */
         done_list_crt[ndone_crt++] = nodefrom;
         if (ndone_crt == Nprocs_server) {
-          nelem_helpga=(int)nelem_valput;
+          nelem_helpga=(int)buf[1];
           dtype=dtype_mpi(ielem_cdtype);
           sizeofdtype=dtype_size(ielem_cdtype);
 
@@ -427,71 +424,37 @@ void DataHelperServer()
     } /* End of collective HELPGA */
     else if ( opertype == RMAONEFLAG ) {
        /* HELPGA RMA operations: get (mproc=0) , fetch-and-add(mproc>0), put (mproc<0) */
-      nelem_valput=(FORTINT)buf[1]; /* mproc=0: no use; mproc<0: value to be put; mproc>0: increment value */
       ielem =(int)buf[2];           /* sequence number of element in helpga: 1,2,...,n      */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
 
       helpga=twosided_helpga_index[handle_orig].ptr;
       dtype=helpga->dtype;
-      if (mproc == 0) { /* work process gets a value from help GA, ie server sends an element value to a work process */
-        if (dtype==MPI_INT32_T) {
-           i32buf=(int32_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i32buf[ielem-1];
-           i32buf=NULL;
-        }
-        else if (dtype==MPI_INT64_T) {
-           i64buf=(int64_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i64buf[ielem-1];
-           i64buf=NULL;
-        }
-        MPI_Send(&returnval, 1, dtype_buf,  nodefrom, type_rma, MPI_COMM_WORLD);
-        if (DEBUG_) printf("%5d: DataHelperServer: helpga_one_get end. handle=%d, ielem_helpga=%d, twosided_helpga_num=%d, returnval=%ld\n",ProcID(),handle,ielem,twosided_helpga_num,(long)returnval);
+      if (dtype==MPI_INT32_T) {
+         i32buf = (int32_t *)helpga->ptr_buf;
+         buf[0] = (FORTINT)i32buf[ielem-1];
+     /*  if (mproc == 0) work process gets a value from help GA, ie server sends an element value to a work process */
+         if (mproc > 0) i32buf[ielem-1] += (int32_t)buf[1]; /* fetch-and-add INCR to help GA */
+	 if (mproc < 0) i32buf[ielem-1] = (int32_t)buf[1]; /* put a value to help GA */
       }
-      else if (mproc > 0) { /* fetch-and-add INCR to help GA */
-        if (dtype==MPI_INT32_T) {
-           i32buf=(int32_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i32buf[ielem-1];
-           i32buf[ielem-1]+=(int32_t)nelem_valput;
-           i32buf=NULL;
-        }
-        else if (dtype==MPI_INT64_T) {
-           i64buf=(int64_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i64buf[ielem-1];
-           i64buf[ielem-1]+=(int64_t)nelem_valput;
-           i64buf=NULL;
-        }
-        MPI_Send(&returnval, 1, dtype_buf,  nodefrom, type_rma, MPI_COMM_WORLD);
-        if (DEBUG_) printf("%5d: DataHelperServer: helpga_one_acc(read_inc) end. handle=%d, ielem_helpga=%d, twosided_helpga_num=%d, returnval=%ld\n",
-                           ProcID(),handle,ielem,twosided_helpga_num,(long)returnval);
+      else if (dtype==MPI_INT64_T) {
+         i64buf = (int64_t *)helpga->ptr_buf;
+         buf[0] = (FORTINT)i64buf[ielem-1];
+     /*  if (mproc == 0) work process gets a value from help GA, ie server sends an element value to a work process */
+         if (mproc > 0) i64buf[ielem-1] += (int64_t)buf[1]; /* fetch-and-add INCR to help GA */
+	 if (mproc < 0) i64buf[ielem-1] = (int64_t)buf[1]; /* put a value to help GA */
       }
-      else { /* put a value to help GA */
-        if (dtype==MPI_INT32_T) {
-           i32buf=(int32_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i32buf[ielem-1];
-           i32buf[ielem-1]=(int32_t)nelem_valput;
-           i32buf=NULL;
-        }
-        else if (dtype==MPI_INT64_T) {
-           i64buf=(int64_t *)helpga->ptr_buf;
-           returnval = (FORTINT)i64buf[ielem-1];
-           i64buf[ielem-1]=(int64_t)nelem_valput;
-           i64buf=NULL;
-        }
-        MPI_Send(&returnval, 1, dtype_buf,  nodefrom, type_rma, MPI_COMM_WORLD);
-        if (DEBUG_) printf("%5d: DataHelperServer: helpga_one_put end. handle=%d, ielem_helpga=%d, twosided_helpga_num=%d, returnval=%ld\n",
-                           ProcID(),handle,ielem,twosided_helpga_num,(long)returnval);
-      }
+      MPI_Send(buf, 1, dtype_buf,  nodefrom, type_rma, MPI_COMM_WORLD);
+      if (DEBUG_) printf("%5d: DataHelperServer: helpga_one end. handle=%d, ielem_helpga=%d, twosided_helpga_num=%d, returnval=%ld\n",ProcID(),handle,ielem,twosided_helpga_num,(long)buf[0]);
       helpga=NULL;
     } /* End of HELPGA RMA operations */
     else if ( opertype == RMAETRFLAG ) {
        /* HELPGA extra RMA operations (RMAETRFLAG): get(mproc=0), put(mproc<0), accumulate(mproc>0) */
-      nelem_valput=(FORTINT)buf[1]; /* mproc<=0: number of elements to be gotten/put/accumulated  */
+      nelem_helpga=(int)buf[1];     /* mproc<=0: number of elements to be gotten/put/accumulated  */
       ielem =(int)buf[2];           /* sequence number of element in helpga: 1,2,...,n      */
       handle=(int)buf[3];           /* adjuested sequence number of helpga */
       handle_orig=handle-TWOSIDED_HELPGA_OFFSET; /* original sequence number of helpga */
 
-      nelem_helpga=(int)nelem_valput;
       helpga=twosided_helpga_index[handle_orig].ptr;
       dtype=helpga->dtype;
       MPI_Type_size( dtype, &sizeofdtype );
@@ -691,7 +654,7 @@ int NXTVAL(int mproc)
 */
 {
   int  type = NXTVALFLAG;
-  FORTINT  buf,val_recv;
+  FORTINT buf;
   int  local=0;
   MPI_Status status;
   MPI_Datatype dtype_buf;         /* MPI Datatype */
@@ -715,15 +678,16 @@ int NXTVAL(int mproc)
 
        dtype_buf=dtype_mpi(PPIDD_FORTINT);
        MPI_Send(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD);
-       MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
+       MPI_Recv(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD, &status);
        if (mproc == 0 && myid == 0 ) { /* rank(0) sends signal to terminate last server process if the last server process doesn't serve any compute process */
          if ( Nprocs_of_Server(LastServerID()) == 0 ) {
            server = LastServerID();                 /* last server process */
+	   buf = mproc;
            MPI_Send(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD);
-           MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
+           MPI_Recv(&buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD, &status);
          }
        }
-       return (int)val_recv;
+       return (int)buf;
     }
   }
   else {
@@ -1225,7 +1189,7 @@ ________________________________________________________________________________
 */
 {
   int  type = RMAONEFLAG;
-  FORTINT  buf[4],val_recv;
+  FORTINT  buf[4];
   int64_t local=0;
   MPI_Status status;
   int  handle_orig;
@@ -1283,8 +1247,8 @@ ________________________________________________________________________________
      if (use_helper_server) {
        dtype_buf = dtype;
        MPI_Send(buf, 4, dtype_buf,  server, type, MPI_COMM_WORLD);
-       MPI_Recv(&val_recv, 1,   dtype_buf,  server, type, MPI_COMM_WORLD, &status);
-       local=(int64_t)val_recv;
+       MPI_Recv(buf, 1, dtype_buf,  server, type, MPI_COMM_WORLD, &status);
+       local=(int64_t)buf[0];
      }
   }
   else {

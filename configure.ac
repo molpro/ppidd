@@ -24,7 +24,6 @@ $4])])
 
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
 AC_SUBST(enable_fortran)
-AC_ARG_ENABLE(fortran-int64,[AS_HELP_STRING([--enable-fortran-int64],[specify Fortran integer size as 64-bit])],[AC_DEFINE([FORTINT],[int64_t])],[AC_DEFINE([FORTINT],[int32_t])])
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])

@@ -713,7 +713,6 @@ PPIDD_PROTOTYPES_H'
 ac_user_opts='
 enable_option_checking
 enable_fortran
-enable_fortran_int64
 with_ga
 enable_nxtval
 with_mpi2
@@ -1352,7 +1351,6 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-fortran        build Fortran interface
-  --enable-fortran-int64  specify Fortran integer size as 64-bit
   --disable-nxtval        disable the helper process (PPIDD_Nxtval)
 
 Optional Packages:
@@ -2470,17 +2468,6 @@ then :
   enableval=$enable_fortran;
 fi
 
-
-# Check whether --enable-fortran-int64 was given.
-if test ${enable_fortran_int64+y}
-then :
-  enableval=$enable_fortran_int64; printf "%s\n" "#define FORTINT int64_t" >>confdefs.h
-
-else case e in #(
-  e) printf "%s\n" "#define FORTINT int32_t" >>confdefs.h
- ;;
-esac
-fi
 
 
 # Check whether --with-ga was given.

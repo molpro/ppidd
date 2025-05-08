@@ -21,7 +21,8 @@
 !  Intitialize a message passing library
 !  Initialize GA
       argv(1)=c_null_ptr
-      call ppidd_initialize(argc,c_loc(argv),ppidd_impl_default)
+      call ppidd_initialize(argc,c_loc(argv),ppidd_impl_default,
+     & int(bit_size(0),c_int))
 #ifdef NO_NXTVAL_SERVER
       helper_server_flag=0_c_int
       num_per_helper=-1_c_int

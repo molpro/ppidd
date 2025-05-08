@@ -95,12 +95,6 @@ else ()
     message(DEBUG "Not building Fortran")
 endif ()
 
-if (FORTRAN_INTEGER8)
-    target_compile_definitions(ppidd PRIVATE $<$<COMPILE_LANGUAGE:CXX>:FORTINT=int64_t>)
-else ()
-    target_compile_definitions(ppidd PRIVATE $<$<COMPILE_LANGUAGE:CXX>:FORTINT=int32_t>)
-endif ()
-
 target_compile_features(ppidd PRIVATE cxx_constexpr)
 target_compile_options(ppidd PRIVATE $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:AppleClang>>:-Wall>)
 target_compile_definitions(ppidd PRIVATE HAVE_MPI_H)

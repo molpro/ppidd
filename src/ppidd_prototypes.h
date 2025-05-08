@@ -1,4 +1,4 @@
- extern void PPIDD_Initialize (int *argc, char ***argv, int impl);
+ extern void PPIDD_Initialize (int *argc, char ***argv, int impl, int fortint_size);
  extern void PPIDD_Initialize_data ();
  extern int  PPIDD_Worker_comm ();
  extern void PPIDD_Finalize ();

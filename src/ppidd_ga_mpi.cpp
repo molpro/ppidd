@@ -31,14 +31,16 @@ extern "C" {
 #include "mpi_utils.h"
 #include "ppidd_ga_mpi.h"
 
+extern int ppidd_fortint_size;
+
 static int dtype_ga(int dtype) {
  std::string errmsg;
  switch (dtype) {
   case PPIDD_FORTINT :
-   if (sizeof(FORTINT)==sizeof(int)) return MT_C_INT;
-   if (sizeof(FORTINT)==sizeof(long)) return MT_C_LONGINT;
-   if (sizeof(FORTINT)==sizeof(long long)) return MT_C_LONGLONG;
-   errmsg=" dtype_ga: unable to map FORTINT ";
+   if (ppidd_fortint_size==sizeof(int)) return MT_C_INT;
+   if (ppidd_fortint_size==sizeof(long)) return MT_C_LONGINT;
+   if (ppidd_fortint_size==sizeof(long long)) return MT_C_LONGLONG;
+   errmsg=" dtype_ga: unable to map PPIDD_FORTINT ";
    GA_Error(&errmsg[0],dtype);
    break;
   case PPIDD_DOUBLE :
@@ -57,7 +59,7 @@ namespace ga_mpi {
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
 
-   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     GA_Initialize_args(argc,argv);            /* initialize GA */
    }
 

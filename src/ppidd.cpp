@@ -21,6 +21,7 @@ static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
 static const int ppidd_impl_mpi2   = PPIDD_IMPL_MPI2;
 
 static int ppidd_impl=ppidd_impl_default;
+int ppidd_fortint_size; // TODO: Remove this global
 
 extern "C" {
 
@@ -28,7 +29,7 @@ extern "C" {
     \details
     - For \b GA, includes initialization of MPI and GA.
     - For \b MPI2, calls MPI_Init. */
-   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     switch (impl) {
      case (ppidd_impl_ga_mpi):
      case (ppidd_impl_mpi2):
@@ -36,6 +37,18 @@ extern "C" {
       break;
      default:
       fprintf(stderr,"ERROR: impl '%d' is unknown\n",impl);
+      exit(1);
+    }
+
+    switch (fortint_size) {
+     case (32):
+      ppidd_fortint_size = 4;
+      break;
+     case (64):
+      ppidd_fortint_size = 8;
+      break;
+     default:
+      fprintf(stderr,"ERROR: fortint_size '%d' is illegal, must be 32 or 64\n", fortint_size);
       exit(1);
     }
 
@@ -79,13 +92,13 @@ extern "C" {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Initialize(argc,argv,impl);
+      return ga_mpi::PPIDD_Initialize(argc,argv,impl,fortint_size);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Initialize(argc,argv,impl);
+      return mpi2::PPIDD_Initialize(argc,argv,impl,fortint_size);
 #endif
      default:
-      return no_mpi::PPIDD_Initialize(argc,argv,impl);
+      return no_mpi::PPIDD_Initialize(argc,argv,impl,fortint_size);
     }
    }
 

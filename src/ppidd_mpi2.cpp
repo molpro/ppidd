@@ -15,6 +15,8 @@
 #define   MPI_EAF_W  -2
 #define   MPI_EAF_R  -3
 
+extern int ppidd_fortint_size;
+
 namespace mpi2 {
 
    static int MPIGA_Debug=0;
@@ -25,7 +27,7 @@ namespace mpi2 {
     exit(1);
    }
 
-   void PPIDD_Initialize(int *argc, char ***argv, int impl) {
+   void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     int mpierr=mpiga_initialize(argc,argv);
     mpi_test_status("PPIDD_Initialize:",mpierr);
    }
@@ -409,12 +411,17 @@ static int n_in_msg_mpiq=0;
          int64_t val;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT32_T||dtype==MPI_INT64_T) ) { /* PPIDD_helpga_get_inum */
-            int64_t nelem_valput=1;
-            FORTINT *ibuff;
-
-            val=twosided_helpga_one(mproc, nelem_valput, ielem, handle);
-            ibuff=(FORTINT *)buff;
-            *ibuff=(FORTINT)val;
+            val=twosided_helpga_one(mproc, 1, ielem, handle);
+            if (ppidd_fortint_size == 4) {
+              int32_t *ibuff;
+              ibuff=(int32_t *)buff;
+              *ibuff=(int32_t)val;
+	    }
+	    else {
+              int64_t *ibuff;
+              ibuff=(int64_t *)buff;
+              *ibuff=(int64_t)val;
+	    }
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_get */
             int nelem=mpiihi-mpiilo+1;
@@ -444,8 +451,15 @@ static int n_in_msg_mpiq=0;
          int ielem=mpiilo;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT32_T||dtype==MPI_INT64_T) ) { /* PPIDD_helpga_put_inum */
-            FORTINT *ibuff=(FORTINT *)buff;
-            int64_t valput=(int64_t)*ibuff;
+            int64_t valput;
+            if (ppidd_fortint_size == 4) {
+              int32_t *ibuff=(int32_t *)buff;
+              valput=(int64_t)*ibuff;
+	    }
+	    else {
+              int64_t *ibuff=(int64_t *)buff;
+              valput=(int64_t)*ibuff;
+	    }
             twosided_helpga_one(mproc, valput, ielem, handle);
          }
          else if (mpiilo <= mpiihi) { /* PPIDD_helpga_put */
@@ -499,9 +513,7 @@ static int n_in_msg_mpiq=0;
          mpivalue=(int64_t)mpiga_read_inc(handle,mpiinum,mpiincr);
       else {                                              /* PPIDD_helpga_readinc */
          int mproc=NProcs_Work();
-
-         int64_t vincr=(int64_t)incr;
-         mpivalue=twosided_helpga_one(mproc, vincr, mpiinum, handle);
+         mpivalue=twosided_helpga_one(mproc, incr, mpiinum, handle);
       }
       if(MPIGA_Debug)printf("%5d: In PPIDD_Read_inc: fetch-and-add element[%d] of array handle=%d by increment=%d\n",
                             ProcID(),mpiinum,handle,mpiincr);

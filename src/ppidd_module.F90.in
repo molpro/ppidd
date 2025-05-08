@@ -11,11 +11,11 @@ integer(c_int), parameter :: PPIDD_IMPL_MPI2   =3
 integer(c_int), parameter :: PPIDD_IMPL_DEFAULT=@PPIDD_IMPL_DEFAULT@
 
 interface
- subroutine ppidd_initialize(argc,argv,impl) bind(c,name="PPIDD_Initialize")
+ subroutine ppidd_initialize(argc,argv,impl,fortint_size) bind(c,name="PPIDD_Initialize")
  use iso_c_binding, only: c_int, c_ptr
  integer(c_int), intent(in)         :: argc
  type(c_ptr), intent(in)            :: argv
- integer(c_int), intent(in), value  :: impl
+ integer(c_int), intent(in), value  :: impl, fortint_size
  end subroutine ppidd_initialize
 end interface
 

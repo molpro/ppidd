@@ -25,6 +25,7 @@ char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
 static int DEBUG_=0;
 
+extern int ppidd_fortint_size;
 
 /* Get the Total node number for specified communicator, and give whether all the nodes are symmetric(every node is the same) */
 int NNodes_Total(MPI_Comm comm, int *flag_sym)
@@ -123,7 +124,7 @@ void mpi_test_status(const char *msg_str, int status)
 extern "C" size_t dtype_size(int dtype) {
  switch (dtype) {
   case PPIDD_FORTINT :
-   return sizeof(FORTINT);
+   return ppidd_fortint_size;
   case PPIDD_DOUBLE :
    return sizeof(double);
   case PPIDD_INT :
@@ -138,9 +139,8 @@ extern "C" MPI_Datatype dtype_mpi(int dtype) {
  MPI_Datatype mpi_dtype=MPI_CHAR;
  switch (dtype) {
   case PPIDD_FORTINT :
-        if (sizeof(FORTINT)==sizeof(int32_t)) mpi_dtype=MPI_INT32_T;
-   else if (sizeof(FORTINT)==sizeof(int64_t)) mpi_dtype=MPI_INT64_T;
-   else MPIGA_Error(" dtype_mpi: unable to map FORTINT ",dtype);
+   if (ppidd_fortint_size==4) mpi_dtype=MPI_INT32_T;
+   else mpi_dtype=MPI_INT64_T;
    break;
   case PPIDD_DOUBLE :
    mpi_dtype=MPI_DOUBLE;

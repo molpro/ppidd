@@ -8,8 +8,8 @@
       <type>void</type>
       <name>PPIDD_Initialize</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>ad0bac13ed66299b75b584da2c0963ee0</anchor>
-      <arglist>(int *argc, char ***argv, int impl)</arglist>
+      <anchor>a56405fe9fc0b7734c207445496eeb21a</anchor>
+      <arglist>(int *argc, char ***argv, int impl, int fortint_size)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -423,6 +423,13 @@
       <anchorfile>ppidd_8cpp.html</anchorfile>
       <anchor>a9dd05422e0e5ad25f0b535e30616742b</anchor>
       <arglist>(int code, char *message)</arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>ppidd_fortint_size</name>
+      <anchorfile>ppidd_8cpp.html</anchorfile>
+      <anchor>aae62167766a13581408398921632576d</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="file">

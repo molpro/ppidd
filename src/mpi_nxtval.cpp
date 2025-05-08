@@ -655,6 +655,7 @@ int NXTVAL(int mproc)
 */
 {
   int  type = NXTVALFLAG;
+  int  cnt;
   dataserver buf;
   int  local=0;
   MPI_Status status;
@@ -677,16 +678,16 @@ int NXTVAL(int mproc)
        else server = LastServerID();                 /* last server process */
 
        MPI_Send(&buf, 1, DATASERVER_MPI,  server, type, MPI_COMM_WORLD);
-       MPI_Recv(&buf, 1, DATASERVER_MPI,  server, type, MPI_COMM_WORLD, &status);
+       MPI_Recv(&cnt, 1, MPI_INT,  server, type, MPI_COMM_WORLD, &status);
        if (mproc == 0 && myid == 0 ) { /* rank(0) sends signal to terminate last server process if the last server process doesn't serve any compute process */
          if ( Nprocs_of_Server(LastServerID()) == 0 ) {
            server = LastServerID();                 /* last server process */
 	   buf = mproc;
            MPI_Send(&buf, 1, DATASERVER_MPI,  server, type, MPI_COMM_WORLD);
-           MPI_Recv(&buf, 1, DATASERVER_MPI,  server, type, MPI_COMM_WORLD, &status);
+           MPI_Recv(&cnt, 1, MPI_INT,  server, type, MPI_COMM_WORLD, &status);
          }
        }
-       return (int)buf;
+       return cnt;
     }
   }
   else {

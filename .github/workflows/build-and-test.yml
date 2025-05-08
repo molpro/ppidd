@@ -28,9 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-
       - name: Configure
         run: ./configure CXX=mpicxx --with-ga
 
@@ -56,9 +53,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
 
       - name: Configure
         run: ./configure CXX=mpicxx --with-mpi2
@@ -87,9 +81,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-
       - name: Configure
         run: ./configure
 
@@ -116,11 +107,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-
       - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DPPIDD-GA=ON
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DPPIDD-GA=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
@@ -143,11 +131,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DPPIDD-GA=OFF
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DPPIDD-GA=OFF
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}

@@ -3,6 +3,7 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
+#include <cassert>
 #ifdef HAVE_MPI_H
 #include <string>
 #include <mpi.h>
@@ -92,13 +93,13 @@ extern "C" {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Initialize(argc,argv,impl,fortint_size);
+      return ga_mpi::PPIDD_Initialize(argc,argv,impl,ppidd_fortint_size);
 #endif
      case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Initialize(argc,argv,impl,fortint_size);
+      return mpi2::PPIDD_Initialize(argc,argv,impl,ppidd_fortint_size);
 #endif
      default:
-      return no_mpi::PPIDD_Initialize(argc,argv,impl,fortint_size);
+      return no_mpi::PPIDD_Initialize(argc,argv,impl,ppidd_fortint_size);
     }
    }
 
@@ -195,6 +196,7 @@ extern "C" {
  *  - \b MPI2 always returns <tt>.true.</tt>
  */
    int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -389,6 +391,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
    void PPIDD_Send(void *buf,int count,int dtype,int dest,int sync) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -410,6 +413,7 @@ extern "C" {
  *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
    void PPIDD_Recv(void *buf,int count,int dtype,int source,int *lenreal,int *sourcereal,int sync) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -476,6 +480,7 @@ extern "C" {
  *  - \c dtype=0 : Fortran integer and logical types
  *  - \c dtype=1 : Fortran double precision type */
    void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -520,6 +525,7 @@ extern "C" {
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
    void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -544,6 +550,7 @@ extern "C" {
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
    int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -571,6 +578,7 @@ extern "C" {
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
    int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
+    assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

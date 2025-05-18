@@ -31,36 +31,23 @@ extern "C" {
 #include "mpi_utils.h"
 #include "ppidd_ga_mpi.h"
 
-extern int ppidd_fortint_size;
-
-static int dtype_ga(int dtype) {
- std::string errmsg;
- switch (dtype) {
-  case PPIDD_FORTINT :
-   if (ppidd_fortint_size==sizeof(int)) return MT_C_INT;
-   if (ppidd_fortint_size==sizeof(long)) return MT_C_LONGINT;
-   if (ppidd_fortint_size==sizeof(long long)) return MT_C_LONGLONG;
-   errmsg=" dtype_ga: unable to map PPIDD_FORTINT ";
-   GA_Error(&errmsg[0],dtype);
-   break;
-  case PPIDD_DOUBLE :
-   return MT_C_DBL;
-  case PPIDD_INT :
-   return MT_C_INT;
-  default:
-   errmsg=" dtype_ga: wrong data type ";
-   GA_Error(&errmsg[0],dtype);
- }
- return -1;
-}
-
 namespace ga_mpi {
 
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
+   static int dtype_map[3];
 
    void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     GA_Initialize_args(argc,argv);            /* initialize GA */
+    if (fortint_size==sizeof(int)) dtype_map[PPIDD_FORTINT] = MT_C_INT;
+    else if (fortint_size==sizeof(long)) dtype_map[PPIDD_FORTINT] = MT_C_LONGINT;
+    else if (fortint_size==sizeof(long long)) dtype_map[PPIDD_FORTINT] = MT_C_LONGLONG;
+    else {
+     std::string errmsg=" PPIDD_Initialize: unable to map PPIDD_FORTINT ";
+     GA_Error(&errmsg[0],fortint_size);
+    }
+    dtype_map[PPIDD_DOUBLE] = MT_C_DBL;
+    dtype_map[PPIDD_INT] = MT_C_INT;
    }
 
 
@@ -87,10 +74,7 @@ namespace ga_mpi {
 
 
    int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
-      Integer istack=(Integer)stack;
-      Integer iheap=(Integer)heap;
-      Integer gadtype=(Integer)dtype_ga(dtype);
-      if( MA_init(gadtype, istack, iheap)) return 1;
+      if( MA_init((Integer)dtype_map[dtype], (Integer)stack, (Integer)heap)) return 1;
       else return 0;
    }
 
@@ -274,8 +258,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
-      int gadtype=dtype_ga(dtype);
-      GA_Gop(gadtype, buffer, len, op);
+      GA_Gop(dtype_map[dtype], buffer, len, op);
    }
 
 
@@ -285,7 +268,6 @@ static int n_in_msg_mpiq=0;
       int np;
       int i;
       ga_int iad;
-      int gadtype=dtype_ga(dtype);
 
       ga_int block[1]={nblock};
       np = GA_Nnodes();
@@ -300,7 +282,7 @@ static int n_in_msg_mpiq=0;
       ga_int dims[1]={iad};
 
 /*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name,dims[1],ndim); */
-      *handle=NGA_CREATE_IRREG(gadtype, ndim, dims, name, block, &map[0]);
+      *handle=NGA_CREATE_IRREG(dtype_map[dtype], ndim, dims, name, block, &map[0]);
 
       return 1 ;
    }
@@ -308,13 +290,12 @@ static int n_in_msg_mpiq=0;
 
    int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       ga_int galentot=(ga_int)lentot;
-      int gadtype=dtype_ga(dtype);
 
       ga_int dims[1]={galentot};
       ga_int block[1]={-1};
 
 /*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name,*dims,ndim); */
-      *handle=NGA_CREATE(gadtype, 1, dims, name, block);
+      *handle=NGA_CREATE(dtype_map[dtype], 1, dims, name, block);
 
       return 1 ;
    }

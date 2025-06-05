@@ -424,13 +424,6 @@
       <anchor>a9dd05422e0e5ad25f0b535e30616742b</anchor>
       <arglist>(int code, char *message)</arglist>
     </member>
-    <member kind="variable">
-      <type>int</type>
-      <name>ppidd_fortint_size</name>
-      <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aae62167766a13581408398921632576d</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="file">
     <name>ppidd_doxygen.h</name>

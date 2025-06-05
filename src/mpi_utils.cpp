@@ -25,7 +25,6 @@ char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
 static int DEBUG_=0;
 
-extern int ppidd_fortint_size;
 MPI_Datatype dtype_mpi[3];
 
 /* Get the Total node number for specified communicator, and give whether all the nodes are symmetric(every node is the same) */
@@ -119,21 +118,6 @@ void mpi_test_status(const char *msg_str, int status)
        MPI_Error_string(status, mpi_test_err_string + len_msg_str, &len_err_str);
        MPIGA_Error(mpi_test_err_string, status);
     }
-}
-
-/*! \brief Return <tt>sizeof(dtype)</tt> */
-extern "C" size_t dtype_size(int dtype) {
- switch (dtype) {
-  case PPIDD_FORTINT :
-   return ppidd_fortint_size;
-  case PPIDD_DOUBLE :
-   return sizeof(double);
-  case PPIDD_INT :
-   return sizeof(int);
-  default:
-   MPIGA_Error(" dtype_size: wrong data type ",dtype);
- }
- return 0;
 }
 
 #else

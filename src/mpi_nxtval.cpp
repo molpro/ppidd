@@ -341,7 +341,7 @@ void DataHelperServer()
         if (ndone_crt == Nprocs_server) {
           nelem_helpga=(int)buf[1];
           dtype=dtype_mpi[ielem_cdtype];
-          sizeofdtype=dtype_size(ielem_cdtype);
+          MPI_Type_size( dtype, &sizeofdtype );
 
           /* create  a new structure */
           helpga =(MPIHELPGA)malloc( sizeof(struct STRUC_MPIHELPGA) );

@@ -36,7 +36,6 @@ extern "C" {
     extern int ProcID();
     extern void MPIGA_Error(const char *, int);
     extern void mpi_test_status(const char *, int);
-    extern size_t dtype_size(int);
 #ifdef __cplusplus
 }
 #endif

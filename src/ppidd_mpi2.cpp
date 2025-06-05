@@ -15,8 +15,6 @@
 #define   MPI_EAF_W  -2
 #define   MPI_EAF_R  -3
 
-extern int ppidd_fortint_size;
-
 namespace mpi2 {
 
    static int MPIGA_Debug=0;
@@ -37,11 +35,6 @@ namespace mpi2 {
     }
     dtype_mpi[PPIDD_DOUBLE] = MPI_DOUBLE;
     dtype_mpi[PPIDD_INT] = MPI_INT;
-    for (int i=PPIDD_FORTINT; i<=PPIDD_INT ; i++) {
-     int mpi_size;
-     MPI_Type_size(dtype_mpi[i],&mpi_size);
-     if (mpi_size != dtype_size(i)) MPIGA_Error(" PPIDD_Initialize: mapped data type wrong ", i);
-    }
    }
 
 
@@ -172,7 +165,9 @@ static int n_in_msg_mpiq=0;
       int mpitag=dtype;
       int mpierr;
 
-      int mpilenbuf = count * dtype_size(dtype);
+      int mpilenbuf;
+      MPI_Type_size( dtype_mpi[dtype], &mpilenbuf);
+      mpilenbuf *= count;
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
@@ -207,7 +202,9 @@ static int n_in_msg_mpiq=0;
       MPI_Status status;
       MPI_Request request;
 
-      int mpilenbuf = count * dtype_size(dtype);
+      int mpilenbuf;
+      MPI_Type_size( dtype_mpi[dtype], &mpilenbuf);
+      mpilenbuf *= count;
 
       if (source == -1)
          mpinode = MPI_ANY_SOURCE;
@@ -276,8 +273,10 @@ static int n_in_msg_mpiq=0;
 
    void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
       char *cbuf=(char *)buffer;
+      int dtype_size;
+      MPI_Type_size( dtype_mpi[dtype], &dtype_size);
       for (int64_t remaining=count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE) {
-       int mpierr=MPI_Bcast(&cbuf[addr*dtype_size(dtype)],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),dtype_mpi[dtype],root,mpiga_compute_comm());
+       int mpierr=MPI_Bcast(&cbuf[addr*dtype_size],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),dtype_mpi[dtype],root,mpiga_compute_comm());
        mpi_test_status("PPIDD_BCast:",mpierr);
       }
    }
@@ -420,7 +419,7 @@ static int n_in_msg_mpiq=0;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT32_T||dtype==MPI_INT64_T) ) { /* PPIDD_helpga_get_inum */
             val=twosided_helpga_one(mproc, 1, ielem, handle);
-            if (ppidd_fortint_size == 4) {
+            if (dtype==MPI_INT32_T) {
               int32_t *ibuff;
               ibuff=(int32_t *)buff;
               *ibuff=(int32_t)val;
@@ -460,7 +459,7 @@ static int n_in_msg_mpiq=0;
          MPI_Datatype dtype=twosided_helpga_inquire_dtype(handle);
          if ( (mpiilo==mpiihi) && (dtype==MPI_INT32_T||dtype==MPI_INT64_T) ) { /* PPIDD_helpga_put_inum */
             int64_t valput;
-            if (ppidd_fortint_size == 4) {
+            if (dtype==MPI_INT32_T) {
               int32_t *ibuff=(int32_t *)buff;
               valput=(int64_t)*ibuff;
 	    }

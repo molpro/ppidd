@@ -36,6 +36,7 @@ namespace ga_mpi {
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
    static int dtype_map[3];
+   static int dtype_size[3];
 
    void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     GA_Initialize_args(argc,argv);            /* initialize GA */
@@ -48,6 +49,9 @@ namespace ga_mpi {
     }
     dtype_map[PPIDD_DOUBLE] = MT_C_DBL;
     dtype_map[PPIDD_INT] = MT_C_INT;
+    dtype_size[PPIDD_FORTINT] = fortint_size;
+    dtype_size[PPIDD_DOUBLE] = sizeof(double);
+    dtype_size[PPIDD_INT] = sizeof(int);
    }
 
 
@@ -143,7 +147,7 @@ static int n_in_msg_mpiq=0;
       int mpitag=dtype;
       int mpierr;
 
-      int mpilenbuf = count * dtype_size(dtype);
+      int mpilenbuf = count * dtype_size[dtype];
 
       if (MPIGA_Debug) {
          printf("PPIDD_SEND: node %d sending to %d, len(bytes)=%d, mes tag=%d, sync=%d\n",
@@ -178,7 +182,7 @@ static int n_in_msg_mpiq=0;
       MPI_Status status;
       MPI_Request request;
 
-      int mpilenbuf = count * dtype_size(dtype);
+      int mpilenbuf = count * dtype_size[dtype];
 
       if (source == -1)
          mpinode = MPI_ANY_SOURCE;
@@ -248,7 +252,7 @@ static int n_in_msg_mpiq=0;
    void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
       char *cbuf=(char *)buffer;
       for (int64_t remaining=count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE)
-       GA_Brdcst(&cbuf[addr*dtype_size(dtype)], (int)(std::min((int64_t)BCAST_BATCH_SIZE,remaining)*dtype_size(dtype)) , root);
+       GA_Brdcst(&cbuf[addr*dtype_size[dtype]], (int)(std::min((int64_t)BCAST_BATCH_SIZE,remaining)*dtype_size[dtype]) , root);
    }
 
 

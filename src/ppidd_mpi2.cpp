@@ -30,6 +30,18 @@ namespace mpi2 {
    void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     int mpierr=mpiga_initialize(argc,argv);
     mpi_test_status("PPIDD_Initialize:",mpierr);
+    if (fortint_size==4) dtype_mpi[PPIDD_FORTINT] = MPI_INT32_T;
+    else if (fortint_size==8) dtype_mpi[PPIDD_FORTINT] = MPI_INT64_T;
+    else {
+     MPIGA_Error(" PPIDD_Initialize: unable to map PPIDD_FORTINT ", fortint_size);
+    }
+    dtype_mpi[PPIDD_DOUBLE] = MPI_DOUBLE;
+    dtype_mpi[PPIDD_INT] = MPI_INT;
+    for (int i=PPIDD_FORTINT; i<=PPIDD_INT ; i++) {
+     int mpi_size;
+     MPI_Type_size(dtype_mpi[i],&mpi_size);
+     if (mpi_size != dtype_size(i)) MPIGA_Error(" PPIDD_Initialize: mapped data type wrong ", i);
+    }
    }
 
 
@@ -263,12 +275,9 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_BCast(void *buffer,int count,int dtype,int root) {
-
-      MPI_Datatype mpidtype=dtype_mpi(dtype);
-
       char *cbuf=(char *)buffer;
       for (int64_t remaining=count, addr=0; remaining > 0; remaining-=(int64_t)BCAST_BATCH_SIZE, addr+=(int64_t)BCAST_BATCH_SIZE) {
-       int mpierr=MPI_Bcast(&cbuf[addr*dtype_size(dtype)],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),mpidtype,root,mpiga_compute_comm());
+       int mpierr=MPI_Bcast(&cbuf[addr*dtype_size(dtype)],(int)std::min((int64_t)BCAST_BATCH_SIZE,remaining),dtype_mpi[dtype],root,mpiga_compute_comm());
        mpi_test_status("PPIDD_BCast:",mpierr);
       }
    }
@@ -281,8 +290,7 @@ static int n_in_msg_mpiq=0;
 
 
    void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
-      MPI_Datatype mpidtype=dtype_mpi(dtype);
-      MPI_GSum(mpidtype, buffer, len, op);
+      MPI_GSum(dtype_mpi[dtype], buffer, len, op);
    }
 
 
@@ -292,7 +300,7 @@ static int n_in_msg_mpiq=0;
 
       std::vector<int> mpilenin(mpinchunk);
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
-      MPI_Datatype mpidtype=dtype_mpi(dtype);
+      MPI_Datatype mpidtype=dtype_mpi[dtype];
       if (use_helper_server==0) {
         mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, handle);
       }
@@ -318,7 +326,7 @@ static int n_in_msg_mpiq=0;
        exit(1);
       }
       else mpilentot=(int)lentot;
-      MPI_Datatype mpidtype=dtype_mpi(dtype);
+      MPI_Datatype mpidtype=dtype_mpi[dtype];
       if (use_helper_server==0) {
         mpierr=mpiga_create( name, mpilentot, mpidtype, handle );
       }

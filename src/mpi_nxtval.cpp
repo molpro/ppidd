@@ -340,7 +340,7 @@ void DataHelperServer()
         done_list_crt[ndone_crt++] = nodefrom;
         if (ndone_crt == Nprocs_server) {
           nelem_helpga=(int)buf[1];
-          dtype=dtype_mpi(ielem_cdtype);
+          dtype=dtype_mpi[ielem_cdtype];
           sizeofdtype=dtype_size(ielem_cdtype);
 
           /* create  a new structure */
@@ -899,7 +899,7 @@ ________________________________________________________________________________
 
     strcpy(helpganame=(char *)malloc(strlen(name)+1),name);
 
-    MPI_Datatype mpidtype=dtype_mpi(dtype);
+    MPI_Datatype mpidtype=dtype_mpi[dtype];
 
     helpga->name=helpganame;
     helpga->ptr_buf=NULL;

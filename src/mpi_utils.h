@@ -23,7 +23,7 @@
 #define TEST_ERR_STR_LEN (MSG_ERR_STR_LEN+MPI_MAX_ERROR_STRING)
 extern  char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
-
+extern MPI_Datatype dtype_mpi[3];
 
 /* =========================== *\
     mpi_utils Function Prototypes
@@ -36,7 +36,6 @@ extern "C" {
     extern int ProcID();
     extern void MPIGA_Error(const char *, int);
     extern void mpi_test_status(const char *, int);
-    extern MPI_Datatype dtype_mpi(int);
     extern size_t dtype_size(int);
 #ifdef __cplusplus
 }

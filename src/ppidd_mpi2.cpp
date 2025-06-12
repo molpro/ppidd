@@ -751,10 +751,10 @@ static int n_in_msg_mpiq=0;
 
 
    int PPIDD_Eaf_waitall(int *list, int num) {
-      MPI_Request *array_of_requests=(MPI_Request*)malloc(num*sizeof(MPI_Request));
-      MPI_Status *array_of_statuses=(MPI_Status*)malloc(num*sizeof(MPI_Status));
+      std::vector<MPI_Request> array_of_requests(num);
+      std::vector<MPI_Status> array_of_statuses(num);
       for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);
-      return MPI_Waitall(num,array_of_requests,array_of_statuses);
+      return MPI_Waitall(num,array_of_requests.data(),array_of_statuses.data());
    }
 
 
@@ -891,10 +891,10 @@ static int n_in_msg_mpiq=0;
 
 
    int PPIDD_Sf_waitall(int *list, int num) {
-      MPI_Request *array_of_requests=(MPI_Request*)malloc(num*sizeof(MPI_Request));
-      MPI_Status *array_of_statuses=(MPI_Status*)malloc(num*sizeof(MPI_Status));
+      std::vector<MPI_Request> array_of_requests(num);
+      std::vector<MPI_Status> array_of_statuses(num);
       for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);
-      return MPI_Waitall(num,array_of_requests,array_of_statuses);
+      return MPI_Waitall(num,array_of_requests.data(),array_of_statuses.data());
    }
 
 

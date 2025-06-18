@@ -20,6 +20,7 @@
 
 #include "mpi_utils.h"
 #include "ppidd.h"
+#include <vector>
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];
 
@@ -32,7 +33,6 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
 {
     int nprocs,rank,nnodes;
     char **nodename;
-    int *nprocs_node;
     int length;
     constexpr int max_length=256;
     int i,j,skip;
@@ -44,10 +44,9 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     nodename = (char **)malloc(nprocs * sizeof(char *));
     nodename[0] = (char*)malloc(nprocs * max_length);
     memset(nodename[0], 0, nprocs * max_length);
-    nprocs_node = (int *)malloc(nprocs * sizeof(int));
+    std::vector<int> nprocs_node(nprocs,0);
     for(i = 0; i < nprocs; i++) {
        nodename[i] = nodename[0] + i * max_length;
-       nprocs_node[i] = 0;
     }
     MPI_Get_processor_name(nodename[rank], &length);
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank],length);
@@ -76,7 +75,6 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
 
     free(nodename[0]);
     free(nodename);
-    free(nprocs_node);
 
     return(nnodes);
 }

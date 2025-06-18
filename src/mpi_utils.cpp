@@ -20,7 +20,6 @@
 
 #include "mpi_utils.h"
 #include "ppidd.h"
-#include <string>
 #include <vector>
 
 char  mpi_test_err_string[TEST_ERR_STR_LEN];

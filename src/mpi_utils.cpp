@@ -49,13 +49,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
        nodename[i] = nodename[0] + i * max_length;
        nprocs_node[i] = 0;
     }
-#ifdef __bg__
-    /* bug 4239 */
-    gethostname(nodename[rank],max_length);
-    length=strlen(nodename[rank]);
-#else
     MPI_Get_processor_name(nodename[rank], &length);
-#endif
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank],length);
 
     MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,

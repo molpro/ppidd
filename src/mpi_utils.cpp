@@ -32,7 +32,6 @@ MPI_Datatype dtype_mpi[3];
 int NNodes_Total(MPI_Comm comm, int *flag_sym)
 {
     int nprocs,rank,nnodes;
-    char **nodename;
     int length;
     constexpr int max_length=256;
     int i,j,skip;
@@ -41,7 +40,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     MPI_Comm_size(comm,&nprocs);
     MPI_Comm_rank(comm,&rank);
 
-    nodename = (char **)malloc(nprocs * sizeof(char *));
+    std::vector<char*> nodename(nprocs);
     nodename[0] = (char*)malloc(nprocs * max_length);
     memset(nodename[0], 0, nprocs * max_length);
     std::vector<int> nprocs_node(nprocs,0);
@@ -74,7 +73,6 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: nnodes=%d, symmetric=%d\n",rank,nnodes,sym);
 
     free(nodename[0]);
-    free(nodename);
 
     return(nnodes);
 }

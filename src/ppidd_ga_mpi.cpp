@@ -44,7 +44,7 @@ namespace ga_mpi {
     else if (fortint_size==sizeof(long long)) dtypes[PPIDD_FORTINT].id = MT_C_LONGLONG;
     else {
      std::string errmsg=" PPIDD_Initialize: unable to map PPIDD_FORTINT ";
-     GA_Error(&errmsg[0],fortint_size);
+     GA_Error(errmsg.data(),fortint_size);
     }
     dtypes[PPIDD_DOUBLE].id = MT_C_DBL;
     dtypes[PPIDD_INT].id = MT_C_INT;
@@ -285,7 +285,7 @@ static int n_in_msg_mpiq=0;
       ga_int dims[1]={iad};
 
 /*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name,dims[1],ndim); */
-      *handle=NGA_CREATE_IRREG(dtypes[dtype].id, ndim, dims, name, block, &map[0]);
+      *handle=NGA_CREATE_IRREG(dtypes[dtype].id, ndim, dims, name, block, map.data());
 
       return 1 ;
    }
@@ -336,7 +336,7 @@ static int n_in_msg_mpiq=0;
       std::vector<ga_int> mpimap(2*mpisize);
       std::vector<int> mpiproclist(mpisize);
 
-      *np=NGA_LOCATE_REGION(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0]);
+      *np=NGA_LOCATE_REGION(handle, mpiilo, mpiihi, mpimap.data(), mpiproclist.data());
 
       for (int i=0;i<*np;i++) {
          map[2*i]=(int64_t)(mpimap[2*i]+1);
@@ -410,7 +410,7 @@ static int n_in_msg_mpiq=0;
         //else if (! PPIDD_Nxtval_initialised) {
         /* first call needs to be collective and will return 0*/
 	std::string name="Nxtval";
-        PPIDD_Create(&name[0],1,PPIDD_INT,1,&PPIDD_Nxtval_handle);
+        PPIDD_Create(name.data(),1,PPIDD_INT,1,&PPIDD_Nxtval_handle);
         PPIDD_Zero(PPIDD_Nxtval_handle);
         PPIDD_Nxtval_initialised=1;
         return 0;

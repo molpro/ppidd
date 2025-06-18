@@ -75,7 +75,7 @@ extern "C" {
       int flag=0;
       int ret=MPI_Initialized(&flag);
       if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Initialized failed (%d)",ret); exit(1);}
-      if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(&msg[0],flag);}
+      if (flag) {std::string msg="MPI already initialized"; PPIDD_Error(msg.data(),flag);}
       ret=MPI_Init(argc, argv);
       if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Init failed (%d)",ret); exit(1);}
     }

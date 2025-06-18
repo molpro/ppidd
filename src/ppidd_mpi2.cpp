@@ -301,14 +301,14 @@ static int n_in_msg_mpiq=0;
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
       MPI_Datatype mpidtype=dtype_mpi[dtype];
       if (use_helper_server==0) {
-        mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, handle);
+        mpierr=mpiga_create_irreg(name, mpilenin.data(), mpinchunk, mpidtype, handle);
       }
       else {
         if (storetype==0)
-          mpierr=mpiga_create_irreg(name, &mpilenin[0], mpinchunk, mpidtype, handle);
+          mpierr=mpiga_create_irreg(name, mpilenin.data(), mpinchunk, mpidtype, handle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, &mpilenin[0], mpinchunk, handle, name, dtype);
+          mpierr=twosided_helpga_create_irreg(mproc, mpilenin.data(), mpinchunk, handle, name, dtype);
         }
       }
       if(mpierr==0) return 1 ;
@@ -389,10 +389,10 @@ static int n_in_msg_mpiq=0;
       std::vector<int> mpiproclist(mpisize);
 
       if ( mpiga_inquire_storetype(handle) == 0 ) {
-         mpierr=mpiga_location(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
+         mpierr=mpiga_location(handle, mpiilo, mpiihi, mpimap.data(), mpiproclist.data(), np);
       }
       else {
-         mpierr=twosided_helpga_location(handle, mpiilo, mpiihi, &mpimap[0], &mpiproclist[0], np);
+         mpierr=twosided_helpga_location(handle, mpiilo, mpiihi, mpimap.data(), mpiproclist.data(), np);
       }
 
       for (int i=0;i<*np;i++) {

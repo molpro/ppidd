@@ -32,11 +32,8 @@ MPI_Datatype dtype_mpi[3];
 /* Get the Total node number for specified communicator, and give whether all the nodes are symmetric(every node is the same) */
 int NNodes_Total(MPI_Comm comm, int *flag_sym)
 {
-    int nprocs,rank,nnodes;
-    int length;
+    int length, nprocs, rank;
     constexpr int max_length=256;
-    int i,j,skip;
-    int sym=1;
 
     MPI_Comm_size(comm,&nprocs);
     MPI_Comm_rank(comm,&rank);
@@ -48,19 +45,19 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
 
     MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, nodename[0].data(), max_length, MPI_CHAR, comm);
 
-    nnodes=1;
-    for(i = 0; i < nprocs; i++){
-       skip=0;
-       for(j = 0; j < nnodes; j++){
+    int nnodes=1;
+    for (int i = 0; i < nprocs; i++) {
+       int skip=0;
+       for (int j = 0; j < nnodes; j++) {
          if (nodename[i].compare(nodename[j]) == 0) skip=1;
        }
        if (skip==0) {nnodes+=1; nodename[nnodes-1] = nodename[i];}
        nprocs_node[nnodes-1]+=1;
     }
     /* determine whether all the nodes are symmetric */
-    if (nnodes==1) sym=1;
-    else {
-      for(j = 1; j < nnodes; j++){
+    int sym=1;
+    if (nnodes!=1) {
+      for (int j = 1; j < nnodes; j++) {
         if(nprocs_node[j] != nprocs_node[j-1]) {sym=0;break; }
       }
     }

@@ -38,20 +38,21 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     MPI_Comm_size(comm,&nprocs);
     MPI_Comm_rank(comm,&rank);
 
-    std::vector<std::string> nodename(nprocs,std::string(max_length,' '));
+    std::vector<char[max_length]> nodename(nprocs);
+    memset(nodename[0], 0, nprocs * max_length);
     std::vector<int> nprocs_node(nprocs,0);
-    MPI_Get_processor_name(nodename[rank].data(), &length);
-    if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank].c_str(),length);
+    MPI_Get_processor_name(&nodename[rank][0], &length);
+    if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank],length);
 
-    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, nodename[0].data(), max_length, MPI_CHAR, comm);
+    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, &nodename[0], max_length, MPI_CHAR, comm);
 
     int nnodes=1;
     for (int i = 0; i < nprocs; i++) {
        int skip=0;
        for (int j = 0; j < nnodes; j++) {
-         if (nodename[i].compare(nodename[j]) == 0) skip=1;
+	 if (strcmp(nodename[i],nodename[j])==0) skip=1;
        }
-       if (skip==0) {nnodes+=1; nodename[nnodes-1] = nodename[i];}
+       if (skip==0) {nnodes+=1;strcpy(nodename[nnodes-1],nodename[i]);}
        nprocs_node[nnodes-1]+=1;
     }
     /* determine whether all the nodes are symmetric */

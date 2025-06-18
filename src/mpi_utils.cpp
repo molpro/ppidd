@@ -64,7 +64,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     *flag_sym=sym;
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: nnodes=%d, symmetric=%d\n",rank,nnodes,sym);
 
-    return(nnodes);
+    return nnodes;
 }
 
 /* Get current calling process id */
@@ -73,7 +73,7 @@ int ProcID()
     int myid;
 
     MPI_Comm_rank(MPI_COMM_WORLD,&myid);
-    return(myid);
+    return myid;
 }
 
 

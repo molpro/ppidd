@@ -57,7 +57,7 @@ int TotalNumber_of_Servers()
       num=0;
     }
     if(DEBUG_) fprintf(stdout,"%5d: In TotalNumber_of_Servers: total servers=%d\n",ProcID(),num);
-    return (num);
+    return num;
 }
 
 /* Get the number of work/compute processes */
@@ -72,7 +72,7 @@ int NProcs_Work()
     else {
       if(DEBUG_) fprintf(stdout,"%5d: In NProcs_Work: helper server has not been defined, total procs=%d\n",ProcID(),numprocs);
     }
-    return(numprocs);
+    return numprocs;
 }
 
 /* Get the ID of NXTVAL server: always the last process */
@@ -94,7 +94,7 @@ int SerialNumber_of_Server(int rank_server)
     if (rank_server == numprocs-1 && numprocs % NPROCS_PER_HELPER!=0) num=(rank_server+1)/NPROCS_PER_HELPER;
     else num=(rank_server+1)/NPROCS_PER_HELPER -1;
     if(DEBUG_) fprintf(stdout,"%5d: In SerialNumber_of_Server: original rank=%d, SerialNumber=%d\n",ProcID(),rank_server,num);
-    return(num);
+    return num;
 }
 
 /* Get the original rank of server process with serial number[0, 1, ..., NUMBER_OF_SERVER-1] */
@@ -106,7 +106,7 @@ int RankNumber_of_Server(int rank_serial)
     if (rank_serial == NUMBER_OF_SERVER-1) num=numprocs-1;
     else num=(rank_serial+1)*NPROCS_PER_HELPER-1;
     if(DEBUG_) fprintf(stdout,"%5d: In RankNumber_of_Server: SerialNumber=%d, original rank=%d\n",ProcID(),rank_serial,num);
-    return(num);
+    return num;
 }
 
 /* Get the corresponding server rank(original) for a compute process(original)*/
@@ -119,7 +119,7 @@ int Server_of_Rank(int rank)
     server=(rank/NPROCS_PER_HELPER +1)*NPROCS_PER_HELPER-1;
     if (server > numprocs-1) server = numprocs-1;
     if(DEBUG_) fprintf(stdout,"%5d: In Server_of_Rank: work process rank=%d, server rank=%d\n",ProcID(),rank,server);
-    return(server);
+    return server;
 }
 
 /* Get the number of processes served by server process [rank_server] */
@@ -131,7 +131,7 @@ int Nprocs_of_Server(int rank_server)
     if (rank_server == numprocs-1 && numprocs % NPROCS_PER_HELPER != 0) num=numprocs % NPROCS_PER_HELPER -1;
     else  num=NPROCS_PER_HELPER-1;
     if(DEBUG_) fprintf(stdout,"%5d: In Nprocs_of_Server: server rank=%d, served work processes number=%d\n",ProcID(),rank_server,num);
-    return(num);
+    return num;
 }
 
 
@@ -143,7 +143,7 @@ int NewRank_of_OldRank(int rank)
 
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
     /* if numprocs==1, then rank_new=rank_old */
-    if ( numprocs == 1 ) return(rank);
+    if ( numprocs == 1 ) return rank;
     else {
       if ((rank+1)%NPROCS_PER_HELPER==0 || rank == numprocs-1 ) {
          fprintf(stderr,"%5d: In NewRank_of_OldRank: original process [ %5d ] served as a helper server.\n",ProcID(),rank);
@@ -151,7 +151,7 @@ int NewRank_of_OldRank(int rank)
       }
       else {
          rank_new=rank-rank/NPROCS_PER_HELPER;
-         return(rank_new);
+         return rank_new;
       }
     }
 }
@@ -165,7 +165,7 @@ int OldRank_of_NewRank(int rank)
 
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
     /* if numprocs==1, then rank_old=rank_new */
-    if ( numprocs == 1 ) return(rank);
+    if ( numprocs == 1 ) return rank;
     else {
       numprocs_work=numprocs-NUMBER_OF_SERVER;
       if(rank >  numprocs_work-1) {
@@ -174,7 +174,7 @@ int OldRank_of_NewRank(int rank)
       }
       else {
          rank_old=rank+rank/(NPROCS_PER_HELPER-1);
-         return(rank_old);
+         return rank_old;
       }
     }
 }
@@ -1604,7 +1604,7 @@ int twosided_helpga_handle_orig( int handle )
        exit (1);
     }
     if (DEBUG_) printf("%5d: twosided_helpga_handle_orig: end. handle=%d\n",ProcID(),handle);
-    return (handle_orig);
+    return handle_orig;
 }
 
 
@@ -1626,7 +1626,7 @@ MPI_Datatype twosided_helpga_inquire_dtype( int handle )
 
     if (DEBUG_) printf("%5d: twosided_helpga_inquire_dtype: end. handle=%d\n",ProcID(),handle);
 
-    return (mpidtype);
+    return mpidtype;
 }
 
 

@@ -356,7 +356,7 @@ size_t mpiga_localmem()
       }
     }
     sum=sum_mpiga+sum_helpga;
-    return(sum);
+    return sum;
 }
 
 
@@ -379,7 +379,7 @@ int mpiga_handle_orig( int handle )
        exit (1);
     }
     if (MPIGA_Debug) printf("%5d: In mpiga_handle_orig: end. handle=%d\n",ProcID(),handle);
-    return (handle_orig);
+    return handle_orig;
 }
 
 
@@ -417,7 +417,7 @@ int mpiga_inquire_storetype( int handle )
     else storetype=1;
 
    if (MPIGA_Debug) printf("%5d: In mpiga_inquire_storetype: end. handle=%d\n",ProcID(),handle);
-   return (storetype);
+   return storetype;
 }
 
 

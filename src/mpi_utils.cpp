@@ -37,13 +37,17 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     MPI_Comm_size(comm,&nprocs);
     MPI_Comm_rank(comm,&rank);
 
-    std::vector<char[max_length]> nodename(nprocs);
+    std::vector<char*> nodename(nprocs);
+    nodename[0] = (char*)malloc(nprocs * max_length);
     memset(nodename[0], 0, nprocs * max_length);
     std::vector<int> nprocs_node(nprocs,0);
-    MPI_Get_processor_name(&nodename[rank][0], &length);
+    for(int i = 0; i < nprocs; i++) {
+       nodename[i] = nodename[0] + i * max_length;
+    }
+    MPI_Get_processor_name(nodename[rank], &length);
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: procname=%s,strlen=%d\n",rank,nodename[rank],length);
 
-    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, &nodename[0], max_length, MPI_CHAR, comm);
+    MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, nodename[0], max_length, MPI_CHAR, comm);
 
     int nnodes=1;
     for (int i = 0; i < nprocs; i++) {
@@ -63,6 +67,8 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     }
     *flag_sym=sym;
     if(DEBUG_) fprintf(stdout,"%5d: In NNodes_Total: nnodes=%d, symmetric=%d\n",rank,nnodes,sym);
+
+    free(nodename[0]);
 
     return nnodes;
 }

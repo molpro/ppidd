@@ -21,6 +21,7 @@
 #include "mpi_nxtval.h"
 #include <string>
 #include <algorithm>
+#include <vector>
 
 mpiglobal_array_t *mpiga_main_data_structure=NULL, *MPIGAIndex;
 mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
@@ -267,34 +268,28 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
 }
 
 
-int mpiga_create( char *name, int lentot, MPI_Datatype datatype, int *handle )
-{
-    int      size,sizeoflen;
-    int      *len;
-    int      minlen,nbiglen,i;
-
+int mpiga_create( char *name, int lentot, MPI_Datatype datatype, int *handle ) {
+    int size, sizeoflen;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create begin.\n",ProcID());
     /* Determine size of MPIGA memory */
 
     MPI_Comm_size( MPIGA_WORK_COMM, &size );
 
-    minlen = lentot / size;
-    nbiglen= lentot % size;
+    int minlen = lentot / size;
+    int nbiglen= lentot % size;
 
     if (minlen==0) sizeoflen=lentot;
     else sizeoflen=size;
 
-    len= (int *)malloc( sizeoflen *sizeof( int) );
+    std::vector<int> len(sizeoflen);
 
-    for(i=0; i<sizeoflen; i++) {
+    for(int i=0; i<sizeoflen; i++) {
        if(i<nbiglen) len[i]=minlen+1;
        else len[i]=minlen;
     }
 
-    mpiga_create_irreg(name, len, sizeoflen, datatype, handle);
-
-    free(len);
+    mpiga_create_irreg(name, len.data(), sizeoflen, datatype, handle);
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create end. handle=%d, nprocs=%d\n",ProcID(),*handle,size);
 
@@ -629,11 +624,13 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     mpimutex_t mutex=NULL;
     int handle_orig;
     int len,ilen;
-    int is32int,is64int,isone;
     void *alphabuf=NULL;
-    int32_t *i32alphabuf=NULL,*i32tempbuf,*i32fac;
-    int64_t *i64alphabuf=NULL,*i64tempbuf,*i64fac;
-    double  *dalphabuf=NULL,*dtempbuf,*dfac;
+    int32_t *i32tempbuf,*i32fac;
+    int64_t *i64tempbuf,*i64fac;
+    double *dtempbuf,*dfac;
+    std::vector<int32_t> i32alphabuf;
+    std::vector<int64_t> i64alphabuf;
+    std::vector<double> dalphabuf;
     MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_acc: begin. handle=%d\n",ProcID(),handle);
@@ -645,42 +642,34 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 /*    size=mpigv(nprocs); */
 
     len=ihigh-ilo+1;
-    is32int=0;
-    is64int=0;
-    isone=1;
     if (ga->dtype==MPI_INT32_T) {
-       is32int=1;
        i32fac=(int32_t *)fac;
        if ((*i32fac)==(int32_t)1) alphabuf=buf;
        else {
-          isone=0;
           i32tempbuf=(int32_t *)buf;
-          i32alphabuf=(int32_t *)malloc(len*sizeof(int32_t));
+	  i32alphabuf.resize(len);
           for(i=0;i<len;i++)i32alphabuf[i]=(*i32fac)*i32tempbuf[i];
-          alphabuf=(void *)i32alphabuf;
+          alphabuf=(void *)i32alphabuf.data();
        }
     }
     else if (ga->dtype==MPI_INT64_T) {
-       is64int=1;
        i64fac=(int64_t *)fac;
        if ((*i64fac)==(int64_t)1) alphabuf=buf;
        else {
-          isone=0;
           i64tempbuf=(int64_t *)buf;
-          i64alphabuf=(int64_t *)malloc(len*sizeof(int64_t));
+	  i64alphabuf.resize(len);
           for(i=0;i<len;i++)i64alphabuf[i]=(*i64fac)*i64tempbuf[i];
-          alphabuf=(void *)i64alphabuf;
+          alphabuf=(void *)i64alphabuf.data();
        }
     }
     else if (ga->dtype==MPI_DOUBLE) {
        dfac=(double *)fac;
        if (std::fabs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-          isone=0;
           dtempbuf=(double *)buf;
-          dalphabuf=(double *)malloc(len*sizeof(double));
+	  dalphabuf.resize(len);
           for(i=0;i<len;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
-          alphabuf=(void *)dalphabuf;
+          alphabuf=(void *)dalphabuf.data();
        }
     }
     else {
@@ -732,11 +721,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
       MPIMUTEX_Unlock(mutex);
     }
 
-    if(!isone) {
-       if(is32int)free(i32alphabuf);
-       else if(is64int)free(i64alphabuf);
-       else free(dalphabuf);
-    }
     if (MPIGA_Debug) printf("%5d: In mpiga_acc end. handle=%d, ga_win=%12ld\n",ProcID(),handle,(long)ga->ga_win);
     return 0;
 }

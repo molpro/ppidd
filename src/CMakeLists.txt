@@ -95,6 +95,7 @@ else ()
     message(DEBUG "Not building Fortran")
 endif ()
 
+target_compile_features(ppidd PRIVATE cxx_std_17)
 target_compile_features(ppidd PRIVATE cxx_constexpr)
 target_compile_options(ppidd PRIVATE $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:AppleClang>>:-Wall>)
 target_compile_definitions(ppidd PRIVATE HAVE_MPI_H)

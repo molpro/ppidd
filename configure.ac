@@ -35,6 +35,9 @@ test "x${RANLIB}" = "x:" && RANLIB="true"
 AC_PROG_INSTALL()
 
 AC_PROG_CXX()
+dnl the following works around a bug in autoconf that incorrectly determines llvm not supporting C++11 by default. This should be
+dnl fixed in the next (2.73) release of autoconf and then this workaround can be removed.
+PPIDD_CXX_PP_TEST([if CXX is llvm],[defined(__clang__)],[CXX="$(echo ${CXX} | sed -e 's/ -std=gnu++11//')"])
 PPIDD_CXX_PP_TEST([if CXX is at least C++11 standard],[__cplusplus >= 201103L],,[AC_MSG_ERROR([require at least C++11 standard compiler])])
 
 if test "x${enable_nxtval}" = xno ; then

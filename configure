@@ -3464,6 +3464,35 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if CXX is llvm" >&5
+printf %s "checking if CXX is llvm... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+#if defined(__clang__)
+#else
+      choke me
+#endif
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+CXX="$(echo ${CXX} | sed -e 's/ -std=gnu++11//')"
+else case e in #(
+  e) { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+ ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if CXX is at least C++11 standard" >&5
 printf %s "checking if CXX is at least C++11 standard... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

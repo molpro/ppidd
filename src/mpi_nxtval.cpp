@@ -21,6 +21,7 @@
 #include "mpi_utils.h"
 #include "mpi_nxtval.h"
 #include <cmath>
+#include <vector>
 int mpiga_cleanup_finalize();
 
 /* twosided helpga global variables */
@@ -1521,52 +1522,44 @@ ________________________________________________________________________________
 void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void *buf, void *fac)
 {
     MPI_Datatype dtype;  /* MPI Datatype for helpga element */
-    int i,len;
-    int is32int,is64int,isone;
     void *alphabuf=NULL;
-    int32_t *i32alphabuf=NULL,*i32tempbuf=NULL,*i32fac=NULL;
-    int64_t *i64alphabuf=NULL,*i64tempbuf=NULL,*i64fac=NULL;
-    double  *dalphabuf=NULL,*dtempbuf=NULL,*dfac=NULL;
+    int32_t *i32tempbuf=NULL,*i32fac=NULL;
+    int64_t *i64tempbuf=NULL,*i64fac=NULL;
+    double *dtempbuf=NULL,*dfac=NULL;
+    std::vector<int32_t> i32alphabuf;
+    std::vector<int64_t> i64alphabuf;
+    std::vector<double> dalphabuf;
 
     if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: begin. handle=%d\n",ProcID(),handle);
     dtype=twosided_helpga_inquire_dtype(handle);
-    len=nelem;
-    is32int=0;
-    is64int=0;
-    isone=1;
     if (dtype==MPI_INT32_T) {
-       is32int=1;
        i32fac=(int32_t *)fac;
        if ((*i32fac)==(int32_t)1) alphabuf=buf;
        else {
-          isone=0;
           i32tempbuf=(int32_t *)buf;
-          i32alphabuf=(int32_t *)malloc(len*sizeof(int32_t));
-          for(i=0;i<len;i++)i32alphabuf[i]=(*i32fac)*i32tempbuf[i];
-          alphabuf=(void *)i32alphabuf;
+	  i32alphabuf.resize(nelem);
+          for (int i=0;i<nelem;i++)i32alphabuf[i]=(*i32fac)*i32tempbuf[i];
+          alphabuf=(void *)i32alphabuf.data();
        }
     }
     else if (dtype==MPI_INT64_T) {
-       is64int=1;
        i64fac=(int64_t *)fac;
        if ((*i64fac)==(int64_t)1) alphabuf=buf;
        else {
-          isone=0;
           i64tempbuf=(int64_t *)buf;
-          i64alphabuf=(int64_t *)malloc(len*sizeof(int64_t));
-          for(i=0;i<len;i++)i64alphabuf[i]=(*i64fac)*i64tempbuf[i];
-          alphabuf=(void *)i64alphabuf;
+	  i64alphabuf.resize(nelem);
+          for (int i=0;i<nelem;i++)i64alphabuf[i]=(*i64fac)*i64tempbuf[i];
+          alphabuf=(void *)i64alphabuf.data();
        }
     }
     else if (dtype==MPI_DOUBLE) {
        dfac=(double *)fac;
        if (std::abs((*dfac)-1.0e0)<1.0e-6) alphabuf=buf;
        else {
-          isone=0;
           dtempbuf=(double *)buf;
-          dalphabuf=(double *)malloc(len*sizeof(double));
-          for(i=0;i<len;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
-          alphabuf=(void *)dalphabuf;
+	  dalphabuf.resize(nelem);
+          for (int i=0;i<nelem;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
+          alphabuf=(void *)dalphabuf.data();
        }
     }
     else {
@@ -1574,12 +1567,6 @@ void twosided_helpga_extra_acc(int mproc, int nelem, int ielem, int handle, void
     }
 
     twosided_helpga_extra(mproc, nelem, ielem, handle, alphabuf);
-
-    if(!isone) {
-       if(is32int){free(i32alphabuf);i32alphabuf=NULL;}
-       else if(is64int){free(i64alphabuf);i64alphabuf=NULL;}
-       else {free(dalphabuf);dalphabuf=NULL;}
-    }
 
     if (DEBUG_) printf("%5d: twosided_helpga_extra_acc: end. handle=%d\n",ProcID(),handle);
 }

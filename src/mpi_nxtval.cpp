@@ -1319,7 +1319,6 @@ ________________________________________________________________________________
 {
   int  type = RMAETRFLAG;
   dataserver buf[4];
-  MPI_Request *requests2,*requests3;
   int  handle_orig;
   MPI_Datatype dtype;            /* MPI Datatype */
   int sizeofdtype;               /* Size of MPI Datatype */
@@ -1354,9 +1353,6 @@ ________________________________________________________________________________
      iserver_first=SerialNumber_of_Server(twosided_helpga_proclist[0]);
      for (lenleft=0,i=0;i<iserver_first;i++) lenleft=lenleft + len_help[i];
 
-     requests2 = (MPI_Request *)malloc(np_help*sizeof(MPI_Request));
-     requests3 = (MPI_Request *)malloc(np_help*sizeof(MPI_Request));
-
      if (mproc > 0 || mproc < 0) {
 /* mproc>0, accumulate a set of elements to helpga, here ensure it is an atomic operation */
 /* mproc<0, put a set of elements to helpga */
@@ -1378,6 +1374,9 @@ ________________________________________________________________________________
       }
       lenleft=lenleft_save;
      }
+
+     std::vector<MPI_Request> requests2(np_help);
+     std::vector<MPI_Request> requests3(np_help);
 
 /* get/put/accumulate the data from/to servers */
      for(i=0;i<np_help;i++) {
@@ -1414,14 +1413,12 @@ ________________________________________________________________________________
      }
 
      if (mproc == 0) { /* get */
-       MPI_Waitall(np_help, requests2, MPI_STATUSES_IGNORE);
+       MPI_Waitall(np_help, requests2.data(), MPI_STATUSES_IGNORE);
      }
      else { /* put and accumulate */
-       MPI_Waitall(np_help, requests2, MPI_STATUSES_IGNORE);
-       MPI_Waitall(np_help, requests3, MPI_STATUSES_IGNORE);
+       MPI_Waitall(np_help, requests2.data(), MPI_STATUSES_IGNORE);
+       MPI_Waitall(np_help, requests3.data(), MPI_STATUSES_IGNORE);
      }
-     if ( requests2 != NULL ) { free (requests2); requests2=NULL;}
-     if ( requests3 != NULL ) { free (requests3); requests3=NULL;}
    } /* end of use_helper_server loop */
   }
   else {

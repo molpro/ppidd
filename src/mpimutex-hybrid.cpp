@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include <assert.h>
+#include <vector>
 
 #define WAKEUP 13
 
@@ -148,18 +149,16 @@ int MPIMUTEX_Unlock(mpimutex_t mutex)
 {
     int mpi_err, i;
     unsigned char val = 0;
-    unsigned char *waitlistcopy;
 
     /* TODO: MOVE INTO INITIALIZE */
-    waitlistcopy = (unsigned char *)malloc(mutex->nprocs-1);
-    if (!waitlistcopy) goto err_return;
+    std::vector<unsigned char> waitlistcopy(mutex->nprocs-1);
 
     /* remove self from waitlist */
     mpi_err = MPI_Win_lock(MPI_LOCK_EXCLUSIVE, mutex->homerank, 0,
                            mutex->waitlistwin);
     if (mpi_err != MPI_SUCCESS) goto err_return;
 
-    mpi_err = MPI_Get(waitlistcopy, mutex->nprocs-1, MPI_BYTE,
+    mpi_err = MPI_Get(waitlistcopy.data(), mutex->nprocs-1, MPI_BYTE,
                       mutex->homerank, 0, 1, mutex->waitlisttype,
                       mutex->waitlistwin);
     if (mpi_err != MPI_SUCCESS) goto err_return;
@@ -206,13 +205,10 @@ int MPIMUTEX_Unlock(mpimutex_t mutex)
         if (mpi_err != MPI_SUCCESS) goto err_return;
     }
 
-    free(waitlistcopy);
-
     return MPI_SUCCESS;
 
  err_return:
     printf("error!\n");
-    if (waitlistcopy) free(waitlistcopy);
     return MPI_ERR_UNKNOWN;
 }
 

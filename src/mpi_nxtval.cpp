@@ -232,9 +232,6 @@ void DataHelperServer()
   int  ntermin=0;
   int  ndone_crt=0, ndone_rls=0, ndone_zero=0;
   int  ndone_mutex_alloc=0, ndone_mutex_free=0;
-  int  *done_list=NULL;       /* list of processes finished with this loop */
-  int  *done_list_crt=NULL,*done_list_rls=NULL,*done_list_zero=NULL;
-  int  *done_mutex_alloc=NULL,*done_mutex_free=NULL;
   int  nodefrom,nodefrom_tmp;
   int  rank_new,rank_next,rank_next_orig;
   int  i,j;
@@ -253,12 +250,12 @@ void DataHelperServer()
   totworkproc=NProcs_Work();
   Nprocs_server=Nprocs_of_Server(ProcID());
 
-  if (!done_list)      done_list     =(int *)malloc(totworkproc*sizeof(int));
-  if (!done_list_crt)  done_list_crt =(int *)malloc(Nprocs_server*sizeof(int));
-  if (!done_list_zero) done_list_zero=(int *)malloc(Nprocs_server*sizeof(int));
-  if (!done_list_rls)  done_list_rls =(int *)malloc(Nprocs_server*sizeof(int));
-  if (!done_mutex_alloc) done_mutex_alloc=(int *)malloc(totworkproc*sizeof(int));
-  if (!done_mutex_free) done_mutex_free=(int *)malloc(totworkproc*sizeof(int));
+  std::vector<int> done_list(totworkproc);
+  std::vector<int> done_list_crt(Nprocs_server);
+  std::vector<int> done_list_zero(Nprocs_server);
+  std::vector<int> done_list_rls(Nprocs_server);
+  std::vector<int> done_mutex_alloc(totworkproc);
+  std::vector<int> done_mutex_free(totworkproc);
 
   if (DEBUG_) printf("%5d: In mpi_nxtval: DataHelperServer before while loop. totworkproc=%5d, Nprocs_server=%5d\n",ProcID(),totworkproc,Nprocs_server);
 
@@ -293,13 +290,6 @@ void DataHelperServer()
             nodefrom_tmp = done_list[ntermin];
             MPI_Send(&cnt, 1, MPI_INT,  nodefrom_tmp, type_nxtval, MPI_COMM_WORLD);
           }
-          /* free the dynamically allocated memory on helper servers */
-          if (done_list_crt != NULL) {free (done_list_crt); done_list_crt=NULL;}
-          if (done_list_zero != NULL) {free (done_list_zero); done_list_zero=NULL;}
-          if (done_list_rls != NULL) { free (done_list_rls); done_list_rls=NULL; }
-          if (done_list != NULL) { free (done_list); done_list=NULL; }
-          if (done_mutex_alloc != NULL) { free (done_mutex_alloc); done_mutex_alloc=NULL; }
-          if (done_mutex_free != NULL) { free (done_mutex_free); done_mutex_free=NULL; }
           if (DEBUG_) printf("%5d: In mpi_nxtval: DataHelperServer: terminate DataHelperServer.\n",ProcID());
           return;
         }

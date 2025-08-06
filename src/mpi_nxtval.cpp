@@ -973,40 +973,38 @@ ________________________________________________________________________________
 --------------------------------------------------------------------------------------------------------
 */
 {
-    int  size,sizeoflen,minlen,nbiglen,i;
-    int  *len=NULL;                 /* size on each compute process */
+    int sizeoflen;
+    std::vector<int> len; /* size on each compute process */
 
     if (DEBUG_) printf("%5d: twosided_helpga_create: begin. mproc=%d, lentot=%d\n",ProcID(),mproc,lentot);
 
 /* calculate the number of elements for each compute process */
-    size=NProcs_Work();
+    int size=NProcs_Work();
 
     /* len: non-zero array that stores the number of elements on i-th compute process; sizeoflen: size of array len */
     /* if array is very small, then all elements are allocated on the first compute process */
     if (lentot <= HELPGA_LENTOT_SMALL_LIMIT) {
       sizeoflen=1;
-      len= (int *)malloc( sizeoflen *sizeof( int) );
+      len.resize(sizeoflen);
       len[0]=lentot;
     }
     /* if array is not small, then all elements are distributed evenly across the compute processes */
     else {
-      minlen = lentot / size;
-      nbiglen= lentot % size;
+      int minlen = lentot / size;
+      int nbiglen= lentot % size;
 
       if (minlen==0) sizeoflen=lentot;
       else sizeoflen=size;
 
-      len= (int *)malloc( sizeoflen *sizeof( int) );
+      len.resize(sizeoflen);
 
-      for(i=0; i<sizeoflen; i++) {
+      for(int i=0; i<sizeoflen; i++) {
          if(i<nbiglen) len[i]=minlen+1;
          else len[i]=minlen;
       }
     }
 
-    twosided_helpga_create_irreg(mproc, len, sizeoflen, handle, name, dtype);
-
-    free(len);
+    twosided_helpga_create_irreg(mproc, len.data(), sizeoflen, handle, name, dtype);
 
     if (DEBUG_) printf("%5d: twosided_helpga_create: end. mproc=%d, handle=%d\n",ProcID(),mproc,*handle);
 

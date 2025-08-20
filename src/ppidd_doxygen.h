@@ -42,7 +42,7 @@
 
 //   Some examples of building the PPIDD library:
  *    The following examples are tested on a x86_64//Linux machine on which Intel Fortran and C compilers,
- *    MPI2-aware Intel Fortran and C compilers, and Intel MPI library are available.
+ *    MPI-aware Intel Fortran and C compilers, and Intel MPI library are available.
  *    Please be aware the options might be different on other machines.
   <pre>
 

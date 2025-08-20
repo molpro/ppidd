@@ -10,7 +10,7 @@
 #endif
 #include "ppidd.h"
 #include "ppidd_ga_mpi.h"
-#include "ppidd_mpi2.h"
+#include "ppidd_mpi.h"
 #include "ppidd_no_mpi.h"
 
 /*! \file
@@ -19,7 +19,7 @@
 static const int ppidd_impl_default= PPIDD_IMPL_DEFAULT;
 static const int ppidd_impl_no_mpi = PPIDD_IMPL_NO_MPI;
 static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
-static const int ppidd_impl_mpi2   = PPIDD_IMPL_MPI2;
+static const int ppidd_impl_mpi    = PPIDD_IMPL_MPI2;
 
 static int ppidd_impl=ppidd_impl_default;
 
@@ -30,12 +30,12 @@ extern "C" {
 /*! \brief Initialize the PPIDD parallel environment
     \details
     - For \b GA, includes initialization of MPI and GA.
-    - For \b MPI2, calls MPI_Init. */
+    - For \b MPI, calls MPI_Init. */
    void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     int fortint_bytes;
     switch (impl) {
      case (ppidd_impl_ga_mpi):
-     case (ppidd_impl_mpi2):
+     case (ppidd_impl_mpi):
      case (ppidd_impl_no_mpi):
       break;
      default:
@@ -60,7 +60,7 @@ extern "C" {
 #ifdef HAVE_GA_H
      case (ppidd_impl_ga_mpi):
 #endif
-     case (ppidd_impl_mpi2):
+     case (ppidd_impl_mpi):
 #endif
      case (ppidd_impl_no_mpi):
       ppidd_impl=impl;
@@ -73,7 +73,7 @@ extern "C" {
 #ifdef HAVE_MPI_H
     switch (impl) {
      case (ppidd_impl_ga_mpi):
-     case (ppidd_impl_mpi2):
+     case (ppidd_impl_mpi):
       int flag=0;
       int ret=MPI_Initialized(&flag);
       if (ret != MPI_SUCCESS) {fprintf(stderr,"MPI_Initialized failed (%d)",ret); exit(1);}
@@ -86,7 +86,7 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       int size;
       MPI_Comm_size(MPI_COMM_WORLD, &size);
-      if (size == 1) ppidd_impl=ppidd_impl_mpi2; /* for single process switch to mpi2 version (because otherwise GA built with mpi-pr would fail) */
+      if (size == 1) ppidd_impl=ppidd_impl_mpi; /* for single process switch to mpi version (because otherwise GA built with mpi-pr would fail) */
     }
 #endif
 #endif
@@ -97,8 +97,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
 #endif
      default:
       return no_mpi::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
@@ -109,7 +109,7 @@ extern "C" {
 /*! Initialize the PPIDD data structure
  *
  *  - For \b GA, does nothing
- *  - For \b MPI2, Initialize global data structure and set helper server.
+ *  - For \b MPI, Initialize global data structure and set helper server.
  */
    void PPIDD_Initialize_data() {
     switch (ppidd_impl) {
@@ -118,8 +118,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Initialize_data();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Initialize_data();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Initialize_data();
 #endif
      default:
       return no_mpi::PPIDD_Initialize_data();
@@ -131,7 +131,7 @@ extern "C" {
  * For simplicity, the returned data type is set as integer. So for C calling, it may have to be converted
  * into MPI_Comm by MPI_Comm_f2c afterward if needed.
  *
- *  - For \b MPI2, Return communicator for worker process group.
+ *  - For \b MPI, Return communicator for worker process group.
  *  - For \b GA and serial cases, should not be called.
  */
    int PPIDD_Worker_comm() {
@@ -141,8 +141,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Worker_comm();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Worker_comm();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Worker_comm();
 #endif
      default:
       return no_mpi::PPIDD_Worker_comm();
@@ -153,7 +153,7 @@ extern "C" {
 /*! Terminate the PPIDD parallel environment.
  *
  *  - For \b GA, tidy up global arrays and MPI, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#TERMINATE
- *  - For \b MPI2, tidy up some associated resources and call MPI_Finalize.
+ *  - For \b MPI, tidy up some associated resources and call MPI_Finalize.
  */
    void PPIDD_Finalize() {
     switch (ppidd_impl) {
@@ -162,8 +162,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Finalize();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Finalize();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Finalize();
 #endif
      default:
       return no_mpi::PPIDD_Finalize();
@@ -174,7 +174,7 @@ extern "C" {
 /*  Detect whether MA is used for allocation of GA memory.
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#USES_MA
- *  - \b MPI2 always returns <tt>.false.</tt>
+ *  - \b MPI always returns <tt>.false.</tt>
  */
    int PPIDD_Uses_ma() {
     switch (ppidd_impl) {
@@ -183,8 +183,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Uses_ma();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Uses_ma();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Uses_ma();
 #endif
      default:
       return no_mpi::PPIDD_Uses_ma();
@@ -195,7 +195,7 @@ extern "C" {
 /*  Initialize the memory allocator.
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/ma/MAapi.html
- *  - \b MPI2 always returns <tt>.true.</tt>
+ *  - \b MPI always returns <tt>.true.</tt>
  */
    int PPIDD_MA_init(int dtype, int64_t stack, int64_t heap) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
@@ -205,8 +205,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_MA_init(dtype,stack,heap);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_MA_init(dtype,stack,heap);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_MA_init(dtype,stack,heap);
 #endif
      default:
       return no_mpi::PPIDD_MA_init(dtype,stack,heap);
@@ -221,7 +221,7 @@ extern "C" {
  * This is a local operation.
  *
  *  - \b GA calls GA_Wtime, which is available only in release 4.1 or greater, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#WTIME
- *  - \b MPI2 calls MPI_Wtime
+ *  - \b MPI calls MPI_Wtime
  */
    double PPIDD_Wtime() {
     switch (ppidd_impl) {
@@ -230,8 +230,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Wtime();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Wtime();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Wtime();
 #endif
      default:
       return no_mpi::PPIDD_Wtime();
@@ -242,7 +242,7 @@ extern "C" {
 /*! Print an error message and abort the program execution.
  *
  *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
- *  - For \b MPI2, prints error, and then calls MPI_Abort.
+ *  - For \b MPI, prints error, and then calls MPI_Abort.
  */
    void PPIDD_Error(char *message, int code) {
     switch (ppidd_impl) {
@@ -251,8 +251,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Error(message,code);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Error(message,code);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Error(message,code);
 #endif
      default:
       return no_mpi::PPIDD_Error(message,code);
@@ -270,8 +270,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Helper_server(flag,numprocs_per_server);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Helper_server(flag,numprocs_per_server);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Helper_server(flag,numprocs_per_server);
 #endif
      default:
       return no_mpi::PPIDD_Helper_server(flag,numprocs_per_server);
@@ -283,7 +283,7 @@ extern "C" {
  *
  *  - \b GA calls GA_Nnodes,
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
- *  - \b MPI2 calls MPI_Comm_size for communicator MPI_COMM_WORLD.
+ *  - \b MPI calls MPI_Comm_size for communicator MPI_COMM_WORLD.
  */
    int PPIDD_Size_all() {
     switch (ppidd_impl) {
@@ -292,8 +292,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Size_all();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Size_all();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Size_all();
 #endif
      default:
       return no_mpi::PPIDD_Size_all();
@@ -305,7 +305,7 @@ extern "C" {
  *
  *  - \b GA calls GA_Nnodes,
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES
- *  - \b MPI2 calls MPI_Comm_size for computational communicator.
+ *  - \b MPI calls MPI_Comm_size for computational communicator.
  */
    int PPIDD_Size() {
     switch (ppidd_impl) {
@@ -314,8 +314,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Size();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Size();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Size();
 #endif
      default:
       return no_mpi::PPIDD_Size();
@@ -327,7 +327,7 @@ extern "C" {
  *
  *  - \b GA calls GA_Nodeid,
  *  http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID
- *  - \b MPI2 calls MPI_Comm_rank in computational communicator.
+ *  - \b MPI calls MPI_Comm_rank in computational communicator.
  */
    int PPIDD_Rank() {
     switch (ppidd_impl) {
@@ -336,8 +336,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Rank();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Rank();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Rank();
 #endif
      default:
       return no_mpi::PPIDD_Rank();
@@ -348,7 +348,7 @@ extern "C" {
 /*! Initialize tracing of completion status of data movement operations.
  *
  *  - \b GA calls GA_Init_fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INIT_FENCE
- *  - \b MPI2 does nothing
+ *  - \b MPI does nothing
  */
    void PPIDD_Init_fence() {
     switch (ppidd_impl) {
@@ -357,8 +357,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Init_fence();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Init_fence();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Init_fence();
 #endif
      default:
       return no_mpi::PPIDD_Init_fence();
@@ -369,7 +369,7 @@ extern "C" {
 /*! Block the calling process until all data transfers complete.
  *
  *  - \b GA calls GA_Fence, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#FENCE
- *  - \b MPI2 does nothing
+ *  - \b MPI does nothing
  */
    void PPIDD_Fence() {
     switch (ppidd_impl) {
@@ -378,8 +378,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Fence();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Fence();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Fence();
 #endif
      default:
       return no_mpi::PPIDD_Fence();
@@ -390,7 +390,7 @@ extern "C" {
 /*! Blocking/nonblocking send.
  *
  *  - \b GA calls SND_.
- *  - \b MPI2 calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
+ *  - \b MPI calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0).
  */
    void PPIDD_Send(void *buf,int count,int dtype,int dest,int sync) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
@@ -400,8 +400,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Send(buf,count,dtype,dest,sync);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Send(buf,count,dtype,dest,sync);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Send(buf,count,dtype,dest,sync);
 #endif
      default:
       return no_mpi::PPIDD_Send(buf,count,dtype,dest,sync);
@@ -412,7 +412,7 @@ extern "C" {
 /*! Blocking/nonblocking receive.
  *
  *  - \b GA calls RCV_.
- *  - \b MPI2 calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
+ *  - \b MPI calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0).
  */
    void PPIDD_Recv(void *buf,int count,int dtype,int source,int *lenreal,int *sourcereal,int sync) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
@@ -422,8 +422,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
 #endif
      default:
       return no_mpi::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
@@ -433,7 +433,7 @@ extern "C" {
 
 /*! Wait for completion of all asynchronous send/receive.
  *
- *  - \b MPI2/GA_MPI calls MPI_Wait for all asynchronous requests.
+ *  - \b MPI/GA_MPI calls MPI_Wait for all asynchronous requests.
  */
    void PPIDD_Wait() {
     switch (ppidd_impl) {
@@ -442,8 +442,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Wait();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Wait();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Wait();
 #endif
      default:
       return no_mpi::PPIDD_Wait();
@@ -455,7 +455,7 @@ extern "C" {
  *
  *  Return <tt>.true.</tt> if the message is available, otherwise <tt>.false.</tt>.
  *
- *  - \b MPI2/GA_MPI calls MPI_Iprobe
+ *  - \b MPI/GA_MPI calls MPI_Iprobe
  */
    int PPIDD_Iprobe(int tag, int source) {
     switch (ppidd_impl) {
@@ -464,8 +464,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Iprobe(tag,source);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Iprobe(tag,source);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Iprobe(tag,source);
 #endif
      default:
       return no_mpi::PPIDD_Iprobe(tag,source);
@@ -477,7 +477,7 @@ extern "C" {
  *
  *  Collective operation.
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#BRDCST
- *  - \b MPI2 calls MPI_Bcast
+ *  - \b MPI calls MPI_Bcast
  *
  *  - \c dtype=0 : Fortran integer and logical types
  *  - \c dtype=1 : Fortran double precision type */
@@ -489,8 +489,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_BCast(buffer,count,dtype,root);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_BCast(buffer,count,dtype,root);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_BCast(buffer,count,dtype,root);
 #endif
      default:
       return no_mpi::PPIDD_BCast(buffer,count,dtype,root);
@@ -501,7 +501,7 @@ extern "C" {
 /*! Synchronize processes and ensure all have reached this routine.
  *
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#SYNC
- *  - \b MPI2 calls MPI_Barrier
+ *  - \b MPI calls MPI_Barrier
  */
    void PPIDD_Barrier() {
     switch (ppidd_impl) {
@@ -510,8 +510,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Barrier();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Barrier();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Barrier();
 #endif
      default:
       return no_mpi::PPIDD_Barrier();
@@ -522,7 +522,7 @@ extern "C" {
 /*! Combine values from all processes and distribute the result back to all processes.
  *
  *  - \b GA analogous to GA_dgop and GA_igop, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GOP
- *  - For \b MPI2, it is realized by MPI_Allreduce
+ *  - For \b MPI, it is realized by MPI_Allreduce
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
@@ -534,8 +534,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Gsum(dtype,buffer,len,op);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Gsum(dtype,buffer,len,op);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Gsum(dtype,buffer,len,op);
 #endif
      default:
       return no_mpi::PPIDD_Gsum(dtype,buffer,len,op);
@@ -559,8 +559,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
 #endif
      default:
       return no_mpi::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
@@ -576,7 +576,7 @@ extern "C" {
  *  - \c storetype>=1: Low-latency array stored on one or more helper processes (effective only when helper process is enabled). \c storetype is advisory: the underlying implementation will use up to \c storetype helpers.
 
  *  - For \b GA, storetype doesn't take effect, and data are always stored across the distributed processes, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE
- *  - For \b MPI2, the library can presently be built with zero or one (default) helpers.
+ *  - For \b MPI, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
    int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
@@ -587,8 +587,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Create(name,lentot,dtype,storetype,handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Create(name,lentot,dtype,storetype,handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Create(name,lentot,dtype,storetype,handle);
 #endif
      default:
       return no_mpi::PPIDD_Create(name,lentot,dtype,storetype,handle);
@@ -607,8 +607,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Destroy(handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Destroy(handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Destroy(handle);
 #endif
      default:
       return no_mpi::PPIDD_Destroy(handle);
@@ -629,8 +629,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Distrib(handle,rank,ilo,ihi);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Distrib(handle,rank,ilo,ihi);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Distrib(handle,rank,ilo,ihi);
 #endif
      default:
       return no_mpi::PPIDD_Distrib(handle,rank,ilo,ihi);
@@ -657,8 +657,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
 #endif
      default:
       return no_mpi::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
@@ -675,8 +675,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Get(handle,ilo,ihi,buff);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Get(handle,ilo,ihi,buff);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Get(handle,ilo,ihi,buff);
 #endif
      default:
       return no_mpi::PPIDD_Get(handle,ilo,ihi,buff);
@@ -692,8 +692,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Put(handle,ilo,ihi,buff);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Put(handle,ilo,ihi,buff);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Put(handle,ilo,ihi,buff);
 #endif
      default:
       return no_mpi::PPIDD_Put(handle,ilo,ihi,buff);
@@ -711,8 +711,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Acc(handle,ilo,ihi,buff,fac);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Acc(handle,ilo,ihi,buff,fac);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Acc(handle,ilo,ihi,buff,fac);
 #endif
      default:
       return no_mpi::PPIDD_Acc(handle,ilo,ihi,buff,fac);
@@ -731,8 +731,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Read_inc(handle,inum,incr);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Read_inc(handle,inum,incr);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Read_inc(handle,inum,incr);
 #endif
      default:
       return no_mpi::PPIDD_Read_inc(handle,inum,incr);
@@ -749,8 +749,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Zero_patch(handle,ilo,ihi);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Zero_patch(handle,ilo,ihi);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Zero_patch(handle,ilo,ihi);
 #endif
      default:
       return no_mpi::PPIDD_Zero_patch(handle,ilo,ihi);
@@ -767,8 +767,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Zero(handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Zero(handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Zero(handle);
 #endif
      default:
       return no_mpi::PPIDD_Zero(handle);
@@ -784,8 +784,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Nxtval(numproc);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Nxtval(numproc);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Nxtval(numproc);
 #endif
      default:
       return no_mpi::PPIDD_Nxtval(numproc);
@@ -803,8 +803,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Inquire_name(handle,name);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Inquire_name(handle,name);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Inquire_name(handle,name);
 #endif
      default:
       return no_mpi::PPIDD_Inquire_name(handle,name);
@@ -824,8 +824,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Inquire_stype(handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Inquire_stype(handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Inquire_stype(handle);
 #endif
      default:
       return no_mpi::PPIDD_Inquire_stype(handle);
@@ -842,8 +842,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Inquire_mem();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Inquire_mem();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Inquire_mem();
 #endif
      default:
       return no_mpi::PPIDD_Inquire_mem();
@@ -856,7 +856,7 @@ extern "C" {
  *  Returns <tt>.true.</tt> if the operation succeeded or <tt>.false.</tt> when failed. It is a collective operation.
 
  *  - For \b GA, \c storetype doesn't take effect, analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES
- *  - For \b MPI2, there are two kinds of mutexes:
+ *  - For \b MPI, there are two kinds of mutexes:
  *   - (1) \c storetype=0: mutex data will be stored by a global array across the distributed processes.
  *        Due to the poor performance of MPI-2 one-sided communication, this kind of mutex is very slow.
  *   - (2) \c storetype=1: mutex data will be stored on the helper process. Improve the performance of (1), and all communications are based on two-sided opeartions.
@@ -871,8 +871,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Create_mutexes(storetype,number);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Create_mutexes(storetype,number);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Create_mutexes(storetype,number);
 #endif
      default:
       return no_mpi::PPIDD_Create_mutexes(storetype,number);
@@ -889,8 +889,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Lock_mutex(inum);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Lock_mutex(inum);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Lock_mutex(inum);
 #endif
      default:
       return no_mpi::PPIDD_Lock_mutex(inum);
@@ -907,8 +907,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Unlock_mutex(inum);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Unlock_mutex(inum);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Unlock_mutex(inum);
 #endif
      default:
       return no_mpi::PPIDD_Unlock_mutex(inum);
@@ -926,8 +926,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Destroy_mutexes();
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Destroy_mutexes();
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Destroy_mutexes();
 #endif
      default:
       return no_mpi::PPIDD_Destroy_mutexes();
@@ -947,8 +947,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_open(name,type,handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_open(name,type,handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_open(name,type,handle);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_open(name,type,handle);
@@ -967,8 +967,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
@@ -988,8 +988,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
@@ -1008,8 +1008,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
@@ -1029,8 +1029,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
@@ -1052,8 +1052,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_wait(handle,request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_wait(handle,request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_wait(handle,request_id);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_wait(handle,request_id);
@@ -1072,8 +1072,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_waitall(list,num);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_waitall(list,num);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_waitall(list,num);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_waitall(list,num);
@@ -1096,8 +1096,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_probe(request_id,status);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_probe(request_id,status);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_probe(request_id,status);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_probe(request_id,status);
@@ -1117,8 +1117,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_close(handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_close(handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_close(handle);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_close(handle);
@@ -1138,8 +1138,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_delete(name);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_delete(name);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_delete(name);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_delete(name);
@@ -1159,8 +1159,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_length(handle,fsize);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_length(handle,fsize);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_length(handle,fsize);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_length(handle,fsize);
@@ -1181,8 +1181,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_truncate(handle,offset);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_truncate(handle,offset);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_truncate(handle,offset);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_truncate(handle,offset);
@@ -1203,8 +1203,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Eaf_errmsg(code,message);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Eaf_errmsg(code,message);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Eaf_errmsg(code,message);
 #endif
      default:
       return no_mpi::PPIDD_Eaf_errmsg(code,message);
@@ -1224,8 +1224,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
 #endif
      default:
       return no_mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
@@ -1245,8 +1245,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
 #endif
      default:
       return no_mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
@@ -1265,8 +1265,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
 #endif
      default:
       return no_mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
@@ -1285,8 +1285,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_wait(request_id);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_wait(request_id);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_wait(request_id);
 #endif
      default:
       return no_mpi::PPIDD_Sf_wait(request_id);
@@ -1305,8 +1305,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_waitall(list,num);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_waitall(list,num);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_waitall(list,num);
 #endif
      default:
       return no_mpi::PPIDD_Sf_waitall(list,num);
@@ -1325,8 +1325,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_destroy(handle);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_destroy(handle);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_destroy(handle);
 #endif
      default:
       return no_mpi::PPIDD_Sf_destroy(handle);
@@ -1348,8 +1348,8 @@ extern "C" {
      case (ppidd_impl_ga_mpi):
       return ga_mpi::PPIDD_Sf_errmsg(code,message);
 #endif
-     case (ppidd_impl_mpi2):
-      return mpi2::PPIDD_Sf_errmsg(code,message);
+     case (ppidd_impl_mpi):
+      return mpi::PPIDD_Sf_errmsg(code,message);
 #endif
      default:
       return no_mpi::PPIDD_Sf_errmsg(code,message);

@@ -39,7 +39,7 @@ jobs:
           make ${{ env.AUTOCONF_TEST_TARGET }} LIBS="-lga -larmci"
           mpiexec -np 4 test/ppidd_ctest.exe
 
-  autoconf_mpi2:
+  autoconf_mpi:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -116,7 +116,7 @@ jobs:
       - name: Test
         run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
 
-  cmake_mpi2:
+  cmake_mpi:
     runs-on: ubuntu-latest
     permissions:
       contents: write

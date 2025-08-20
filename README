@@ -14,7 +14,7 @@
     - If compiling Fortran interface, a Fortran compiler which supports
       Fortran 2003 Standard features
 
-    - An MPI2 library
+    - An MPI library
 
     OR
 

@@ -13,7 +13,7 @@ OBJECTS+=mpiga_base.o
 OBJECTS+=mpimutex-hybrid.o
 OBJECTS+=ppidd.o
 OBJECTS+=ppidd_ga_mpi.o
-OBJECTS+=ppidd_mpi2.o
+OBJECTS+=ppidd_mpi.o
 OBJECTS+=ppidd_no_mpi.o
 ifneq ($(FC),)
 OBJECTS+=ppidd_module.o

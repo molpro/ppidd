@@ -45,7 +45,7 @@ LibraryManager_Add(ppidd NAMESPACE ppidd)
 LibraryManager_Append(ppidd
         SOURCES
         ppidd.cpp
-        ppidd_mpi2.h ppidd_mpi2.cpp
+        ppidd_mpi.h ppidd_mpi.cpp
         ppidd_no_mpi.cpp
         mpi_utils.cpp mpiga_base.cpp
         mpi_nxtval.cpp mpimutex-hybrid.cpp mpi_helpmutex.cpp

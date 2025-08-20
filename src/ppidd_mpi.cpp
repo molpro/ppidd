@@ -10,19 +10,19 @@
 #include "mpiga_base.h"
 #include "mpi_nxtval.h"
 #include "mpi_utils.h"
-#include "ppidd_mpi2.h"
+#include "ppidd_mpi.h"
 #define   MPI_EAF_RW -1
 #define   MPI_EAF_W  -2
 #define   MPI_EAF_R  -3
 
 namespace ppidd {
-namespace mpi2 {
+namespace mpi {
 
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;
 
    [[ noreturn ]] static void do_not_call(const char* function) {
-    fprintf(stderr,"%s should not be called in mpi2 case\n",function);
+    fprintf(stderr,"%s should not be called in mpi case\n",function);
     exit(1);
    }
 

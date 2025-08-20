@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "ppidd_no_mpi.h"
 
+namespace ppidd {
 namespace no_mpi {
 
    [[ noreturn ]] static void do_not_call(const char* function) {
@@ -304,4 +305,5 @@ namespace no_mpi {
       do_not_call("PPIDD_Sf_errmsg");
    }
 
+}
 }

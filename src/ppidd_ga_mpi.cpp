@@ -31,6 +31,7 @@ extern "C" {
 #include "mpi_utils.h"
 #include "ppidd_ga_mpi.h"
 
+namespace ppidd {
 namespace ga_mpi {
 
    static int MPIGA_Debug=0;
@@ -581,5 +582,6 @@ static int n_in_msg_mpiq=0;
       SF_Errmsg(code, message);
    }
 
+}
 }
 #endif

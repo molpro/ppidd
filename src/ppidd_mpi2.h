@@ -3,7 +3,9 @@
 
 #include "ppidd_defines.h"
 
+namespace ppidd {
 namespace mpi2 {
 #include "ppidd_prototypes.h"
+}
 }
 #endif

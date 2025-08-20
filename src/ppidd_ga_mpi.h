@@ -3,7 +3,9 @@
 
 #include "ppidd_defines.h"
 
+namespace ppidd {
 namespace ga_mpi {
 #include "ppidd_prototypes.h"
+}
 }
 #endif

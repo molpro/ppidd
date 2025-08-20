@@ -15,6 +15,7 @@
 #define   MPI_EAF_W  -2
 #define   MPI_EAF_R  -3
 
+namespace ppidd {
 namespace mpi2 {
 
    static int MPIGA_Debug=0;
@@ -921,5 +922,6 @@ static int n_in_msg_mpiq=0;
       if(MPI_Debug)printf("In PPIDD_Sf_errmsg: message=%s\n",message);
    }
 
+}
 }
 #endif

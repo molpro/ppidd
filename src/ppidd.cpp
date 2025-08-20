@@ -23,6 +23,8 @@ static const int ppidd_impl_mpi2   = PPIDD_IMPL_MPI2;
 
 static int ppidd_impl=ppidd_impl_default;
 
+using namespace ppidd;
+
 extern "C" {
 
 /*! \brief Initialize the PPIDD parallel environment

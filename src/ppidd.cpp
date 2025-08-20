@@ -19,7 +19,7 @@
 static const int ppidd_impl_default= PPIDD_IMPL_DEFAULT;
 static const int ppidd_impl_no_mpi = PPIDD_IMPL_NO_MPI;
 static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
-static const int ppidd_impl_mpi    = PPIDD_IMPL_MPI2;
+static const int ppidd_impl_mpi    = PPIDD_IMPL_MPI;
 
 static int ppidd_impl=ppidd_impl_default;
 

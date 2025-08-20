@@ -26,7 +26,7 @@ AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interfac
 AC_SUBST(enable_fortran)
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
 AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
-AC_ARG_WITH(mpi2,[AS_HELP_STRING([--with-mpi2],[build using MPI])],,[with_mpi2="no"])
+AC_ARG_WITH(mpi,[AS_HELP_STRING([--with-mpi],[build using MPI])],,[with_mpi="no"])
 
 AC_CHECK_TOOL([AR], [ar])
 AC_SUBST(ARFLAGS,"-rS")
@@ -54,14 +54,14 @@ else
 FC=""
 fi
 
-if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
- AC_MSG_ERROR([both --with-ga and --with-mpi2 specified])
+if test "x${with_ga}" != xno && test "x${with_mpi}" != xno ; then
+ AC_MSG_ERROR([both --with-ga and --with-mpi specified])
 elif test "x${with_ga}" != xno ; then
  AC_MSG_NOTICE([PPIDD with Global Arrays])
  AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_GA_MPI)
-elif test "x${with_mpi2}" != xno ; then
- AC_MSG_NOTICE([PPIDD with MPI2])
- AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_MPI2)
+elif test "x${with_mpi}" != xno ; then
+ AC_MSG_NOTICE([PPIDD with MPI])
+ AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_MPI)
 else
  AC_MSG_NOTICE([PPIDD without MPI])
  AC_SUBST(PPIDD_IMPL_DEFAULT,[PPIDD_IMPL_NO_MPI])
@@ -73,7 +73,7 @@ if test "x${with_ga}" != xno ; then
  fi
  AC_CHECK_HEADERS([ga.h],,AC_MSG_ERROR([unable to locate ga.h header file]))
 fi
-if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
+if test "x${with_ga}" != xno || test "x${with_mpi}" != xno ; then
  PPIDD_CXX_PP_TEST([if CXX is intel],[defined(__INTEL_COMPILER)],[CPPFLAGS="${CPPFLAGS} -DMPICH_SKIP_MPICXX"])
  AC_CHECK_FUNC([MPI_Init],,AC_MSG_ERROR([unable to locate MPI library]))
  AC_CHECK_HEADERS([mpi.h],,AC_MSG_ERROR([unable to locate mpi.h header file]))

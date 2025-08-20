@@ -46,8 +46,8 @@
  *    Please be aware the options might be different on other machines.
   <pre>
 
-     1. Build MPI-2 version of PPIDD:
-     ./configure --with-mpi2
+     1. Build MPI version of PPIDD:
+     ./configure --with-mpi
 
      2. Build Global Arrays version of PPIDD.
      ./configure --with-ga=/path/to/ga-install/include

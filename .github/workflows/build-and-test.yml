@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: ./configure CXX=mpicxx --with-mpi2
+        run: ./configure CXX=mpicxx --with-mpi
 
       - name: Build
         run: make

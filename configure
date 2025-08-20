@@ -715,7 +715,7 @@ enable_option_checking
 enable_fortran
 with_ga
 enable_nxtval
-with_mpi2
+with_mpi
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1358,7 +1358,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-ga=PATH          build using Global Arrays, PATH is the location of
                           the GA include files
-  --with-mpi2             build using MPI
+  --with-mpi              build using MPI
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -2489,12 +2489,12 @@ esac
 fi
 
 
-# Check whether --with-mpi2 was given.
-if test ${with_mpi2+y}
+# Check whether --with-mpi was given.
+if test ${with_mpi+y}
 then :
-  withval=$with_mpi2;
+  withval=$with_mpi;
 else case e in #(
-  e) with_mpi2="no" ;;
+  e) with_mpi="no" ;;
 esac
 fi
 
@@ -3968,17 +3968,17 @@ else
 FC=""
 fi
 
-if test "x${with_ga}" != xno && test "x${with_mpi2}" != xno ; then
- as_fn_error $? "both --with-ga and --with-mpi2 specified" "$LINENO" 5
+if test "x${with_ga}" != xno && test "x${with_mpi}" != xno ; then
+ as_fn_error $? "both --with-ga and --with-mpi specified" "$LINENO" 5
 elif test "x${with_ga}" != xno ; then
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD with Global Arrays" >&5
 printf "%s\n" "$as_me: PPIDD with Global Arrays" >&6;}
  PPIDD_IMPL_DEFAULT=PPIDD_IMPL_GA_MPI
 
-elif test "x${with_mpi2}" != xno ; then
- { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD with MPI2" >&5
-printf "%s\n" "$as_me: PPIDD with MPI2" >&6;}
- PPIDD_IMPL_DEFAULT=PPIDD_IMPL_MPI2
+elif test "x${with_mpi}" != xno ; then
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD with MPI" >&5
+printf "%s\n" "$as_me: PPIDD with MPI" >&6;}
+ PPIDD_IMPL_DEFAULT=PPIDD_IMPL_MPI
 
 else
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD without MPI" >&5
@@ -4034,7 +4034,7 @@ fi
 
 done
 fi
-if test "x${with_ga}" != xno || test "x${with_mpi2}" != xno ; then
+if test "x${with_ga}" != xno || test "x${with_mpi}" != xno ; then
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if CXX is intel" >&5
 printf %s "checking if CXX is intel... " >&6; }

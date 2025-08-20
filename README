@@ -26,7 +26,7 @@
  2. Building the library
 
     By default configure will build the library for serial, one should
-    therefore specify --with-ga or --with-mpi2 to build a parallel
+    therefore specify --with-ga or --with-mpi to build a parallel
     interface. The normal autoconf influential variables can be used
     with configure, run ./configure --help for full details.
 

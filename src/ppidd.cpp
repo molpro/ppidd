@@ -9,7 +9,7 @@
 #include <mpi.h>
 #endif
 #include "ppidd.h"
-#include "ppidd_ga_mpi.h"
+#include "ppidd_ga.h"
 #include "ppidd_mpi.h"
 #include "ppidd_no_mpi.h"
 
@@ -18,7 +18,7 @@
 
 static const int ppidd_impl_default= PPIDD_IMPL_DEFAULT;
 static const int ppidd_impl_no_mpi = PPIDD_IMPL_NO_MPI;
-static const int ppidd_impl_ga_mpi = PPIDD_IMPL_GA_MPI;
+static const int ppidd_impl_ga     = PPIDD_IMPL_GA_MPI;
 static const int ppidd_impl_mpi    = PPIDD_IMPL_MPI;
 
 static int ppidd_impl=ppidd_impl_default;
@@ -34,7 +34,7 @@ extern "C" {
    void PPIDD_Initialize(int *argc, char ***argv, int impl, int fortint_size) {
     int fortint_bytes;
     switch (impl) {
-     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_ga):
      case (ppidd_impl_mpi):
      case (ppidd_impl_no_mpi):
       break;
@@ -58,7 +58,7 @@ extern "C" {
     switch (impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_ga):
 #endif
      case (ppidd_impl_mpi):
 #endif
@@ -72,7 +72,7 @@ extern "C" {
 
 #ifdef HAVE_MPI_H
     switch (impl) {
-     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_ga):
      case (ppidd_impl_mpi):
       int flag=0;
       int ret=MPI_Initialized(&flag);
@@ -83,7 +83,7 @@ extern "C" {
     }
 #ifdef HAVE_GA_H
     switch (impl) {
-     case (ppidd_impl_ga_mpi):
+     case (ppidd_impl_ga):
       int size;
       MPI_Comm_size(MPI_COMM_WORLD, &size);
       if (size == 1) ppidd_impl=ppidd_impl_mpi; /* for single process switch to mpi version (because otherwise GA built with mpi-pr would fail) */
@@ -94,8 +94,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Initialize(argc,argv,impl,fortint_bytes);
@@ -115,8 +115,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Initialize_data();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Initialize_data();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Initialize_data();
@@ -138,8 +138,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Worker_comm();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Worker_comm();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Worker_comm();
@@ -159,8 +159,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Finalize();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Finalize();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Finalize();
@@ -180,8 +180,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Uses_ma();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Uses_ma();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Uses_ma();
@@ -202,8 +202,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_MA_init(dtype,stack,heap);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_MA_init(dtype,stack,heap);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_MA_init(dtype,stack,heap);
@@ -227,8 +227,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Wtime();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Wtime();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Wtime();
@@ -248,8 +248,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Error(message,code);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Error(message,code);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Error(message,code);
@@ -267,8 +267,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Helper_server(flag,numprocs_per_server);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Helper_server(flag,numprocs_per_server);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Helper_server(flag,numprocs_per_server);
@@ -289,8 +289,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Size_all();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Size_all();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Size_all();
@@ -311,8 +311,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Size();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Size();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Size();
@@ -333,8 +333,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Rank();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Rank();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Rank();
@@ -354,8 +354,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Init_fence();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Init_fence();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Init_fence();
@@ -375,8 +375,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Fence();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Fence();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Fence();
@@ -397,8 +397,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Send(buf,count,dtype,dest,sync);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Send(buf,count,dtype,dest,sync);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Send(buf,count,dtype,dest,sync);
@@ -419,8 +419,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Recv(buf,count,dtype,source,lenreal,sourcereal,sync);
@@ -433,14 +433,14 @@ extern "C" {
 
 /*! Wait for completion of all asynchronous send/receive.
  *
- *  - \b MPI/GA_MPI calls MPI_Wait for all asynchronous requests.
+ *  - \b MPI/GA calls MPI_Wait for all asynchronous requests.
  */
    void PPIDD_Wait() {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Wait();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Wait();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Wait();
@@ -455,14 +455,14 @@ extern "C" {
  *
  *  Return <tt>.true.</tt> if the message is available, otherwise <tt>.false.</tt>.
  *
- *  - \b MPI/GA_MPI calls MPI_Iprobe
+ *  - \b MPI/GA calls MPI_Iprobe
  */
    int PPIDD_Iprobe(int tag, int source) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Iprobe(tag,source);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Iprobe(tag,source);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Iprobe(tag,source);
@@ -486,8 +486,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_BCast(buffer,count,dtype,root);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_BCast(buffer,count,dtype,root);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_BCast(buffer,count,dtype,root);
@@ -507,8 +507,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Barrier();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Barrier();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Barrier();
@@ -531,8 +531,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Gsum(dtype,buffer,len,op);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Gsum(dtype,buffer,len,op);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Gsum(dtype,buffer,len,op);
@@ -556,8 +556,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Create_irreg(name,lenin,nchunk,dtype,storetype,handle);
@@ -584,8 +584,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Create(name,lentot,dtype,storetype,handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Create(name,lentot,dtype,storetype,handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Create(name,lentot,dtype,storetype,handle);
@@ -604,8 +604,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Destroy(handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Destroy(handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Destroy(handle);
@@ -626,8 +626,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Distrib(handle,rank,ilo,ihi);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Distrib(handle,rank,ilo,ihi);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Distrib(handle,rank,ilo,ihi);
@@ -654,8 +654,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Location(handle,ilo,ihi,map,proclist,np);
@@ -672,8 +672,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Get(handle,ilo,ihi,buff);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Get(handle,ilo,ihi,buff);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Get(handle,ilo,ihi,buff);
@@ -689,8 +689,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Put(handle,ilo,ihi,buff);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Put(handle,ilo,ihi,buff);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Put(handle,ilo,ihi,buff);
@@ -708,8 +708,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Acc(handle,ilo,ihi,buff,fac);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Acc(handle,ilo,ihi,buff,fac);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Acc(handle,ilo,ihi,buff,fac);
@@ -728,8 +728,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Read_inc(handle,inum,incr);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Read_inc(handle,inum,incr);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Read_inc(handle,inum,incr);
@@ -746,8 +746,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Zero_patch(handle,ilo,ihi);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Zero_patch(handle,ilo,ihi);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Zero_patch(handle,ilo,ihi);
@@ -764,8 +764,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Zero(handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Zero(handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Zero(handle);
@@ -781,8 +781,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Nxtval(numproc);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Nxtval(numproc);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Nxtval(numproc);
@@ -800,8 +800,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Inquire_name(handle,name);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Inquire_name(handle,name);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Inquire_name(handle,name);
@@ -821,8 +821,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Inquire_stype(handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Inquire_stype(handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Inquire_stype(handle);
@@ -839,8 +839,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Inquire_mem();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Inquire_mem();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Inquire_mem();
@@ -868,8 +868,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Create_mutexes(storetype,number);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Create_mutexes(storetype,number);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Create_mutexes(storetype,number);
@@ -886,8 +886,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Lock_mutex(inum);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Lock_mutex(inum);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Lock_mutex(inum);
@@ -904,8 +904,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Unlock_mutex(inum);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Unlock_mutex(inum);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Unlock_mutex(inum);
@@ -923,8 +923,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Destroy_mutexes();
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Destroy_mutexes();
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Destroy_mutexes();
@@ -944,8 +944,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_open(name,type,handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_open(name,type,handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_open(name,type,handle);
@@ -964,8 +964,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_write(handle,byte_offset,buff,byte_length);
@@ -985,8 +985,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_awrite(handle,byte_offset,buff,byte_length,request_id);
@@ -1005,8 +1005,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_read(handle,byte_offset,buff,byte_length);
@@ -1026,8 +1026,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_aread(handle,byte_offset,buff,byte_length,request_id);
@@ -1049,8 +1049,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_wait(handle,request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_wait(handle,request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_wait(handle,request_id);
@@ -1069,8 +1069,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_waitall(list,num);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_waitall(list,num);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_waitall(list,num);
@@ -1093,8 +1093,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_probe(request_id,status);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_probe(request_id,status);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_probe(request_id,status);
@@ -1114,8 +1114,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_close(handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_close(handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_close(handle);
@@ -1135,8 +1135,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_delete(name);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_delete(name);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_delete(name);
@@ -1156,8 +1156,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_length(handle,fsize);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_length(handle,fsize);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_length(handle,fsize);
@@ -1178,8 +1178,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_truncate(handle,offset);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_truncate(handle,offset);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_truncate(handle,offset);
@@ -1200,8 +1200,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Eaf_errmsg(code,message);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Eaf_errmsg(code,message);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Eaf_errmsg(code,message);
@@ -1221,8 +1221,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_create(name,size_hard_limit,size_soft_limit,req_size,handle);
@@ -1242,8 +1242,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_write(handle,byte_offset,byte_length,buff,request_id);
@@ -1262,8 +1262,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_read(handle,byte_offset,byte_length,buff,request_id);
@@ -1282,8 +1282,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_wait(request_id);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_wait(request_id);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_wait(request_id);
@@ -1302,8 +1302,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_waitall(list,num);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_waitall(list,num);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_waitall(list,num);
@@ -1322,8 +1322,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_destroy(handle);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_destroy(handle);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_destroy(handle);
@@ -1345,8 +1345,8 @@ extern "C" {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
-     case (ppidd_impl_ga_mpi):
-      return ga_mpi::PPIDD_Sf_errmsg(code,message);
+     case (ppidd_impl_ga):
+      return ga::PPIDD_Sf_errmsg(code,message);
 #endif
      case (ppidd_impl_mpi):
       return mpi::PPIDD_Sf_errmsg(code,message);

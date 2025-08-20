@@ -29,10 +29,10 @@ extern "C" {
 #define NGA_ZERO_PATCH NGA_Zero_patch64
 
 #include "mpi_utils.h"
-#include "ppidd_ga_mpi.h"
+#include "ppidd_ga.h"
 
 namespace ppidd {
-namespace ga_mpi {
+namespace ga {
 
    static int MPIGA_Debug=0;
    static int MPI_Debug=0;

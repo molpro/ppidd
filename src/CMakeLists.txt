@@ -60,7 +60,7 @@ LibraryManager_AppendExternal(ppidd
         )
 target_compile_definitions(ppidd PRIVATE BCAST_BATCH_SIZE=134217728)
 if (PPIDD-GA)
-    LibraryManager_Append(ppidd SOURCES ppidd_ga_mpi.h ppidd_ga_mpi.cpp)
+    LibraryManager_Append(ppidd SOURCES ppidd_ga.h ppidd_ga.cpp)
     target_compile_definitions(ppidd PRIVATE HAVE_GA_H)
     if (NOT TARGET ga::ga)
         add_library(ga::ga ALIAS ga)

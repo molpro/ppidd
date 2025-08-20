@@ -75,7 +75,7 @@ $(function() {
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &quot;ppidd.h&quot;</code><br />
 <code>#include &quot;ppidd_ga_mpi.h&quot;</code><br />
-<code>#include &quot;ppidd_mpi2.h&quot;</code><br />
+<code>#include &quot;ppidd_mpi.h&quot;</code><br />
 <code>#include &quot;ppidd_no_mpi.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ppidd.cpp:</div>
@@ -88,8 +88,8 @@ Include dependency graph for ppidd.cpp:</div>
 <area shape="rect" title=" " alt="" coords="192,80,261,107"/>
 <area shape="rect" title=" " alt="" coords="286,80,357,107"/>
 <area shape="rect" title=" " alt="" coords="381,80,507,107"/>
-<area shape="rect" title=" " alt="" coords="531,80,642,107"/>
-<area shape="rect" title=" " alt="" coords="667,80,792,107"/>
+<area shape="rect" title=" " alt="" coords="531,80,634,107"/>
+<area shape="rect" title=" " alt="" coords="659,80,784,107"/>
 </map>
 </div>
 </div>
@@ -283,7 +283,7 @@ Functions</h2></td></tr>
 <p>Accumulate data into a section of a global array. </p>
 <p>Atomic operation. global array section (ilo, ihi) += *fac * buffer. Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ACC</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00705">705</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00707">707</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -304,10 +304,10 @@ Functions</h2></td></tr>
 <p>Synchronize processes and ensure all have reached this routine.</p>
 <ul>
 <li><b>GA</b> analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#SYNC">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#SYNC</a></li>
-<li><b>MPI2</b> calls MPI_Barrier </li>
+<li><b>MPI</b> calls MPI_Barrier </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00504">504</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00506">506</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -351,12 +351,12 @@ Functions</h2></td></tr>
 <p>Broadcast a message from the root process to all other processes.</p>
 <p>Collective operation.</p><ul>
 <li><b>GA</b> analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#BRDCST">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#BRDCST</a></li>
-<li><b>MPI2</b> calls MPI_Bcast</li>
+<li><b>MPI</b> calls MPI_Bcast</li>
 <li><code>dtype=0</code> : Fortran integer and logical types</li>
 <li><code>dtype=1</code> : Fortran double precision type </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00482">482</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00484">484</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -410,10 +410,10 @@ Functions</h2></td></tr>
 <li><code>storetype=0</code> : Normal distributed array stored across the distributed processes</li>
 <li><code>storetype&gt;=1</code>: Low-latency array stored on one or more helper processes (effective only when helper process is enabled). <code>storetype</code> is advisory: the underlying implementation will use up to <code>storetype</code> helpers.</li>
 <li>For <b>GA</b>, storetype doesn't take effect, and data are always stored across the distributed processes, analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE</a></li>
-<li>For <b>MPI2</b>, the library can presently be built with zero or one (default) helpers. When helper process is disabled, <code>storetype</code> doesn't take effect, and data are always stored across the distributed processes. </li>
+<li>For <b>MPI</b>, the library can presently be built with zero or one (default) helpers. When helper process is disabled, <code>storetype</code> doesn't take effect, and data are always stored across the distributed processes. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00580">580</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00582">582</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -473,7 +473,7 @@ Functions</h2></td></tr>
 <li><b>GA</b> analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG</a> </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00552">552</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00554">554</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -506,7 +506,7 @@ Functions</h2></td></tr>
 <p>Returns <code>.true.</code> if the operation succeeded or <code>.false.</code> when failed. It is a collective operation.</p>
 <ul>
 <li>For <b>GA</b>, <code>storetype</code> doesn't take effect, analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES</a></li>
-<li><p class="startli">For <b>MPI2</b>, there are two kinds of mutexes:</p><ul>
+<li><p class="startli">For <b>MPI</b>, there are two kinds of mutexes:</p><ul>
 <li>(1) <code>storetype=0</code>: mutex data will be stored by a global array across the distributed processes. Due to the poor performance of MPI-2 one-sided communication, this kind of mutex is very slow.</li>
 <li>(2) <code>storetype=1</code>: mutex data will be stored on the helper process. Improve the performance of (1), and all communications are based on two-sided opeartions.</li>
 </ul>
@@ -514,7 +514,7 @@ Functions</h2></td></tr>
 </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00865">865</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00867">867</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -538,7 +538,7 @@ Functions</h2></td></tr>
 <li><b>GA</b> analogous <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY</a> </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00601">601</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00603">603</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -561,7 +561,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>1 if the operation succeeded or 0 when failed.</dd></dl>
 <p>This is a collective operation. Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00920">920</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00922">922</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -607,7 +607,7 @@ Functions</h2></td></tr>
 <li><b>GA</b> analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#DISTRIBUTION</a> </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00623">623</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00625">625</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -655,7 +655,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01023">1023</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01025">1025</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -703,7 +703,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00982">982</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00984">984</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -723,7 +723,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01111">1111</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01113">1113</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -743,7 +743,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01132">1132</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01134">1134</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -773,7 +773,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01197">1197</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01199">1199</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -803,7 +803,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01153">1153</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01155">1155</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -839,7 +839,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00941">941</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00943">943</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -869,7 +869,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01090">1090</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01092">1092</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -911,7 +911,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01002">1002</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01004">1004</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -941,7 +941,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01175">1175</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01177">1177</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -971,7 +971,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01046">1046</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01048">1048</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1001,7 +1001,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01066">1066</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01068">1068</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1043,7 +1043,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00961">961</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00963">963</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1075,10 +1075,10 @@ Functions</h2></td></tr>
 <p>Print an error message and abort the program execution.</p>
 <ul>
 <li><b>GA</b> calls GA_Error, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR</a></li>
-<li>For <b>MPI2</b>, prints error, and then calls MPI_Abort. </li>
+<li>For <b>MPI</b>, prints error, and then calls MPI_Abort. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00245">245</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00247">247</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1099,10 +1099,10 @@ Functions</h2></td></tr>
 <p>Block the calling process until all data transfers complete.</p>
 <ul>
 <li><b>GA</b> calls GA_Fence, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#FENCE">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#FENCE</a></li>
-<li><b>MPI2</b> does nothing </li>
+<li><b>MPI</b> does nothing </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00372">372</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00374">374</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1123,10 +1123,10 @@ Functions</h2></td></tr>
 <p>Terminate the PPIDD parallel environment.</p>
 <ul>
 <li>For <b>GA</b>, tidy up global arrays and MPI, analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#TERMINATE">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#TERMINATE</a></li>
-<li>For <b>MPI2</b>, tidy up some associated resources and call MPI_Finalize. </li>
+<li>For <b>MPI</b>, tidy up some associated resources and call MPI_Finalize. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00156">156</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00158">158</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1171,7 +1171,7 @@ Functions</h2></td></tr>
 <p>Copies data from array section to the local array buffer according to starting and ending index. </p>
 <p>analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GET</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00669">669</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00671">671</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1215,12 +1215,12 @@ Functions</h2></td></tr>
 <p>Combine values from all processes and distribute the result back to all processes.</p>
 <ul>
 <li><b>GA</b> analogous to GA_dgop and GA_igop, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GOP">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#GOP</a></li>
-<li>For <b>MPI2</b>, it is realized by MPI_Allreduce</li>
+<li>For <b>MPI</b>, it is realized by MPI_Allreduce</li>
 <li><code>type=0</code> : Fortran Integer</li>
 <li><code>type=1</code> : Fortran Double Precision </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00527">527</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00529">529</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1252,7 +1252,7 @@ Functions</h2></td></tr>
 <p>Set the flag for data helper server and set the number of how many processes own one helper server</p>
 <p>Set the helper_server flag: 1 (use); 0 (don't use). </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00264">264</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00266">266</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1273,10 +1273,10 @@ Functions</h2></td></tr>
 <p>Initialize tracing of completion status of data movement operations.</p>
 <ul>
 <li><b>GA</b> calls GA_Init_fence, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INIT_FENCE">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INIT_FENCE</a></li>
-<li><b>MPI2</b> does nothing </li>
+<li><b>MPI</b> does nothing </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00351">351</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00353">353</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1321,10 +1321,10 @@ Functions</h2></td></tr>
 <p>Initialize the PPIDD parallel environment. </p>
 <ul>
 <li>For <b>GA</b>, includes initialization of MPI and GA.</li>
-<li>For <b>MPI2</b>, calls MPI_Init. </li>
+<li>For <b>MPI</b>, calls MPI_Init. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00032">32</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00034">34</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1345,10 +1345,10 @@ Functions</h2></td></tr>
 <p>Initialize the PPIDD data structure</p>
 <ul>
 <li>For <b>GA</b>, does nothing</li>
-<li>For <b>MPI2</b>, Initialize global data structure and set helper server. </li>
+<li>For <b>MPI</b>, Initialize global data structure and set helper server. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00112">112</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00114">114</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1370,7 +1370,7 @@ Functions</h2></td></tr>
 <p>Get the amount of memory (in bytes) used in the allocated distributed arrays on the calling processor. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00836">836</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00838">838</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1403,7 +1403,7 @@ Functions</h2></td></tr>
 <p>Returns the name of a global array represented by the handle. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME</a> This operation is local. </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00797">797</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00799">799</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1423,7 +1423,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00818">818</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00820">820</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1455,10 +1455,10 @@ Functions</h2></td></tr>
 <p>Detect whether a message of the specified type is available.</p>
 <p>Return <code>.true.</code> if the message is available, otherwise <code>.false.</code>.</p>
 <ul>
-<li><b>MPI2/GA_MPI</b> calls MPI_Iprobe </li>
+<li><b>MPI/GA_MPI</b> calls MPI_Iprobe </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00458">458</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00460">460</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1527,7 +1527,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00645">645</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00647">647</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1550,7 +1550,7 @@ Functions</h2></td></tr>
 <p>Lock a mutex object identified by a given mutex number. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00883">883</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00885">885</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1586,7 +1586,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00198">198</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00200">200</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1609,7 +1609,7 @@ Functions</h2></td></tr>
 <p>Get the next shared counter number(helper process should be enabled). </p>
 <p>Increment a counter by 1 and returns the counter value (0, 1, ...). </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00778">778</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00780">780</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1654,7 +1654,7 @@ Functions</h2></td></tr>
 <p>Put local buffer data into a section of a global array according to starting and ending index. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#PUT</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00686">686</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00688">688</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1675,10 +1675,10 @@ Functions</h2></td></tr>
 <p>Determine the rank of the calling process.</p>
 <ul>
 <li><b>GA</b> calls GA_Nodeid, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NODEID</a></li>
-<li><b>MPI2</b> calls MPI_Comm_rank in computational communicator. </li>
+<li><b>MPI</b> calls MPI_Comm_rank in computational communicator. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00330">330</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00332">332</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1717,7 +1717,7 @@ Functions</h2></td></tr>
 <p>Atomically read and increment an element in an integer array. </p>
 <p>Reads data from the (inum) element of a global array of integers, returns that value, and increments the (inum) element by a given increment. This is a fetch-and-add operation. Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#READ_INC</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00725">725</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00727">727</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1779,10 +1779,10 @@ Functions</h2></td></tr>
 <p>Blocking/nonblocking receive.</p>
 <ul>
 <li><b>GA</b> calls RCV_.</li>
-<li><b>MPI2</b> calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0). </li>
+<li><b>MPI</b> calls MPI_Recv ( sync is 1) or MPI_Irecv( sync is 0). </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00415">415</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00417">417</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1832,10 +1832,10 @@ Functions</h2></td></tr>
 <p>Blocking/nonblocking send.</p>
 <ul>
 <li><b>GA</b> calls SND_.</li>
-<li><b>MPI2</b> calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0). </li>
+<li><b>MPI</b> calls MPI_Send ( sync is 1) or MPI_Isend ( sync is 0). </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00393">393</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00395">395</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1883,7 +1883,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01218">1218</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01220">1220</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +1903,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01319">1319</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01321">1321</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1933,7 +1933,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01342">1342</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01344">1344</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -1981,7 +1981,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01259">1259</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01261">1261</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2001,7 +2001,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01279">1279</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01281">1281</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2031,7 +2031,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01299">1299</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01301">1301</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2079,7 +2079,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01239">1239</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l01241">1241</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2098,7 +2098,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00308">308</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00310">310</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2119,10 +2119,10 @@ Functions</h2></td></tr>
 <p>Determine the total number of processes available (including helper process if there is one).</p>
 <ul>
 <li><b>GA</b> calls GA_Nnodes, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#NNODES</a></li>
-<li><b>MPI2</b> calls MPI_Comm_size for communicator MPI_COMM_WORLD. </li>
+<li><b>MPI</b> calls MPI_Comm_size for communicator MPI_COMM_WORLD. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00286">286</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00288">288</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2145,7 +2145,7 @@ Functions</h2></td></tr>
 <p>Unlock a mutex object identified by a given mutex number. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00901">901</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00903">903</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2164,7 +2164,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00177">177</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00179">179</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2184,10 +2184,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Wait for completion of all asynchronous send/receive.</p>
 <ul>
-<li><b>MPI2/GA_MPI</b> calls MPI_Wait for all asynchronous requests. </li>
+<li><b>MPI/GA_MPI</b> calls MPI_Wait for all asynchronous requests. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00436">436</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00438">438</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2207,11 +2207,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Return communicator for worker process group, which excludes any helper process. For simplicity, the returned data type is set as integer. So for C calling, it may have to be converted into MPI_Comm by MPI_Comm_f2c afterward if needed.</p>
 <ul>
-<li>For <b>MPI2</b>, Return communicator for worker process group.</li>
+<li>For <b>MPI</b>, Return communicator for worker process group.</li>
 <li>For <b>GA</b> and serial cases, should not be called. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00135">135</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00137">137</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2233,10 +2233,10 @@ Functions</h2></td></tr>
 <p>Returns a floating-point number of seconds, representing elapsed wall-clock time since an arbitrary time in the past. The times returned are local to the node that called them. There is no requirement that different nodes return the same time. This is a local operation.</p>
 <ul>
 <li><b>GA</b> calls GA_Wtime, which is available only in release 4.1 or greater, <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#WTIME">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#WTIME</a></li>
-<li><b>MPI2</b> calls MPI_Wtime </li>
+<li><b>MPI</b> calls MPI_Wtime </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00224">224</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00226">226</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2259,7 +2259,7 @@ Functions</h2></td></tr>
 <p>Set all the elements of a global data structure to zero. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00761">761</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00763">763</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>
@@ -2298,7 +2298,7 @@ Functions</h2></td></tr>
 <p>Set all the elements in an array patch to zero. </p>
 <p>Analogous to <a href="http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH">http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ZERO_PATCH</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00743">743</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00745">745</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
 
 </div>
 </div>

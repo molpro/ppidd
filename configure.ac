@@ -58,7 +58,7 @@ if test "x${with_ga}" != xno && test "x${with_mpi}" != xno ; then
  AC_MSG_ERROR([both --with-ga and --with-mpi specified])
 elif test "x${with_ga}" != xno ; then
  AC_MSG_NOTICE([PPIDD with Global Arrays])
- AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_GA_MPI)
+ AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_GA)
 elif test "x${with_mpi}" != xno ; then
  AC_MSG_NOTICE([PPIDD with MPI])
  AC_SUBST(PPIDD_IMPL_DEFAULT,PPIDD_IMPL_MPI)

@@ -3973,7 +3973,7 @@ if test "x${with_ga}" != xno && test "x${with_mpi}" != xno ; then
 elif test "x${with_ga}" != xno ; then
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD with Global Arrays" >&5
 printf "%s\n" "$as_me: PPIDD with Global Arrays" >&6;}
- PPIDD_IMPL_DEFAULT=PPIDD_IMPL_GA_MPI
+ PPIDD_IMPL_DEFAULT=PPIDD_IMPL_GA
 
 elif test "x${with_mpi}" != xno ; then
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: PPIDD with MPI" >&5

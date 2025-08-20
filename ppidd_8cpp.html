@@ -74,7 +74,7 @@ $(function() {
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &quot;ppidd.h&quot;</code><br />
-<code>#include &quot;ppidd_ga_mpi.h&quot;</code><br />
+<code>#include &quot;ppidd_ga.h&quot;</code><br />
 <code>#include &quot;ppidd_mpi.h&quot;</code><br />
 <code>#include &quot;ppidd_no_mpi.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -87,9 +87,9 @@ Include dependency graph for ppidd.cpp:</div>
 <area shape="rect" title=" " alt="" coords="97,80,167,107"/>
 <area shape="rect" title=" " alt="" coords="192,80,261,107"/>
 <area shape="rect" title=" " alt="" coords="286,80,357,107"/>
-<area shape="rect" title=" " alt="" coords="381,80,507,107"/>
-<area shape="rect" title=" " alt="" coords="531,80,634,107"/>
-<area shape="rect" title=" " alt="" coords="659,80,784,107"/>
+<area shape="rect" title=" " alt="" coords="381,80,475,107"/>
+<area shape="rect" title=" " alt="" coords="499,80,602,107"/>
+<area shape="rect" title=" " alt="" coords="627,80,752,107"/>
 </map>
 </div>
 </div>
@@ -1455,7 +1455,7 @@ Functions</h2></td></tr>
 <p>Detect whether a message of the specified type is available.</p>
 <p>Return <code>.true.</code> if the message is available, otherwise <code>.false.</code>.</p>
 <ul>
-<li><b>MPI/GA_MPI</b> calls MPI_Iprobe </li>
+<li><b>MPI/GA</b> calls MPI_Iprobe </li>
 </ul>
 
 <p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00460">460</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>
@@ -2184,7 +2184,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Wait for completion of all asynchronous send/receive.</p>
 <ul>
-<li><b>MPI/GA_MPI</b> calls MPI_Wait for all asynchronous requests. </li>
+<li><b>MPI/GA</b> calls MPI_Wait for all asynchronous requests. </li>
 </ul>
 
 <p class="definition">Definition at line <a class="el" href="ppidd_8cpp_source.html#l00438">438</a> of file <a class="el" href="ppidd_8cpp_source.html">ppidd.cpp</a>.</p>

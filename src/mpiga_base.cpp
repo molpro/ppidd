@@ -25,7 +25,7 @@
 
 mpiglobal_array_t *mpiga_main_data_structure=NULL, *MPIGAIndex;
 mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
-int *mpigv(map)=NULL,*mpigv(proclist)=NULL;
+std::vector<int> mpigv(map), mpigv(proclist);
 static int MPIGA_Debug = 0;
 
 int SR_parallel;
@@ -100,8 +100,8 @@ int mpiga_initialize_data()
     mpigv(nprocs) = size;
     mpigv(myproc) = rank;
 
-    mpigv(map)=(int *)malloc(2*size*sizeof(int));        /* initialize list of lower and upper indices */
-    mpigv(proclist)=(int *)malloc(size*sizeof(int));     /* initialize list of processors              */
+    mpigv(map).resize(2*size);        /* initialize list of lower and upper indices */
+    mpigv(proclist).resize(size);     /* initialize list of processors              */
    }
 
     if (MPIGA_Debug) printf("%5d: In mpiga_initilize_data end. rank=%5d, size=%5d\n",ProcID(),rank,size);
@@ -127,10 +127,6 @@ int mpiga_terminate()
        free(mpiga_main_data_structure);
     }
 #endif
-
-    if (MPIGA_Debug) printf("%5d: In mpiga_terminate:  free the memory for mpigv(map) and mpigv(proclist).\n",ProcID());
-    if(mpigv(map)) free(mpigv(map));      /* free the memory for list of lower and upper indices */
-    if(mpigv(proclist)) free(mpigv(proclist)); /* free the memory for list of list of processors */
 
     MPI_Barrier(MPIGA_WORK_COMM);
 
@@ -523,7 +519,7 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map), mpigv(proclist), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
 /*    for (i=0;i<np;i++)  printf("In mpiga_put: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]); */
 
     for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
@@ -589,7 +585,7 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map), mpigv(proclist), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
 
     for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
 
@@ -676,7 +672,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        MPIGA_Error("mpiga_acc: wrong MPI_Datatype ",0);
     }
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map), mpigv(proclist), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
 
     rank_first = mpigv(proclist)[0];
     rank_last  = mpigv(proclist)[np-1];
@@ -766,7 +762,7 @@ int mpiga_read_inc( int handle, int inum, int inc )
        MPIGA_Error("mpiga_read_inc: wrong MPI_Datatype ",0);
     }
 
-    mpiga_location(handle, inum, inum, mpigv(map), mpigv(proclist), &np);
+    mpiga_location(handle, inum, inum, mpigv(map).data(), mpigv(proclist).data(), &np);
 /*    for (i=0;i<np;i++)  printf("In mpiga_read_inc: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]);
 */
     rank = mpigv(proclist)[0];
@@ -838,7 +834,7 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
 /*    len=ihigh-ilo+1; */
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map), mpigv(proclist), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
     for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
     for(i=0;i<np;i++) {
        rank=mpigv(proclist)[i];

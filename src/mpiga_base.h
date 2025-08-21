@@ -27,6 +27,7 @@
  #include <time.h>
  #include <cmath>
  #include <cctype>
+ #include <vector>
 
 
 /* --------------------------------------- *\
@@ -113,12 +114,12 @@ typedef struct {
    extern int mpigv(nprocs);                   /* Number of processes in the group of MPI comm         */
    extern int mpigv(myproc);                   /* Rank of the calling process in the group of MPI comm */
 
-   extern int *mpigv(map);
+   extern std::vector<int> mpigv(map);
    /* List of lower and upper indices for local MPIGA that exists on each processor containing a  portion of MPIGA.
     * For a D dimensional MPIGA, the first D elements are the lower indices on 1st processor in proclist,
     * the next D elements are the upper indices on 1st processor in proclist; and then the next D elements are
     * the lower indices on 2nd processor in proclist, and  so on. Here, it very simple since D=1. */
-   extern int *mpigv(proclist); /* list of processors containing some portion of MPIGA */
+   extern std::vector<int> mpigv(proclist); /* list of processors containing some portion of MPIGA */
 
    extern long  mpigv(curmem);    /* currently allocated memory of MPIGA for all processes, exclude freed memory */
    extern long  mpigv(maxmem);    /* maximum limit of memory for MPIGA for all processes */

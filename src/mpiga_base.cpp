@@ -25,7 +25,7 @@
 
 mpiglobal_array_t *mpiga_main_data_structure=NULL, *MPIGAIndex;
 mpimutex_t_index  *mpiga_mutex_data_struc=NULL, *mpiga_mutexindex;
-std::vector<int> mpigv(map), mpigv(proclist);
+std::vector<int> mpigv::map, mpigv::proclist;
 static int MPIGA_Debug = 0;
 
 int SR_parallel;
@@ -34,9 +34,9 @@ int NNODES_SYMMETRY;
 MPI_Comm MPIGA_WORK_COMM;
 
 
-long  mpigv(curmem),mpigv(maxmem),mpigv(grsmem);  /* current, maximum, gross memory of MPIGA */
-int  mpigv(nga),mpigv(nmutex);
-int mpigv(nprocs), mpigv(myproc); /* Number of processes and rank of the calling process in the group of MPI comm */
+long  mpigv::curmem,mpigv::maxmem,mpigv::grsmem;  /* current, maximum, gross memory of MPIGA */
+int  mpigv::nga,mpigv::nmutex;
+int mpigv::nprocs, mpigv::myproc; /* Number of processes and rank of the calling process in the group of MPI comm */
 
 MPI_Comm mpiga_compute_comm() {
  return MPIGA_WORK_COMM;
@@ -90,18 +90,18 @@ int mpiga_initialize_data()
        MPIGAIndex[i].actv = 0;
     }
 #endif
-    mpigv(curmem) = 0;
-    mpigv(grsmem) = 0;
-    mpigv(nga)=0;         /* initialize MPIGA number */
-    mpigv(nmutex)=0;      /* initialize MPIGA mutex number */
+    mpigv::curmem = 0;
+    mpigv::grsmem = 0;
+    mpigv::nga=0;         /* initialize MPIGA number */
+    mpigv::nmutex=0;      /* initialize MPIGA mutex number */
 
     MPI_Comm_size(MPIGA_WORK_COMM, &size);
     MPI_Comm_rank(MPIGA_WORK_COMM, &rank);
-    mpigv(nprocs) = size;
-    mpigv(myproc) = rank;
+    mpigv::nprocs = size;
+    mpigv::myproc = rank;
 
-    mpigv(map).resize(2*size);        /* initialize list of lower and upper indices */
-    mpigv(proclist).resize(size);     /* initialize list of processors              */
+    mpigv::map.resize(2*size);        /* initialize list of lower and upper indices */
+    mpigv::proclist.resize(size);     /* initialize list of processors              */
    }
 
     if (MPIGA_Debug) printf("%5d: In mpiga_initilize_data end. rank=%5d, size=%5d\n",ProcID(),rank,size);
@@ -114,10 +114,10 @@ int mpiga_terminate()
     int i;
     int handle;
 
-    if (MPIGA_Debug) printf("%5d: In mpiga_terminate begin: mpigv(nga)= %d\n",ProcID(),mpigv(nga));
+    if (MPIGA_Debug) printf("%5d: In mpiga_terminate begin: mpigv::nga= %d\n",ProcID(),mpigv::nga);
 
 #ifdef MPI2_ONESIDED
-    if (mpigv(nga)>0) {
+    if (mpigv::nga>0) {
        for(i=0;i<MAX_MPI_ARRAYS; i++) {
          if ( MPIGAIndex[i].actv == 1) { handle=i+MPI_GA_OFFSET; mpiga_free(handle); }
        }
@@ -218,11 +218,11 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
 /*    printf("In mpiga_create_irreg middle 2: nchunk= %d \n", nchunk); */
 
     sizetot=(long)sizeoftype*(long)lentot;
-    mpigv(nga)++;
+    mpigv::nga++;
    /* ----------------------------------------------------------------- *\
       Check to ensure the maximum number of arrays hasn't been reached.
    \* ----------------------------------------------------------------- */
-      if( mpigv(nga) > MAX_MPI_ARRAYS ) {
+      if( mpigv::nga > MAX_MPI_ARRAYS ) {
         if(rank == 0) {
            fprintf(stderr," MPI Error:  The maximum number of global data structures [%i] has been reached.\n",MAX_MPI_ARRAYS);
            fprintf(stderr," Information:  The maximum number of global data structures is a MPI compile-time option.\n");
@@ -254,8 +254,8 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
     MPIGAIndex[handle_orig].size=(long)local_size;
     *handle=handle_orig+MPI_GA_OFFSET;  /* adjusted sequence number of mpiga */
 
-    mpigv(curmem) += sizetot;
-    mpigv(grsmem) += sizetot;
+    mpigv::curmem += sizetot;
+    mpigv::grsmem += sizetot;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create_irreg end: handle=%d, ga_win=%12ld\n",ProcID(),*handle,(long)new_ga->ga_win);
 
@@ -325,8 +325,8 @@ int mpiga_free( int handle )
       MPIGAIndex[handle_orig].ptr=NULL;
       MPIGAIndex[handle_orig].actv = 0;
     }
-   mpigv(nga)--;
-   mpigv(curmem) -= sizetot;
+   mpigv::nga--;
+   mpigv::curmem -= sizetot;
    if (MPIGA_Debug) printf("%5d: In mpiga_free: end. handle=%d\n",ProcID(),handle);
    return 0;
 }
@@ -337,7 +337,7 @@ size_t mpiga_localmem()
 {
     int i;
     size_t sum_mpiga=(size_t)0,sum_helpga=(size_t)0,sum=(size_t)0;
-    if ( mpigv(nga) > 0 ) {
+    if ( mpigv::nga > 0 ) {
       for(i=0; i<MAX_MPI_ARRAYS; i++)
         if(MPIGAIndex[i].actv) sum_mpiga += (size_t)MPIGAIndex[i].size;
     }
@@ -428,7 +428,7 @@ int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    size=mpigv(nprocs);
+    size=mpigv::nprocs;
 
     if ( iproc < 0 || iproc >=size ) {
       fprintf(stderr,"ERROR in mpiga_distribution: iproc= %d over range!!\n",iproc);
@@ -468,7 +468,7 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    size=mpigv(nprocs);
+    size=mpigv::nprocs;
 
     if ( ilo < 1 || ilo >ihigh ||ihigh > ga->lentot) {
       fprintf(stderr,"ERROR in mpiga_location: over range! ilo=%d,ihigh=%d\n",ilo,ihigh);
@@ -519,16 +519,16 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 /*    for (i=0;i<np;i++)  printf("In mpiga_put: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]); */
 
-    for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
+    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
 
 /* put the data to distributed location of remote processes */
     for(i=0;i<np;i++) {
-       rank   = mpigv(proclist)[i];
-       ifirst = mpigv(map)[2*i];
-       ilast  = mpigv(map)[2*i+1];
+       rank   = mpigv::proclist[i];
+       ifirst = mpigv::map[2*i];
+       ilast  = mpigv::map[2*i+1];
        disp   = ifirst-lenleft - 1;
        ilen   = ilast - ifirst + 1;
 
@@ -585,15 +585,15 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 
-    for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
+    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
 
 /* get the data from distributed location of remote processes */
     for(i=0;i<np;i++) {
-       rank=mpigv(proclist)[i];
-       ifirst = mpigv(map)[2*i];
-       ilast  = mpigv(map)[2*i+1];
+       rank=mpigv::proclist[i];
+       ifirst = mpigv::map[2*i];
+       ilast  = mpigv::map[2*i+1];
        disp = ifirst-lenleft-1;
        ilen = ilast-ifirst+1;
 
@@ -635,7 +635,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-/*    size=mpigv(nprocs); */
+/*    size=mpigv::nprocs; */
 
     len=ihigh-ilo+1;
     if (ga->dtype==MPI_INT32_T) {
@@ -672,10 +672,10 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        MPIGA_Error("mpiga_acc: wrong MPI_Datatype ",0);
     }
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
+    mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 
-    rank_first = mpigv(proclist)[0];
-    rank_last  = mpigv(proclist)[np-1];
+    rank_first = mpigv::proclist[0];
+    rank_last  = mpigv::proclist[np-1];
     for (lenleft=0,i=0;i<rank_first;i++) lenleft=lenleft + ga->len[i];
     /* In order to ensure that the entire update is atomic, we must
        first mutex-lock all of the windows that we will access */
@@ -694,8 +694,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 
     for (rank = rank_first; rank <= rank_last; rank++) {
        i=rank-rank_first;
-       ifirst = mpigv(map)[2*i];
-       ilast  = mpigv(map)[2*i+1];
+       ifirst = mpigv::map[2*i];
+       ilast  = mpigv::map[2*i+1];
        disp = ifirst-lenleft-1;
        ilen = ilast-ifirst + 1;
 
@@ -743,7 +743,7 @@ int mpiga_read_inc( int handle, int inum, int inc )
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-/*    size=mpigv(nprocs); */
+/*    size=mpigv::nprocs; */
 
     if (ga->dtype==MPI_INT32_T) {
        incval=&i32incval;
@@ -762,10 +762,10 @@ int mpiga_read_inc( int handle, int inum, int inc )
        MPIGA_Error("mpiga_read_inc: wrong MPI_Datatype ",0);
     }
 
-    mpiga_location(handle, inum, inum, mpigv(map).data(), mpigv(proclist).data(), &np);
+    mpiga_location(handle, inum, inum, mpigv::map.data(), mpigv::proclist.data(), &np);
 /*    for (i=0;i<np;i++)  printf("In mpiga_read_inc: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]);
 */
-    rank = mpigv(proclist)[0];
+    rank = mpigv::proclist[0];
     for (lenleft=0,i=0;i<rank;i++) lenleft=lenleft + ga->len[i];
 
     /* disp depends on the displacement unit being sizeof(int) */
@@ -830,17 +830,17 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
     ga=MPIGAIndex[handle_orig].ptr;
 
-    irank=mpigv(myproc);
+    irank=mpigv::myproc;
 
 /*    len=ihigh-ilo+1; */
 
-    mpiga_location(handle, ilo, ihigh, mpigv(map).data(), mpigv(proclist).data(), &np);
-    for (lenleft=0,i=0;i<mpigv(proclist)[0];i++) lenleft=lenleft + ga->len[i];
+    mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
+    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
     for(i=0;i<np;i++) {
-       rank=mpigv(proclist)[i];
+       rank=mpigv::proclist[i];
        if (rank==irank){
-         ifirst = mpigv(map)[2*i];
-         ilast  = mpigv(map)[2*i+1];
+         ifirst = mpigv::map[2*i];
+         ilast  = mpigv::map[2*i+1];
          disp = ifirst-lenleft - 1;
          ilen = ilast -ifirst  + 1;
 
@@ -923,7 +923,7 @@ int mpiga_create_mutexes(int number)
        return 1;
     }
     mpiga_mutexindex = mpiga_mutex_data_struc;
-    mpigv(nmutex)=number;
+    mpigv::nmutex=number;
 
     for (i=0;i<number;i++) {
        homerank=0;
@@ -945,10 +945,10 @@ int mpiga_create_mutexes(int number)
 int mpiga_lock_mutex(int inum)
 {
 
-    if (MPIGA_Debug) printf("%5d: In mpiga_lock_mutex begin: mutex num=%d, total num=%d\n",ProcID(),inum,mpigv(nmutex));
+    if (MPIGA_Debug) printf("%5d: In mpiga_lock_mutex begin: mutex num=%d, total num=%d\n",ProcID(),inum,mpigv::nmutex);
 
-    if (inum <0 || inum >= mpigv(nmutex) ) {
-       fprintf(stderr,"ERROR in mpiga_lock_mutex: over range! mutex num=%d, total num=%d\n",inum,mpigv(nmutex));
+    if (inum <0 || inum >= mpigv::nmutex ) {
+       fprintf(stderr,"ERROR in mpiga_lock_mutex: over range! mutex num=%d, total num=%d\n",inum,mpigv::nmutex);
        return 1;
     }
     else if (mpiga_mutexindex[inum].lock == 1 ) {
@@ -973,7 +973,7 @@ int mpiga_unlock_mutex(int inum)
 
     if (MPIGA_Debug) printf("%5d: In mpiga_unlock_mutex begin: mutex=%d\n",ProcID(),inum);
 
-    if (inum <0 || inum >= mpigv(nmutex) ) {
+    if (inum <0 || inum >= mpigv::nmutex ) {
        fprintf(stderr,"ERROR in mpiga_unlock_mutex: over range! mutex=%d\n",inum);
        return 1;
     }
@@ -996,14 +996,14 @@ int mpiga_destroy_mutexes()
 {
     int  i,mpierr;
 
-    if (MPIGA_Debug) printf("%5d: In mpiga_destroy_mutexes begin: mpigv(nmutex)=%d\n",ProcID(),mpigv(nmutex));
+    if (MPIGA_Debug) printf("%5d: In mpiga_destroy_mutexes begin: mpigv::nmutex=%d\n",ProcID(),mpigv::nmutex);
 
-    if (mpigv(nmutex)<=0) {
-       fprintf(stderr,"ERROR in mpiga_destroy_mutexes: no mutex is needed to be destroyed. N mutex=%d\n",mpigv(nmutex));
+    if (mpigv::nmutex<=0) {
+       fprintf(stderr,"ERROR in mpiga_destroy_mutexes: no mutex is needed to be destroyed. N mutex=%d\n",mpigv::nmutex);
        return 1;
     }
 
-    for(i=0;i<mpigv(nmutex); i++) {
+    for(i=0;i<mpigv::nmutex; i++) {
        if ( mpiga_mutexindex[i].lock ==1 ){
           fprintf(stderr,"WARNING in mpiga_destroy_mutexes: mutex is still locked before destroyed. Now unlocking it...\n");
           mpierr = MPIMUTEX_Unlock(mpiga_mutexindex[i].ptr);
@@ -1019,9 +1019,9 @@ int mpiga_destroy_mutexes()
        mpiga_mutex_data_struc=NULL;
     }
 
-    mpigv(nmutex)= 0;
+    mpigv::nmutex= 0;
 
-    if (MPIGA_Debug) printf("%5d: In mpiga_destroy_mutexes: mpigv(nmutex)=%d\n",ProcID(),mpigv(nmutex));
+    if (MPIGA_Debug) printf("%5d: In mpiga_destroy_mutexes: mpigv::nmutex=%d\n",ProcID(),mpigv::nmutex);
 
     return 0;
 }

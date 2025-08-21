@@ -7,11 +7,6 @@
 #ifndef __MPIGA_BASE_H__
 #define __MPIGA_BASE_H__
 
-/* ---------------------------------------------------------- *\
-   Macro used for global variable -- Ensures unique namespace
-\* ---------------------------------------------------------- */
- # define mpigv(a) __mpiga_common__ ## a ## __
-
 /* ------------- *\
 ***Include Files***
 \* ------------- */
@@ -106,22 +101,24 @@ typedef struct {
 /* ---------------------------------------------------------------------- *\
    Global Variables -- including MPI Global Data Structure and Mutex etc
 \* ---------------------------------------------------------------------- */
-   extern int mpigv(nga);                      /* Number of MPI Global Data Structure in use */
-   extern int mpigv(nmutex);                   /* Number of MPI Mutex in use         */
+namespace mpigv {
+   extern int nga;                      /* Number of MPI Global Data Structure in use */
+   extern int nmutex;                   /* Number of MPI Mutex in use         */
 
-   extern int mpigv(nprocs);                   /* Number of processes in the group of MPI comm         */
-   extern int mpigv(myproc);                   /* Rank of the calling process in the group of MPI comm */
+   extern int nprocs;                   /* Number of processes in the group of MPI comm         */
+   extern int myproc;                   /* Rank of the calling process in the group of MPI comm */
 
-   extern std::vector<int> mpigv(map);
+   extern std::vector<int> map;
    /* List of lower and upper indices for local MPIGA that exists on each processor containing a  portion of MPIGA.
     * For a D dimensional MPIGA, the first D elements are the lower indices on 1st processor in proclist,
     * the next D elements are the upper indices on 1st processor in proclist; and then the next D elements are
     * the lower indices on 2nd processor in proclist, and  so on. Here, it very simple since D=1. */
-   extern std::vector<int> mpigv(proclist); /* list of processors containing some portion of MPIGA */
+   extern std::vector<int> proclist; /* list of processors containing some portion of MPIGA */
 
-   extern long  mpigv(curmem);    /* currently allocated memory of MPIGA for all processes, exclude freed memory */
-   extern long  mpigv(maxmem);    /* maximum limit of memory for MPIGA for all processes */
-   extern long  mpigv(grsmem);    /* all allocated gross memory of MPIGA for all processes, include already freed memory */
+   extern long  curmem;    /* currently allocated memory of MPIGA for all processes, exclude freed memory */
+   extern long  maxmem;    /* maximum limit of memory for MPIGA for all processes */
+   extern long  grsmem;    /* all allocated gross memory of MPIGA for all processes, include already freed memory */
+}
 
    extern int NUM_TOTAL_NNODES; /* total nodes for MPI_COMM_WORLD */
    extern int NNODES_SYMMETRY;    /* if all the nodes are symmetric: 1 (yes), 0 (no) */

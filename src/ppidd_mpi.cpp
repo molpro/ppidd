@@ -48,7 +48,7 @@ namespace mpi {
       MPI_Comm mycomm=mpiga_compute_comm();
 
 /* test whether worker communicator contains all the processes, if so then return MPI_COMM_WORLD */
-      int np_all, np_worker=mpigv(nprocs);
+      int np_all, np_worker=mpigv::nprocs;
       MPI_Comm_size(MPI_COMM_WORLD, &np_all);
       if(np_all==np_worker) mycomm=MPI_COMM_WORLD;
 
@@ -605,7 +605,7 @@ static int n_in_msg_mpiq=0;
 
    void PPIDD_Lock_mutex(int inum) {
       int mpierr;
-      if ( mpigv(nmutex) > 0 )
+      if ( mpigv::nmutex > 0 )
          mpierr=mpiga_lock_mutex(inum);   /* mutexes data store by a global array across the distributed processes */
       else
          mpierr=lock_general_helpmutex(inum); /* mutexes data on helper process */
@@ -615,7 +615,7 @@ static int n_in_msg_mpiq=0;
 
    void PPIDD_Unlock_mutex(int inum) {
       int mpierr;
-      if ( mpigv(nmutex) > 0 )
+      if ( mpigv::nmutex > 0 )
          mpierr=mpiga_unlock_mutex(inum);    /* mutexes data store by a global array across the distributed processes */
       else
          mpierr=unlock_general_helpmutex(inum);  /* mutexes data on helper process */
@@ -625,7 +625,7 @@ static int n_in_msg_mpiq=0;
 
    int PPIDD_Destroy_mutexes() {
       int mpierr;
-      if ( mpigv(nmutex) > 0 )
+      if ( mpigv::nmutex > 0 )
          mpierr=mpiga_destroy_mutexes();  /* mutexes data store by a global array across the distributed processes */
       else
          mpierr=free_general_helpmutexes();   /* mutexes data on helper process */

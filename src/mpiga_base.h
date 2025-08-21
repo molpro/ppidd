@@ -108,8 +108,6 @@ typedef struct {
 \* ---------------------------------------------------------------------- */
    extern int mpigv(nga);                      /* Number of MPI Global Data Structure in use */
    extern int mpigv(nmutex);                   /* Number of MPI Mutex in use         */
-   extern int onesided_helpmutex_num;          /* Number of one-sided helpmutex in use     */
-   extern int use_onesided_helpmutex;          /* Switch of one-sided or two-sided helpmutex in use    */
 
    extern int mpigv(nprocs);                   /* Number of processes in the group of MPI comm         */
    extern int mpigv(myproc);                   /* Rank of the calling process in the group of MPI comm */

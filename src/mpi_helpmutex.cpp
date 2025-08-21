@@ -22,9 +22,9 @@
 #include "mpi_nxtval.h"
 
 mpimutex_t_index *onesided_helpmutex_data_struc=NULL, *onesided_helpmutex_index=NULL;
-int onesided_helpmutex_num=0;
+static int onesided_helpmutex_num = 0;  /* Number of one-sided helpmutex in use     */
 
-int use_onesided_helpmutex=0;
+static int use_onesided_helpmutex = 0;  /* Switch of one-sided or two-sided helpmutex in use    */
 
 static int MPI_Debug = 0;
 

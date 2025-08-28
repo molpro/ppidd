@@ -5,8 +5,6 @@
 
 #undef HAVE_MPI_H
 
-#undef NO_NXTVAL_SERVER
-
 #define BCAST_BATCH_SIZE 134217728
 
 #endif

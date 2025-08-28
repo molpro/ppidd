@@ -25,7 +25,6 @@ $4])])
 AC_ARG_ENABLE(fortran,[AS_HELP_STRING([--enable-fortran],[build Fortran interface])])
 AC_SUBST(enable_fortran)
 AC_ARG_WITH(ga,[AS_HELP_STRING([--with-ga[=PATH]],[build using Global Arrays, PATH is the location of the GA include files])],,[with_ga="no"])
-AC_ARG_ENABLE(nxtval,[AS_HELP_STRING([--disable-nxtval],[disable the helper process (PPIDD_Nxtval)])],,[enable_nxtval="yes"])
 AC_ARG_WITH(mpi,[AS_HELP_STRING([--with-mpi],[build using MPI])],,[with_mpi="no"])
 
 AC_CHECK_TOOL([AR], [ar])
@@ -39,11 +38,6 @@ dnl the following works around a bug in autoconf that incorrectly determines llv
 dnl fixed in the next (2.73) release of autoconf and then this workaround can be removed.
 PPIDD_CXX_PP_TEST([if CXX is llvm],[defined(__clang__)],[CXX="$(echo ${CXX} | sed -e 's/ -std=gnu++11//')"])
 PPIDD_CXX_PP_TEST([if CXX is at least C++11 standard],[__cplusplus >= 201103L],,[AC_MSG_ERROR([require at least C++11 standard compiler])])
-
-if test "x${enable_nxtval}" = xno ; then
- AC_MSG_NOTICE([Helper process will not be compiled; PPIDD_Nxtval will be disabled])
- AC_DEFINE(NO_NXTVAL_SERVER)
-fi
 
 if test "x${enable_fortran}" = xyes ; then
 AC_PROG_FC()

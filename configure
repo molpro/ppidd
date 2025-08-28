@@ -714,7 +714,6 @@ ac_user_opts='
 enable_option_checking
 enable_fortran
 with_ga
-enable_nxtval
 with_mpi
 '
       ac_precious_vars='build_alias
@@ -1351,7 +1350,6 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-fortran        build Fortran interface
-  --disable-nxtval        disable the helper process (PPIDD_Nxtval)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2479,15 +2477,6 @@ else case e in #(
 esac
 fi
 
-# Check whether --enable-nxtval was given.
-if test ${enable_nxtval+y}
-then :
-  enableval=$enable_nxtval;
-else case e in #(
-  e) enable_nxtval="yes" ;;
-esac
-fi
-
 
 # Check whether --with-mpi was given.
 if test ${with_mpi+y}
@@ -3521,13 +3510,6 @@ as_fn_error $? "require at least C++11 standard compiler" "$LINENO" 5 ;;
 esac
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
-
-if test "x${enable_nxtval}" = xno ; then
- { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Helper process will not be compiled; PPIDD_Nxtval will be disabled" >&5
-printf "%s\n" "$as_me: Helper process will not be compiled; PPIDD_Nxtval will be disabled" >&6;}
- printf "%s\n" "#define NO_NXTVAL_SERVER 1" >>confdefs.h
-
-fi
 
 if test "x${enable_fortran}" = xyes ; then
 ac_ext=${ac_fc_srcext-f}

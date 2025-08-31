@@ -33,8 +33,6 @@
            |-- GNUmakefile                    Makefile for test directory
            |-- ppidd_ctest.cpp                C test program
            |-- ppidd_test.F                   Fortran test program
-           |-- sizeofctypes.cpp               Code for determining the size of C data types
-           |-- sizeoffortypes.F               Code for determining the size of Fortran data types
            |-- ppidd_test.F                   Fortran test program
            `-- ppidd_test.out                 Output of test example
 

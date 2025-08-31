@@ -53,6 +53,10 @@ c...  Get the processes number and process id
       nproc = ppidd_size()
       me = ppidd_rank()
       iout=6
+      if (ppidd_impl_default.eq.ppidd_impl_no_mpi) then
+        write(iout,*) 'Serial PPIDD, no tests performed.'
+        return
+      end if
       if(me.eq.0) write(iout,*) 'PPIDD initialized '
       if(me.eq.0)then
          write(iout,*)

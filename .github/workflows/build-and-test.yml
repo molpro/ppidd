@@ -29,15 +29,15 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Configure
-        run: ./configure CXX=mpicxx --with-ga
+        run: ./configure CXX=mpicxx --with-ga --enable-fortran FC=mpif90 FCFLAGS=-fdefault-integer-8
 
       - name: Build
         run: make
 
       - name: Test
         run: |
-          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS="-lga -larmci"
-          mpiexec -np 4 test/ppidd_ctest.exe
+          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS='-lga -larmci -lstdc++'
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
 
   autoconf_mpi:
     runs-on: ubuntu-latest
@@ -55,15 +55,15 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Configure
-        run: ./configure CXX=mpicxx --with-mpi
+        run: ./configure CXX=mpicxx --with-mpi --enable-fortran FC=mpif90 FCFLAGS=-fdefault-integer-8
 
       - name: Build
         run: make
 
       - name: Test
         run: |
-          make ${{ env.AUTOCONF_TEST_TARGET }}
-          mpiexec -np 4 test/ppidd_ctest.exe
+          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS='-lstdc++'
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
   
 
   autoconf_serial:
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Configure
-        run: ./configure
+        run: ./configure --enable-fortran FCFLAGS=-fdefault-integer-8
 
       - name: Build
         run: make
@@ -90,7 +90,7 @@ jobs:
       - name: Test
         run: |
           make ${{ env.AUTOCONF_TEST_TARGET }}
-          ./test/ppidd_ctest.exe          
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do ./test/$t; done
 
   cmake_ga:
     runs-on: ubuntu-latest

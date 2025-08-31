@@ -33,11 +33,7 @@ c
       iout=6
       if(iprocs.eq.0)then
          write(iout,*)
-#ifdef MPI2
-         write(iout,*) 'PPIDD initialized (MPI-2 version of PPIDD).'
-#else
-         write(iout,*) 'PPIDD initialized (GA version of PPIDD).'
-#endif
+         write(iout,*) 'PPIDD initialized'
          flush(6)
       endif
       call ppidd_barrier()
@@ -87,6 +83,10 @@ c...  Get the processes number and process id
       nproc_total = ppidd_size_all()
 c
       iout=6
+      if (ppidd_impl_default.eq.ppidd_impl_no_mpi) then
+        write(iout,*) 'Serial PPIDD, no tests performed.'
+        return
+      end if
 c
 c... Print messages
 c
@@ -104,12 +104,6 @@ c
       endif
 
 ! Synchronize processes (a barrier) before specific tests
-#if defined(MPI2) || defined(GA_MPI)
-      call ppidd_barrier()
-c... Checking if C data types match Fortran
-      if(iprocs.eq.0)then
-        call ppidd_checkdtype
-      endif
       call ppidd_barrier()
 c... Performing PPIDD basic operation test
       call get_current_times(cpua,wtimea)
@@ -148,70 +142,8 @@ c... Performing PPIDD shared counter test
 c
       if(iprocs.eq.0) write(iout,*)
       if(iprocs.eq.0) write(iout,*) 'All PPIDD tests successful.'
-#else
-      write(iout,*) 'All PPIDD tests are skipped in serial case.'
-#endif
 c
       return
-      end
-
-
-! Checking whether C types match Fortran types
-      subroutine ppidd_checkdtype
-      use ppidd
-      implicit double precision (a-h,o-z)
-      logical ok_int,ok_log,ok_dbl
-
-      interface
-       subroutine sizeofctype(sizeint,sizelog,sizedouble,sizefloat)
-     >            bind(C,name='sizeofctype')
-       use iso_c_binding, only : c_double
-       real(c_double), intent(out) :: sizeint
-       real(c_double), intent(out) :: sizelog
-       real(c_double), intent(out) :: sizedouble
-       real(c_double), intent(out) :: sizefloat
-       end subroutine sizeofctype
-      end interface
-
-      write(6,*) 'Checking whether C types match Fortran types:'
-      call sizeofctype(dbyte_int1,dbyte_log1,dbyte_dbl1,dbyte_float)
-      nbyte_int1=nint(dbyte_int1)
-      nbyte_log1=nint(dbyte_log1)
-      nbyte_dbl1=nint(dbyte_dbl1)
-      nbyte_float=nint(dbyte_float)
-      write(6,*) 'The size (in bytes) of some C data types:'
-      write(6,10) 'float:', nbyte_float
-      write(6,10) 'double:', nbyte_dbl1
-      write(6,10) 'int64_t:', nbyte_int1
-      write(6,10) 'fortlogical:', nbyte_log1
-10    format(1x,'Size of C ',a,t35,i4,' bytes')
-      call sizeoffortype(nbyte_int2,nbyte_log2,nbyte_dbl2,nbyte_real)
-      write(6,*) 'The size (in bytes) of some Fortran data types:'
-      write(6,20) 'Real:', nbyte_real
-      write(6,20) 'Doule Precision:', nbyte_dbl2
-      write(6,20) 'Integer:', nbyte_int2
-      write(6,20) 'Logical:', nbyte_log2
-20    format(1x,'Size of Fortran ',a,t35,i4,' bytes')
-      ok_int=nbyte_int1.eq.nbyte_int2
-      ok_log=nbyte_log1.eq.nbyte_log2
-      ok_dbl=nbyte_dbl1.eq.nbyte_dbl2
-      if( ok_int .and. ok_log .and. ok_dbl) then
-        write(6,30)
-30      format(1x,'All data types (Integer, Logical, and ',
-     >         'Double Precision) match between C and Fortran.')
-      else
-        if (.not.ok_int) write(6,31) 'Integer'
-        if (.not.ok_log) write(6,31) 'Logical'
-        if (.not.ok_dbl) write(6,31) 'Double Precision'
-31      format(1x,'ERROR: Data type ( ',a,t38,') does not match between'
-     >           ,' C and Fortran types.')
-        write(6,32)
-32      format(1x,'Please check INTEGER (related to CFLAGS/FCFLAGS)',
-     >            ' option, and rebuild the library.')
-        call ppidd_error('Data types failed to match'//c_null_char,
-     >                   0_c_int)
-      endif
-
       end
 
 
@@ -280,15 +212,10 @@ c... initialise the buffer space
         buff(i)=10.01d0+dble(i)*0.001d0
       end do
 
-#ifdef MPI2
-      if (helper_server_flag) then
-        nloop_array=2
-      else
-        nloop_array=1
+      nloop_array = 1
+      if (ppidd_impl_default.eq.ppidd_impl_mpi) then
+        if (helper_server_flag) nloop_array = 2
       end if
-#else
-      nloop_array=1
-#endif
 c     dtype=1_c_int: double precision
       do loop_array=1,nloop_array
       if (nloop_array.eq.1) then
@@ -1040,12 +967,12 @@ c    2^31=2,147,483,648
       if(iprocs.eq.0) write(iout,*) 'PPIDD shared counter tests:'
       flush(6)
 
-#if defined(GA_MPI)
+      if (ppidd_impl_default.eq.ppidd_impl_ga) then
 
       if(iprocs.eq.0) write(iout,*)
      > 'For GA_MPI, ppidd_nxtval does nothing. Skip this test.'
 
-#else
+      else
 
 c... shared counter test with computing tasks
 
@@ -1317,7 +1244,7 @@ c... release the memory in buffer space
       IF( ALLOCATED(twt_array1) ) DEALLOCATE( twt_array1)
       IF( ALLOCATED(twt_array2) ) DEALLOCATE( twt_array2)
 
-#endif
+      end if
 
       return
       end
@@ -1426,15 +1353,10 @@ c... initialise the buffer space
 
 
 c... create mutexes
-#ifdef MPI2
-      if (helper_server_flag) then
-        nloop_array=2
-      else
-        nloop_array=1
+      nloop_array = 1
+      if (ppidd_impl_default.eq.ppidd_impl_mpi) then
+        if (helper_server_flag) nloop_array = 2
       end if
-#else
-      nloop_array=1
-#endif
       do loop_array=1,nloop_array
       if (nloop_array.eq.1) then
         if(iprocs.eq.0) write(iout,101) ' '

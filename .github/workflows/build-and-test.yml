@@ -9,11 +9,37 @@ on:
 
 env:
   CMAKE_BUILD_TYPE: Release
-  AUTOCONF_TEST_TARGET: test
 
 jobs:
 
   autoconf_ga:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+    container:
+      # relies on repository name being all lower case
+      image: ghcr.io/${{ github.repository }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure
+        run: ./configure CXX=mpicxx --with-ga --enable-fortran FC=mpif90
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: |
+          make test LIBS='-lga -larmci -lstdc++'
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
+
+
+  autoconf_ga_i8:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -36,8 +62,9 @@ jobs:
 
       - name: Test
         run: |
-          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS='-lga -larmci -lstdc++'
+          make test LIBS='-lga -larmci -lstdc++'
           for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
+
 
   autoconf_mpi:
     runs-on: ubuntu-latest
@@ -62,11 +89,65 @@ jobs:
 
       - name: Test
         run: |
-          make ${{ env.AUTOCONF_TEST_TARGET }} LIBS='-lstdc++'
+          make test LIBS='-lstdc++'
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
+
+
+  autoconf_mpi_i8:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+    container:
+      # relies on repository name being all lower case
+      image: ghcr.io/${{ github.repository }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure
+        run: ./configure CXX=mpicxx --with-mpi --enable-fortran FC=mpif90 FCFLAGS=-fdefault-integer-8
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: |
+          make test LIBS='-lstdc++'
           for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do mpiexec -np 4 test/$t; done
   
 
   autoconf_serial:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+    container:
+      # relies on repository name being all lower case
+      image: ghcr.io/${{ github.repository }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure
+        run: ./configure --enable-fortran
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: |
+          make test
+          for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do ./test/$t; done
+  
+
+  autoconf_serial_i8:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -89,8 +170,9 @@ jobs:
 
       - name: Test
         run: |
-          make ${{ env.AUTOCONF_TEST_TARGET }}
+          make test
           for t in ppidd_ctest.exe ppidd_sf_test.exe ppidd_test.exe ; do ./test/$t; done
+
 
   cmake_ga:
     runs-on: ubuntu-latest
@@ -115,6 +197,7 @@ jobs:
 
       - name: Test
         run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
+
 
   cmake_mpi:
     runs-on: ubuntu-latest

@@ -155,8 +155,9 @@ c
       double precision totsize,bufsize
       double precision, target :: z1
       double precision cpu1,cpu2,cpu,speed
-      integer lentot,lenbuf,ioff,ilo,ihi
-      integer lenseg,lenlat
+      integer lenbuf,ioff
+      integer(c_int64_t) lentot, ilo, ihi, lenlat, inum
+      integer lenseg
       integer maxprc,nloop,iout,i,ipr
       integer proc_ltop,proc_rbot
       integer(c_int) lenre, srcre

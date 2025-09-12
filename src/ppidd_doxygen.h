@@ -32,8 +32,8 @@
        `-- ./test                         Test code directory for PPIDD library
            |-- GNUmakefile                    Makefile for test directory
            |-- ppidd_ctest.cpp                C test program
-           |-- ppidd_test.F                   Fortran test program
-           |-- ppidd_test.F                   Fortran test program
+           |-- ppidd_test.F90                 Fortran test program
+           |-- ppidd_sf_test.F90              Fortran test program
            `-- ppidd_test.out                 Output of test example
 
   </pre>

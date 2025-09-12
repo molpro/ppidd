@@ -16,7 +16,7 @@ endif
 ppidd_ctest.exe: ppidd_ctest.cpp
 	$(CXX) $(CPPFLAGS) -I ../src $(CXXFLAGS) -o $@ $< -L.. -lppidd $(LIBS)
 
-ppidd_test.exe: ppidd_test.F
+ppidd_test.exe: ppidd_test.F90
 	$(FC) -I ../src $(FCFLAGS) -o $@ $< -L.. -lppidd $(LIBS)
 
 ppidd_sf_test.exe: ppidd_sf_test.F90

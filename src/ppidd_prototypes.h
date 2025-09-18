@@ -5,7 +5,7 @@
  extern int  PPIDD_Uses_ma ();
  extern int  PPIDD_MA_init (int dtype, int64_t stack, int64_t heap);
  extern double PPIDD_Wtime ();
- extern void PPIDD_Error (char *message, int code);
+ extern void PPIDD_Error (const char *message, int code);
  extern void PPIDD_Helper_server (int flag, int num_per_server);
  extern int64_t PPIDD_Nxtval (int numproc);
  extern int  PPIDD_Size_all ();
@@ -19,9 +19,9 @@
  extern int  PPIDD_Iprobe (int tag, int source);
  extern void PPIDD_BCast (void *buffer, int count, int dtype, int root);
  extern void PPIDD_Barrier ();
- extern void PPIDD_Gsum (int dtype, void *buffer, int len, char *op);
- extern int  PPIDD_Create_irreg (char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle);
- extern int  PPIDD_Create (char *name, int64_t lentot, int dtype, int storetype, int *handle);
+ extern void PPIDD_Gsum (int dtype, void *buffer, int len, const char *op);
+ extern int  PPIDD_Create_irreg (const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle);
+ extern int  PPIDD_Create (const char *name, int64_t lentot, int dtype, int storetype, int *handle);
  extern int  PPIDD_Destroy (int handle);
  extern int  PPIDD_Distrib (int handle, int rank, int64_t *ilo, int64_t *ihi);
  extern int  PPIDD_Location (int handle, int64_t ilo, int64_t ihi, int64_t *map, int *proclist, int *np);
@@ -39,24 +39,24 @@
  extern void PPIDD_Unlock_mutex (int inum);
  extern int  PPIDD_Destroy_mutexes ();
 
- extern int  PPIDD_Eaf_open (char *name, int type, int *handle);
+ extern int  PPIDD_Eaf_open (const char *name, int type, int *handle);
  extern int  PPIDD_Eaf_write (int handle, double byte_offset, void *buff, size_t byte_length);
  extern int  PPIDD_Eaf_awrite (int handle, double byte_offset, void *buff, size_t byte_length, int *request_id);
  extern int  PPIDD_Eaf_read (int handle, double byte_offset, void *buff, size_t byte_length);
  extern int  PPIDD_Eaf_aread (int handle, double byte_offset, void *buff, size_t byte_length, int *request_id);
  extern int  PPIDD_Eaf_wait (int handle, int request_id);
- extern int  PPIDD_Eaf_waitall (int *list, int num);
+ extern int  PPIDD_Eaf_waitall (const int *list, int num);
  extern int  PPIDD_Eaf_probe (int request_id, int *status);
  extern int  PPIDD_Eaf_close (int handle);
- extern int  PPIDD_Eaf_delete (char *name);
+ extern int  PPIDD_Eaf_delete (const char *name);
  extern int  PPIDD_Eaf_length (int handle, double *fsize);
  extern int  PPIDD_Eaf_truncate (int handle, double offset);
  extern void PPIDD_Eaf_errmsg (int code, char *message);
 
- extern int  PPIDD_Sf_create (char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);
+ extern int  PPIDD_Sf_create (const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle);
  extern int  PPIDD_Sf_write (int handle, double byte_offset, double byte_length, double *buff, int *request_id);
  extern int  PPIDD_Sf_read (int handle, double byte_offset, double byte_length, double *buff, int *request_id);
  extern int  PPIDD_Sf_wait (int request_id);
- extern int  PPIDD_Sf_waitall (int *list, int num);
+ extern int  PPIDD_Sf_waitall (const int *list, int num);
  extern int  PPIDD_Sf_destroy (int handle);
  extern void PPIDD_Sf_errmsg (int code, char *message);

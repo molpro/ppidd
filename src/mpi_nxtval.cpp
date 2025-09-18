@@ -806,7 +806,7 @@ ________________________________________________________________________________
 }
 
 
-int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, char *name, int dtype)
+int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, const char *name, int dtype)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -962,7 +962,7 @@ ________________________________________________________________________________
 
 /* create a normal helpga */
 /* here  mproc = 0 ;  lentot: total number of elements     */
-int twosided_helpga_create(int mproc, int lentot, int *handle, char *name, int dtype)
+int twosided_helpga_create(int mproc, int lentot, int *handle, const char *name, int dtype)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________

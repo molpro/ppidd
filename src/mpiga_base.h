@@ -132,8 +132,8 @@ namespace mpigv {
    int mpiga_initialize_data();
    int mpiga_terminate();
    int mpiga_cleanup_finalize();
-   int mpiga_create_irreg(char *, int *, int , MPI_Datatype , int *);
-   int mpiga_create( char *, int , MPI_Datatype , int *);
+   int mpiga_create_irreg(const char *, int *, int , MPI_Datatype , int *);
+   int mpiga_create( const char *, int , MPI_Datatype , int *);
    int mpiga_free( int );
    size_t mpiga_localmem();
    int mpiga_handle_orig( int );
@@ -147,7 +147,7 @@ namespace mpigv {
    int mpiga_read_inc( int ,  int , int );
    int mpiga_zero_patch( int , int , int );
    int mpiga_zero( int );
-   int MPI_GSum(MPI_Datatype , void *, int , char *);
+   int MPI_GSum(MPI_Datatype , void *, int , const char *);
    int mpiga_create_mutexes(int);
    int mpiga_lock_mutex(int);
    int mpiga_unlock_mutex(int);

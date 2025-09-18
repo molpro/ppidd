@@ -160,7 +160,7 @@ int mpiga_cleanup_finalize()
 }
 
 
-int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
+int mpiga_create_irreg(const char *name, int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
 {
     MPIGA       new_ga;
     int      size, sizeoftype;
@@ -264,7 +264,7 @@ int mpiga_create_irreg(char *name, int *lenin, int nchunk, MPI_Datatype dtype, i
 }
 
 
-int mpiga_create( char *name, int lentot, MPI_Datatype datatype, int *handle ) {
+int mpiga_create( const char *name, int lentot, MPI_Datatype datatype, int *handle ) {
     int size, sizeoflen;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create begin.\n",ProcID());
@@ -888,7 +888,7 @@ int mpiga_zero( int handle)
 
 
 /* sum over the buffer according to type and operator */
-int MPI_GSum(MPI_Datatype mpidtype, void *buffer,int len, char *op) {
+int MPI_GSum(MPI_Datatype mpidtype, void *buffer,int len, const char *op) {
      std::string oper=op;
      std::transform(oper.begin(),oper.end(),oper.begin(),::tolower);
      MPI_Op mpiop=MPI_SUM;

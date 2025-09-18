@@ -244,7 +244,7 @@ extern "C" {
  *  - \b GA calls GA_Error, http://hpc.pnl.gov/globalarrays/api/c_op_api.html#ERROR
  *  - For \b MPI, prints error, and then calls MPI_Abort.
  */
-   void PPIDD_Error(char *message, int code) {
+   void PPIDD_Error(const char *message, int code) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -526,7 +526,7 @@ extern "C" {
  *
  *  - \c type=0 : Fortran Integer
  *  - \c type=1 : Fortran Double Precision */
-   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
+   void PPIDD_Gsum(int dtype,void *buffer,int len, const char *op) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
@@ -551,7 +551,7 @@ extern "C" {
 
  *  - \b GA analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_IRREG
  */
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
+   int PPIDD_Create_irreg(const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
@@ -579,7 +579,7 @@ extern "C" {
  *  - For \b MPI, the library can presently be built with zero or one (default) helpers.
  *       When helper process is disabled, \c storetype doesn't take effect, and data are always stored across the distributed processes.
  */
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
+   int PPIDD_Create(const char *name,int64_t lentot, int dtype, int storetype, int *handle) {
     assert(dtype >= PPIDD_FORTINT && dtype <= PPIDD_INT);
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
@@ -940,7 +940,7 @@ extern "C" {
    Return the EAF file descriptor in handle.
    It is a non-collective operation.
 \* ************************************************************************ */
-   int PPIDD_Eaf_open(char *name,int type, int *handle) {
+   int PPIDD_Eaf_open(const char *name,int type, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1065,7 +1065,7 @@ extern "C" {
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Finally invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   int PPIDD_Eaf_waitall(int *list, int num) {
+   int PPIDD_Eaf_waitall(const int *list, int num) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1131,7 +1131,7 @@ extern "C" {
    character*(*) name   -- [in]  File name.
    integer ierr         -- [out] Error code. 0 if the file was deleted, else returns error code.
 \* ********************************************************************************************* */
-   int PPIDD_Eaf_delete(char *name) {
+   int PPIDD_Eaf_delete(const char *name) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1217,7 +1217,7 @@ extern "C" {
    req_size specifies size of a typical request (-1. means "don't know").
    It is a collective operation.
 \* ************************************************************************ */
-   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
+   int PPIDD_Sf_create(const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H
@@ -1298,7 +1298,7 @@ extern "C" {
    Blocks the calling process until all of the num I/O operations associated with ids
    specified in list complete. Invalidates (modifies) ids on the list.
 \* ********************************************************************************** */
-   int PPIDD_Sf_waitall(int *list, int num) {
+   int PPIDD_Sf_waitall(const int *list, int num) {
     switch (ppidd_impl) {
 #ifdef HAVE_MPI_H
 #ifdef HAVE_GA_H

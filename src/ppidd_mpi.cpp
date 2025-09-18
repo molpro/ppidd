@@ -76,7 +76,7 @@ namespace mpi {
    }
 
 
-   void PPIDD_Error(char *message, int code) {
+   void PPIDD_Error(const char *message, int code) {
       MPIGA_Error(message,code);
    }
 
@@ -289,12 +289,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
+   void PPIDD_Gsum(int dtype,void *buffer,int len, const char *op) {
       MPI_GSum(dtype_mpi[dtype], buffer, len, op);
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
+   int PPIDD_Create_irreg(const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       int mpierr;
       int mpinchunk=(int)nchunk;
 
@@ -317,7 +317,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
+   int PPIDD_Create(const char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       int mpierr;
       int mpilentot;
 
@@ -634,7 +634,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int *handle) {
+   int PPIDD_Eaf_open(const char *name,int type, int *handle) {
       MPI_File mpi_fh;
       MPI_Fint mpifhandle;
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
@@ -751,7 +751,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int *list, int num) {
+   int PPIDD_Eaf_waitall(const int *list, int num) {
       std::vector<MPI_Request> array_of_requests(num);
       std::vector<MPI_Status> array_of_statuses(num);
       for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);
@@ -785,7 +785,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_delete(char *name) {
+   int PPIDD_Eaf_delete(const char *name) {
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. name=%s\n",name);
       int ierr=MPI_File_delete(name,MPI_INFO_NULL);
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
@@ -831,7 +831,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
+   int PPIDD_Sf_create(const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
       MPI_Comm mpicomm=MPIGA_WORK_COMM;
       MPI_File mpi_fh;
 
@@ -891,7 +891,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_waitall(int *list, int num) {
+   int PPIDD_Sf_waitall(const int *list, int num) {
       std::vector<MPI_Request> array_of_requests(num);
       std::vector<MPI_Status> array_of_statuses(num);
       for(int i=0;i<num;i++) array_of_requests[i] = MPI_Request_f2c(list[i]);

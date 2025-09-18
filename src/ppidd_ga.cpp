@@ -88,8 +88,8 @@ namespace ga {
    }
 
 
-   void PPIDD_Error(char *message, int code) {
-      GA_Error(message,code);
+   void PPIDD_Error(const char *message, int code) {
+      GA_Error(const_cast<char*>(message), code);
    }
 
 
@@ -261,12 +261,12 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
-      GA_Gop(dtypes[dtype].id, buffer, len, op);
+   void PPIDD_Gsum(int dtype,void *buffer,int len, const char *op) {
+      GA_Gop(dtypes[dtype].id, buffer, len, const_cast<char*>(op));
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
+   int PPIDD_Create_irreg(const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       int ndim=1;
       ga_int nblock=(ga_int)nchunk;
       int np;
@@ -286,20 +286,20 @@ static int n_in_msg_mpiq=0;
       ga_int dims[1]={iad};
 
 /*      printf("\n NGA_CREATE_IRREG: %s created, dims=%d, ndim=%d\n",name,dims[1],ndim); */
-      *handle=NGA_CREATE_IRREG(dtypes[dtype].id, ndim, dims, name, block, map.data());
+      *handle=NGA_CREATE_IRREG(dtypes[dtype].id, ndim, dims, const_cast<char*>(name), block, map.data());
 
       return 1 ;
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
+   int PPIDD_Create(const char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       ga_int galentot=(ga_int)lentot;
 
       ga_int dims[1]={galentot};
       ga_int block[1]={-1};
 
 /*      printf("\n NGA_CREATE: %s created, dims=%d, ndim=%d\n",name,*dims,ndim); */
-      *handle=NGA_CREATE(dtypes[dtype].id, 1, dims, name, block);
+      *handle=NGA_CREATE(dtypes[dtype].id, 1, dims, const_cast<char*>(name), block);
 
       return 1 ;
    }
@@ -465,7 +465,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int *handle) {
+   int PPIDD_Eaf_open(const char *name,int type, int *handle) {
       if(MPI_Debug)printf("In PPIDD_Eaf_open: begin.\n");
       int ierr=EAF_Open(name, type, handle);
       if(MPI_Debug)printf("In PPIDD_Eaf_open: end. handle=%d,ierr=%d\n",*handle,ierr);
@@ -498,7 +498,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_waitall(int *list, int num) {
+   int PPIDD_Eaf_waitall(const int *list, int num) {
       return 0;
    }
 
@@ -513,7 +513,7 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Eaf_delete(char *name) {
+   int PPIDD_Eaf_delete(const char *name) {
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: begin. name=%s\n",name);
       int ierr=EAF_Delete(name);
       if(MPI_Debug)printf("In PPIDD_Eaf_delete: end. ierr=%d\n",ierr);
@@ -540,10 +540,10 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
+   int PPIDD_Sf_create(const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: begin.\n");
-      int ierr=SF_Create(name, size_hard_limit, size_soft_limit, req_size, handle);
+      int ierr=SF_Create(const_cast<char*>(name), size_hard_limit, size_soft_limit, req_size, handle);
 
       if(MPI_Debug)printf("In PPIDD_Sf_create: end. handle=%d,ierr=%d\n",*handle,ierr);
       return ierr;
@@ -568,8 +568,8 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   int PPIDD_Sf_waitall(int *list, int num) {
-      return SF_Waitall(list, num);
+   int PPIDD_Sf_waitall(const int *list, int num) {
+      return SF_Waitall(const_cast<int*>(list), num);
    }
 
 

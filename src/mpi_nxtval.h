@@ -120,8 +120,8 @@ typedef struct {
     extern void DataHelperServer();
     extern int NXTVAL(int );
     extern int twosided_helpga_col(int , int );
-    extern int twosided_helpga_create_irreg(int , int *, int , int *, char *, int );
-    extern int twosided_helpga_create(int , int , int *, char *, int );
+    extern int twosided_helpga_create_irreg(int , int *, int , int *, const char *, int );
+    extern int twosided_helpga_create(int , int , int *, const char *, int );
     extern int twosided_helpga_locate_server(int , int , int , int *, int *, int *);
     extern int twosided_helpga_distrib( int , int , int *, int *);
     extern int twosided_helpga_location( int , int , int , int *, int *, int *);

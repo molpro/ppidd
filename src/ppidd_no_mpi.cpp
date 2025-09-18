@@ -45,7 +45,7 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Error(char *message, int code) {
+   void PPIDD_Error(const char *message, int code) {
       fprintf(stdout," %s %d (%#x).\n", message,code,code);
       fflush(stdout);
       fprintf(stderr," %s %d (%#x).\n", message,code,code);
@@ -109,16 +109,16 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Gsum(int dtype,void *buffer,int len, char *op) {
+   void PPIDD_Gsum(int dtype,void *buffer,int len, const char *op) {
    }
 
 
-   int PPIDD_Create_irreg(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
+   int PPIDD_Create_irreg(const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle) {
       do_not_call("PPIDD_Create_irreg");
    }
 
 
-   int PPIDD_Create(char *name,int64_t lentot, int dtype, int storetype, int *handle) {
+   int PPIDD_Create(const char *name,int64_t lentot, int dtype, int storetype, int *handle) {
       do_not_call("PPIDD_Create");
    }
 
@@ -206,7 +206,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_open(char *name,int type, int *handle) {
+   int PPIDD_Eaf_open(const char *name,int type, int *handle) {
       do_not_call("PPIDD_Eaf_open");
    }
 
@@ -236,7 +236,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_waitall(int *list, int num) {
+   int PPIDD_Eaf_waitall(const int *list, int num) {
       do_not_call("PPIDD_Eaf_waitall");
    }
 
@@ -251,7 +251,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Eaf_delete(char *name) {
+   int PPIDD_Eaf_delete(const char *name) {
       do_not_call("PPIDD_Eaf_delete");
    }
 
@@ -271,7 +271,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_create(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
+   int PPIDD_Sf_create(const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle) {
       do_not_call("PPIDD_Sf_create");
    }
 
@@ -291,7 +291,7 @@ namespace no_mpi {
    }
 
 
-   int PPIDD_Sf_waitall(int *list, int num) {
+   int PPIDD_Sf_waitall(const int *list, int num) {
       do_not_call("PPIDD_Sf_waitall");
    }
 

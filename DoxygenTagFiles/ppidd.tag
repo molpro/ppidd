@@ -57,8 +57,8 @@
       <type>void</type>
       <name>PPIDD_Error</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a16e1aebb607213730b037da415349eba</anchor>
-      <arglist>(char *message, int code)</arglist>
+      <anchor>ad77fa44018aebc858fab16a721c4b10a</anchor>
+      <arglist>(const char *message, int code)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -148,22 +148,22 @@
       <type>void</type>
       <name>PPIDD_Gsum</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa72378b9de01b4cae8ee2713549f1833</anchor>
-      <arglist>(int dtype, void *buffer, int len, char *op)</arglist>
+      <anchor>a53c82519591e57a37720c975f5707c85</anchor>
+      <arglist>(int dtype, void *buffer, int len, const char *op)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Create_irreg</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aabaa345ef135d2d65f32cb2de7461faa</anchor>
-      <arglist>(char *name, int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle)</arglist>
+      <anchor>a04cb96325ae304f0cbb726c384f4d5ac</anchor>
+      <arglist>(const char *name, const int64_t *lenin, int64_t nchunk, int dtype, int storetype, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>PPIDD_Create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a0cf53817e9e57b8b3f807c2ca9ff613e</anchor>
-      <arglist>(char *name, int64_t lentot, int dtype, int storetype, int *handle)</arglist>
+      <anchor>a0fb29936b9ce82d532712d0dfa0ff5fb</anchor>
+      <arglist>(const char *name, int64_t lentot, int dtype, int storetype, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -288,8 +288,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_open</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a88aa59519cbf4cb7b837d37be740af85</anchor>
-      <arglist>(char *name, int type, int *handle)</arglist>
+      <anchor>a9524c22076243610952e609039cae39d</anchor>
+      <arglist>(const char *name, int type, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -330,8 +330,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a05962762b793f7bd27fcbd231176ba3f</anchor>
-      <arglist>(int *list, int num)</arglist>
+      <anchor>abb9eadcb3c19add931f2b0f8238536b2</anchor>
+      <arglist>(const int *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -351,8 +351,8 @@
       <type>int</type>
       <name>PPIDD_Eaf_delete</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a307d1d9646109797ab3fa84858012df4</anchor>
-      <arglist>(char *name)</arglist>
+      <anchor>a35f33df7dabfdd81b61702567f7a2fb2</anchor>
+      <arglist>(const char *name)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -379,8 +379,8 @@
       <type>int</type>
       <name>PPIDD_Sf_create</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>aa20fccc5bd21559a1423ca90d099f1f2</anchor>
-      <arglist>(char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle)</arglist>
+      <anchor>a25cebde7790a362ad725f0fb422438df</anchor>
+      <arglist>(const char *name, double size_hard_limit, double size_soft_limit, double req_size, int *handle)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -407,8 +407,8 @@
       <type>int</type>
       <name>PPIDD_Sf_waitall</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a372e273c9c2f5cc8741b85c8b680b8b2</anchor>
-      <arglist>(int *list, int num)</arglist>
+      <anchor>a0f9abe4e02422fe3758dbf44f148bb8c</anchor>
+      <arglist>(const int *list, int num)</arglist>
     </member>
     <member kind="function">
       <type>int</type>

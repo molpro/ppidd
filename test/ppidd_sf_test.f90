@@ -1,8 +1,4 @@
 ! PPIDD SF standalone test suites
-!
-! FNAME - filename for test program
-!
-#define FNAME   'ppidd_sf'
 
       program main
       use ppidd
@@ -47,6 +43,7 @@
       integer nodeid, nnodes
       integer i,start,end,j, chunk
       integer(c_int) me, nproc, rc, curid, handle
+      character(8), parameter :: fname='ppidd_sf'
 
 !...  Get the processes number and process id
       nproc = ppidd_size()
@@ -68,9 +65,9 @@
 
       size  = maxid*dimnsn*nproc
 !
-      if(me.eq.0) write(iout,*) 'Creating shared file = ',trim(FNAME)
+      if(me.eq.0) write(iout,*) 'Creating shared file = ',fname
       flush(6)
-      rc=ppidd_sf_create(FNAME//c_null_char,dble(16*size),dble(8*size),dble(8*dimnsn),handle)
+      rc=ppidd_sf_create(fname//c_null_char,dble(16*size),dble(8*size),dble(8*dimnsn),handle)
 !
       call ppidd_barrier()
       if(me.eq.0) write(iout,*) 'Writing and reading operations:'
@@ -156,7 +153,7 @@
         write(iout,*) 8.0d-6*dble(maxid*dimnsn)/ttw,' MB/s write rate'
         write(iout,*) 8.0d-6*dble(maxid*dimnsn)/ttr,' MB/s read rate'
         write(iout,*)
-        write(iout,*) 'Destroying shared file = ',trim(FNAME)
+        write(iout,*) 'Destroying shared file = ',fname
       endif
       rc=ppidd_sf_destroy(handle)
 

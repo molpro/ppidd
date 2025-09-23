@@ -19,5 +19,5 @@ ppidd_ctest.exe: ppidd_ctest.cpp
 ppidd_test.exe: ppidd_test.F90
 	$(FC) -I ../src $(FCFLAGS) -o $@ $< -L.. -lppidd $(LIBS)
 
-ppidd_sf_test.exe: ppidd_sf_test.F90
+ppidd_sf_test.exe: ppidd_sf_test.f90
 	$(FC) -I ../src $(FCFLAGS) -o $@ $< -L.. -lppidd $(LIBS)

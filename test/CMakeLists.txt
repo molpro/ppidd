@@ -10,7 +10,7 @@ endif ()
 add_test(NAME ppidd_ctest COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ./ppidd_ctest)
 
 if (CMAKE_Fortran_COMPILER_ID)
-    add_executable(ppidd_test ppidd_test.F90)
+    add_executable(ppidd_test ppidd_test.f90)
     target_link_libraries(ppidd_test PRIVATE ppidd::ppidd)
     add_test(NAME ppidd_test COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIOPTIONS} ./ppidd_test)
 

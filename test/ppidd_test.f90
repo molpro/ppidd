@@ -9,13 +9,6 @@
       integer(c_int)     :: argc=0_c_int
       type(c_ptr), target, dimension(1) :: argv
       integer iout
-#ifdef PPIDD_USE_MA
-      integer ma_heap, idtype
-      logical status
-      integer, parameter :: heap=400*400*4
-      integer, parameter :: fudge=100
-      integer, parameter :: stack=400*400*4
-#endif
 
 !  Intitialize PPIDD library
 !  Intitialize a message passing library
@@ -36,28 +29,6 @@
          flush(6)
       endif
       call ppidd_barrier()
-
-#if defined(PPIDD_USE_MA)
-!***  Initialize the MA package
-!     MA must be initialized before any global array is allocated
-
-      ma_heap=heap
-      call ppidd_uses_ma(status)
-      IF (status) then
-        ma_heap=heap+fudge
-        if(iprocs.eq.0) write(iout,11) ma_heap
-11      format(' ppidd_uses_ma= true, calling ppidd_ma_init with heap size=',i15)
-      else
-        if(iprocs.eq.0) write(iout,22)
-22      format(' ppidd_uses_ma=false, calling ppidd_ma_init with nominal heap.')
-      END IF
-!... idtype=1: fortran double precision type
-      idtype=1
-      call ppidd_ma_init(idtype,stack,ma_heap,status)
-      if (.not. status) call ppidd_error('ppidd_ma_init failed'//c_null_char,-1_c_int)
-
-      if(iprocs.eq.0) write(iout,*) 'MA initialized.'
-#endif
 
 ! Call ppiddtest
       call ppiddtest(helper_server_flag.eq.1_c_int)

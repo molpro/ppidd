@@ -3,39 +3,30 @@
 program main
 use ppidd
 implicit none
-integer(c_int)     :: helper_server_flag
-integer(c_int)     :: num_per_helper
-integer(c_int)     :: iprocs
-integer(c_int)     :: argc=0_c_int
+integer(c_int) helper_server_flag, num_per_helper, argc
 type(c_ptr), target, dimension(1) :: argv
-integer iout
+integer, parameter :: iout = 6
 
-!  Intitialize PPIDD library
-!  Intitialize a message passing library
-!  Initialize GA
-argv(1)=c_null_ptr
-call ppidd_initialize(argc,c_loc(argv),ppidd_impl_default,int(bit_size(0),c_int))
-! one helper server on every node */
-helper_server_flag=1_c_int
-num_per_helper=0_c_int
-call ppidd_helper_server(helper_server_flag,num_per_helper)
+argc = 0_c_int
+argv(1) = c_null_ptr
+call ppidd_initialize(argc, c_loc(argv), ppidd_impl_default, int(bit_size(0),c_int))
+! one helper server on every node
+helper_server_flag = 1_c_int
+num_per_helper = 0_c_int
+call ppidd_helper_server(helper_server_flag, num_per_helper)
 call ppidd_initialize_data()
 
-iprocs = ppidd_rank()
-iout=6
-if(iprocs.eq.0)then
+if(ppidd_rank() .eq. 0_c_int)then
    write(iout,*)
    write(iout,*) 'PPIDD initialized'
    flush(6)
 endif
 call ppidd_barrier()
 
-! Call ppiddtest
-call ppiddtest(helper_server_flag.eq.1_c_int)
+call ppiddtest(helper_server_flag .eq. 1_c_int)
 
-! Terminate and Tidy up PPIDD
 call ppidd_finalize()
-end
+end program main
 
 subroutine ppiddtest(helper_server_flag)
 use ppidd

@@ -6,19 +6,17 @@ implicit none
 integer(c_int) helper_server_flag, num_per_helper, argc
 type(c_ptr), target, dimension(1) :: argv
 
-! Intitialize PPIDD library
-argv(1) = c_null_ptr
 argc = 0_c_int
-call ppidd_initialize(argc,c_loc(argv),ppidd_impl_default,int(bit_size(0),c_int))
-! one helper server on every node */
-helper_server_flag=1_c_int
-num_per_helper=0_c_int
-call ppidd_helper_server(helper_server_flag,num_per_helper)
+argv(1) = c_null_ptr
+call ppidd_initialize(argc, c_loc(argv), ppidd_impl_default, int(bit_size(0),c_int))
+! one helper server on every node
+helper_server_flag = 1_c_int
+num_per_helper = 0_c_int
+call ppidd_helper_server(helper_server_flag, num_per_helper)
 call ppidd_initialize_data()
 
 call ppidd_sf_test()
 
-! Terminate and Tidy up PPIDD
 call ppidd_finalize()
 end program main
 

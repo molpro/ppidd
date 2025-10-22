@@ -5,6 +5,7 @@ use ppidd
 implicit none
 integer(c_int) helper_server_flag, num_per_helper, argc
 type(c_ptr), target, dimension(1) :: argv
+integer, parameter :: iout = 6
 
 argc = 0_c_int
 argv(1) = c_null_ptr
@@ -15,15 +16,15 @@ num_per_helper = 0_c_int
 call ppidd_helper_server(helper_server_flag, num_per_helper)
 call ppidd_initialize_data()
 
-call ppidd_sf_test()
+call ppidd_sf_test(iout)
 
 call ppidd_finalize()
 end program main
 
-subroutine ppidd_sf_test
+subroutine ppidd_sf_test(iout)
 use ppidd
 implicit none
-integer, parameter :: iout = 6
+integer, intent(in) :: iout
 
 integer size
 integer dimnsn

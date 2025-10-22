@@ -23,23 +23,23 @@ if(ppidd_rank() .eq. 0_c_int)then
 endif
 call ppidd_barrier()
 
-call ppiddtest(helper_server_flag .eq. 1_c_int)
+call ppiddtest(helper_server_flag .eq. 1_c_int, iout)
 
 call ppidd_finalize()
 end program main
 
-subroutine ppiddtest(helper_server_flag)
+subroutine ppiddtest(helper_server_flag, iout)
 use ppidd
 implicit double precision (a-h,o-z)
+logical, intent(in) :: helper_server_flag
+integer, intent(in) :: iout
 integer(c_int) nproc, iprocs
-logical helper_server_flag
 
 !...  Get the processes number and process id
 nproc = ppidd_size()
 iprocs = ppidd_rank()
 nproc_total = ppidd_size_all()
 
-iout=6
 if (ppidd_impl_default.eq.ppidd_impl_no_mpi) then
   write(iout,*) 'Serial PPIDD, no tests performed.'
   return
@@ -62,7 +62,7 @@ endif
 call ppidd_barrier()
 !... Performing PPIDD basic operation test
 call get_current_times(cpua,wtimea)
-call ppidd_basictest(helper_server_flag)
+call ppidd_basictest(helper_server_flag, iout)
 call ppidd_barrier()
 call get_current_times(cpub,wtimeb)
 if(iprocs.eq.0)write(iout,*)
@@ -72,7 +72,7 @@ if(iprocs.eq.0)write(iout,100) 'ppidd_basictest:',cpub-cpua,wtimeb-wtimea
 call ppidd_barrier()
 !... Performing PPIDD mutex test
 call get_current_times(cpua,wtimea)
-call ppidd_mutex_test(helper_server_flag)
+call ppidd_mutex_test(helper_server_flag, iout)
 call ppidd_barrier()
 call get_current_times(cpub,wtimeb)
 if(iprocs.eq.0)write(iout,*)
@@ -81,7 +81,7 @@ call ppidd_barrier()
 !... Performing PPIDD shared counter test
 call get_current_times(cpua,wtimea)
 if (helper_server_flag) then
-  call ppidd_sharedcounter_test
+  call ppidd_sharedcounter_test(iout)
 else
   if(iprocs.eq.0) write(iout,*)'Helper server is disabled. Skip the shared counter test.'
 end if
@@ -97,9 +97,10 @@ return
 end
 
 
-subroutine ppidd_basictest(helper_server_flag)
+subroutine ppidd_basictest(helper_server_flag, iout)
 use ppidd
 implicit double precision (a-h,o-z)
+integer, intent(in) :: iout
 logical helper_server_flag
 double precision, allocatable, target :: buff(:)
 double precision totsize,bufsize
@@ -108,7 +109,7 @@ double precision cpu1,cpu2,cpu,speed
 integer lenbuf,ioff
 integer(c_int64_t) lentot, ilo, ihi, lenlat, inum
 integer lenseg
-integer maxprc,nloop,iout,i,ipr
+integer maxprc,nloop,i,ipr
 integer proc_ltop,proc_rbot
 integer(c_int) lenre, srcre
 integer(c_int) dtype, nprocs, iprocs, sync, storetype
@@ -124,7 +125,6 @@ bufsize=0.0d0
 maxprc=0
 nloop=10
 
-iout=6
 ! ARCCA Test Flag
 arcca_test_flag=.false.
 !      arcca_test_flag=.true.
@@ -844,9 +844,10 @@ end
 
 
 
-subroutine ppidd_sharedcounter_test
+subroutine ppidd_sharedcounter_test(iout)
 use ppidd
 implicit double precision (a-h,o-z)
+integer, intent(in) :: iout
 integer,          allocatable, target :: task_array(:)
 double precision, allocatable, target :: sum_array(:)
 double precision, allocatable, target :: tcpu_array1(:)
@@ -856,7 +857,7 @@ double precision cpu1,cpu2
 double precision wtime1,wtime2
 double precision sumtemp,diffm
 integer(c_int) nprocs, iprocs
-integer iout,i
+integer i
 integer num_tasks,nscale_task,npart
 integer nval,junk
 logical verbose
@@ -871,7 +872,6 @@ npart=5000000
 
 verbose=.false.
 !      verbose=.true.
-iout=6
 nval=0
 sumtemp=0.0d0
 diffm=0.0d0
@@ -1134,9 +1134,10 @@ end
 
 
 
-subroutine ppidd_mutex_test(helper_server_flag)
+subroutine ppidd_mutex_test(helper_server_flag, iout)
 use ppidd
 implicit double precision (a-h,o-z)
+integer, intent(in) :: iout
 logical helper_server_flag
 integer,          allocatable, target :: task_array(:)
 double precision, allocatable, target :: sum_array(:)
@@ -1146,7 +1147,7 @@ double precision cpu1,cpu2
 double precision wtime1,wtime2
 double precision sumtemp,diffm
 integer(c_int) nprocs, iprocs
-integer iout,i
+integer i
 integer num_tasks,nscale_task,npart
 integer(c_int) storetype, ok
 logical verbose
@@ -1161,7 +1162,6 @@ npart=5000000
 
 verbose=.false.
 !      verbose=.true.
-iout=6
 nval=0
 sumtemp=0.0d0
 diffm=0.0d0

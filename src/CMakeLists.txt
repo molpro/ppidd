@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.5...4.0)
 if (NOT MPI_FOUND)
     find_package(MPI REQUIRED)
 endif (NOT MPI_FOUND)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.5...4.0)
 
 add_executable(ppidd_ctest ppidd_ctest.cpp)
 target_link_libraries(ppidd_ctest PRIVATE ppidd::ppidd)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5...4.0)
 
 project(ppidd LANGUAGES CXX)
 

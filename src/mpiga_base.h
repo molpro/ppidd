@@ -59,7 +59,6 @@
 /* We make MPIGA a pointer to this structure so that users always
    have a pointer, never the actual structure */
 typedef struct STRUC_MPIGA {
-    char         *name;
     MPI_Win      ga_win;
     void         *win_ptr;
     mpimutex_t   mutex_p;
@@ -137,7 +136,6 @@ namespace mpigv {
    int mpiga_free( int );
    size_t mpiga_localmem();
    int mpiga_handle_orig( int );
-   int mpiga_inquire_name( int , char **);
    int mpiga_inquire_storetype( int );
    int mpiga_distribution( int , int , int *, int *);
    int mpiga_location( int , int , int , int *, int *, int *);

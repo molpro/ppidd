@@ -272,14 +272,6 @@ interface
 end interface
 
 interface
- subroutine ppidd_inquire_name(handle, name) bind(c, name='PPIDD_Inquire_name')
- use iso_c_binding, only: c_int, c_char
- integer(c_int), intent(in), value :: handle
- character(c_char), intent(out) :: name ! must be terminated by c_null_char
- end subroutine ppidd_inquire_name
-end interface
-
-interface
  function ppidd_inquire_stype(handle) bind(c, name='PPIDD_Inquire_stype')
  use iso_c_binding, only: c_int
  integer(c_int) ppidd_inquire_stype

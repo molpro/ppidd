@@ -338,7 +338,6 @@ void DataHelperServer()
           helpga =(MPIHELPGA)malloc( sizeof(struct STRUC_MPIHELPGA) );
           if (!helpga) MPIGA_Error("DataHelperServer ERROR: failed to allocate memory for STRUC_MPIHELPGA ",0);
 
-          helpga->name=NULL;
           helpga->dtype=dtype;
           helpga->nele=nelem_helpga;        /* total number of elements on current server */
           helpga->len=NULL;
@@ -828,7 +827,6 @@ ________________________________________________________________________________
   long sizetot;
   int  i,ii;
   int  size,rank_pre,rank_serial;
-  char *helpganame=NULL;
   int  *len=NULL;                 /* size on each compute process */
   int  *len_help=NULL;            /* size on each helper process  */
   MPIHELPGA helpga=NULL;
@@ -888,11 +886,8 @@ ________________________________________________________________________________
     }
 
 
-    strcpy(helpganame=(char *)malloc(strlen(name)+1),name);
-
     MPI_Datatype mpidtype=dtype_mpi[dtype];
 
-    helpga->name=helpganame;
     helpga->ptr_buf=NULL;
     helpga->dtype=mpidtype;
     helpga->nele=lentot;        /* total number of elements */
@@ -914,7 +909,6 @@ ________________________________________________________________________________
 
     len=NULL;
     len_help=NULL;
-    helpganame=NULL;
 
   }
 
@@ -1602,26 +1596,6 @@ MPI_Datatype twosided_helpga_inquire_dtype( int handle )
 }
 
 
-/* get the name of a helpga represented by handle */
-int twosided_helpga_inquire_name( int handle, char **name )
-{
-    int handle_orig;
-    MPIHELPGA helpga=NULL;
-
-    if (DEBUG_) printf("%5d: twosided_helpga_inquire_name: begin. handle=%d\n",ProcID(),handle);
-
-    handle_orig=twosided_helpga_handle_orig(handle);
-    helpga=twosided_helpga_index[handle_orig].ptr;
-
-    *name=helpga->name;
-
-    helpga=NULL;
-
-    if (DEBUG_) printf("%5d: twosided_helpga_inquire_name: end. handle=%d, name=%s\n",ProcID(),handle,*name);
-    return 0;
-}
-
-
 /* Collective operations(allocate and free) for mutexes */
 /* Creates and destroys a set of mutexes (in total: number). Only one set of mutexes can exist at a time. Mutexes can be
 created and destroyed as many times as needed. Mutexes are numbered: 0, ..., number-1. */
@@ -2048,7 +2022,6 @@ int twosided_helpga_release_orig( int handle_orig )
     MPI_Type_size( helpga->dtype, &sizeofdtype );
     sizetot=(long)(helpga->nele)* (long)(sizeofdtype);
     if (helpga!=NULL) { /* free the memory in helpga structure */
-      if ( helpga->name != NULL ) { free (helpga->name); helpga->name=NULL;}
 /*      if ( helpga->ptr_buf != NULL ) { free (helpga->ptr_buf); helpga->ptr_buf=NULL;} */
       if ( helpga->ptr_buf != NULL ) { MPI_Free_mem(helpga->ptr_buf); helpga->ptr_buf=NULL;}
       if ( helpga->len != NULL ) { free (helpga->len);  helpga->len=NULL;}

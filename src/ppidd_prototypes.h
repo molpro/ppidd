@@ -31,7 +31,6 @@
  extern int64_t PPIDD_Read_inc (int handle, int64_t inum, int64_t incr);
  extern void PPIDD_Zero_patch (int handle, int64_t ilo, int64_t ihi);
  extern int  PPIDD_Zero (int handle);
- extern void PPIDD_Inquire_name (int handle, char *name);
  extern int  PPIDD_Inquire_stype (int handle);
  extern size_t PPIDD_Inquire_mem ();
  extern int  PPIDD_Create_mutexes (int storetype, int number);

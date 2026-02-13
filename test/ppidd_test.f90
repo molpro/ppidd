@@ -113,7 +113,6 @@ integer proc_ltop,proc_rbot
 integer(c_int) lenre, srcre
 integer(c_int) dtype, nprocs, iprocs, sync, storetype
 integer(c_int) ihandle,ihandlat, dest_src, n, len
-character(len=80) :: name
 integer(c_int) :: ok
 logical verbose
 logical arcca_test_flag
@@ -195,8 +194,6 @@ ok=ppidd_create('ppiddarray'//c_null_char,lentot,dtype,storetype,ihandle)
 call get_current_times(cpu2,wtime2)
 cpu=cpu2-cpu1
 wtime=wtime2-wtime1
-call ppidd_inquire_name(ihandle,name)
-if(iprocs.eq.0)write(iout,*)'ppidd has created global array: ',name(1:len_trim(name))
 if(iprocs.eq.0)write(iout,10) 'ppidd_create:',cpu,wtime
 10    format(1x,a,t20,'cpu=',f9.4,' sec,  wall time=',f9.4,' sec',:,',  speed=', f12.2,' MB/sec')
 flush(6)

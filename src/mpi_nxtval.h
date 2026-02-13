@@ -58,7 +58,6 @@ Internally in MPICH2, MPI_Cart_create, MPI_Win_create, and some of the MPI-IO fu
 /* Define a helpga structure STRUC_MPIHELPGA, and pointer to this structure MPIHELPGA.
    Users can always use the pointer to this structure */
 typedef struct STRUC_MPIHELPGA {
-       char  *name;             /* name of helpga                       */
        void  *ptr_buf;          /* pointer to helpga buffer             */
        MPI_Datatype dtype;      /* Datatype of helpga                   */
        int   nele;              /* total number of elements, but for helper server it is the number of elements located in current server */
@@ -130,7 +129,6 @@ typedef struct {
     extern void twosided_helpga_extra_acc(int , int , int , int , void *, void *);
     extern int twosided_helpga_handle_orig( int );
     extern MPI_Datatype twosided_helpga_inquire_dtype( int );
-    extern int twosided_helpga_inquire_name(int , char **);
     extern int twosided_helpmutex_collect(int , int , int );
     extern int twosided_helpmutex_lock(int , int );
     extern int lock_twosided_helpmutex_orig(int );

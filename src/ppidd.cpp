@@ -793,25 +793,6 @@ extern "C" {
    }
 
 
-/*! \brief Returns the name of a global array represented by the handle.
-    \details Analogous to http://hpc.pnl.gov/globalarrays/api/c_op_api.html#INQUIRE_NAME
-    This operation is local. */
-   void PPIDD_Inquire_name(int handle, char *name) {
-    switch (ppidd_impl) {
-#ifdef HAVE_MPI_H
-#ifdef HAVE_GA_H
-     case (ppidd_impl_ga):
-      return ga::PPIDD_Inquire_name(handle,name);
-#endif
-     case (ppidd_impl_mpi):
-      return mpi::PPIDD_Inquire_name(handle,name);
-#endif
-     default:
-      return no_mpi::PPIDD_Inquire_name(handle,name);
-    }
-   }
-
-
 /* \brief Returns the storetype of a global array represented by the handle.
    \details storetype: number of helper processes for storing this global array.
    - \c storetype=0 : Normal distributed array stored across the distributed processes

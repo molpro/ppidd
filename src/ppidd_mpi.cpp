@@ -566,15 +566,6 @@ static int n_in_msg_mpiq=0;
    }
 
 
-   void PPIDD_Inquire_name(int handle, char *name) {
-      char *name2;
-
-      if ( mpiga_inquire_storetype(handle) == 0 ) mpiga_inquire_name(handle, &name2);
-      else twosided_helpga_inquire_name(handle, &name2);
-      strncpy(name,name2,strlen(name));
-   }
-
-
    int PPIDD_Inquire_stype(int handle) {
       return mpiga_inquire_storetype(handle);
    }

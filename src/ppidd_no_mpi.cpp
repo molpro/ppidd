@@ -173,11 +173,6 @@ namespace no_mpi {
    }
 
 
-   void PPIDD_Inquire_name(int handle, char *name) {
-      do_not_call("PPIDD_Inquire_name");
-   }
-
-
    int PPIDD_Inquire_stype(int handle) {
       do_not_call("PPIDD_Inquire_stype");
    }

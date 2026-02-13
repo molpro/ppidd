@@ -170,7 +170,6 @@ int mpiga_create_irreg(const char *name, int *lenin, int nchunk, MPI_Datatype dt
     int      *len;
     int      lentot,i,mpierr;
     int      handle_orig=0;
-    char     *mpiganame;
     mpimutex_t mutex;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create_irreg begin: nchunk= %d\n",ProcID(),nchunk);
@@ -205,10 +204,8 @@ int mpiga_create_irreg(const char *name, int *lenin, int nchunk, MPI_Datatype dt
 
 /*    printf("In mpiga_create_irreg 1: size= %d \n", size); */
     MPI_Barrier(MPIGA_WORK_COMM);
-    strcpy(mpiganame=(char *)malloc(strlen(name)+1),name);
     /* Save other data and return */
     new_ga->mutex_p    = NULL;
-    new_ga->name       = mpiganame;
     new_ga->dtype      = dtype;
     new_ga->dtype_size = sizeoftype;
     new_ga->lentot     = lentot;
@@ -319,7 +316,6 @@ int mpiga_free( int handle )
       if (ga->win_ptr) mpierr=MPI_Free_mem( ga->win_ptr );
       if (mpierr != MPI_SUCCESS) printf("In mpiga_free: after MPI_Free_mem, mpierr=%d\n",mpierr);
       sizetot=(long)(ga->lentot)* (long)(ga->dtype_size);
-      if (ga->name) free(ga->name);
       if (ga->len) free(ga->len);
       free(ga);
       MPIGAIndex[handle_orig].ptr=NULL;
@@ -371,25 +367,6 @@ int mpiga_handle_orig( int handle )
     }
     if (MPIGA_Debug) printf("%5d: In mpiga_handle_orig: end. handle=%d\n",ProcID(),handle);
     return handle_orig;
-}
-
-
-/* get the name of mpiga */
-int mpiga_inquire_name( int handle, char **name )
-{
-    int handle_orig;
-    MPIGA ga;
-
-    if (MPIGA_Debug) printf("%5d: In mpiga_inquire_name: begin. handle=%d\n",ProcID(),handle);
-
-    handle_orig=mpiga_handle_orig(handle);
-
-    ga=MPIGAIndex[handle_orig].ptr;
-
-    *name=ga->name;
-
-   if (MPIGA_Debug) printf("%5d: In mpiga_inquire_name: end. name=%s.\n",ProcID(),*name);
-   return 0;
 }
 
 

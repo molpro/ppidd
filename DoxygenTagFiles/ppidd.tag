@@ -236,13 +236,6 @@
       <arglist>(int numproc)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>PPIDD_Inquire_name</name>
-      <anchorfile>ppidd_8cpp.html</anchorfile>
-      <anchor>a704b674ff7f5dcc6b88c666c3308adef</anchor>
-      <arglist>(int handle, char *name)</arglist>
-    </member>
-    <member kind="function">
       <type>int</type>
       <name>PPIDD_Inquire_stype</name>
       <anchorfile>ppidd_8cpp.html</anchorfile>

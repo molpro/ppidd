@@ -93,7 +93,6 @@ if(iprocs.eq.0)write(iout,100) 'ppidd_sharedcounter_test:',cpub-cpua,wtimeb-wtim
 if(iprocs.eq.0) write(iout,*)
 if(iprocs.eq.0) write(iout,*) 'All PPIDD tests successful.'
 
-return
 end
 
 
@@ -827,7 +826,6 @@ flush(6)
 !... release the memory in buffer space
 IF( ALLOCATED(buff) ) DEALLOCATE( buff )
 
-return
 end
 
 !... get current CPU time from Fortran intrinsic function and wall time from MPI2/GA function
@@ -839,7 +837,6 @@ double precision cpu,wtime
 cpu=dble(second())
 wtime=ppidd_wtime()
 
-return
 end
 
 
@@ -1129,7 +1126,6 @@ IF( ALLOCATED(twt_array2) ) DEALLOCATE( twt_array2)
 
 end if
 
-return
 end
 
 
@@ -1477,7 +1473,6 @@ IF( ALLOCATED(sum_array) ) DEALLOCATE( sum_array)
 IF( ALLOCATED(tcpu_array1) ) DEALLOCATE( tcpu_array1)
 IF( ALLOCATED(twt_array1) ) DEALLOCATE( twt_array1)
 
-return
 end
 
 
@@ -1517,13 +1512,11 @@ pai=totsum/dble(nloop)
 err = pai - pi
 !      write(6,*) 'running compute_task, pai=',pai,' err=',err
 
-return
 contains
  double precision function f(x)
  implicit none
  double precision x
  f = 4.0d0/(1.0d0+x*x)
- return
  end function f
 
 end

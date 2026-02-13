@@ -93,7 +93,7 @@ if(iprocs.eq.0)write(iout,100) 'ppidd_sharedcounter_test:',cpub-cpua,wtimeb-wtim
 if(iprocs.eq.0) write(iout,*)
 if(iprocs.eq.0) write(iout,*) 'All PPIDD tests successful.'
 
-end
+end subroutine ppiddtest
 
 
 subroutine ppidd_basictest(helper_server_flag, iout)
@@ -826,7 +826,7 @@ flush(6)
 !... release the memory in buffer space
 IF( ALLOCATED(buff) ) DEALLOCATE( buff )
 
-end
+end subroutine ppidd_basictest
 
 !... get current CPU time from Fortran intrinsic function and wall time from MPI2/GA function
 subroutine get_current_times(cpu,wtime)
@@ -837,7 +837,7 @@ double precision cpu,wtime
 cpu=dble(second())
 wtime=ppidd_wtime()
 
-end
+end subroutine get_current_times
 
 
 
@@ -1126,7 +1126,7 @@ IF( ALLOCATED(twt_array2) ) DEALLOCATE( twt_array2)
 
 end if
 
-end
+end subroutine ppidd_sharedcounter_test
 
 
 
@@ -1473,7 +1473,7 @@ IF( ALLOCATED(sum_array) ) DEALLOCATE( sum_array)
 IF( ALLOCATED(tcpu_array1) ) DEALLOCATE( tcpu_array1)
 IF( ALLOCATED(twt_array1) ) DEALLOCATE( twt_array1)
 
-end
+end subroutine ppidd_mutex_test
 
 
 
@@ -1519,4 +1519,4 @@ contains
  f = 4.0d0/(1.0d0+x*x)
  end function f
 
-end
+end subroutine compute_task

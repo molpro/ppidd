@@ -160,7 +160,7 @@ int mpiga_cleanup_finalize()
 }
 
 
-int mpiga_create_irreg(const char *name, int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
+int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
 {
     MPIGA       new_ga;
     int      size, sizeoftype;
@@ -282,7 +282,7 @@ int mpiga_create( const char *name, int lentot, MPI_Datatype datatype, int *hand
        else len[i]=minlen;
     }
 
-    mpiga_create_irreg(name, len.data(), sizeoflen, datatype, handle);
+    mpiga_create_irreg(len.data(), sizeoflen, datatype, handle);
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create end. handle=%d, nprocs=%d\n",ProcID(),*handle,size);
 

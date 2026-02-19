@@ -131,7 +131,7 @@ namespace mpigv {
    int mpiga_initialize_data();
    int mpiga_terminate();
    int mpiga_cleanup_finalize();
-   int mpiga_create_irreg(const char *, int *, int , MPI_Datatype , int *);
+   int mpiga_create_irreg(int *, int , MPI_Datatype , int *);
    int mpiga_create( const char *, int , MPI_Datatype , int *);
    int mpiga_free( int );
    size_t mpiga_localmem();

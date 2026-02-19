@@ -302,11 +302,11 @@ static int n_in_msg_mpiq=0;
       for (int i=0;i<mpinchunk;i++) mpilenin[i]=(int)lenin[i];
       MPI_Datatype mpidtype=dtype_mpi[dtype];
       if (use_helper_server==0) {
-        mpierr=mpiga_create_irreg(name, mpilenin.data(), mpinchunk, mpidtype, handle);
+        mpierr=mpiga_create_irreg(mpilenin.data(), mpinchunk, mpidtype, handle);
       }
       else {
         if (storetype==0)
-          mpierr=mpiga_create_irreg(name, mpilenin.data(), mpinchunk, mpidtype, handle);
+          mpierr=mpiga_create_irreg(mpilenin.data(), mpinchunk, mpidtype, handle);
         else {
           int mproc=0;
           mpierr=twosided_helpga_create_irreg(mproc, mpilenin.data(), mpinchunk, handle, name, dtype);

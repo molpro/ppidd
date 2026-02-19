@@ -335,7 +335,7 @@ static int n_in_msg_mpiq=0;
          mpierr=mpiga_create(mpilentot, mpidtype, handle );
         else {
          int mproc=0;
-         mpierr=twosided_helpga_create(mproc, mpilentot, handle, name, dtype);
+         mpierr=twosided_helpga_create(mproc, mpilentot, handle, dtype);
         }
       }
       if(MPIGA_Debug)printf("%5d: In PPIDD_Create: array %s created, dtype=%d, storetype=%d\n",ProcID(),name,storetype,dtype);

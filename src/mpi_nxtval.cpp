@@ -805,7 +805,7 @@ ________________________________________________________________________________
 }
 
 
-int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, const char *name, int dtype)
+int twosided_helpga_create_irreg(int mproc, int *lenin, int nchunk, int *handle, int dtype)
 /*
   Operations for helpga:
 ________________________________________________________________________________________________________
@@ -998,7 +998,7 @@ ________________________________________________________________________________
       }
     }
 
-    twosided_helpga_create_irreg(mproc, len.data(), sizeoflen, handle, name, dtype);
+    twosided_helpga_create_irreg(mproc, len.data(), sizeoflen, handle, dtype);
 
     if (DEBUG_) printf("%5d: twosided_helpga_create: end. mproc=%d, handle=%d\n",ProcID(),mproc,*handle);
 

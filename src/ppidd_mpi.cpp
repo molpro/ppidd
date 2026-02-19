@@ -309,7 +309,7 @@ static int n_in_msg_mpiq=0;
           mpierr=mpiga_create_irreg(mpilenin.data(), mpinchunk, mpidtype, handle);
         else {
           int mproc=0;
-          mpierr=twosided_helpga_create_irreg(mproc, mpilenin.data(), mpinchunk, handle, name, dtype);
+          mpierr=twosided_helpga_create_irreg(mproc, mpilenin.data(), mpinchunk, handle, dtype);
         }
       }
       if(mpierr==0) return 1 ;

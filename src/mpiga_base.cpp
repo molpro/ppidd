@@ -261,7 +261,7 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
 }
 
 
-int mpiga_create( const char *name, int lentot, MPI_Datatype datatype, int *handle ) {
+int mpiga_create(int lentot, MPI_Datatype datatype, int *handle ) {
     int size, sizeoflen;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create begin.\n",ProcID());

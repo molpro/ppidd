@@ -328,11 +328,11 @@ static int n_in_msg_mpiq=0;
       else mpilentot=(int)lentot;
       MPI_Datatype mpidtype=dtype_mpi[dtype];
       if (use_helper_server==0) {
-        mpierr=mpiga_create( name, mpilentot, mpidtype, handle );
+        mpierr=mpiga_create(mpilentot, mpidtype, handle );
       }
       else {
         if (storetype==0)
-         mpierr=mpiga_create( name, mpilentot, mpidtype, handle );
+         mpierr=mpiga_create(mpilentot, mpidtype, handle );
         else {
          int mproc=0;
          mpierr=twosided_helpga_create(mproc, mpilentot, handle, name, dtype);

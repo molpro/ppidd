@@ -861,7 +861,7 @@ ________________________________________________________________________________
     size=NProcs_Work();
 
     if (nchunk<0 || nchunk>size) {
-       printf("ERROR in mpiga_create_irreg : nchunk(%5d)larger than process number(%5d).\n", nchunk,size);
+       printf("ERROR in twosided_helpga_create_irreg: nchunk(%5d)larger than process number(%5d).\n", nchunk,size);
        return 1;
     }
 

@@ -790,7 +790,7 @@ int mpiga_read_inc( int handle, int inum, int inc )
 
 int mpiga_zero_patch( int handle, int ilo, int ihigh)
 {
-    int ifirst, ilast, i, j, rank;
+    int ifirst, ilast, i, rank;
     MPI_Aint disp;
     int irank;
     int np,lenleft;
@@ -823,15 +823,15 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
          if (ga->dtype==MPI_INT32_T) {
             i32buf=(int32_t *)ga->win_ptr;
-            for (j=disp;j<disp+ilen;j++) i32buf[j]=(int32_t)0;
+            for (int j=disp; j<disp+ilen; j++) i32buf[j]=(int32_t)0;
          }
          else if (ga->dtype==MPI_INT64_T) {
             i64buf=(int64_t *)ga->win_ptr;
-            for (j=disp;j<disp+ilen;j++) i64buf[j]=(int64_t)0;
+            for (int j=disp; j<disp+ilen; j++) i64buf[j]=(int64_t)0;
          }
          else if (ga->dtype==MPI_DOUBLE) {
             dbuf=(double *)ga->win_ptr;
-            for (j=disp;j<disp+ilen;j++) dbuf[j]=0.0e0;
+            for (int j=disp; j<disp+ilen; j++) dbuf[j]=0.0e0;
          }
          else {
             MPIGA_Error("mpiga_zero_patch: wrong MPI_Datatype ",0);

@@ -294,14 +294,12 @@ int mpiga_free( int handle )
 {
     int mpierr;
     long sizetot=(long)0;
-    int handle_orig;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_free: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
     if (ga) {
       if (ga->ga_win != MPI_WIN_NULL) mpierr=MPI_Win_free( &ga->ga_win );
       if (use_helper_server) {
@@ -350,12 +348,10 @@ size_t mpiga_localmem()
 /* get the original handle of mpiga, and check whether the handle is out of range or active */
 int mpiga_handle_orig( int handle )
 {
-    int handle_orig;
-
     if (MPIGA_Debug) printf("%5d: In mpiga_handle_orig: begin. handle=%d\n",ProcID(),handle);
 
     /* check whether mpiga handle is out of range, and check whether it is active */
-    handle_orig=handle-MPI_GA_OFFSET;
+    int handle_orig=handle-MPI_GA_OFFSET;
     if(handle_orig < 0 || handle_orig >= MAX_MPI_ARRAYS){
        fprintf(stderr,"%4d: mpiga_handle_orig ERROR:  invalid handle [%d]. Should be [ %d -- %d ].\n",
                        ProcID(),handle,MPI_GA_OFFSET,(MPI_GA_OFFSET+MAX_MPI_ARRAYS));
@@ -393,19 +389,15 @@ int mpiga_inquire_storetype( int handle )
 /* If no array elements are owned by process iproc, the range is returned as ilo[ ]=0 and ihigh[ ]= -1  */
 int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
 {
-    int i;
-    int size;
-    int lenleft;
-    int handle_orig;
-    MPIGA ga;
+    int i, lenleft;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_distribution begin: handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
-    size=mpigv::nprocs;
+    int size=mpigv::nprocs;
 
     if ( iproc < 0 || iproc >=size ) {
       fprintf(stderr,"ERROR in mpiga_distribution: iproc= %d over range!!\n",iproc);
@@ -436,14 +428,12 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
     int size;
     int lenleft,iilow,iihig,offset;
     int iproclow=0,iprochigh=0;
-    int handle_orig;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_location: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
     size=mpigv::nprocs;
 
@@ -487,14 +477,12 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
     MPI_Aint disp;
     int np,lenleft,ilen;
     mpimutex_t mutex=NULL;
-    int handle_orig;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_put: begin. handle=%d,ilo=%d,ihi=%d\n",ProcID(),handle,ilo,ihigh);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
     mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 /*    for (i=0;i<np;i++)  printf("In mpiga_put: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]); */
@@ -553,14 +541,12 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
     int ifirst,ilast,i,rank;
     MPI_Aint disp;
     int np,lenleft,ilen;
-    int handle_orig;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_get: begin. handle=%d, ilo=%d,ihigh=%d\n",ProcID(),handle,ilo,ihigh);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
     mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 
@@ -595,7 +581,6 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     MPI_Aint disp;
     int np,lenleft;
     mpimutex_t mutex=NULL;
-    int handle_orig;
     int len,ilen;
     void *alphabuf=NULL;
     int32_t *i32tempbuf,*i32fac;
@@ -604,13 +589,12 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     std::vector<int32_t> i32alphabuf;
     std::vector<int64_t> i64alphabuf;
     std::vector<double> dalphabuf;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_acc: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
 /*    size=mpigv::nprocs; */
 
@@ -711,14 +695,12 @@ int mpiga_read_inc( int handle, int inum, int inc )
     int np,lenleft;
     int i;
     mpimutex_t mutex=NULL;
-    int handle_orig;
-    MPIGA ga;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
 /*    size=mpigv::nprocs; */
 
@@ -794,8 +776,6 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
     MPI_Aint disp;
     int irank;
     int np,lenleft;
-    int handle_orig;
-    MPIGA ga;
     int ilen;
     int32_t *i32buf;
     int64_t *i64buf;
@@ -803,9 +783,9 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
     if (MPIGA_Debug)  printf("%5d: In mpiga_zero_patch: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    ga=MPIGAIndex[handle_orig].ptr;
+    MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
     irank=mpigv::myproc;
 
@@ -848,14 +828,11 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
 int mpiga_zero( int handle)
 {
-    int handle_orig;
-    int len;
-
     if (MPIGA_Debug) printf("%5d: In mpiga_zero: begin. handle=%d\n",ProcID(),handle);
 
-    handle_orig=mpiga_handle_orig(handle);
+    int handle_orig=mpiga_handle_orig(handle);
 
-    len=(MPIGAIndex[handle_orig].ptr)->lentot;
+    int len=(MPIGAIndex[handle_orig].ptr)->lentot;
 
     mpiga_zero_patch(handle,1,len);
 

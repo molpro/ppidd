@@ -12,9 +12,6 @@ jobs:
     container:
       # relies on repository name being all lower case
       image: ghcr.io/${{ github.repository }}
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6

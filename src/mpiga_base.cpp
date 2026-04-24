@@ -860,8 +860,6 @@ created and destroyed as many times as needed. Mutexes are numbered: 0, ..., num
 int mpiga_create_mutexes(int number)
 {
     mpimutex_t mutex;
-    int  i,mpierr;
-    int  homerank;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create_mutexes begin:  %d mutexes will be created.\n",ProcID(),number);
 
@@ -879,9 +877,9 @@ int mpiga_create_mutexes(int number)
     mpiga_mutexindex = mpiga_mutex_data_struc;
     mpigv::nmutex=number;
 
-    for (i=0;i<number;i++) {
-       homerank=0;
-       mpierr = MPIMUTEX_Create(homerank, MPIGA_WORK_COMM, &mutex);
+    for (int i=0; i<number; i++) {
+       int homerank = 0;
+       int mpierr = MPIMUTEX_Create(homerank, MPIGA_WORK_COMM, &mutex);
        if (mpierr != MPI_SUCCESS) MPI_Abort(MPIGA_WORK_COMM, MPI_ERR_UNKNOWN);
        mpiga_mutexindex[i].actv   = 1;
        mpiga_mutexindex[i].lock   = 0;
@@ -948,7 +946,7 @@ int mpiga_unlock_mutex(int inum)
 /* destroys the set of mutexes created with ga_create_mutexes.*/
 int mpiga_destroy_mutexes()
 {
-    int  i,mpierr;
+    int  mpierr;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_destroy_mutexes begin: mpigv::nmutex=%d\n",ProcID(),mpigv::nmutex);
 
@@ -957,7 +955,7 @@ int mpiga_destroy_mutexes()
        return 1;
     }
 
-    for(i=0;i<mpigv::nmutex; i++) {
+    for(int i=0; i<mpigv::nmutex; i++) {
        if ( mpiga_mutexindex[i].lock ==1 ){
           fprintf(stderr,"WARNING in mpiga_destroy_mutexes: mutex is still locked before destroyed. Now unlocking it...\n");
           mpierr = MPIMUTEX_Unlock(mpiga_mutexindex[i].ptr);

@@ -772,14 +772,7 @@ int mpiga_read_inc( int handle, int inum, int inc )
 
 int mpiga_zero_patch( int handle, int ilo, int ihigh)
 {
-    int ifirst, ilast, i, rank;
-    MPI_Aint disp;
-    int irank;
-    int np,lenleft;
-    int ilen;
-    int32_t *i32buf;
-    int64_t *i64buf;
-    double  *dbuf;
+    int np;
 
     if (MPIGA_Debug)  printf("%5d: In mpiga_zero_patch: begin. handle=%d\n",ProcID(),handle);
 
@@ -787,30 +780,31 @@ int mpiga_zero_patch( int handle, int ilo, int ihigh)
 
     MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
-    irank=mpigv::myproc;
+    int irank=mpigv::myproc;
 
 /*    len=ihigh-ilo+1; */
 
     mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
-    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
-    for(i=0;i<np;i++) {
-       rank=mpigv::proclist[i];
+    int lenleft = 0;
+    for (int i=0; i<mpigv::proclist[0]; i++) lenleft=lenleft + ga->len[i];
+    for (int i=0; i<np; i++) {
+       int rank=mpigv::proclist[i];
        if (rank==irank){
-         ifirst = mpigv::map[2*i];
-         ilast  = mpigv::map[2*i+1];
-         disp = ifirst-lenleft - 1;
-         ilen = ilast -ifirst  + 1;
+         int ifirst = mpigv::map[2*i];
+         int ilast  = mpigv::map[2*i+1];
+         MPI_Aint disp = ifirst-lenleft - 1;
+         int ilen = ilast -ifirst  + 1;
 
          if (ga->dtype==MPI_INT32_T) {
-            i32buf=(int32_t *)ga->win_ptr;
+            int32_t *i32buf=(int32_t *)ga->win_ptr;
             for (int j=disp; j<disp+ilen; j++) i32buf[j]=(int32_t)0;
          }
          else if (ga->dtype==MPI_INT64_T) {
-            i64buf=(int64_t *)ga->win_ptr;
+            int64_t *i64buf=(int64_t *)ga->win_ptr;
             for (int j=disp; j<disp+ilen; j++) i64buf[j]=(int64_t)0;
          }
          else if (ga->dtype==MPI_DOUBLE) {
-            dbuf=(double *)ga->win_ptr;
+            double  *dbuf=(double *)ga->win_ptr;
             for (int j=disp; j<disp+ilen; j++) dbuf[j]=0.0e0;
          }
          else {

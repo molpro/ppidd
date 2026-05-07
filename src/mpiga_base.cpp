@@ -690,10 +690,7 @@ int mpiga_read_inc( int handle, int inum, int inc )
     int32_t i32buf, i32incval=(int32_t)inc;
     int64_t i64buf, i64incval=(int64_t)inc;
     int is32int=0, is64int=0;
-    int rank;
-    MPI_Aint disp;
-    int np,lenleft;
-    int i;
+    int np;
     mpimutex_t mutex=NULL;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc: begin. handle=%d\n",ProcID(),handle);
@@ -722,13 +719,14 @@ int mpiga_read_inc( int handle, int inum, int inc )
     }
 
     mpiga_location(handle, inum, inum, mpigv::map.data(), mpigv::proclist.data(), &np);
-/*    for (i=0;i<np;i++)  printf("In mpiga_read_inc: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]);
+/*    for (int i=0;i<np;i++)  printf("In mpiga_read_inc: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]);
 */
-    rank = mpigv::proclist[0];
-    for (lenleft=0,i=0;i<rank;i++) lenleft=lenleft + ga->len[i];
+    int rank = mpigv::proclist[0];
+    int lenleft = 0;
+    for (int i=0; i<rank; i++) lenleft = lenleft + ga->len[i];
 
     /* disp depends on the displacement unit being sizeof(int) */
-    disp = inum-lenleft - 1;
+    MPI_Aint disp = inum-lenleft - 1;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_read_inc before mutex. rank=%d,ga_win=%ld,disp=%d\n",ProcID(),rank,(long)ga->ga_win,(int)disp);
 

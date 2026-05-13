@@ -63,7 +63,7 @@ int mpiga_initialize(int *argcmain, char ***argvmain)
 
 int mpiga_initialize_data()
 {
-    int size,rank,i;
+    int size,rank;
     if (MPIGA_Debug) printf("In mpiga_initilize_data begin.\n");
 /* Split off one process to hold the counter; remaining processes are used to construct work/compute communicator.*/
     make_worker_comm( MPI_COMM_WORLD, &MPIGA_WORK_COMM);
@@ -85,7 +85,7 @@ int mpiga_initialize_data()
       exit (1);
     }
     MPIGAIndex = mpiga_main_data_structure;
-    for(i=0;i<MAX_MPI_ARRAYS; i++) {
+    for(int i=0; i<MAX_MPI_ARRAYS; i++) {
        MPIGAIndex[i].ptr  = NULL;
        MPIGAIndex[i].actv = 0;
     }
@@ -111,15 +111,12 @@ int mpiga_initialize_data()
 
 int mpiga_terminate()
 {
-    int i;
-    int handle;
-
     if (MPIGA_Debug) printf("%5d: In mpiga_terminate begin: mpigv::nga= %d\n",ProcID(),mpigv::nga);
 
 #ifdef MPI2_ONESIDED
     if (mpigv::nga>0) {
-       for(i=0;i<MAX_MPI_ARRAYS; i++) {
-         if ( MPIGAIndex[i].actv == 1) { handle=i+MPI_GA_OFFSET; mpiga_free(handle); }
+       for(int i=0; i<MAX_MPI_ARRAYS; i++) {
+         if ( MPIGAIndex[i].actv == 1) { int handle=i+MPI_GA_OFFSET; mpiga_free(handle); }
        }
     }
     if(mpiga_main_data_structure) {
@@ -168,7 +165,7 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
     MPI_Aint local_size;
     int      rank,homerank;
     int      *len;
-    int      lentot,i,mpierr;
+    int      lentot,mpierr;
     int      handle_orig=0;
     mpimutex_t mutex;
 
@@ -188,8 +185,8 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
        return 1;
     }
     lentot=0;
-    for(i=0;i<nchunk;i++) {len[i]=lenin[i];lentot=lentot+lenin[i];}
-    for(i=nchunk;i<size;i++) len[i]=0;
+    for(int i=0; i<nchunk; i++) {len[i]=lenin[i];lentot=lentot+lenin[i];}
+    for(int i=nchunk; i<size; i++) len[i]=0;
 
     MPI_Type_size( dtype, &sizeoftype );
 
@@ -226,7 +223,7 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
         }
         return 1;
       }
-    for(i=0;i<MAX_MPI_ARRAYS;i++){
+    for(int i=0; i<MAX_MPI_ARRAYS; i++){
        if ( MPIGAIndex[i].actv == 0 ) {
           handle_orig=i;  /* original sequence number of mpiga */
           break;
@@ -329,19 +326,17 @@ int mpiga_free( int handle )
 /* RETURNS AMOUNT OF MEMORY on each processor IN ACTIVE MPI GLOBAL DADA STRUCTURES AND HELPGA */
 size_t mpiga_localmem()
 {
-    int i;
-    size_t sum_mpiga=(size_t)0,sum_helpga=(size_t)0,sum=(size_t)0;
+    size_t sum_mpiga=(size_t)0,sum_helpga=(size_t)0;
     if ( mpigv::nga > 0 ) {
-      for(i=0; i<MAX_MPI_ARRAYS; i++)
+      for(int i=0; i<MAX_MPI_ARRAYS; i++)
         if(MPIGAIndex[i].actv) sum_mpiga += (size_t)MPIGAIndex[i].size;
     }
     if ( twosided_helpga_num > 0 ) {
-      for(i=0;i<MAX_TWOSIDED_HELPGA_ARRAYS; i++) {
+      for(int i=0; i<MAX_TWOSIDED_HELPGA_ARRAYS; i++) {
         if(twosided_helpga_index[i].actv) sum_helpga += (size_t)twosided_helpga_index[i].size;
       }
     }
-    sum=sum_mpiga+sum_helpga;
-    return sum;
+    return sum_mpiga + sum_helpga;
 }
 
 
@@ -389,8 +384,6 @@ int mpiga_inquire_storetype( int handle )
 /* If no array elements are owned by process iproc, the range is returned as ilo[ ]=0 and ihigh[ ]= -1  */
 int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
 {
-    int i, lenleft;
-
     if (MPIGA_Debug) printf("%5d: In mpiga_distribution begin: handle=%d\n",ProcID(),handle);
 
     int handle_orig=mpiga_handle_orig(handle);
@@ -404,7 +397,8 @@ int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
       MPI_Abort(MPI_COMM_WORLD,MPI_ERR_OTHER);
     }
 
-    for (lenleft=0,i=0;i<iproc;i++) lenleft=lenleft + ga->len[i];
+    int lenleft = 0;
+    for (int i=0; i<iproc; i++) lenleft=lenleft + ga->len[i];
 
     if (ga->len[iproc] !=0 ) {
        *ilo=lenleft+1;
@@ -424,9 +418,8 @@ int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
  If lo/hi are out of bounds then error is given. np is equal to the number of processes that hold the data . */
 int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int *np)
 {
-    int i, rank;
-    int size;
-    int lenleft,iilow,iihig,offset;
+    int rank, size;
+    int iilow,iihig,offset;
     int iproclow=0,iprochigh=0;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_location: begin. handle=%d\n",ProcID(),handle);
@@ -441,7 +434,8 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
       fprintf(stderr,"ERROR in mpiga_location: over range! ilo=%d,ihigh=%d\n",ilo,ihigh);
       MPI_Abort(MPI_COMM_WORLD,MPI_ERR_OTHER);
     }
-    for (lenleft=0,i=0;i<size;i++){
+    int lenleft = 0;
+    for (int i=0; i<size; i++){
        if (ilo   >=lenleft+1 && ilo   <= lenleft+ga->len[i]) iproclow=i;
        if (ihigh >=lenleft+1 && ihigh <= lenleft+ga->len[i]) { iprochigh=i; break; }
        lenleft=lenleft + ga->len[i];
@@ -449,10 +443,11 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
 
     *np=iprochigh-iproclow+1;
 
-    for (lenleft=0,i=0;i<iproclow;i++) lenleft=lenleft + ga->len[i];
+    lenleft = 0;
+    for (int i=0; i<iproclow; i++) lenleft=lenleft + ga->len[i];
 
     for (rank=iproclow;rank<=iprochigh;rank++) {
-       i=rank-iproclow;
+       int i = rank-iproclow;
        proclist[i]=rank;
        iilow=lenleft+1;
        iihig=lenleft + ga->len[rank];
@@ -473,9 +468,9 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
 */
 int mpiga_put( int handle, int ilo, int ihigh, void *buf )
 {
-    int ifirst, ilast, i, rank;
+    int ifirst, ilast, rank;
     MPI_Aint disp;
-    int np,lenleft,ilen;
+    int np,ilen;
     mpimutex_t mutex=NULL;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_put: begin. handle=%d,ilo=%d,ihi=%d\n",ProcID(),handle,ilo,ihigh);
@@ -485,12 +480,13 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
     MPIGA ga=MPIGAIndex[handle_orig].ptr;
 
     mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
-/*    for (i=0;i<np;i++)  printf("In mpiga_put: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]); */
+/*    for (int i=0; i<np; i++)  printf("In mpiga_put: i=%d,proclist[i]=%d,map=%d %d\n",i,proclist[i],map[2*i],map[2*i+1]); */
 
-    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
+    int lenleft = 0;
+    for (int i=0; i<mpigv::proclist[0]; i++) lenleft=lenleft + ga->len[i];
 
 /* put the data to distributed location of remote processes */
-    for(i=0;i<np;i++) {
+    for(int i=0; i<np; i++) {
        rank   = mpigv::proclist[i];
        ifirst = mpigv::map[2*i];
        ilast  = mpigv::map[2*i+1];
@@ -538,9 +534,9 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
  */
 int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 {
-    int ifirst,ilast,i,rank;
+    int ifirst,ilast,rank;
     MPI_Aint disp;
-    int np,lenleft,ilen;
+    int np,ilen;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_get: begin. handle=%d, ilo=%d,ihigh=%d\n",ProcID(),handle,ilo,ihigh);
 
@@ -550,10 +546,11 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 
     mpiga_location(handle, ilo, ihigh, mpigv::map.data(), mpigv::proclist.data(), &np);
 
-    for (lenleft=0,i=0;i<mpigv::proclist[0];i++) lenleft=lenleft + ga->len[i];
+    int lenleft = 0;
+    for (int i=0; i<mpigv::proclist[0]; i++) lenleft=lenleft + ga->len[i];
 
 /* get the data from distributed location of remote processes */
-    for(i=0;i<np;i++) {
+    for(int i=0; i<np; i++) {
        rank=mpigv::proclist[i];
        ifirst = mpigv::map[2*i];
        ilast  = mpigv::map[2*i+1];
@@ -577,9 +574,9 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 */
 int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 {
-    int ifirst, ilast, i, rank, rank_first, rank_last;
+    int ifirst, ilast, rank, rank_first, rank_last;
     MPI_Aint disp;
-    int np,lenleft;
+    int np;
     mpimutex_t mutex=NULL;
     int len,ilen;
     void *alphabuf=NULL;
@@ -605,7 +602,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        else {
           i32tempbuf=(int32_t *)buf;
 	  i32alphabuf.resize(len);
-          for(i=0;i<len;i++)i32alphabuf[i]=(*i32fac)*i32tempbuf[i];
+          for(int i=0; i<len; i++) i32alphabuf[i]=(*i32fac)*i32tempbuf[i];
           alphabuf=(void *)i32alphabuf.data();
        }
     }
@@ -615,7 +612,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        else {
           i64tempbuf=(int64_t *)buf;
 	  i64alphabuf.resize(len);
-          for(i=0;i<len;i++)i64alphabuf[i]=(*i64fac)*i64tempbuf[i];
+          for(int i=0; i<len; i++) i64alphabuf[i]=(*i64fac)*i64tempbuf[i];
           alphabuf=(void *)i64alphabuf.data();
        }
     }
@@ -625,7 +622,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
        else {
           dtempbuf=(double *)buf;
 	  dalphabuf.resize(len);
-          for(i=0;i<len;i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
+          for(int i=0; i<len; i++) dalphabuf[i]=(*dfac)*dtempbuf[i];
           alphabuf=(void *)dalphabuf.data();
        }
     }
@@ -637,7 +634,8 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
 
     rank_first = mpigv::proclist[0];
     rank_last  = mpigv::proclist[np-1];
-    for (lenleft=0,i=0;i<rank_first;i++) lenleft=lenleft + ga->len[i];
+    int lenleft = 0;
+    for (int i=0; i<rank_first; i++) lenleft=lenleft + ga->len[i];
     /* In order to ensure that the entire update is atomic, we must
        first mutex-lock all of the windows that we will access */
 /*    for (rank = rank_first; rank <= rank_last; rank++) {
@@ -654,7 +652,7 @@ int mpiga_acc(int handle, int ilo, int ihigh, void *buf, void *fac)
     }
 
     for (rank = rank_first; rank <= rank_last; rank++) {
-       i=rank-rank_first;
+       int i = rank-rank_first;
        ifirst = mpigv::map[2*i];
        ilast  = mpigv::map[2*i+1];
        disp = ifirst-lenleft-1;

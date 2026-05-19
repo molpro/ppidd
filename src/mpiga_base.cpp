@@ -419,7 +419,6 @@ int mpiga_distribution( int handle, int iproc, int *ilo, int *ihigh)
 int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int *np)
 {
     int rank, size;
-    int iilow,iihig,offset;
     int iproclow=0,iprochigh=0;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_location: begin. handle=%d\n",ProcID(),handle);
@@ -449,9 +448,9 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
     for (rank=iproclow;rank<=iprochigh;rank++) {
        int i = rank-iproclow;
        proclist[i]=rank;
-       iilow=lenleft+1;
-       iihig=lenleft + ga->len[rank];
-       offset=2*i;
+       int iilow=lenleft+1;
+       int iihig=lenleft + ga->len[rank];
+       int offset=2*i;
        map[offset]  = iilow < ilo   ? ilo:   iilow;
        map[offset+1]= iihig > ihigh ? ihigh: iihig;
        lenleft=iihig;
@@ -468,9 +467,7 @@ int mpiga_location( int handle, int ilo, int ihigh, int *map, int *proclist, int
 */
 int mpiga_put( int handle, int ilo, int ihigh, void *buf )
 {
-    int ifirst, ilast, rank;
-    MPI_Aint disp;
-    int np,ilen;
+    int np;
     mpimutex_t mutex=NULL;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_put: begin. handle=%d,ilo=%d,ihi=%d\n",ProcID(),handle,ilo,ihigh);
@@ -487,11 +484,11 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
 
 /* put the data to distributed location of remote processes */
     for(int i=0; i<np; i++) {
-       rank   = mpigv::proclist[i];
-       ifirst = mpigv::map[2*i];
-       ilast  = mpigv::map[2*i+1];
-       disp   = ifirst-lenleft - 1;
-       ilen   = ilast - ifirst + 1;
+       int rank   = mpigv::proclist[i];
+       int ifirst = mpigv::map[2*i];
+       int ilast  = mpigv::map[2*i+1];
+       MPI_Aint disp   = ifirst-lenleft - 1;
+       int ilen   = ilast - ifirst + 1;
 
        /* For multiple nodes, use mutex to avoid overwriting the current window; without mutex, it will fail to run. */
        /* Using MPI_LOCK_SHARED allows get accesses to proceed */
@@ -534,9 +531,7 @@ int mpiga_put( int handle, int ilo, int ihigh, void *buf )
  */
 int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 {
-    int ifirst,ilast,rank;
-    MPI_Aint disp;
-    int np,ilen;
+    int np;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_get: begin. handle=%d, ilo=%d,ihigh=%d\n",ProcID(),handle,ilo,ihigh);
 
@@ -551,11 +546,11 @@ int mpiga_get( int handle, int ilo, int ihigh, void *buf )
 
 /* get the data from distributed location of remote processes */
     for(int i=0; i<np; i++) {
-       rank=mpigv::proclist[i];
-       ifirst = mpigv::map[2*i];
-       ilast  = mpigv::map[2*i+1];
-       disp = ifirst-lenleft-1;
-       ilen = ilast-ifirst+1;
+       int rank=mpigv::proclist[i];
+       int ifirst = mpigv::map[2*i];
+       int ilast  = mpigv::map[2*i+1];
+       MPI_Aint disp = ifirst-lenleft-1;
+       int ilen = ilast-ifirst+1;
 
        MPI_Win_lock( MPI_LOCK_SHARED, rank, 0, ga->ga_win );
        MPI_Get( buf, ilen, ga->dtype, rank, disp, ilen, ga->dtype, ga->ga_win );

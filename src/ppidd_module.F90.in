@@ -62,7 +62,7 @@ end interface
 interface
  subroutine ppidd_error(message, code) bind(c, name='PPIDD_Error')
  use iso_c_binding, only: c_int, c_char
- character(c_char), intent(in) :: message ! must be terminated by c_null_char
+ character(c_char), intent(in) :: message(*) ! must be terminated by c_null_char
  integer(c_int), intent(in), value :: code
  end subroutine ppidd_error
 end interface
@@ -153,7 +153,7 @@ interface
  use iso_c_binding, only: c_int, c_int64_t, c_char, c_ptr
  integer(c_int), intent(in), value :: dtype, len
  type(c_ptr), intent(in), value :: buffer ! call ppidd_gsum(c_loc(f_buffer), ...)
- character(c_char), intent(in) :: op ! must be terminated by c_null_char
+ character(c_char), intent(in) :: op(*) ! must be terminated by c_null_char
  end subroutine ppidd_gsum
 end interface
 
@@ -161,7 +161,7 @@ interface
  function ppidd_create_irreg(name, lenin, nchunk, dtype, storetype, handle) bind(c, name='PPIDD_Create_irreg')
  use iso_c_binding, only: c_int, c_int64_t, c_char
  integer(c_int) ppidd_create_irreg
- character(c_char), intent(in) :: name ! must be terminated by c_null_char
+ character(c_char), intent(in) :: name(*) ! must be terminated by c_null_char
  integer(c_int64_t), intent(in), value :: nchunk
  integer(c_int64_t), intent(in) :: lenin(nchunk)
  integer(c_int), intent(in), value :: dtype, storetype
@@ -173,7 +173,7 @@ interface
  function ppidd_create(name, lentot, dtype, storetype, handle) bind(c, name='PPIDD_Create')
  use iso_c_binding, only: c_int, c_int64_t, c_char
  integer(c_int) ppidd_create
- character(c_char), intent(in) :: name ! must be terminated by c_null_char
+ character(c_char), intent(in) :: name(*) ! must be terminated by c_null_char
  integer(c_int64_t), intent(in), value :: lentot
  integer(c_int), intent(in), value :: dtype, storetype
  integer(c_int), intent(out) :: handle
@@ -319,7 +319,7 @@ interface
  function ppidd_sf_create(name, size_hard_limit, size_soft_limit, req_size, handle) bind(c, name='PPIDD_Sf_create')
  use iso_c_binding, only: c_double, c_int, c_char
  integer(c_int) ppidd_sf_create
- character(c_char), intent(in) :: name ! must be terminated by c_null_char
+ character(c_char), intent(in) :: name(*) ! must be terminated by c_null_char
  real(c_double), intent(in), value :: size_hard_limit, size_soft_limit, req_size
  integer(c_int), intent(out) :: handle
  end function ppidd_sf_create
@@ -376,7 +376,7 @@ interface
  subroutine ppidd_sf_errmsg(code, message) bind(c, name='PPIDD_Sf_errmsg')
  use iso_c_binding, only: c_int, c_char
  integer(c_int), intent(in), value :: code
- character(c_char), intent(out) :: message ! must be terminated by c_null_char
+ character(c_char), intent(out) :: message(*) ! must be terminated by c_null_char
  end subroutine ppidd_sf_errmsg
 end interface
 
@@ -384,7 +384,7 @@ interface
  function ppidd_eaf_open(name, type, handle) bind(c, name='PPIDD_Eaf_open')
  use iso_c_binding, only: c_int, c_char
  integer(c_int) ppidd_eaf_open
- character(c_char), intent(in) :: name ! must be terminated by c_null_char
+ character(c_char), intent(in) :: name(*) ! must be terminated by c_null_char
  integer(c_int), intent(in), value :: type
  integer(c_int), intent(out) :: handle
  end function ppidd_eaf_open
@@ -474,7 +474,7 @@ interface
  function ppidd_eaf_delete(name) bind(c, name='PPIDD_Eaf_delete')
  use iso_c_binding, only: c_char, c_int
  integer(c_int) ppidd_eaf_delete
- character(c_char), intent(in) :: name ! must be terminated by c_null_char
+ character(c_char), intent(in) :: name(*) ! must be terminated by c_null_char
  end function ppidd_eaf_delete
 end interface
 
@@ -500,7 +500,7 @@ interface
  subroutine ppidd_eaf_errmsg(code, message) bind(c, name='PPIDD_Eaf_errmsg')
  use iso_c_binding, only: c_int, c_char
  integer(c_int), intent(in), value :: code
- character(c_char), intent(out) :: message ! must be terminated by c_null_char
+ character(c_char), intent(out) :: message(*) ! must be terminated by c_null_char
  end subroutine ppidd_eaf_errmsg
 end interface
 

@@ -159,38 +159,31 @@ int mpiga_cleanup_finalize()
 
 int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
 {
-    MPIGA       new_ga;
-    int      size, sizeoftype;
-    long     sizetot;
-    MPI_Aint local_size;
-    int      rank,homerank;
-    int      *len;
-    int      lentot,mpierr;
-    int      handle_orig=0;
+    int      size, sizeoftype, rank, mpierr, handle_orig=0;
     mpimutex_t mutex;
 
     if (MPIGA_Debug) printf("%5d: In mpiga_create_irreg begin: nchunk= %d\n",ProcID(),nchunk);
 
     /* Get a new structure */
-    new_ga = (MPIGA)malloc( sizeof(struct STRUC_MPIGA) );
+    MPIGA new_ga = (MPIGA)malloc( sizeof(struct STRUC_MPIGA) );
     if (!new_ga) return 1;
 
     /* Determine size of MPIGA memory */
     MPI_Comm_size( MPIGA_WORK_COMM, &size );
     MPI_Comm_rank( MPIGA_WORK_COMM, &rank );
 
-    len= (int *)malloc( size *sizeof( int) );
+    int *len = (int *)malloc( size *sizeof( int) );
     if (nchunk<0 || nchunk>size) {
        printf("ERROR in mpiga_create_irreg : nchunk(%4d)larger than process number(%4d).\n", nchunk,size);
        return 1;
     }
-    lentot=0;
+    int lentot=0;
     for(int i=0; i<nchunk; i++) {len[i]=lenin[i];lentot=lentot+lenin[i];}
     for(int i=nchunk; i<size; i++) len[i]=0;
 
     MPI_Type_size( dtype, &sizeoftype );
 
-    local_size = len[rank] * sizeoftype;
+    MPI_Aint local_size = len[rank] * sizeoftype;
 
     /* Allocate memory my ga_win and create window */
     if ( local_size==(MPI_Aint)0 ) new_ga->win_ptr=NULL;
@@ -211,7 +204,7 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
 
 /*    printf("In mpiga_create_irreg middle 2: nchunk= %d \n", nchunk); */
 
-    sizetot=(long)sizeoftype*(long)lentot;
+    long sizetot=(long)sizeoftype*(long)lentot;
     mpigv::nga++;
    /* ----------------------------------------------------------------- *\
       Check to ensure the maximum number of arrays hasn't been reached.
@@ -237,7 +230,7 @@ int mpiga_create_irreg(int *lenin, int nchunk, MPI_Datatype dtype, int *handle)
     else {
 /*  use mutex stored on compute processes */
     /* Create critical section window */
-      homerank=0;
+      int homerank = 0;
       mpierr = MPIMUTEX_Create(homerank, MPIGA_WORK_COMM, &mutex);
       if (mpierr != MPI_SUCCESS) MPI_Abort(MPIGA_WORK_COMM, MPI_ERR_UNKNOWN);
       new_ga->mutex_p    = mutex;

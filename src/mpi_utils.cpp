@@ -41,7 +41,7 @@ int NNodes_Total(MPI_Comm comm, int *flag_sym)
     std::vector<char> nodename_storage(nprocs * max_length, '\0');
     nodename[0] = nodename_storage.data();
     std::vector<int> nprocs_node(nprocs,0);
-    for(int i = 0; i < nprocs; i++) {
+    for(int i = 1; i < nprocs; i++) {
        nodename[i] = nodename[0] + i * max_length;
     }
     MPI_Get_processor_name(nodename[rank], &length);
